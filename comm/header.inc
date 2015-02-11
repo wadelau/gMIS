@@ -131,7 +131,7 @@ $tit = $tit==''?$tbl:$tit;
 $id = $_REQUEST['id'];
 
 if(strpos($tbl,$_CONFIG['tblpre']) !== 0){
-    $tbl = $_CONFIG['tblpre'].$tbl; # 兼容不是以 hss_ 开头的表名
+    $tbl = $_CONFIG['tblpre'].$tbl; # 
 }
 
 # check access control
