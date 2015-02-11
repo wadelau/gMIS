@@ -1,0 +1,45 @@
+<?xml version="1.0" standalone="yes"?>
+<tablecfg>   
+    <table name="bk_authortbl">
+        <chnname>作者管理</chnname>
+        <listfieldcount>8</listfieldcount> <!--max_disp_cols-->
+        <since>20141130</since>
+        <creator>Xenxin</creator>
+		<readonly>1</readonly>	
+    </table>	
+
+        <field name="iname">
+            <chnname>姓名</chnname>
+        </field>	
+
+        <field name="igender">
+            <chnname>性别</chnname>
+			<inputtype>select</inputtype>
+			<selectoption>1:男|0:女</selectoption>
+        </field>
+
+	   <field name="theorg">
+            <chnname>组织/机构</chnname>
+            <inputtype>select</inputtype>
+            <selectoption>fromtable::bk_authorunittbl::iname::id>0</selectoption>
+			<listview>1</listview>
+        </field>
+		
+        <field name="updatetime">
+            <chnname>更新时间</chnname>
+			<listview>0</listview> <!-- force display-->
+        </field>
+
+     
+        <field name="istate">
+            <chnname>状态</chnname>
+			<inputtype>select</inputtype>
+			<selectoption>1:正常|0:停用</selectoption>
+        </field>
+
+        <field name="op" type="text">
+            <chnname>操作人</chnname>
+        </field>
+
+
+</tablecfg>

@@ -1,0 +1,62 @@
+<?xml version="1.0" standalone="yes"?>
+<tablecfg>   
+    <table name="fwn_pagedetailtbl_201409">
+        <chnname>页面记录</chnname>
+        <listfieldcount>8</listfieldcount> <!--max_disp_cols-->
+        <since>20140312</since>
+        <creator>Xenxin</creator>
+		<readonly>1</readonly>	
+		<relatedref>201408::jdo.php?tbl=fwn_pagedetailtbl_201408&amp;act=list::actarea</relatedref>
+		<relatedref>201407::jdo.php?tbl=fwn_pagedetailtbl_201407&amp;act=list::actarea</relatedref>
+		<relatedref>201406::jdo.php?tbl=fwn_pagedetailtbl_201406&amp;act=list::actarea</relatedref>
+		<relatedref>201405::jdo.php?tbl=fwn_pagedetailtbl_201405&amp;act=list::actarea</relatedref>
+		<relatedref>201404::jdo.php?tbl=fwn_pagedetailtbl_201404&amp;act=list::actarea</relatedref>
+		<relatedref>201403::jdo.php?tbl=fwn_pagedetailtbl_201403&amp;act=list::actarea</relatedref>
+    </table>
+		
+        <field name="siteid">
+            <chnname>站点Id</chnname>
+            <inputtype>select</inputtype>
+            <selectoption>fromtable::fwn_sitetbl::sitename::id>0 and sitetype&lt;5</selectoption>
+			<input2select>1</input2select>
+        </field>
+
+        <field name="title" type="text">
+            <chnname>页面标题</chnname>
+        </field>
+  		
+        <field name="longurl">
+            <chnname>长地址</chnname>
+			<!--
+			<href>javascript:doActionEx('jdo.php?tbl=fwn_pagedetailtbl_201403&amp;act=view&amp;tit=&amp;db=&amp;id=THIS','contentarea')::详细::</href>
+			-->
+			<href>THIS::1=1::源页面::needblank=1</href>
+        </field>
+
+        <field name="pubtime" type="text">
+            <chnname>发表时间</chnname>
+        </field>
+
+		<field name="isorig">
+			<chnname>原创?</chnname>
+			<selectoption>1:是|0:否</selectoption>
+		</field>
+
+		<field name="beforwarded">
+			<chnname>被转次数</chnname>
+		</field>
+
+        <field name="inserttime" type="text">
+            <chnname>分析时间</chnname>
+			<listview>0</listview>
+        </field>
+
+        <field name="urlkey" type="text">
+			<listview>0</listview>
+		</field>
+        <field name="operator" type="text">
+            <chnname>操作人</chnname>
+        </field>
+
+
+</tablecfg>

@@ -1,0 +1,49 @@
+<?xml version="1.0" standalone="yes"?>
+<tablecfg>   
+    <table name="fwn_sitetbl">
+        <chnname>新闻源</chnname>
+        <listfieldcount>8</listfieldcount> <!--max_disp_cols-->
+        <since>20140312</since>
+        <creator>Xenxin</creator>
+		<readonly>1</readonly>	
+		<!-- <hidesk>sitetype::!=::5</hidesk> -->
+    </table>
+  
+  		
+        <field name="parentid">
+            <chnname>父站点Id</chnname>
+            <inputtype>select</inputtype>
+            <selectoption>fromtable::fwn_sitetbl::sitename::parentid=0 and sitetype&lt;5</selectoption>
+			<input2select>1</input2select> <!-- enable input2select or not, Mon Jul 28 15:10:56 CST 2014 -->
+        </field>
+
+        <field name="sitename" type="text">
+            <chnname>站点名称</chnname>
+        </field>
+
+        <field name="sitedomain" type="text">
+            <chnname>站点域名</chnname>
+        </field>
+
+		<field name="sitetype">
+			<chnname>类型</chnname>
+			<selectoption>0:资讯站|1:+报纸|2:-杂志|3:×电视|4:÷广播|7:通讯社|5:机构及官网|6:其他</selectoption>
+		</field>
+
+		<field name="addtype">
+			<chnname>站点添加类型</chnname>
+			<selectoption>0:手工|1:自动抓取|2:其他</selectoption>
+		</field>
+
+        <field name="inserttime" type="text">
+            <chnname>更新时间</chnname>
+			<listview>2</listview>
+        </field>
+
+        <field name="firstpage">
+            <chnname>触发页</chnname>
+			<href>THIS::1=1::触发页::needblank=1</href>
+        </field>
+
+
+</tablecfg>

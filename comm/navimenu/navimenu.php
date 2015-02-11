@@ -1,0 +1,126 @@
+<?php
+$ido = "ido.php";
+
+$myNavi = new PageNavi();
+$pnscTodo = "state=? and (touser like ? or togroup like ?)";
+$pnsckTodo = $myNavi->signPara($pnscTodo);
+
+$dynamicmenu = '';
+$hm = $myNavi->execBy("select levelcode,linkname,modulename,dynamicpara,disptitle,thedb from ".$_CONFIG['tblpre']."info_menulist where state=1 order by levelcode", null);
+
+#print_r($hm);
+if($hm[0]){
+    $hm = $hm[1];
+    $hmkeys = array();
+    $hmkeysbylen = array("2"=>array(),"4"=>array(),"6"=>array(),"8"=>array());
+    foreach($hm as $k=>$v){
+        $hmkeys[$hm[$k]['levelcode']] = $hm[$k]; # use levelcode 作为key
+        $hmkeysbylen[strlen($hm[$k]['levelcode'])][] = $hm[$k]['levelcode']; # 按levelcode的长度划分menu等级
+    }
+    #print_r($hmkeys);
+    #print_r($hmkeysbylen);
+    for($li = 10; $li <= 99; $li++){
+        $li = "".$li;
+        if(in_array($li, $hmkeysbylen[2])){
+            $linfo = $hmkeys[$li];
+            $dynamicmenu .= '<li><!--'.$li.'.--><a href="javascript:void(0);" class="menulink">'.$linfo['linkname'].'</a>'."\n";
+            $dynamicmenu .= "<ul>\n";
+            $lv3 = '';
+            $lv4 = '';
+            foreach($hmkeysbylen[4] as $k1=>$v1){
+                if(strpos($v1,$li) === 0){
+                    $linfo = $hmkeys[$v1];
+                    #$dynamicmenu .= 'level2-'.$v1.':';
+                    if($linfo['modulename'] == ''){
+                        $dynamicmenu .= '<li><a href="javascript:void(0);" class="sub">'.$linfo['linkname'].'</a>'."<ul>\n<!--LEVEL-3--></ul>\n</li>\n";
+                    }else{
+			if($linfo['disptitle'] == ''){ $linfo['disptitle'] = $linfo['linkname'];}
+                        $dynamicmenu .= '<li><a href="./'.$ido.'?tbl='.$linfo['modulename'].'&tit='.$linfo['disptitle'].'&db='.$linfo['thedb'].'">'.$linfo['linkname'].'</a></li>'."\n";    
+                    }
+                    
+                    foreach($hmkeysbylen[6] as $k2=>$v2){
+                        if(strpos($v2, $v1) === 0){
+                            $linfo = $hmkeys[$v2];
+                            #$lv3 .= "\tlevel3-".$v2;
+                            if($linfo['modulename'] == ''){
+                                $lv3 .= '<li><a href="javascript:void(0);" class="sub">'.$linfo['linkname'].'</a>'."<ul>\n<!--LEVEL-4--></ul>\n</li>\n";
+                            }else{
+				if($linfo['disptitle'] == ''){ $linfo['disptitle'] = $linfo['linkname'];}
+                                $lv3 .= '<li><a href="./'.$ido.'?tbl='.$linfo['modulename'].'&tit='.$linfo['disptitle'].'&db='.$linfo['thedb'].'">'.$linfo['linkname'].'</a></li>'."\n";    
+                            }    
+
+                            foreach($hmkeysbylen[8] as $k3=>$v3){
+				    if(strpos($v3, $v2) === 0){
+					    $linfo = $hmkeys[$v3];
+						#$lv4 .= "\t\tlevel4-".$v3."\n";
+					    if($linfo['disptitle'] == ''){ $linfo['disptitle'] = $linfo['linkname'];}
+					    $lv4 .= '<li><a href="./'.$ido.'?tbl='.$linfo['modulename'].'&tit='.$linfo['disptitle'].'&db='.$linfo['thedb'].'">'.$linfo['linkname'].'</a></li>';    
+
+				    }
+                            }
+                        }
+                    }
+                } 
+            }
+            
+            $lv3 = str_replace("<!--LEVEL-4-->", $lv4, $lv3);
+            #print "li:$li, final: lv3:[$lv3], lv4:[$lv4]\n";
+            $dynamicmenu = str_replace("<!--LEVEL-3-->", $lv3, $dynamicmenu);
+
+            $dynamicmenu .= "</ul>\n</li>\n";
+
+            $lv3 = ''; $lv4 = '';
+        } 
+    }
+}
+
+ $menulist = ' 
+     <ul class="menu" id="menu"> 
+     <li> 
+	 
+        <a href="./" class="menulink"><img src="./img/my-desktop.png" alt="my desktop" height="10px" /> 我的桌面</a>
+            <ul> 
+                <li><a href="./'.$ido.'?tbl=fin_todotbl&tit=待处理事项&db=&pnsktouser='.$userid.'&pnsm=1&pnskstate=0&pnsktogroup='.$user->getGroup().'&pnsc='.$pnscTodo.'&pnsck='.$pnsckTodo.'">待处理事项</a></li> 
+                <li><a href="./'.$ido.'?tbl=fin_todotbl&tit=已处理事项&db=&pnsktouser='.$userid.'&pnsm=1&pnskstate=1&pnsktogroup='.$user->getGroup().'&pnsc='.$pnscTodo.'&pnsck='.$pnsckTodo.'">已处理事项</a></li> 
+                <li><a href="./'.$ido.'?tbl=mynotetbl&tit=我的笔记&db=&pnskoperator='.$userid.'">我的笔记</a></li> 
+                <li><a href="./'.$ido.'?tbl=fin_operatelogtbl&tit=操作历史记录&db=&pnskuserid='.$userid.'">操作历史记录</a></li>
+                <li><a href="./'.$ido.'?tbl=info_toolsettbl&tit=常用工具">日常工具</a></li>
+
+                <li> <a href="javascript:">桌面设置</a> </li> 
+
+            </ul>
+     </li>
+     
+	'.$dynamicmenu.'
+	    
+     <li><a href="javascript:void(0);" class="menulink">系统设置</a> 
+     <ul> 
+        <li><a href="./'.$ido.'?tbl=info_usertbl&tit=&db=">用户信息</a></li> 
+        <li><a href="./'.$ido.'?tbl=info_grouptbl&tit=&db=">用户组设置</a></li> 
+        <li><a href="./'.$ido.'?tbl=info_objecttbl&tit=&db=">单元模块</a></li> 
+        <li><a href="./'.$ido.'?tbl=info_objectgrouptbl&tit=&db=">单元模块组</a></li> 
+        <li><a href="./'.$ido.'?tbl=useraccesstbl&tit=&db=">系统权限</a></li> 
+        <li> <a href="./'.$ido.'?tbl=info_menulist&tit=&db=">菜单调整</a> </li>
+		<li><a href="javascript:void(0);" class="sub">帮助向导</a> 
+     		<ul>  
+        	<li><a href="./'.$ido.'?tbl=info_helptbl&pnskid=2&tit=公司介绍&db=&act=view&id=16">公司介绍</a></li> 
+        	<li><a href="./'.$ido.'?tbl=info_helptbl&pnskisfaq=1&tit=FAQ常见问题&db=">FAQ常见问题</a></li> 
+        	<li><a href="./'.$ido.'?tbl=info_helptbl&tit=帮助主题&db=">帮助主题</a></li> 
+     		</ul> 
+     	</li>
+     </ul> 
+     </li> 
+    
+    </ul>
+     ';
+
+$menulistjs = '
+     <script type="text/javascript"> 
+        var menu=new parent.NaviMenu.dd("menu"); 
+        menu.init("menu","menuhover"); 
+     </script> 
+ ';
+
+#$menulist = $dynamicmenu;
+
+$menulist .= $menulistjs;

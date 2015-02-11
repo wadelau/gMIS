@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" standalone="yes"?>
+<tablecfg>
+    <table name="addresstbl">
+        <chnname>待处理任务管理表</chnname>
+        <listfieldcount>6</listfieldcount> <!--max_disp_cols-->
+        <since>20121024</since>
+        <creator>daguoli</creator>
+        <!-- <superaccess>inherit::id=USER_ID::rw</superaccess> -->
+    </table>
+    <field name="id">
+      <chnname>序号</chnname>
+    </field>
+
+    <field name="taskname">
+      <chnname>任务名</chnname>
+    </field>
+    <field name="tasktype">
+      <chnname>任务类型</chnname>
+    </field>	
+
+    <field name="triggerbyparent">
+      <chnname>父任务触发</chnname>
+    </field>
+    <field name="triggerbyparentid">
+      <chnname>父任务ID</chnname>
+    </field>	 
+     <field name="togroup">
+      <chnname>目标组</chnname>
+    </field> 
+     <field name="touser">
+      <chnname>目标用户</chnname>
+    </field> 
+
+</tablecfg>
+

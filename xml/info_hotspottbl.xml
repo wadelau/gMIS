@@ -1,0 +1,34 @@
+<?xml version="1.0" standalone="yes"?>
+<tablecfg>   
+    <table name="com_hotspottbl">
+        <chnname>周边景点</chnname>
+        <listfieldcount>4</listfieldcount> <!--max_disp_cols-->
+        <since>20140512</since>
+        <creator>Shujuan</creator>		
+    </table>
+        <field name="hotspotname">
+            <chnname>周边景点</chnname>
+        </field>
+		<field name="parentid">
+            <chnname>所属区域</chnname>
+            <selectoption>fromtable::info_areatbl::areaname</selectoption>
+            <!--<selectmultiple>1</selectmultiple>-->
+        </field>
+		 <field name="ishot" type="text">
+            <chnname>是否热门景点</chnname>
+            <inputtype>select</inputtype>
+            <selectoption>1:是|0:否</selectoption>
+        </field>  
+        <field name="state" type="text">
+            <chnname>状态</chnname>
+            <inputtype>select</inputtype>
+            <selectoption>1:正常|0:停用</selectoption>
+        </field>  
+        <field name="updatetime" type="text">
+            <chnname>更新时间</chnname>
+        </field>
+        <field name="operator" type="text">
+            <chnname>操作人</chnname>
+        </field>
+</tablecfg>
+

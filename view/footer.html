@@ -1,0 +1,32 @@
+{if $isheader == 1}
+    <table width="100%" style="background-image: url({$rtvdir}/img/login-top-bg-small-updown.png); background-repeat: repeat-x;">
+    <tr>
+        <td align="center"> <span class="login-buttom-txt"> &nbsp; &copy; <script type="text/javascript">document.write((new Date()).getFullYear());</script> <b><a href="./" style="color:#ABCAD3;font-weight:bold; font-size:12px">{$agentname}</a>  Powered by  <a href="#-gmis" style="color:#ABCAD3;font-weight:bold; font-size:12px">{$appname}</a></b>. All rights reserved. </span></td>
+    </tr>
+    </table>
+{/if}
+</body>
+<script type="text/javascript">
+//- create urlredir for this page.
+//-- added by wadelau@ufqi.com on Thu Oct 24 11:35:21 CST 2013
+(function(win){
+ var url = '';
+ var ipos = 0;
+ var urlprefix = 'http://ufqi.com/naturedns/search?q=';
+ var ndnstag = '#-'; //- tag userd in <a href="#-r/abbc">
+ for(var i=0, l=document.links.length; i<l; i++){
+ 	url = document.links[i].href;
+ 	ipos = url.indexOf(ndnstag); 
+ 	if(ipos > 0){
+ 		url = url.substring(ipos+1);
+ 		document.links[i].href = urlprefix + url;
+	}
+ }
+ //window.alert(typeof console);
+ if(typeof console !== 'undefined'){
+ 	win.console.log('-NatureDNS initiated.');
+ }
+ })(window);
+</script>
+
+</html>

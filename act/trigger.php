@@ -1,0 +1,132 @@
+<?php
+
+#embedded in act/doaddmodi.php or act/dodelete.php
+
+error_log(__FILE__.": act:[$act] id:[$id] triggers:[".$triggers=$gtbl->getTrigger($id)."]");
+$IDTAG = 'id';
+#if($act == 'list-dodelete'){
+if(1){
+    if($id != ''){
+        $tblTrigger = $gtbl->getTrigger('');
+        #error_log(__FILE__.": act:[$act] id:[$id] tbl triggers:[".$triggers=$gtbl->getTrigger()."]");
+        error_log(__FILE__.": act:[$act] id:[$id] tbl triggers:[".$triggers=$gtbl->getTrigger('')."]");
+        if($tblTrigger != ''){
+            $gtbl->setTrigger($IDTAG, $tblTrigger);
+            error_log(__FILE__.": id triggers:[".$triggers=$gtbl->getTrigger($IDTAG)."]");
+            $fieldlist[] = $IDTAG;
+        }
+        if(count($hmorig) > 0){
+            foreach($hmorig as $k=>$v){
+                if(!defined($_REQUEST[$K]) || $_REQUEST[$k] == ''){
+                    $_REQUEST[$k] = $v;
+                }
+            }
+        }
+    }
+}
+
+# some triggers bgn, added on Fri Mar 23 21:51:12 CST 2012
+foreach($fieldlist as $i=>$field){
+# e.g. <trigger>1::copyto::hss_dijietbl::tuanid=id::tuanid=id</trigger>
+    $triggers = $gtbl->getTrigger($field);
+    if($triggers != ''){
+        error_log(__FILE__.": triggers:[".$triggers."]");
+        $fstArr = explode("|",$triggers);
+        foreach($fstArr as $k=>$trigger){
+            error_log("current trigger:[$trigger]");
+            $tArr = explode("::", $trigger);
+            if($tArr[0] == 'ALL' || $tArr[0] == $gtbl->get($field)){
+                $tmptbl = $tArr[2];
+                if($tArr[1] == 'copyto'){
+
+                    $sqlchk = "select id from $tmptbl where ";
+                    $chkFArr = explode(",", $tArr[4]);
+                    foreach($chkFArr as $k=>$v){
+                        if($v != ''){
+                            $chkField = explode("=", $v);
+                            $sqlchk .= $chkField[0]."='".$gtbl->get($chkField[1])."' and ";
+                        }
+                    }
+                    $sqlchk = substr($sqlchk, 0, strlen($sqlchk)-4);
+                    $sqlchk .= " limit 1";
+
+                    $sql = "insert into ".$tmptbl." set ";
+                    $sqlupd = "update ".$tmptbl." set ";
+                    $fieldArr = explode(",",$tArr[4]);
+                    foreach($fieldArr as $k=>$v){
+                        if($v != ''){
+                            $vArr = explode("=",$v);
+                            if(strpos($vArr[1],"'") === 0 ||strpos($vArr[1],'"') === 0) # hss_fin_applylogtbl.xml
+                            {
+                                $gtbl->set($vArr[1], substr($vArr[1],1,strlen($vArr[1])-2));
+                            }else if($vArr[1] == 'THIS'){
+                                $vArr[1] = $field;
+                            }
+                            $tmpfieldv = $gtbl->get($vArr[1]);
+                            if($vArr[1] == 'THIS_TABLE'){
+                                $tmpfieldv = $tbl;
+                            }else if($vArr[1] == 'THIS_ID'){
+                                $tmpfieldv = $id;
+                            }
+                            $sql .= " ".$vArr[0]."='".$tmpfieldv."',";
+                            $sqlupd .= " ".$vArr[0]."='".$tmpfieldv."',";
+                        }
+                    }
+                    $sql = substr($sql, 0, strlen($sql)-1);
+                    $sqlupd = substr($sqlupd, 0, strlen($sqlupd)-1);
+                    error_log(__FILE__.": trigger: sqlchk:[".$sqlchk."]");
+                    $tmphm = $gtbl->execBy($sqlchk, null);
+                    if(!$tmphm[0]){
+                        $tmphm = $gtbl->execBy($sql,null);
+                        error_log(__FILE__.": trigger insert sql:[".$sql."]");
+                    }else{
+                        $newtmphm = $tmphm[1];
+                        $sqlupd = $sqlupd." where id='".$newtmphm[0]['id']."' limit 1";
+                        $tmphm = $gtbl->execBy($sqlupd, null);
+                        error_log(__FILE__.": trigger upd sql:[".$sqlupd."]");
+                    }
+#print_r($tmphm);
+
+                }else if($tArr[1] == 'lockto'){
+
+                    $sql = "replace into ".$tmptbl." set inserttime=NOW(), operator='".$userid."', ";
+                    $sqlchk = "select id from $tmptbl where ";
+                    $fieldArr = explode(",",$tArr[3]);
+                    foreach($fieldArr as $k=>$v){
+                        if($v != ''){
+                            $vArr = explode("=",$v);
+                            if(strpos($vArr[1],"'") === 0 ||strpos($vArr[1],'"') === 0)
+                            {
+                                $gtbl->set($vArr[1], substr($vArr[1],1,strlen($vArr[1])-1));
+                            }else if($vArr[1] == 'THIS'){
+                                $vArr[1] = $field;
+                            }
+                            $tmpfieldv = $gtbl->get($vArr[1]);
+                            if($vArr[1] == 'THIS_TABLE'){
+                                $tmpfieldv = $tbl;
+                            }else if($vArr[1] == 'THIS_ID'){
+                                $tmpfieldv = $id;
+                            }
+                            $sql .= " ".$vArr[0]."='".$tmpfieldv."',";
+                            $sqlchk .= " ".$vArr[0]."='".$tmpfieldv."' and";
+                        }
+                    }
+                    $sql .= " mode='r' ";
+                    $sqlchk = substr($sqlchk, 0, strlen($sqlchk)-3);
+                    $tmphm = $gtbl->execBy($sql,null);
+#print_r($tmphm);
+
+                }else if($tArr[1] == 'extraact'){ # see xml/hss_tuandui_shouzhitbl.xml
+                    $extraact = $tArr[2];
+                    include($appdir."/".$extraact);
+
+                }    
+            }
+        }
+    }
+}
+
+# some triggers end, added on Fri Mar 23 21:51:12 CST 2012
+
+
+?>

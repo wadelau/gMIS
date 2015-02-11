@@ -1,0 +1,168 @@
+{include file='header.html'}
+<style type="text/css">
+<!--
+body {
+	margin-left: 5px;
+	margin-top: 5px;
+	margin-right: 5px;
+	margin-bottom: 0px;
+	background-color: #1D3647;
+}
+-->
+</style>
+<table width="100%"  border="0px" cellpadding="0" cellspacing="0">
+   <tr>
+    <td valign="bottom">
+    <table width="100%" border="0px" cellpadding="0" cellspacing="0" class="login_top_bg" style="background-image: url(./img/login-top-bg-small.png);background-repeat: repeat-x;">
+      <tr>
+        <td width="37%" height="28px">&nbsp;<a href="./"  style="color:#ABCAD3;font-weight:bold; font-size:12px">{$agentname} </a> </td>
+        <td width="63%" style="text-align:right;" class="login-buttom-txt"> {$welcomemsg} </td>
+      </tr>
+    </table>
+    </td>
+  </tr>
+
+  <tr>
+    <td valign="top">
+
+     <table width="100%" align="center" height="532" border="0px" cellpadding="0" cellspacing="0" class="login_bg">
+      <tr>
+        <td width="98%" align="center" >
+
+            {$content}
+			
+            <div id="welcomearea" style="float:left;margin-left:28px">
+			<b> &Pi; <a href="./" style="font-size:17px" >首页</a> <span style="font-size:17px">&rarr;</span></b>
+			欢迎您回来！ 今天是 <script type="text/javascript" src="./comm/show_today.js"></script>
+            <br/> 
+
+           <style type='text/css'>
+		   .wrapper{
+			      position: relative;
+				     float: left;
+					    left: 89px;
+						   //width: 850px;
+						      margin-bottom: 20px;
+							     //background-color: #cccccc
+		   }
+		   .left1{
+			      position: relative; word-break:break-all; word-wrap:break-word;
+				     float: left; vertical-align:middle;padding:5px 5px 5px 5px;
+					    left: 10px;
+						   width: 150px;
+						      height: 70px;
+							     background-color: #cfcfcf
+		   }
+		   .left2{
+			      position: relative; word-break:break-all; word-wrap:break-word;
+				     float: left;vertical-align:middle;padding:5px 5px 5px 5px;
+					    left: 30px;
+						   width: 150px;
+						      height: 70px;
+							     background-color: #cfcfcf
+		   }
+		   .left3{
+			      position: relative; word-break:break-all; word-wrap:break-word;
+				     float: left;vertical-align:middle;padding:5px 5px 5px 5px;
+					    left: 50px;
+						   width: 150px;
+						      height: 70px;
+							     background-color: #cfcfcf
+		   }
+		   .left4{
+			      position: relative; word-break:break-all; word-wrap:break-word;
+				     float: left;vertical-align:middle;padding:5px 5px 5px 5px;
+					    left: 70px;
+						   width: 150px;
+						      height: 70px;
+							     background-color: #cfcfcf
+		   }
+		</style>
+		<table align="center" width="700px"  style="background:transparent"><tr>
+		<td>
+		<b title="(根据被调用频率自动排列、调整)">MU.常用Most-Used</b><br/>
+		{$mi=0}
+		{foreach $module_list_order as $k=>$v}
+			{if $mi==0 || ($mi) % 4 == 0}
+			<div class="wrapper">
+			{/if}
+				 <a href="./{$ido}&tbl={$module_list_order[$k]}"><div class="left{($k%4)+1}">{$mi+1}.{$module_list_name[$module_list_order[$k]]}({$module_list_order[$k]})</div></a>
+			{if ($mi+1) % 4 == 0}
+			</div>
+			{/if}
+			{$mi=$mi+1}
+		{/foreach}
+		<!--
+			<div class="wrapper">
+				 <div class="left1"></div>
+					<div class="left2"></div>
+					<div class="left3"></div>
+					<div class="left4"></div>
+			</div>
+			-->
+		</td>
+		</tr><tr>
+		<td>
+		<b title="（用户自定义的快捷列表，在“系统设置--单元模块”中选择某个模块，修改其中“添加到桌面”即可）">DT.桌面Desktop</b><br/>
+		{$mi=0}
+		{foreach $module_list_byuser as $k=>$v}
+			{if $mi==0 || ($mi) % 4 == 0}
+			<div class="wrapper">
+			{/if}
+				 <a href="./{$ido}&tbl={$v['tblname']}"><div class="left{($k%4)+1}">{$mi+1}.{$v['objname']}({$v['tblname']})</div></a>
+			{if ($mi+1) % 4 == 0}
+			</div>
+			{/if}
+			{$mi=$mi+1}
+		{/foreach}
+		</td>
+		</tr>
+		<tr><td colspan="10">
+		<script type="text/javascript"> 
+		function diffInYearsAndDays(startDate, endDate) {
+			// Copy and normalise dates
+			var d0 = new Date(startDate);
+			d0.setHours(12,0,0,0);
+			var d1 = new Date(endDate);
+			d1.setHours(12,0,0,0);
+			// Make d0 earlier date
+			// Can remember a sign here to make -ve if swapped
+			if (d0 > d1) {
+				var t = d0;
+				d0 = d1;
+				d1 = t;
+			}  
+			// Initial estimate of years
+			var dY = d1.getFullYear() - d0.getFullYear();
+			// Modify start date
+			d0.setYear(d0.getFullYear() + dY);
+			// Adjust if required
+			if (d0 > d1) {
+				d0.setYear(d0.getFullYear() - 1);
+				--dY;
+			}
+			// Get remaining difference in days
+			var dD = (d1 - d0) / 8.64e7;
+			// If sign required, deal with it here
+			return [dY, dD];  
+		}
+		</script>
+		<b><i>ii</i></b>.系统已上线 <a href="./"><script type="text/javascript">diff=diffInYearsAndDays('{$system_lastmodify}',(new Date()));document.write(''+diff[0]+' 年 '+diff[1]+' 天');</script></a> , 目前共 <b>{$user_count}</b> 位用户，管理着<b> {$module_count}  </b>个功能模块.  
+		</td></tr>
+		<tr><td><b><i>HM</i></b>.<a href="{$front_page}" target="_blank">打开主站</a></td></tr>
+		</table>
+			<!-- <script type="text/javascript"> window.setTimeout(location.href = '{$todourl}', 10*1000); </script> -->
+
+		<br/>
+            </div>
+		<br/>
+
+        </td>
+      </tr>
+     </table>
+
+    </td>
+  </tr>
+ 
+</table>
+{include file='footer.html'}

@@ -1,0 +1,39 @@
+<?xml version="1.0" standalone="yes"?>
+<tablecfg>   
+    <table name="info_grouptbl">
+        <chnname>笔记</chnname>
+        <listfieldcount>5</listfieldcount> <!--max_disp_cols-->
+        <since>20121022</since>
+        <creator>sunlit</creator>
+        <!-- <superaccess>inherit::id=USER_ID::rw</superaccess> --> 
+    </table>
+        
+		<field name="groupname" type="text">
+            <chnname>组名</chnname>
+        </field>
+        <field name="grouplevel">
+            <chnname>组级别</chnname>
+        </field>
+        
+     
+
+
+
+		<field name="inserttime" type="text">
+            <chnname>创建时间</chnname>
+			        </field>
+
+		<field name="updatetime" type="text">
+            <chnname>更新时间</chnname>
+        </field>
+        
+		<field name="operator" type="text">
+            <chnname>操作人</chnname>
+        </field>
+
+		<field name="state" type="text">
+        <chnname>状态</chnname>
+        <inputtype>select</inputtype>
+        <selectoption>0:停用|1:正常|2:冻结</selectoption>
+        </field>
+</tablecfg>

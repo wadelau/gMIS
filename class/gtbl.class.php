@@ -1,0 +1,787 @@
+<?php
+/* GTbl class for general management information system
+ * v0.1,
+ * wadelau@ufqi.com,
+ * Mon Jan 23 02:58:52 GMT 2012
+ * note: general table config transactions, created on 20090304, wadelau@hotmail.com, updated....
+ * v0.2, Sat Apr  7 09:53:53 CST 2012
+ * Mon Jul 28 15:39:14 CST 2014
+ */
+
+if(!defined('__ROOT__')){
+  define('__ROOT__', dirname(dirname(__FILE__)));
+}
+require_once(__ROOT__.'/inc/webapp.class.php'); 
+
+class GTbl extends WebApp
+{
+	public $sep = '';
+	private $hmfield = array();
+	private $hmconf = array();
+	private $tbl = "";
+	private $prttbl = "";
+	private $rotatetag = '';
+	private $tblrotate = '';
+	public $taglist = array(
+			'table'=>'table',
+			'field'=>'field',
+			'chnname'=>'chnname',
+			'inputtype'=>'inputtype',
+			'selectoption'=>'selectoption',
+			'extrainput'=>'extrainput',
+			'displayorder'=>'displayorder', # disable since Thu Jan 26 04:09:32 GMT 2012
+			'memo'=>'memo',
+			'charset'=>'charset',
+			'dbname'=>'dbname',
+			'relatedref'=>'relatedref', # related functions of a table
+			'listfieldcount'=>'listfieldcount', # how many fields display in list view
+			'listview'=>'listview', # hide in list view or not
+			'singlerow'=>'singlerow', # display in a single row
+			'printref'=>'printref',
+			'reftable'=>'reftable',
+			'jsaction'=>'jsaction',
+			'delayjsaction'=>'delayjsaction',
+			'check'=>'check', # business check logic...
+			'orderby'=>'orderby', # explicitly specify a field for ordering...
+			'defaultvalue'=>'defaultvalue', # default value during add/modify...
+			'managemode'=>'managemode', # managemode for a table, r(read),w(write),d(delete)
+			'accept'=>'accept', # front-end validator, e.g. "lt=100,gt=1000"
+			'trigger'=>'trigger', #  trigger sth when meeting some prequisters
+			'readonly' => 'readonly', # some fields do not need input by users, but by programs
+			'href' => 'href', # href of a field
+			'selectmultiple' => 'selectmultiple', # is multiple of a select
+			'hidesk' => 'hidesk', # default search key
+			'css' => 'css', # css of a field or the table
+			'superaccess' => 'superaccess', # access control over system settings
+			'stat' => 'stat', # 对该字段统计时的计算方法, sum|count|average
+			'input2select' => 'input2select', # filter much more select options to a few of them...., Mon Jul 28 15:12:17 CST 2014
+			'rotatespan'=>'rotatespan', # table names contains variable datetime, e.g. _201412, _201501, Mon Jan  5 15:31:29 CST 2015
+			);
+
+	private static $MAX_FIELD_LIST = 99;
+
+	//-
+	function GTbl($tbl, $hmconf, $sep, $tblrotate=null){
+		//-
+		$this->dba = new DBA();
+		
+		$this->hmconf = $hmconf;
+		$this->sep = $sep;
+		
+		$this->prttbl = $tbl;
+		$tbl .= $this->getTblRotateName($tblrotate);
+		error_log(__FILE__.": tbl:[".$this->prttbl."] +span:[".$tbl."]");
+
+		$this->setTbl($tbl);
+		$this->tbl = $tbl;
+		
+	}
+
+	public function getTblCHN(){
+		$tmpstr = $this->hmconf[$this->taglist['table'].$this->sep.$this->prttbl.$this->sep.$this->taglist['chnname']];
+		return $tmpstr = $tmpstr==null?$tbl:$tmpstr;
+	}
+
+    public function getTblCHK(){
+        $tmpstr = $this->hmconf[$this->taglist['table'].$this->sep.$this->prttbl.$this->sep.$this->taglist['check']];
+        $tmpstr = $tmpstr==null?'':$tmpstr;
+        $tblchk = array();
+        if($tmpstr != ''){
+            $tmparr = explode("|",$tmpstr);
+            foreach($tmparr as $k=>$v){
+                $subarr = explode(":",$tmparr[$k]);
+                $tblchk[$subarr[0]] = $subarr[1];
+            }
+        }
+        return $tblchk;
+    }
+
+    public function getTblCharset(){
+        $tmpstr = $this->hmconf[$this->taglist['table'].$this->sep.$this->prttbl.$this->sep.$this->taglist['charset']];
+        return $tmpstr = $tmpstr==null?'utf-8':$tmpstr;
+    }
+	
+	public function getTblRotateName($tblrotate=null){ # Mon Jan  5 15:34:26 CST 2015
+        $tmpstr = $this->hmconf[$this->taglist['table'].$this->sep.$this->prttbl.$this->sep.$this->taglist['rotatespan']];
+        $tmpstr = $tmpstr==null?'':$tmpstr;
+		$spantbl = ''; 
+		if($tmpstr != ''){
+		$spantag = strtoupper(substr($tmpstr, -1));
+		if($spantag != ''){
+			$this->rotatetag = $spantag;
+			if($tblrotate != ''){
+				$this->tblrotate = $tblrotate;
+				$spantbl .= '_'.$tblrotate;	
+			}
+			else if($spantag == "M"){ #month
+				$spantbl .= "_".date("Ym");	
+			}
+			else if($spantag == "Y"){
+				$spantbl .= "_".date("Y");	
+			}
+			else if($spantag == "D"){
+				$spantbl .= "_".date("Ymd");	
+			}
+			else if($spantag == "W"){
+				$spantbl .= "_".date("YW");	
+			}
+			else{
+				error_log(__FILE__.": found rotatespan:[$rotatespan] match failed.");	
+			}
+		}
+		}
+		#error_log(__FILE__.": chn:[".$this->getTblCHN()."] prttbl:[".$this->prttbl."] tmpstr:[$tmpstr]"); 
+		return $spantbl;
+				
+    }
+
+
+    public function getOrderBy(){
+        $tmpstr = $this->hmconf[$this->taglist['table'].$this->sep.$this->prttbl.$this->sep.$this->taglist['orderby']];
+        return $tmpstr = $tmpstr==null?'id':$tmpstr;
+    }
+
+    public function getPrintRef($after=0){
+        $tmpstr = $this->hmconf[$this->taglist['printref'].$this->sep.($after==0?'before':'after').$this->sep.$this->taglist['reftable']];
+        return $tmpstr = $tmpstr==null?'':$tmpstr;
+    }
+
+    public function getMode(){
+        $tmpstr = $this->hmconf[$this->taglist['table'].$this->sep.$this->prttbl.$this->sep.$this->taglist['managemode']];
+        $tmpstr = $tmpstr==null?'':$tmpstr;
+
+        if(strpos($tmpstr,"fromtable") === 0){
+            $arr = explode("::",$tmpstr);
+            $tbl = $arr[1];
+            $dispfield = $arr[2];
+         
+            $oldhmf = $this->hmf;
+            $tmpId = $_REQUEST['id'];
+            #print "tmpId:$tmpId\n";
+            $this->hmf = array();
+            $this->setTbl($tbl);
+            if(isset($arr[3])){
+                $secArr = explode(",",$arr[3]);
+                $wherestr = "";
+                foreach($secArr as $k=>$v){
+                    $trdArr = explode("=",$v);
+                    $tmpfieldv = $trdArr[1];
+                    if($trdArr[1] == 'THIS_TABLE'){
+                       $tmpfieldv = $oldhmf['tbl']; 
+                    }else if($trdArr[1] == 'THIS_ID'){
+                        $tmpfieldv = $tmpId;
+                    }
+                    $this->set($trdArr[0],$tmpfieldv); 
+                    $wherestr .= " ".$trdArr[0]."='".$tmpfieldv."' and";
+                }
+            }
+            $hm = $this->getBy("id,$dispfield", $wherestr." 1=1");
+            if($hm[0]){
+                $hm = $hm[1];
+                $tmpstr = $hm[0][$dispfield]; 
+            }else{
+                $tmpstr = '';
+            }
+            $this->hmf = $oldhmf;
+        }
+        return $tmpstr;
+    }
+
+    # js for whole form, added by wadelau on Wed Apr  4 17:45:09 CST 2012
+    public function getJsActionTbl(){
+        $tmpstr = $this->hmconf[$this->taglist['table'].$this->sep.$this->prttbl.$this->sep.$this->taglist['jsaction']];
+        $tmpstr = $tmpstr==null?'':$tmpstr;
+        $jsact = '';
+        if($tmpstr != ''){
+            $mularr = explode("|",$tmpstr);
+            foreach($mularr as $k=>$jsstr){
+                $arr = explode("::", $jsstr);
+                $jsact .= " ".$arr[0]."=\"javascript:".$arr[1].";\" ";
+            }
+        }
+        return $jsact;
+    }
+
+    public function getListFieldCount(){
+        $default = 6; # six fields 
+        $tmpstr = $this->hmconf[$this->taglist['table'].$this->sep.$this->prttbl.$this->sep.$this->taglist['listfieldcount']];
+        $tmpstr = $tmpstr==null?'':$tmpstr;
+        return $tmpstr = $tmpstr==''?$default:$tmpstr;
+    }
+
+    public function getFieldList()
+    {
+        return $this->hmfield;
+    }
+
+
+    public function getRelatedRef($url=''){ # ref to xml/hss_info_objecttbl.xml
+        $refArr = array();
+        $tmpstr = $this->hmconf[$this->taglist['table'].$this->sep.$this->prttbl.$this->sep.$this->taglist['relatedref']];
+        $tmpstr = $tmpstr==null?'':$tmpstr;
+        if($tmpstr != ''){
+            if($url != '' && strpos($tmpstr,"THIS_URL") !== false){
+                $tmpstr = str_replace("THIS_URL",$url,$tmpstr);
+            }
+            $arr = explode("|", $tmpstr);
+            foreach($arr as $k=>$v){
+                $arr2 = explode("::", $v);
+                $refArr[] = array("name"=>$arr2[0], "href"=>$arr2[1],"target"=>$arr2[2]);
+            }
+        }
+		# check rotatespan, Mon Jan  5 16:55:48 CST 2015
+		$rotatespan = $this->rotatetag;
+		error_log(__FILE__.": rotatespan:$rotatespan");
+		if($rotatespan != ''){
+			$tmpArr = array('M'=>'month', 'Y'=>'year', 'D'=>'day', 'W'=>'week');
+			$tmpArr1 = array('M'=>'Ym', 'Y'=>'Y', 'D'=>'Ymd', 'W'=>'YW');
+			$tmpArr2 = array();
+			$tmptag = $tmpArr[$rotatespan];
+			for($tmpi=1; $tmpi<5; $tmpi++){
+				$mytag = date($tmpArr1[$rotatespan], strtotime("-$tmpi $tmptag"));		
+				$refArr[] = array("name"=>$mytag, "href"=>'jdo.php?tbl='.$this->prttbl.'&amp;act=list&amp;tblrotate='.$mytag, 'target'=>'actarea');
+			}
+			#print_r($tmpArr2);
+			
+		}
+        #print_r($refArr);
+        return $refArr;
+    }
+
+    public function getHideSk($user){
+        # see xml/hss_tuanduitbl.xml
+        $tmpstr = $this->hmconf[$this->taglist['table'].$this->sep.$this->prttbl.$this->sep.$this->taglist['hidesk']];
+        $tmpstr = $tmpstr==null?'':$tmpstr;
+        
+        #error_log(__FILE__.": 111 tmpstr:$tmpstr");
+        if(strpos($tmpstr,"USER_OPERATEAREA") !== false){
+            $tmpstr = str_replace( "USER_OPERATEAREA", $user->getOperateArea(), $tmpstr);
+        }
+        #error_log(__FILE__.": 222 tmpstr:$tmpstr");
+        return $tmpstr;
+    }
+
+
+    # functions based on $field, below
+
+    public function getCHN($field){
+        $tmpstr = $this->hmconf[$this->taglist['field'].$this->sep.$field.$this->sep.$this->taglist['chnname']];
+        return $tmpstr = $tmpstr==null?$field:$tmpstr;
+    }
+
+    public function getFieldPrint($field){
+        $tmpstr = $this->hmconf[$this->taglist['field'].$this->sep.$field.$this->sep.$this->taglist['printref']];
+        return $tmpstr = $tmpstr==null?'':$tmpstr;
+    }
+
+    public function getInputType($field){
+        $tmpstr = $this->hmconf[$this->taglist['field'].$this->sep.$field.$this->sep.$this->taglist['inputtype']];
+        if($tmpstr == null){
+            $selectoption = $this->getSelectOption($field,'');
+            if($selectoption != null && $selectoption !=''){
+                $tmpstr = 'select'; # added on Sun Mar 18 15:57:20 CST 2012
+            }
+        }
+        return $tmpstr = $tmpstr==null?'input':$tmpstr;
+    }
+
+    public function getDefaultValue($field){
+        $tmpstr = $this->hmconf[$this->taglist['field'].$this->sep.$field.$this->sep.$this->taglist['defaultvalue']];
+        return $tmpstr = $tmpstr==null?'':$tmpstr;
+    }
+
+    public function getListView($field){ # '0': not disp, '1' or '': disp, '2': force to disp
+        $tmpstr = $this->hmconf[$this->taglist['field'].$this->sep.$field.$this->sep.$this->taglist['listview']];
+        $tmpstr = $tmpstr==null?'':$tmpstr;
+        if($tmpstr == ''){
+            $tmpstr = 1;
+        }
+        return $tmpstr ;
+    }
+
+    public function getSingleRow($field){
+        $tmpstr = $this->hmconf[$this->taglist['field'].$this->sep.$field.$this->sep.$this->taglist['singlerow']];
+        return $tmpstr = $tmpstr==null?'':$tmpstr;
+    }
+
+    public function getJsAction($field){
+        $tmpstr = $this->hmconf[$this->taglist['field'].$this->sep.$field.$this->sep.$this->taglist['jsaction']];
+        $tmpstr = $tmpstr==null?'':$tmpstr;
+        $jsact = '';
+        if($tmpstr != ''){
+            $mularr = explode("|",$tmpstr);
+            foreach($mularr as $k=>$jsstr){
+                $arr = explode("::", $jsstr);
+                $jsact .= " ".$arr[0]."=\"javascript:".$arr[1].";\" ";
+            }
+        }
+        return $jsact;
+    }
+
+    public function getAccept($field){
+        $tmpstr = $this->hmconf[$this->taglist['field'].$this->sep.$field.$this->sep.$this->taglist['accept']];
+        $tmpstr = $tmpstr==null?'':$tmpstr;
+        if($tmpstr != ''){
+            return " accept=\"".$tmpstr."\" ";
+        }else{
+            return '';
+        }
+    }
+
+    public function getSelectOption($field, $defaultval, $tagpre='', $needv=0, $ismultiple=0){
+        $tmpstr = $this->hmconf[$this->taglist['field'].$this->sep.$field.$this->sep.$this->taglist['selectoption']];
+        $tmpstr = $tmpstr==null?'':$tmpstr;
+        if($tmpstr == ''){
+            if($field == 'state'){
+                $tmpstr = "1:正常|0:停用";
+            }else{
+                return $tmpstr;
+            }
+        }
+        $optionlist = '<option value="">-选择-</option>';
+        $selectval = '';
+        $selectval_mul = '';
+        if($tmpstr == ''){
+            # ?    
+
+        }else if(strpos($tmpstr,"fromtable") === 0){
+            $arr = explode("::",$tmpstr);
+            $tbl = $arr[1];
+            $dispfield = $arr[2];
+            if(isset($arr[3])){
+                #$dispfield .= ",".$arr[3];
+            }
+			$hmoption = array();
+			$optval = 'id';
+			if(isset($arr[4])){ $optval = $arr[4]; }  # alternative 'id', # see xml/fwn_sitetbl, sitetype, Fri Dec 12 13:43:36 CST 2014
+			if(isset($this->hmconf['selectoption_'.$field])){
+				$hmoption = $this->hmconf['selectoption_'.$field];	
+			}
+			else{
+				$oldhmf = $this->hmf;
+				$this->hmf = array();
+				$this->setTbl($tbl);
+				$hm = $this->getBy("$optval,$dispfield", $arr[3]);  
+				if($hm[0]){
+					$hmoption = $hm[1]; $this->hmconf['selectoption_'.$field] = $hmoption;
+				}
+				$this->hmf = $oldhmf;
+			}
+			foreach($hmoption as $k=>$rec){
+				$dispname = $rec[$arr[2]];
+				if(strpos($dispfield, ",") !== false){ #! Sat Nov 29 07:35:39 CST 2014
+					$tmparr = explode(",", $dispfield);
+					foreach($tmparr as $k2=>$v2){
+						$dispname .= "-".$rec[$v2];	
+					}
+				}
+				$optionlist .= "<option value=\"".$rec[$optval]."\"";
+				if($defaultval != null){
+					if($rec[$optval] == $defaultval || strpos(",".$defaultval.",", ",".$rec[$optval].",") !== false){
+						$optionlist .= " selected";   
+						$selectval = $dispname.(isset($arr[3])?"-".$rec[$arr[3]]:"")." (".$rec[$optval].")";
+						if($needv == 1){
+							$selectval_mul .= $dispname.(isset($arr[3])?"-".$rec[$arr[3]]:"")." (".$rec[$optval]."),";
+						} 
+					}
+				}
+			   $optionlist .=">".$dispname.(isset($arr[3])?"-".$rec[$arr[3]]:"")." (".$rec[$optval].")</option>\n"; 
+			}
+            //$this->setTbl($oldtbl);
+
+        }else if(strpos($tmpstr,"|") > 0){ 
+            $varlist = explode("|", $tmpstr);
+            $tmpstr = "";
+            foreach($varlist as $k=>$v){
+                $arr = explode(":", $v);
+                $optionlist .= "<option value=\"".$arr[0]."\"";
+                if($defaultval != null){
+                    if($arr[0] != '' && ($arr[0] == $defaultval || strpos($defaultval, $arr[0]) !== false)){
+                        $optionlist .= " selected";   
+                        $selectval = $arr[1];
+                        if($needv == 1){
+                            $selectval_mul .= $arr[1].",";
+                        } 
+                    }
+                }
+                $optionlist .=">".$arr[1]."(".$arr[0].")</option>\n";
+            }
+        }
+        if($this->getReadOnly($field,'select') == 'disabled'){
+            $tmpstr = "<select id=\"".$tagpre.$field."\" name=\"".$tagpre.$field."\" ".$this->getJsAction($field)." ".$this->getAccept($field)." disabled>".$optionlist."</select> <input type=\"hidden\" id=\"".$tagpre.$field."\" name=\"".$tagpre.$field."\" value=\"".$defaultval."\" />";
+        }else{
+            if($ismultiple == 0){
+                $tmpstr = "<select id=\"".$tagpre.$field."\" name=\"".$tagpre.$field."\" ".$this->getJsAction($field)." ".$this->getAccept($field)." ".$this->getCss($field).">".$optionlist."</select>";
+            }else{
+                $tmpstr = "<select id=\"".$tagpre.$field."\" name=\"".$tagpre.$field."[]\" ".$this->getJsAction($field)." ".$this->getAccept($field)." multiple=\"multiple\">".$optionlist."</select>";
+            }
+        }
+        if($needv != 1){
+            return $tmpstr;
+        }else{
+            #error_log(__FILE__.": field:$field, selectval:$selectval , selectval_mul:$selectval_mul");
+            if($ismultiple == 1){
+                return substr($selectval_mul,0, strlen($selectval_mul)-1);
+            }else{
+                return $selectval==''?$defaultval:$selectval; #  = $defaultval;
+            }
+        }
+
+    }
+
+    public function getExtraInput($field,$result=null){
+        $tmpstr = $this->hmconf[$this->taglist['field'].$this->sep.$field.$this->sep.$this->taglist['extrainput']];
+        $tmpstr = $tmpstr==null?'':$tmpstr;
+        if($tmpstr != ''){
+        	if(strpos($tmpstr, "THIS_") !== false){
+				if($tmpcount=preg_match_all("/THIS_([^&]+)/", $tmpstr, $matches)){
+					#print_r($matches);		
+					foreach($matches[1] as $k=>$v){
+						#print_r($v);
+						#print __FILE__.": matched:[".$v."],,,\n";
+						$tmpstr = str_replace("THIS_$v", $result[$v], $tmpstr);
+					}
+				}	
+			}	
+		}
+        return $tmpstr ;
+    }
+    
+    public function getReadOnly($field, $inputtype=''){
+        $tmpstr = $this->hmconf[$this->taglist['field'].$this->sep.$field.$this->sep.$this->taglist['readonly']];
+        $tmpstr = $tmpstr ==null ? '':$tmpstr;
+        if($tmpstr == '1'){
+            $tmpstr = "readonly";
+            if($inputtype == 'select'){
+                $tmpstr =  'disabled';
+            }
+        }else{
+            $tmpstr = '';
+        }
+        return $tmpstr;
+    }
+    
+    public function getMemo($field){
+        $tmpstr = $this->hmconf[$this->taglist['field'].$this->sep.$field.$this->sep.$this->taglist['memo']];
+        return $tmpstr = $tmpstr==null?'':$tmpstr;
+    }
+
+    public function getCss($field, $fieldv=''){
+        $tmpstr = $this->hmconf[$this->taglist['field'].$this->sep.$field.$this->sep.$this->taglist['css']];
+        $tmpstr = $tmpstr==null?'':$tmpstr;
+        if($tmpstr != ''){
+            $arr = explode("|", $tmpstr); # need to fiter by state, see xml/hss_tuanduitbl.xml
+            foreach($arr as $k=>$v){
+                $arr2 = explode("::", $v);
+                if($fieldv != ''){
+                    if($fieldv == $arr2[0]){
+                        $tmpstr = "class=\"".$arr2[1]."\"";
+                        break;
+                    }else{
+
+                    }
+                }else{
+                    #$tmpstr = "class=\"".$arr2[1]."\"";
+                    $tmpstr = "";
+                    break;
+                }
+            }
+        }
+        return $tmpstr;
+    }
+
+
+    public function getTrigger($field=''){
+        $tmpstr = '';
+        if($field == ''){
+            $tmpstr = $this->hmconf[$this->taglist['table'].$this->sep.$this->prttbl.$this->sep.$this->taglist['trigger']];
+        }else{
+            $tmpstr = $this->hmconf[$this->taglist['field'].$this->sep.$field.$this->sep.$this->taglist['trigger']];
+    	}    
+        return $tmpstr = $tmpstr==null?'':$tmpstr;
+    }
+
+    public function setTrigger($field,$trigger){
+        $this->hmconf[$this->taglist['field'].$this->sep.$field.$this->sep.$this->taglist['trigger']] = $trigger;
+    }
+
+    public function getHref($field,$result){
+        $tmpstr = $this->hmconf[$this->taglist['field'].$this->sep.$field.$this->sep.$this->taglist['href']];
+        $tmpstr = $tmpstr==null?'':$tmpstr;
+        $tUrl = "";
+        $title = ""; $needJsConfirm = 0; $needBlank = 0;
+        if($tmpstr != ""){ # see xml/hss_info_usertbl.xml
+            $vArr = explode("::", $tmpstr);
+			if(startsWith($vArr[0],"javascript:")){
+				$tUrl = $vArr[0];
+				$title = $vArr[1];
+				if(strpos($tUrl,"THIS") > -1){
+					$tUrl = str_replace('THIS',$result[$field], $tUrl);	
+				}
+			}
+			else{
+            $file = $vArr[0];
+            if($file == 'THIS'){
+                $file = $result[$field];
+            }
+            $pArr = explode(",", $vArr[1]);
+            $title = $vArr[2];
+            if($title == 'THIS'){
+                $title = $result[$field];
+            }
+            foreach($pArr as $k=>$v){
+                $para = explode("=", $v);
+                $tUrl .= $para[0].'=';
+                if(count($para) > 2){
+                    $para[1] = $para[1]."=".$para[2];
+                    $para[1] = str_replace("THIS", $result[$field], $para[1]);
+                }
+                if($para[1] == 'THIS'){
+                    $tUrl .= $result[$field];
+                }else if(strpos($para[1],"THIS_") !== false){
+                    $tUrl .= $result[substr($para[1],5)];
+                    
+                }else if(strpos($para[1],"'") === 0){
+                    $tUrl .= substr($para[1],1,strlen($para[1])-2);
+                }else{
+                    $tUrl .= $result[$para[1]];
+                }
+                $tUrl .= "&";
+            }
+            $tUrl = $file."?".substr($tUrl, 0, strlen($tUrl)-1);
+            $fourthPara = $vArr[3];
+            if($fourthPara != ''){
+                if(strpos($fourthPara,"confirm=1") !== false){
+                    $needJsConfirm = 1;
+                }
+                if(strpos($fourthPara,"blank=1") !== false){
+                    $needBlank = 1;
+                } 
+                else if(strpos($fourthPara,"blank=2") !== false){
+                    $needBlank = 2;
+                } 
+            }
+            if($needJsConfirm == 1){
+                $tUrl = "javascript:if(window.confirm('确认要执行此操作吗?')){document.location.href='".$tUrl."';}";
+            }
+            if($needBlank == 1){
+                $needBlank = "_blank";
+            }
+			else if($needBlank == 2){
+                $needBlank = "_top";
+			}
+			else{
+                $needBlank = "_self";
+            }
+			}
+            return array($tUrl, $title, $needBlank);
+        }
+        return array();
+    }
+
+    public function getSelectMultiple($field){
+        $tmpstr = $this->hmconf[$this->taglist['field'].$this->sep.$field.$this->sep.$this->taglist['selectmultiple']];
+        return $tmpstr = $tmpstr==null?'':$tmpstr;
+    }
+
+    public function getStat($field){
+        $tmpstr = $this->hmconf[$this->taglist['field'].$this->sep.$field.$this->sep.$this->taglist['stat']];
+        return $tmpstr = $tmpstr==null?'':$tmpstr;
+    }
+
+
+    public function getField($fieldi){
+        $tmpstr = $this->hmfieldsort[$fieldi];
+        return $tmpstr = $tmpstr==null?'':$tmpstr;
+    }
+
+    public function setFieldSort($hmfieldsort, $hmsize, $hmi){
+        if($hmi < $MAX_FIELD_LIST){
+            $ibala = $MAX_FIELD_LIST - $hmi;
+            $mini = $hmsize - $ibala;
+            for($myi=$mini; $myi<$mini+$ibala; $myi++){
+                $hmi++;
+                $obj = $hmfieldsort[$hmi];
+                $hmfieldsort[$myi] = $obj;
+                unset($hmfieldsort[$hmi]);
+            }
+        }
+        $this->hmfieldsort = $hmfieldsort;
+    
+    }
+
+    public function setFieldList($hmfield){
+        $this->hmfield = $hmfield;
+    }
+
+    public function getDelayJsAction($field){
+        $tmpstr = $this->hmconf[$this->taglist['field'].$this->sep.$field.$this->sep.$this->taglist['delayjsaction']];
+        $tmpstr = $tmpstr==null?'':$tmpstr;
+        $jsact = "";
+        if($tmpstr != ""){
+            $arr = explode("|", $tmpstr);
+            foreach($arr as $k=>$v){
+                $arr2 = explode("::", $v);
+                $jsact .= "parent.registerAct({'status':'".$arr2[0]."','delaytime':".$arr2[1].",'action':'".urlencode($arr2[2])."'});";
+            }
+        }
+        return $jsact==''?'':"<script type=\"text/javascript\">".$jsact."</script>";
+    }
+
+    public function getSuperAccess($field=''){
+        $tmpstr = '';
+        if($field == ''){
+            $tmpstr = $this->hmconf[$this->taglist['table'].$this->sep.$this->prttbl.$this->sep.$this->taglist['superaccess']];
+        }else{
+            $tmpstr = $this->hmconf[$this->taglist['field'].$this->sep.$field.$this->sep.$this->taglist['delayjsaction']];
+        }
+        return $tmpstr==null?'':$tmpstr;
+    }
+
+    public function getLogicOp($field){
+        $intop = array('----'=>'忽略', '='=>'等于',
+                '!='=>'不等于',
+                '>'=>'大于',
+                '>='=>'大于等于',
+                '<'=>'小于',
+                '<='=>'小于等于',
+                'inlist'=>'等于列表中的一个,如: 1,2,3',
+                'inrange'=>'在一个值域中,如: min,max');
+        $strop = array('----'=>'忽略','='=>'等于',
+                '!='=>'不等于',
+                'contains'=>'包含',
+                'notcontains'=>'不包含',
+                'inlist'=>'等于列表中的一个,如: 1,2,3',
+                'startswith'=>'以...开头',
+                'endswith'=>'以...结尾');
+        $rtn = "";
+        $hmfield = $this->hmfield;
+        $isint = 0;
+        if($this->isNumeric($hmfield[$field])){
+            $isint = 1;
+        }
+        $targetArr = $intop;
+        if(!$isint){
+            $targetArr = $strop;
+        }
+        foreach($targetArr as $k=>$v){
+            $reqfieldv = $_REQUEST["oppnsk".$field];
+            $selected = "";
+            if($k == $reqfieldv){
+                $selected = " selected";
+            }
+            $rtn .= "<option value=\"$k\" title=\"".$v."\"".$selected.">$k</option>";
+        }
+        return $rtn;
+    }
+
+
+
+    # inner functions for this object
+
+    //- max depth: 4
+    public static function xml2hash($xmlpath, $sep, $db, $tbl){
+        $i = 0;
+        $hm = array();
+        $hmsortinxml = array();
+        $attribute = array('name','type');
+        if($xmlpath == ''){
+            print __FILE__.": xmlpath is empty. [1201231150]\n";
+            return $hm;
+        }else if($sep == ''){
+            print __FILE__.": separator is empty. [1201231153]\n";
+            return $hm;
+        }
+	$tblpre = Gconf::get('tblpre');
+	$tblconf = str_replace($tblpre, "", $tbl);
+        if(file_exists($xmlpath."/".$tblconf.".xml")){
+            $xmlobj = simplexml_load_file($xmlpath."/".$tblconf.".xml");
+            #print __FILE__.": xmlstr: [".print_r($xmlobj)."]\n";
+
+            foreach($xmlobj as $key=>$value){
+                #print "leve-0: $key: [$value], name: [".$value['name']."] type:[".$value['type']."] typeof:[".gettype($value)."]\n";
+                $sortk = (String)$value['name'];
+                if(!array_key_exists($sortk, $hmsortinxml)){
+                    $hmsortinxml[$sortk] = $i; $i++;
+                }
+		$tmpname = (String)$value['name'];
+		if($key == 'table'){
+			if(substr($tmpname, 0, strlen($tblpre)) !==  $tblpre){
+				$value['name'] = $tblpre.$tmpname;
+			}
+		}
+		$hm[$key.$sep.$value['name']] = $tmpname;
+
+                foreach($value as $key1=>$value1){
+                    #print "leve-1: $key1: [$value1] typeof:[".gettype($value1)."]\n";
+                    $tmpkey1 = $key.$sep.$value['name'].$sep.$key1;
+                    if(!array_key_exists($tmpkey1,$hm)){
+                        $hm[$tmpkey1] = (String)$value1;
+                    }else{
+                        $hm[$tmpkey1] = $hm[$tmpkey1]."|".(String)$value1; 
+                    }
+
+                    foreach($value1 as $key2=>$value2){
+                        #print "leve-2: $key2: [$value2] typeof:[".gettype($value2)."]\n";
+                        $tmpkey2 = $key.$sep.$value['name'].$sep.$key1.$value1['name'].$sep.$key2;
+                        if(!array_key_exists($tmpkey2,$hm)){
+                            $hm[$tmpkey2] = (String)$value2;
+                        }else{
+                            $hm[$tmpkey2] = $hm[$tmpkey2]."|".(String)$value2; 
+                        }
+
+                        foreach($value2 as $key3=>$value3){
+                            #print "leve-3: $key3: [$value3] typeof:[".gettype($value3)."]\n";
+                            $tmpkey3 = $key.$sep.$value['name'].$sep.$key1.$value1['name'].$sep.$key2.$sep.$value2['name'].$sep.$key3;
+                            if(!array_key_exists($tmpkey3,$hm)){
+                                $hm[$tmpkey3] = (String)$value3;
+                            }else{
+                                $hm[$tmpkey3] = $hm[$tmpkey3]."|".(String)$value3; 
+                            }
+                        }
+                    }
+                } 
+            }
+        }else{
+            error_log(__FILE__.": ".$xmlpath."/".$tblconf.".xml was not found.");
+        }
+        #print_r($hmsortinxml);
+        #print_r($hm);
+        return array($hm,$hmsortinxml);
+    }
+
+    function filterHiddenField($field, $opfield, $timefield){
+       $ishidden = false;
+       if($field == null || $field == ''
+            || $field == 'id' || $this->getInputType($field) == 'hidden'
+            || in_array($field, array_merge($opfield, $timefield))){
+            
+           if($field != '' && $this->getListView($field) == 2){
+                # force to disp 
+           }else{
+                $ishidden = true;
+                #print "field:[".$field."] is hidden!\n";
+           }
+       }     
+       return $ishidden;
+    }
+
+    function getFieldType(){
+        $fieldtype = "";
+        foreach($this->hmfield as $k=>$v){
+            $type = $this->getInputType($k);
+            $fieldtype .= ",".$k.":".$type;
+        }
+        return substr($fieldtype,1);
+    }
+
+	# filter much more options to a few of them
+	# Mon Jul 28 15:14:01 CST 2014
+	function getInput2Select($field){
+        $tmpstr = $this->hmconf[$this->taglist['field'].$this->sep.$field.$this->sep.$this->taglist['input2select']];
+        return $tmpstr = $tmpstr==null?'':$tmpstr;
+	}
+    
+
+}
+?>

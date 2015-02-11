@@ -1,0 +1,28 @@
+<?xml version="1.0" standalone="yes"?>
+<tablecfg>   
+    <table name="info_starleveltbl">
+        <chnname>星级信息</chnname>
+        <listfieldcount>4</listfieldcount> <!--max_disp_cols-->
+        <since>20140512</since>
+        <creator>Shujuan</creator>		
+    </table>
+        <field name="starlevelname">
+            <chnname>名称</chnname>
+        </field>
+		<field name="stars">
+            <chnname>显示几颗星</chnname>
+			<inputtype>select</inputtype>
+            <selectoption>0:0颗星|2:2颗星|3:3颗星|4:4颗星|5:5颗星|6:6颗星|7:7颗星</selectoption>
+        </field>
+        <field name="state" type="text">
+            <chnname>状态</chnname>
+            <inputtype>select</inputtype>
+            <selectoption>1:正常|0:停用</selectoption>
+        </field>  
+        <field name="updatetime" type="text">
+            <chnname>更新时间</chnname>
+        </field>
+        <field name="operator" type="text">
+            <chnname>操作人</chnname>
+        </field>
+</tablecfg>

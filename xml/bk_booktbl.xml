@@ -1,0 +1,55 @@
+<?xml version="1.0" standalone="yes"?>
+<tablecfg>   
+    <table name="bk_booktbl">
+        <chnname>在编书刊列表</chnname>
+        <listfieldcount>8</listfieldcount> <!--max_disp_cols-->
+        <since>20141128</since>
+        <creator>Xenxin</creator>
+		<readonly>1</readonly>	
+    </table>
+  
+        <field name="ititle" type="text">
+            <chnname>书名</chnname>
+			<!-- <href>javascript:doActionEx('jdo.php?tbl=bk_chaptertbl&amp;act=list&amp;tit=&amp;db=&amp;bookid=THIS','actarea')::展开::</href> -->
+			<href>./ido.php::tbl='bk_chaptertbl',parent='bookid',pnobiserial='0',bookid=THIS_id::展开::blank=2</href>
+        </field>
+  		
+        <field name="ivolume">
+            <chnname>卷/期</chnname>
+			<!--
+            <inputtype>select</inputtype>
+            <selectoption>fromtable::bk_volumenametbl::volumename::id>0</selectoption>
+			-->
+        </field>
+
+        <field name="iauthor">
+            <chnname>作者</chnname>
+        	<extrainput>extra/linktbl.php?tbl=bk_bookauthortbl&amp;linkfield=bookid&amp;pnskbookid=THIS_id</extrainput>
+        </field>
+
+        <field name="ieditor">
+            <chnname>编者</chnname>
+        	<extrainput>extra/linktbl.php?tbl=bk_bookeditortbl&amp;linkfield=bookid&amp;pnskbookid=THIS_id</extrainput>
+        </field>
+
+        <field name="entitle" type="text">
+            <chnname>英文标题</chnname>
+			<listview>0</listview>
+        </field>
+
+        <field name="istate" type="text">
+            <chnname>状态</chnname>
+            <inputtype>select</inputtype>
+            <selectoption>fromtable::bk_bookstatetbl::statename::id>0</selectoption>
+        </field>
+
+        <field name="inserttime" type="text">
+            <chnname>更新时间</chnname>
+			<listview>2</listview>
+        </field>
+        <field name="op" type="text">
+            <chnname>操作人</chnname>
+        </field>
+
+
+</tablecfg>

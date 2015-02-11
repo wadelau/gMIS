@@ -1,0 +1,45 @@
+<?xml version="1.0" standalone="yes"?>
+<tablecfg>   
+    <table name="info_mediotbl">
+        <chnname>多媒体管理</chnname>
+        <listfieldcount>5</listfieldcount> <!--max_disp_cols-->
+        <since>20141111</since>
+        <creator>byhunpo</creator>
+        <!-- <superaccess>inherit::id=USER_ID::rw</superaccess> --> 
+    </table>  
+        <field name="videoname" type="text">
+            <chnname>视频名称</chnname>
+        </field>
+		<field name="exlink" type="text">
+            <chnname>外部资源</chnname>
+			<inputtype>text</inputtype>
+        </field>
+		<field name="inlink" type="text">
+            <chnname>内部资源</chnname>
+			<inputtype>file</inputtype>
+        </field>
+		<!--<field name="show" type="text">
+            <chnname>视频状态</chnname>
+            <inputtype>select</inputtype>
+            <selectoption>1:显示|2:隐藏</selectoption>videocontent
+        </field> -->
+		<field name="videocontent">
+		<inputtype>textarea</inputtype>
+            <chnname>视频介绍</chnname>
+			<singlerow>1</singlerow>
+        </field>
+        <field name="uploader">
+            <chnname>上传者</chnname>
+        </field>
+        <field name="updatatime">
+            <chnname>更新时间</chnname>
+        </field>
+		<field name="operator" type="text">
+            <chnname>操作人</chnname>
+        </field>
+        <field name="static" type="text">
+            <chnname>状态</chnname>
+            <inputtype>select</inputtype>
+            <selectoption>0:停用|1:正常|2:冻结</selectoption>
+        </field>
+</tablecfg>
