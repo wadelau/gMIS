@@ -2,7 +2,7 @@
 
 # global constant configurations
 
-$tblpre = "gmis_";
+$tblpre = "";
 $conf = array();
 
 $conf['tblpre'] 	= $tblpre;
@@ -18,17 +18,17 @@ $conf['smarty']		= $appdir.'/class/Smarty-3.1.7/libs';
 $conf['uploaddir']	= 'upld';
 $conf['septag']		= '_J_A_Z_';
 
-$conf['maindb']		= 'peoplelab';
+$conf['maindb']		= '';
 $conf['maintbl']	= $tblpre.'customertbl';
 $conf['usertbl']	= $tblpre.'info_usertbl';
 $conf['welcometbl']	= $tblpre.'info_welcometbl';
 $conf['operatelogtbl']	= $tblpre.'fin_operatelogtbl';
 
 # db info
-$conf['dbhost'] 	= 'localhost';
-$conf['dbport'] 	= '3306';
-$conf['dbuser'] 	= 'peoplelab';
-$conf['dbpassword'] 	= 'peoplelab0809';
+$conf['dbhost'] 	= '';
+$conf['dbport'] 	= '';
+$conf['dbuser'] 	= '';
+$conf['dbpassword'] 	= '';
 $conf['dbname'] 	= $conf['maindb'];
 
 #
