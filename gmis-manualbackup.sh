@@ -22,14 +22,14 @@ tmpdir="/var/tmp";
 rm -f $tmpdir/gtbl.*
 
 # files
-dir="/www/webroot/pages/dev/dbmgmt";
+dir="/www/webroot/pages/gmis";
 cd $dir
 tar czfh $tmpdir/gmis.$curdate.tar.gz ./* 
 
 sz $tmpdir/gmis.$curdate.tar.gz
 
 # data
-mysqldump --opt -ugmis -pgmispwd1433 gmisdb --default-character-set=utf8 > $tmpdir/gmis-db.$curdate.sql
+mysqldump --opt -ugmisUSER -pgmisPWD gmisdb --default-character-set=utf8 > $tmpdir/gmis-db.$curdate.sql
 
 tar czfh $tmpdir/gmis-db.$curdate.tar.gz $tmpdir/gmis-db.$curdate.sql
 
