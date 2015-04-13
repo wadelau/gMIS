@@ -223,6 +223,7 @@ CREATE TABLE `gmis_info_objecttbl` (
   `tblindex` char(254) NOT NULL DEFAULT '',
   `state` tinyint(1) NOT NULL DEFAULT '1',
   `operator` char(32) NOT NULL DEFAULT '',
+  `addtodesktop` tinyint(1) not null default 0,
   `updatetime` datetime NOT NULL,
   `inserttime` datetime NOT NULL,
   PRIMARY KEY (`id`),

@@ -128,18 +128,18 @@ function inList($needle, $haystack){
     return ($pos === false ? false : true);
 }
 
-function mkUrl($file, $_REQUEST){
+function mkUrl($file, $req){
     $url = $file."?";
     /*
     $noneeddata = array('act','PHPSESSID','JSESSIONID','userufqi','iweb_shoppingcart','iweb_user_id','iweb_user_pwd','iweb_username','iweb_head_ico','iweb_safecode');
-    foreach($_REQUEST as $k=>$v){
+    foreach($req as $k=>$v){
         if(!in_array($k,$noneeddata)){
             $url .= $k."=".$v."&";
         }
     }
     */
     $needdata = array('id','tbl','db','oid','otbl','oldv','field','linkfield','linkfield2','tit');
-    foreach($_REQUEST as $k=>$v){
+    foreach($req as $k=>$v){
         if(in_array($k, $needdata) || startsWith($k,'pn') || startsWith($k, "oppn")){
             if($k == 'oldv'){
                 $v = substr($v,0,32); # why? Sun Mar 18 20:40:59 CST 2012
