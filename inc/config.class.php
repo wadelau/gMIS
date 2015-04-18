@@ -32,7 +32,7 @@ $conf['dbpassword'] 	= '';
 $conf['dbname'] 	= $conf['maindb'];
 
 #
-$conf['frontpage'] = '#-people-lab';
+$conf['frontpage'] = '#-xxx';
 $conf['is_debug'] = 1;
 
 # set them all
