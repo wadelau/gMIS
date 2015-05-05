@@ -94,9 +94,33 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
         }
         $out .= "  <br/>".$gtbl->getMemo($field)." </td></tr><tr>";
 
-    }else{
-      
-        $tmpval = str_replace('<', '&lt;', $hmorig[$field]);
+    }
+	else if($fieldinputtype == 'textarea'){
+
+        $hmorig[$field] = str_replace("<br/>", "\n", $hmorig[$field]); 
+
+        if($gtbl->getSingleRow($field) == '1'){
+			$tmpmemo = $gtbl->getMemo($field);
+            if($tmpmemo == ''){
+                #$tmpmemo = '支持标准HTML: 加粗&lt;b&gt;, 超链&lt;a&gt;, 插入图片如&lt;img src="admin/upld/102913431493_-201210.jpg" /&gt;(图片路径在 综合数据--附件数据 里获取)';
+            }
+            $out .= "</tr>\n<tr><td style=\"vertical-align:top\">".$gtbl->getCHN($field).":</td><td colspan=\"".($form_cols)."\">
+                <div id='".$field."_myeditordiv' style='width:680px;height:450px;display:none'></div>
+                <div id='".$field."_mytextdiv' style='width:680px;height:450px;display:block'>
+                <textarea id=\"".$field."\" name=\"".$field."\" rows=\"5\" cols=\"65\"  class=\"search\" onclick=\"javascript:openEditor('".$rtvdir."/extra/htmleditor.php?field=".$field."', '".$field."'); parent.switchArea('".$field."_myeditordiv','on'); parent.switchArea('".$field."_mytextdiv','off');\">".$hmorig[$field]."</textarea> </div><br/> ".$tmpmemo."<br/> </td></tr><tr>";
+            $out .= '';
+
+        }else{
+            $out .= "<td>".$gtbl->getCHN($field).":</td><td><textarea id=\"".$field."\" name=\"".$field."\" rows=\"5\" cols=\"30\"  class=\"search\">".$hmorig[$field]."</textarea> <br/> ".$gtbl->getMemo($field)." </td>";
+        }
+
+    }
+	else{
+
+		$tmpval = $hmorig[$field];
+		if(strpos($tmpval, '<') !== false){
+			$tmpval = str_replace('<', '&lt;', $tmpval);
+		}
 
         $fhref = $gtbl->getHref($field, $hmorig);
         if(count($fhref)>0){
