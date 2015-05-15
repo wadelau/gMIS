@@ -30,42 +30,50 @@ if($hm[0]){
             foreach($hmkeysbylen[4] as $k1=>$v1){
                 if(strpos($v1,$li) === 0){
                     $linfo = $hmkeys[$v1];
-                    #$dynamicmenu .= 'level2-'.$v1.':';
+                    #$dynamicmenu .= 'level2- v1:'.$v1.", \n";
                     if($linfo['modulename'] == ''){
                         $dynamicmenu .= '<li><a href="javascript:void(0);" class="sub">'.$linfo['linkname'].'</a>'."<ul>\n<!--LEVEL-3--></ul>\n</li>\n";
-                    }else{
-			if($linfo['disptitle'] == ''){ $linfo['disptitle'] = $linfo['linkname'];}
+                    }
+					else{
+						if($linfo['disptitle'] == ''){ $linfo['disptitle'] = $linfo['linkname'];}
                         $dynamicmenu .= '<li><a href="./'.$ido.'?tbl='.$linfo['modulename'].'&tit='.$linfo['disptitle'].'&db='.$linfo['thedb'].'&'.$linfo['dynamicpara'].'">'.$linfo['linkname'].'</a></li>'."\n";    
                     }
                     
+					$lv3 = '';
                     foreach($hmkeysbylen[6] as $k2=>$v2){
+                        #$lv3 .= "\tlevel3-v2:".$v2.", v1:$v1, \n";
                         if(strpos($v2, $v1) === 0){
                             $linfo = $hmkeys[$v2];
-                            #$lv3 .= "\tlevel3-".$v2;
+                            #$lv3 .= "\tlevel3-v2:".$v2.", v1:$v1, \n";
                             if($linfo['modulename'] == ''){
                                 $lv3 .= '<li><a href="javascript:void(0);" class="sub">'.$linfo['linkname'].'</a>'."<ul>\n<!--LEVEL-4--></ul>\n</li>\n";
-                            }else{
-				if($linfo['disptitle'] == ''){ $linfo['disptitle'] = $linfo['linkname'];}
+                            }
+							else{
+								if($linfo['disptitle'] == ''){ $linfo['disptitle'] = $linfo['linkname'];}
                                 $lv3 .= '<li><a href="./'.$ido.'?tbl='.$linfo['modulename'].'&tit='.$linfo['disptitle'].'&db='.$linfo['thedb'].'&'.$linfo['dynamicpara'].'">'.$linfo['linkname'].'</a></li>'."\n";    
                             }    
 
+							$lv4 = '';
                             foreach($hmkeysbylen[8] as $k3=>$v3){
-				    if(strpos($v3, $v2) === 0){
-					    $linfo = $hmkeys[$v3];
-						#$lv4 .= "\t\tlevel4-".$v3."\n";
-					    if($linfo['disptitle'] == ''){ $linfo['disptitle'] = $linfo['linkname'];}
-					    $lv4 .= '<li><a href="./'.$ido.'?tbl='.$linfo['modulename'].'&tit='.$linfo['disptitle'].'&db='.$linfo['thedb'].'&'.$linfo['dynamicpara'].'">'.$linfo['linkname'].'</a></li>';    
+								if(strpos($v3, $v2) === 0){
+									$linfo = $hmkeys[$v3];
+									#$lv4 .= "\t\tlevel4-v3:".$v3.", v2:$v2, v1:$v1,\n";
+									if($linfo['disptitle'] == ''){ $linfo['disptitle'] = $linfo['linkname'];}
+										$lv4 .= '<li><a href="./'.$ido.'?tbl='.$linfo['modulename'].'&tit='.$linfo['disptitle'].'&db='.$linfo['thedb'].'&'.$linfo['dynamicpara'].'">'.$linfo['linkname'].'</a></li>';    
 
-				    }
-                            }
+								}
+							}
+							if($lv3 != ''){ $lv3 = str_replace("<!--LEVEL-4-->", $lv4, $lv3);  $lv4 = ''; }
+
                         }
                     }
+					$dynamicmenu = str_replace("<!--LEVEL-3-->", $lv3, $dynamicmenu); $lv3 = '';
                 } 
             }
             
-            $lv3 = str_replace("<!--LEVEL-4-->", $lv4, $lv3);
+            #$lv3 = str_replace("<!--LEVEL-4-->", $lv4, $lv3);
             #print "li:$li, final: lv3:[$lv3], lv4:[$lv4]\n";
-            $dynamicmenu = str_replace("<!--LEVEL-3-->", $lv3, $dynamicmenu);
+            #$dynamicmenu = str_replace("<!--LEVEL-3-->", $lv3, $dynamicmenu);
 
             $dynamicmenu .= "</ul>\n</li>\n";
 
