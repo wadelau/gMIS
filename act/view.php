@@ -78,6 +78,7 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
         
     }else if($fieldinputtype == 'file'){
         $isimg = isImg($hmorig[$field]);
+		if(strpos($hmorig[$field], "$shortDirName/") !== false){ $hmorig[$field] = str_replace("$shortDirName/", "", $hmorig[$field]); }
         if($isimg){
             $out .= "<td >".$gtbl->getCHN($field).":&nbsp;</td><td> <a href=\"".$hmorig[$field]."\" target=\"_blank\" title=\"打开大图\"><img src=\"".$hmorig[$field]."\" alt=\"-x-\" style=\"width:118px\"/></a><br/>".$rtvdir."/".$hmorig[$field]." </td>";
         }else{

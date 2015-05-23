@@ -8,6 +8,9 @@ $rtvdir = dirname(dirname(__FILE__)); # relative dir
 $rtvdir = str_replace($docroot,"", $rtvdir);
 $appdir = $docroot.$rtvdir;
 
+$dirArr = explode("/", $rtvdir);
+$shortDirName = $dirArr[count($dirArr)-1]; # the name of gMIS subdir, i.e. admin, mgmt ...Sat May 23 22:43:21 CST 2015
+
 require_once($appdir."/inc/config.class.php");
 $is_debug = $_CONFIG['is_debug'];
 if($is_debug){

@@ -157,8 +157,9 @@ if(startsWith($act,'add') || startsWith($act, "modify")){
 
                }else if($inputtype == 'file'){
                    $out .= "<td  > <a href=\"javascript:void(0);\" onclick=\"window.open('".$rec[$field]."');\" title=\"点击大图或者下载 ".$rec[$field]."\">";
-                   $tmparr = explode(".", $rec[$field]); $fileext = strtolower($tmparr[count($tmparr)-1]);
-                   if(in_array($fileext, array('gif','jpg','jpeg','png','bmp'))){
+				   if(strpos($rec[$field], "$shortDirName/") !== false){ $rec[$field] = str_replace("$shortDirName/", "", $rec[$field]); }
+				   $isimg = isImg($rec[$field]);
+                   if($isimg){
                        $out .= "<img src=\"".$rec[$field]."\" style=\"max-width:99%; max-height:99%\" onload=\"javascript: var baseSize=218; if(this.width > baseSize){ this.style.width = baseSize+'px';}else if(this.height > baseSize){ this.style.height=baseSize+'px'; } \" id=\"img_".$rec[$field]."\" />";
 
                    }else{
@@ -229,7 +230,7 @@ if(startsWith($act,'add') || startsWith($act, "modify")){
                $out .= "<td > <a href=\"javascript:void(0);\" onclick=\"javascript:doActionEx('".$url."&act=modify".$fieldargv."','contentarea')\" >[modify]</a> <br/> <a href=\"javascript:void(0);\" onclick=\"javascript:if(confirm('confirm delete [".$gtbl->getField(1).":".$rec[$gtbl->getField(1)]."]?')){doAction('".$url."&act=list-dodelete".$fieldargv."');}\" >[delete]</a> &nbsp; </td>";
            }
            $out .= "</tr>"; 
-           if(true){ $fstfields .= $listid[1].","; }
+           if(!isset($_REQUEST['linkfieldcopy'])){ $fstfields .= $listid[1].","; }else{ $fstfields .= $listid[$_REQUEST['linkfieldcopy']].","; }
         } 
         # record end
         # sum bgn
