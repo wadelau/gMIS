@@ -222,7 +222,7 @@ CREATE TABLE `gmis_info_objecttbl` (
   `tblfield` char(254) NOT NULL,
   `tblindex` char(254) NOT NULL DEFAULT '',
   `state` tinyint(1) NOT NULL DEFAULT '1',
-  `addtodesktop` tinyint(1) NOT NULL DEFAULT '1',
+  `addtodesktop` tinyint(1) NOT NULL DEFAULT '0',
   `operator` char(32) NOT NULL DEFAULT '',
   `updatetime` datetime NOT NULL,
   `inserttime` datetime NOT NULL,
