@@ -144,19 +144,46 @@ if(startsWith($act,'add') || startsWith($act, "modify")){
                     $out .= "<td> * </td>";
 
                }else if($inputtype == 'select'){
+				
+					   $fhref = $gtbl->getHref($field, $rec);
+					   if(count($fhref) == 0){
+							$fhref = "";
+						}
+						else{
+							if(strpos($fhref[0],"javascript") !== false){
+							   $fhref_tmp = "<a href=\"javascript:void(0);\" onclick=\"".$fhref[0]."\" title=\"".$fhref[1]."\" target=\"".$fhref[2]."\">";
+							}else{
+							   $fhref_tmp = "<a href=\"".$fhref[0]."\" title=\"".$fhref[1]."\" target=\"".$fhref[2]."\">";
+							}			
+							$fhref = $fhref_tmp;
+						}
+						$fhref_end = ''; if($fhref != ''){ $href_end = "</a>"; }
+
 				   $myinputtype = $inputtype;
                    $readonly = $gtbl->getReadOnly($field);
                    if($gtbl->getJsAction($field) != ''){ $readonly = 'readonly'; }
 				   if($gtbl->getInput2Select($field)==1){ $myinputtype = "input2select";  }
                    $tmpv_orig = $tmpv=$gtbl->getSelectOption($field, $rec[$field],'',1, $gtbl->getSelectMultiple($field));
                    $tmpv = shortenStr($tmpv, $list_disp_limit);
-                   $out .= "<td ondblclick=\"javascript:switchEditable('othercont_div_".$id."_".$field."','".$field."','".$myinputtype."','".$rec[$field]."','".$url."&act=updatefield&field=".$field."&id=".$id."','".$readonly."');\" ".$gtbl->getCss($field, $rec[$field])." title=\"".$tmpv_orig."\"><div id=\"othercont_div_".$id."_".$field."\">".$tmpv."</div>";
+                   $out .= "<td ondblclick=\"javascript:switchEditable('othercont_div_".$id."_".$field."','".$field."','".$myinputtype."','".$rec[$field]."','".$url."&act=updatefield&field=".$field."&id=".$id."','".$readonly."');\" ".$gtbl->getCss($field, $rec[$field])." title=\"".$tmpv_orig."\"><div id=\"othercont_div_".$id."_".$field."\">".$fhref.$tmpv.$fhref_end."</div>";
                    $out .= "</td>";
 
                    $listid[$dispi] = $tmpv_orig;
 
                }else if($inputtype == 'file'){
-                   $out .= "<td  > <a href=\"javascript:void(0);\" onclick=\"window.open('".$rec[$field]."');\" title=\"点击大图或者下载 ".$rec[$field]."\">";
+					   $fhref = $gtbl->getHref($field, $rec);
+					   if(count($fhref) == 0){
+							$fhref = "<a href=\"javascript:void(0);\" onclick=\"window.open('".$rec[$field]."');\" title=\"点击大图或者下载 ".$rec[$field]."\">"; 	   
+						}
+						else{
+							if(strpos($fhref[0],"javascript") !== false){
+							   $fhref_tmp = "<a href=\"javascript:void(0);\" onclick=\"".$fhref[0]."\" title=\"".$fhref[1]."\" target=\"".$fhref[2]."\">";
+							}else{
+							   $fhref_tmp = "<a href=\"".$fhref[0]."\" title=\"".$fhref[1]."\" target=\"".$fhref[2]."\">";
+							}			
+							$fhref = $fhref_tmp;
+						}
+                   $out .= "<td> ".$fhref;
 				   if(strpos($rec[$field], "$shortDirName/") !== false){ $rec[$field] = str_replace("$shortDirName/", "", $rec[$field]); }
 				   $isimg = isImg($rec[$field]);
                    if($isimg){
