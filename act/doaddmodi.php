@@ -2,9 +2,10 @@
 # save data from act=add|modify
 
 $fieldlist = array();
+$fieldvlist = array(); # remedy for overrided by $obj->get during adding, need a tmp container for query string, Thu Jun 11 22:15:32 CST 2015
 $filearr = array();
 if($id != ''){
-    $gtbl->setId($id);
+    $gtbl->setId($id); # speical field
 }
 
 for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
@@ -20,17 +21,23 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
 
     }else if(in_array($field, $opfield)){
         $fieldv = $userid;
+        $fieldlist[] = $field;
+        #$gtbl->set($field, $fieldv);
+		$fieldvlist[$field] = $fieldv;
 
     }else if(in_array($field,$timefield)){
         $fieldv = 'NOW()'; 
         $fieldlist[] = $field;
-        $gtbl->set($field, $fieldv);
+        #$gtbl->set($field, $fieldv);
+        $fieldvlist[$field] = $fieldv;
         continue;
     
     }else if($field == 'password'){
         if($_REQUEST[$field] != ''){
            $fieldv = sha1($_REQUEST[$field]); 
-		   $fieldlist[] = $field; $gtbl->set($field, $fieldv); # 2014-10-26 21:33
+		   $fieldlist[] = $field; 
+		   #$gtbl->set($field, $fieldv); # 2014-10-26 21:33
+		   $fieldvlist[$field] = $fieldv;
         }else{
           continue;    
         }            
@@ -59,7 +66,7 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
 
                 $filedir = $_CONFIG['uploaddir'];
                 if($gtbl->getId() != ''){ # remove old file if necessary
-                    $oldfile = $gtbl->get($field);
+                    $oldfile = $gtbl->get($field); # this might override what has been set by query string
                     if($oldfile != ""){
                         unlink($appdir."/".$oldfile);
                     }else{
@@ -99,8 +106,7 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
 			if($fieldv == ''){
 				$fieldv = $hmfield[$field."_default"];
 			}
-            else
-			{
+            else{
 				if(strpos($fieldv,"<") !== false){ # added by wadelau on Sun Apr 22 22:09:46 CST 2012
                 	#$fieldv = str_replace("<","&lt;", $fieldv);
                 	# allow all html tags except these below 
@@ -114,8 +120,16 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
         	}
     	}
     	$fieldlist[] = $field;
-    	$gtbl->set($field, $fieldv);
+    	#$gtbl->set($field, $fieldv);
+    	$fieldvlist[$field] = $fieldv;
 	}
+
+	#print(__FILE__.": field:[$field] fieldv:[$fieldv]");
+}
+
+#print(__FILE__.": fieldlist:[".$gtbl->toString($fieldlist)."]");
+foreach($fieldvlist as $k=>$v){
+	$gtbl->set($k, $v);		
 }
 
 if(count($filearr)){
