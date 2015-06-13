@@ -36,7 +36,7 @@ if($hm[0]){
 	$codelist = substr($levelcode,0,2)."','".substr($levelcode,0,4)."','".substr($levelcode,0,6)."','".substr($levelcode,0,8); # max 4 levels allowed
 	$hm = $gtbl->execBy("select levelcode, linkname, modulename from ".$_CONFIG['tblpre']."info_menulist where levelcode in ('".$codelist."') order by levelcode", null);
 	if($hm[0]){
-		$hm = $hm[1];	
+		$hm = $hm[1]; $lastLinkName = ''; #print_r($hm); 
 		foreach($hm as $k=>$v){
 			if($v['modulename'] != ''){
 				$module_path .= "<a href='./".$ido."?sid=".$sid."&tbl=".$v['modulename']."'>".$v['linkname']."</a> &rarr;";	
@@ -44,11 +44,13 @@ if($hm[0]){
 			else{
 				$module_path .= "".$v['linkname']." &rarr;";	
 			}
+			$lastLinkName = $v['linkname'];
 		}
 		$module_path = substr($module_path, 0, strlen($module_path)-6);
 	}
 }
 $module_path = $module_path == '' ? '桌面 & 系统配置 &rarr; '.$tit : $module_path;
+if($lastLinkName != $tit){ $module_path .= "&nbsp;|&nbsp;".$tit; }
 
 #print __FILE__.": module_path:[$module_path] hm:[".$gtbl->toString($hm)."] tbl:[$tbl] levelcode:[$levelcode] codelist:[$codelist]\n";
 
