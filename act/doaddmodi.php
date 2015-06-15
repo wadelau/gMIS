@@ -87,7 +87,8 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
                 }else{
                     $out .= __FILE__.": file:[$filename] fail. 201202251535";
                 }
-                $fieldv = $filedir."/".$filename; 
+                #$fieldv = $filedir."/".$filename; 
+                $fieldv = $shortDirName."/".$filedir."/".$filename; 
                 $filearr['filename'] = basename($_FILES[$field]['name']); # sometimes original name may be different with uploadedfile.
                 $filearr['filesize'] = $_FILES[$field]['size'];
                 $filearr['filetype'] = $_FILES[$field]['type'];

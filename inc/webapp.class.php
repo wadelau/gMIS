@@ -5,8 +5,8 @@
  * 2011-07-12 22:41
  * Sun Jul 17 10:16:03 UTC 2011
  * Mon Jan 23 12:14:15 GMT 2012
+ * 08:42 Sunday, June 14, 2015
  */
-
 
 if(!defined('__ROOT__')){
   define('__ROOT__', dirname(dirname(__FILE__)));
@@ -18,14 +18,13 @@ require(__ROOT__."/inc/dba.class.php");
 require(__ROOT__."/inc/session.class.php");
 require(__ROOT__."/inc/cache.class.php");
 require(__ROOT__."/inc/filesystem.class.php");
-//require(__ROOT__."/inc/attachementmgr.class.php");
 
-class WebApp implements WebAppInterface
-{
+class WebApp implements WebAppInterface{
+	
 	var $dba = null;
 	var $hm = array();
 	var $hmf = array(); # container for the Object which extends this class	
-	var $isdbg = 0; # Gconf::get('is_debug');
+	var $isdbg = 1;  # Gconf::get('is_debug');
 	var $sep = "|"; # separating tag for self-defined message body
 
 	//- constructor
@@ -34,54 +33,32 @@ class WebApp implements WebAppInterface
 		if($this->dba == null){ # Wed Oct 22 10:23:03 CST 2014
           $this->dba = new DBA();
         }
-		$this->isdbg = Gconf::get('is_debug'); 
+		$this->isdbg = Gconf::get('is_debug');
 	}
-	/*
-	function set($field,$value){
-		$this->hmf[$field] = $value;
-	}
-    */
-	
-    //- remedy by wadelau on Mon Nov 11 09:29:47 CST 2013
-    # support batchly set
-	function set($field,$value=null){
-        #if(is_array($field)){
-        if($value === null){
-			//var_dump($field);
+	//-
+	function set($field,$value=null){ # update, Sat May 16 08:54:54 CST 2015
+		if($value === null){
 			if(is_array($field)){
-		    	foreach($field as $k => $v){
-			    	$this->hmf[$k] = $v;
-		    	}
+				foreach($field as $k=>$v){
+					$this->hmf[$k] = $v;	
+				}		
 			}
 			else{
-				$this->hmf[$field] = ''; # remedy 	Tue Jun 24 20:53:23 CST 2014
+				$this->hmf[$field] = '';
+				error_log(__FILE__.": Error! Set a null value.");
 			}
-        }
-        else{
-		    $this->hmf[$field] = $value;
-        }
-	}
-	
-	//set array
-    /*
-	function setArray($array_field)
-	{
-		foreach($array_field as $key => $value)
-		{
-			$this->hmf[$key] = $value;
+		}
+		else{
+			$this->hmf[$field] = $value;
 		}
 	}
-	*/
-
 	//-
 	function get($field){
-		if(array_key_exists($field,$this->hmf))
-		{
+		if(array_key_exists($field,$this->hmf)){
 			return $this->hmf[$field];
 		}
-		else if($field != 'id' & $field != 'tbl' && $field != 'er') {
+		else if($field != 'id' & $field != 'tbl' && $field != 'er'){
 			#! Otherwise, this will cause a dead loop with ._setAll.
-			#  Wed Jun 18 15:16:28 CST 2014
 			if($this->get('er') != 1){
 				if($this->_setAll()){
 					if(isset($this->hmf[$field])){
@@ -95,39 +72,33 @@ class WebApp implements WebAppInterface
 					return '';
 				}
 			}
-			else{
+			else {
 				return '';
 			}
 		}
 		else{
-			return '';	
+			return '';
 		}
 	}
-		
-	function setTbl($tbl)
-	{
+	
+	function setTbl($tbl){
 		$tblpre = Gconf::get('tblpre');
 		if(strpos($tbl, $tblpre) !== 0){
 			$tbl = $tblpre.$tbl;
 		}
 		$this->set("tbl",$tbl);
-    	if($this->dba == null){
-          $this->dba = new DBA();
-        }
+		if($this->dba == null){ $this->dba = new DBA(); }
 	}
 
-	function getTbl()
-	{
+	function getTbl(){
 		return $this->get("tbl");
 	}
 
-	function setId($id)
-	{
+	function setId($id){
 		$this->set("id", $id);
 	}
 
-	function getId()
-	{
+	function getId(){
 		return $this->get("id");
 	}
 
@@ -135,26 +106,22 @@ class WebApp implements WebAppInterface
 	 * mandatory return $hm = (0 => true|false, 1 => string|array);
 	 * Thu Jul 21 11:31:47 UTC 2011, wadelau@gmail.com
 	 */
-	function setBy($fields, $conditions)
-	{
+	function setBy($fields, $conditions){
 		$sql = "";
 		$hm = array();
 		$isupdate = 0;
-		
-		if($this->getId() == '')
-		{
+		if($this->getId() == ''){
 			$sql = "insert into ".$this->getTbl()." set ";
 		}
-		else
-		{
+		else{
 			$sql = "update ".$this->getTbl()." set ";
 			$isupdate = 1;
 		}
 		$fieldarr = explode(",",$fields);
+		
 		foreach($fieldarr as $k => $v){
 			$v = trim($v);
-			if($v == "updatetime" || $v == 'inserttime' || $v == 'createtime')
-			{
+			if($v == "updatetime" || $v == 'inserttime' || $v == 'createtime'){
 				$sql .= $v."=NOW(), ";
                 unset($this->hmf[$v]);
 			}
@@ -164,29 +131,23 @@ class WebApp implements WebAppInterface
 		}
 		$sql = substr($sql,0,strlen($sql)-2); //- drop ", " at the end, Sun Jul 17 22:51:44 UTC 2011
 		$issqlready = 1;
-		if($conditions == null || $conditions == "")
-		{
-			if($this->getId() != "")
-			{
+		if($conditions == null || $conditions == ""){
+			if($this->getId() != ""){
 				$sql .= " where id=?";
 			}
-			else if($isupdate == 1)
-			{
+			else if($isupdate == 1){
 				error_log("/inc/webapp.class.php: setBy: unconditonal update is forbidden.");
 				$issqlready = 0;
 				$hm[0] = false;
 				$hm[1] = array("error"=>"unconditonal update is forbidden.");
 			}
 		}
-		else
-		{
+		else{
 			$sql .= " where ".$conditions;
 		}
 		#error_log(__FILE__.": setBy, sql:[".$sql."] hmf:[".$this->toString($this->hmf)."] [1201241223].\n");
 		#print(__FILE__.": setBy, sql:[".$sql."] hmf:[".$this->toString($this->hmf)."] [1201241223].\n");
-		
-		if($issqlready == 1)
-		{
+		if($issqlready == 1){
 			if($this->getId() != ""){ $this->hmf["pagesize"] = 1; } # single record
 			$hm = $this->dba->update($sql, $this->hmf);
 		}
@@ -198,8 +159,6 @@ class WebApp implements WebAppInterface
 	 * Thu Jul 21 11:31:47 UTC 2011, wadelau@gmail.com
 	 */
 	function getBy($fields, $conditions){
-	
-	//	var_dump("hi");
 		$sql = "";
 		$hm = array();
 		$haslimit1 = 0;
@@ -209,41 +168,30 @@ class WebApp implements WebAppInterface
 		if(array_key_exists('pagenum',$this->hmf)){ $pagenum = $this->hmf['pagenum'];}
 		if(array_key_exists('pagesize',$this->hmf)){ $pagesize = $this->hmf['pagesize'];}
 		$sql .= "select ".$fields." from ".$this->getTbl()." where ";
-		if($conditions == null || $conditions == "")
-		{
-			if($this->getId() != "")
-			{
+		if($conditions == null || $conditions == ""){
+			if($this->getId() != ""){
 				$sql .= "id=?";
 				$haslimit1 = 1;
 			}
-			else
-			{
+			else{
 				$sql .= "1=1";
 			}
 		}
-		else
-		{
+		else{
 			$sql .= $conditions;
 		}
 		if(array_key_exists('orderby',$this->hmf)){ $sql .= " order by ".$this->hmf['orderby'];}
-		if($haslimit1 == 1)
-		{
+		if($haslimit1 == 1){
 			$sql .= " limit 1 ";
 		}
-		else
-		{
+		else{
 			if($pagesize == 0){ $pagesize = 99999; } # maximum records per query
 			$sql .= ' limit '.(($pagenum-1)*$pagesize).','.$pagesize;	
 		}
 		#print '<br/>/inc/webapp.class.php: sql:['.$sql.']';
         #error_log(__FILE__.": getBy, sql:[".$sql."] hmf:[".$this->toString($this->hmf)."] [1201241223].\n");
-		
-		//var_dump($sql);
-		//var_dump($this->hmf);
+        #var_dump($sql);
 		$hm = $this->dba->select($sql, $this->hmf);
-		
-		//var_dump($hm);
-		
 		return $hm;
 	}
 
@@ -258,18 +206,21 @@ class WebApp implements WebAppInterface
         $pos = stripos($sql, "select");
         if($pos === 0){
 			#
-		}else{
+		}
+		else{
             $pos = stripos($sql, "desc");
             if($pos === 0){
 				#
-			}else{
+			}
+			else{
                 $pos = stripos($sql, "show");
             }
         }
         if($pos === 0){
             $hm = $this->dba->select($sql, $conditions);
             #error_log(__FILE__.": select!! sql:[$sql] pos:[$pos]");
-        }else{
+        }
+		else{
             #error_log(__FILE__.": update!! sql:[$sql] pos:[$pos]");
             $hm = $this->dba->update($sql, $conditions);
         }
@@ -280,8 +231,7 @@ class WebApp implements WebAppInterface
 	 * mandatory return $hm = (0 => true|false, 1 => string|array);
 	 * Thu Jul 21 11:31:47 UTC 2011, wadelau@gmail.com
 	 */
-	function rmBy($conditions)
-	{
+	function rmBy($conditions=null){
 		$hm = array();
 		$issqlready = 0;
 		$sql = "delete from ".$this->getTbl()." where ";
@@ -289,12 +239,14 @@ class WebApp implements WebAppInterface
 			if($this->getId() != ""){
 				$sql .= "id=?";
 				$issqlready = 1;
-			}else{
+			}
+			else{
 				print "unconditional deletion is strictly forbidden. stop it. sql:[".$sql."] conditions:[".$conditions."]";
 				$hm[0] = false;
 				$hm[1] = array("error"=>"unconditional deletion is strictly forbidden.");
 			}
-		}else{
+		}
+		else{
 			$sql .= $conditions;
 			$issqlready = 1;
 		}
@@ -311,8 +263,13 @@ class WebApp implements WebAppInterface
 		$isinclude = 0;
 		if($this->getId() != ''){
 			$tmphm = $this->getBy('*',null);
+			#print "/inc/webapp.class.php: _setAll";
+            #print_r($tmphm);
+            #print_r($this->hmf);
 			if($tmphm[0]){
+                #print_r($tmphm);
 				$infoarr = $tmphm[1][0];
+                #print_r($infoarr);
 				foreach($infoarr as $k => $v){
 					$this->hmf[$k] = $v;	
 					if($field == $k){
@@ -324,13 +281,13 @@ class WebApp implements WebAppInterface
 				}
 				return true;
 			}
-            else{
-				error_log('/inc/webapp.class.php: _setAll: failed for reading table. id:['.$this->getId().']');
+			else{
+				error_log(__FILE__.': _setAll: failed for reading table. id:['.$this->getId().']');
 				$this->set('er', 1);
 				return false;
 			}
 		}
-        else{
+		else{
 			#error_log('/inc/webapp.class.php: _setAll: failed for empty id.');
 			$this->set('er', 1);
 			return false;
@@ -346,20 +303,21 @@ class WebApp implements WebAppInterface
         $str = '';
         if(is_array($object)){
             foreach($object as $k=>$v){
-                $str .= "$k:[$v]";
+                $str .= "$k:[$v]\n";
                 if(is_array($v)){
                     foreach($v as $k1=>$v1){
-                        $str .= "\t $k1:[$v1]";
+                        $str .= "\t $k1:[$v1]\n";
                         if(is_array($v1)){
                             foreach($v1 as $k2=>$v2){
-                                $str .= "\t\t $k2:[$v2]";
+                                $str .= "\t\t $k2:[$v2]\n";
                             }
                         }
                     }
                 }
                 $str .= "\n";
             } 
-        }else{
+        }
+		else{
             $str = serialize($object);
         }
         return $str;
@@ -378,112 +336,5 @@ class WebApp implements WebAppInterface
         }
         return $isNumeric;
     }
-	
-	//add new record
-	//all new name must be start with "add"
-	function add($newInfo) {
-		foreach($newInfo as $key=>$value)
-		{
-			$pos = strpos($key, 'add');
-            $hasKey = 1;
-			if ($pos !== false) {
-				#$key = substr($key, 5, strlen($key));
-				$key = substr($key, 4, strlen($key));
-                if($key == 'password'){
-                    if($value != ''){
-                        $value = sha1($value);
-				        $this->set($key, $value);
-                    }
-                    else{
-                        $hasKey = 0;
-                    }
-                }
-                else{
-				    $this->set($key, $value);
-                }
-                if($hasKey){				
-				if(strlen($fieldlist_str)==0)
-				{
-					$fieldlist_str = $key;
-				} else {
-					$fieldlist_str .= ',';
-					$fieldlist_str .= $key;
-				}
-                }
-			} 
-		}
-		
-		$hm = $this->setBy($fieldlist_str, null);
-
-		//var_dump($hm);
-		
-
-		if ( $hm[0] != 1 ) { 	  
-			$result = 0;  //Modify FAILED
-			return $result;
-		} else {
-			$result = 1;  //Modify SUCCESSFULLY
-		}
-		
-		$attachementMgr = new AttachementMgr();
-		$attachements = $attachementMgr->addAttachements($this->getTbl(), $hm[1]['insertid']);		
-		
-		
-		return $result;
-		//return 0;
-	}
-	
-	//edit information
-	//all new name must be start with "edit"
-    #!!! deprecated below this LINE !!!
-	function edit($newInfo) { 
-		foreach($newInfo as $key=>$value)
-		{
-			$pos = strpos($key, 'edit');
-            $hasKey = 1;
-			if ($pos !== false) {
-				$key = substr($key, 5, strlen($key));
-                if($key == 'password'){
-                    if($value != ''){
-                        $value = sha1($value);
-				        $this->set($key, $value);
-                    }
-                    else{
-                        $hasKey = 0;
-                    }
-                }
-                else{
-				    $this->set($key, $value);
-                }
-				
-                if($hasKey){
-				if($key != 'id')   // ignore id
-				{
-					if(strlen($fieldlist_str)==0)
-					{
-						$fieldlist_str = $key;
-					} else {
-						$fieldlist_str .= ',';
-						$fieldlist_str .= $key;
-					}
-				}
-                }
-			} 
-		}
-
-		$hm = $this->setBy($fieldlist_str, null);
-
-		if ( $hm[0]!=1 ) { 	  
-			$result = 0;  //Modify FAILED
-		} else {
-			$result = 1;  //Modify SUCCESSFULLY
-		}
-		
-		$attachementMgr = new AttachementMgr();
-		$attachements = $attachementMgr->addAttachements($this->getTbl(), $newInfo['edit_id']);	
-		
-		return $result;
-	}
 }
-
 ?>
