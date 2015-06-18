@@ -7,7 +7,7 @@
 
 interface WebAppInterface
 {
-	function set($key, $value=null);
+	function set($key, $value);
 	function get($key);
 
 	function setTbl($tbl);
@@ -18,14 +18,14 @@ interface WebAppInterface
 
 	function setBy($fields, $conditions);
 	function getBy($fields, $conditions);
+	function execBy($fields, $conditions);
 	function rmBy($conditions);
 
-    function toString($object);
+  	function toString($object);
 
 	/*
 	function setLang($lang);
 	function getLang();
-
 	function checkDB();
 	*/
 }

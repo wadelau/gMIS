@@ -4,26 +4,26 @@ ini_set("memory_limit","256M");
 //--- updated from 16M to 64M  on 20060816, from 64M to 256M on 20110708
 //--- add "SQL Injection Attacks" prevension, updated on 2006113 by wadelau
 //--- v1.2, new remedies on 20110708 by wadelau
+//--- v1.3, update hm2idxArr by wadelau on  Sat Nov  3 20:38:55 CST 2012
 
-require_once(__ROOT__."/inc/conn.class.php");
+# Wed Nov  5 14:10:39 CST 2014
+require_once(__ROOT__."/inc/config.class.php");
 
-class MySQLDB 
-{ 
+class MySQLDB { 
 	var $m_host; 
 	var $m_port; 
 	var $m_user; 
 	var $m_password; 
 	var $m_name; 
 	var $m_link; 
-	var $isdebug = 0; # Gconf::get('is_debug'); # debug mode
+	var $isdebug = 0; # debug mode
+	var $ismagicquote = 0;
 
-	function Err($sql = "") 
-	{
+	function Err($sql = ""){
 		global $HTTP_HOST;
 		global $REMOTE_ADDR;
 		global $PHP_SELF;
-		if($this->isdebug)
-		{
+		if($this->isdebug){
 			// --- leo 2002-11-01 21:42:03  start --- //
 			echo "<br>xxxxxx";
 			echo "<font color=red>error sql : </font><br>&nbsp;&nbsp;".$sql;
@@ -36,28 +36,26 @@ class MySQLDB
 		else
 		{
 			//header ("Location: http://sms.fumobile.com/show_msg.php?ra=".$REMOTE_ADDR);
-			echo "<span style=\"color:red\">Found error when process your transaction..., please report this to wadelau@gmail.com. [07211253]</span>\n";
-			error_log("MYSQL_ERROR: err_no:[".$this->getErrno()."] err_info:[".$this->getError()."] err_sql:[".$sql."] 07212150 2nd");
+			echo "<div id=\"errdiv_201210131751\" style=\"color:red;z-index:99;position:absolute\">Found internal error when process your transaction..., please report this to wadelau@gmail.com. [07211253]</div>\n";
+			error_log(__FILE__.": MYSQL_ERROR: err_no:[".$this->getErrno()."] err_info:[".$this->getError()."] err_sql:[".$sql."] [07211253]");
 		}
 		#exit;
 		return false;
 	} 
 
-	function MySQLDB($config) 
-	{             
+	function MySQLDB($config){             
 		$this->m_host     = $config->mDbHost;
 		$this->m_port     = $config->mDbPort; 
 		$this->m_user     = $config->mDbUser; 
 		$this->m_password = $config->mDbPassword; 
 		$this->m_name     = $config->mDbDatabase; 
 		$this->m_link=0;
-		$this->isdebug = Gconf::get('is_debug');
 	} 
 	//- for test purpose, wadelau@gmail.com, Wed Jul 13 19:21:37 UTC 2011
-	function showConf()
-	{
+	function showConf(){
 		print "<br/>/inc/class.mysql-1.2.php: current db:[".$this->m_name."].";
 	}	
+
 	function _initconnection(){
 		if ($this->m_link==0){
 			$real_host = $this->m_host.":".$this->m_port;    
@@ -67,18 +65,16 @@ class MySQLDB
 			//echo "[".$this->m_link."]";
 			if ("" != $this->m_name){
 				mysql_select_db($this->m_name, $this->m_link) or die($this->Err("use ".$this->m_name));
-				mysql_query("set names utf8", $this->m_link); # 08:47 Tuesday, November 04, 2014
 			}             
+			if(get_magic_quotes_gpc()){ $this->ismagicquote = 1; }
 		}
 	}
 
 	function selectDb($database)
 	{
 		$this->m_name = $database;
-		if ("" != $this->m_name)
-		{
-			if ($this->m_link == 0)
-			{
+		if ("" != $this->m_name){
+			if ($this->m_link == 0){
 				$this->_initconnection();
 			}
 			mysql_select_db($this->m_name, $this->m_link) or eval($this->Err("use $database"));
@@ -86,23 +82,19 @@ class MySQLDB
 	}
 
 	//--- for sql injection, added on 20061113 by wadelau
-	function query($sql,$hmvars,$idxarr)
-	{
+	function query($sql,$hmvars,$idxarr){
 		$hm = array();
-		if ($this->m_link == 0)
-		{
+		if ($this->m_link == 0){
 			$this->_initconnection();
 		}
 		$sql = $this->_enSafe($sql,$idxarr,$hmvars);
 		#$result=mysql_query($sql,$this->m_link) or eval($this->Err($sql)); 
 		$result=mysql_query($sql,$this->m_link) or $this->Err($sql); 
-		if($result)
-		{
+		if($result){
 			$hm[0] = true;
 			$hm[1] = $result;
 		}
-		else
-		{
+		else{
 			$hm[0] = false;
 			$hm[1] = array('error'=>'Query failed');
 		}
@@ -110,39 +102,40 @@ class MySQLDB
 
 	}
 	
-	function _enSafe($sql,$idxarr,$hmvars)
-	{
-		$sql = trim($sql);
+	function _enSafe($sql,$idxarr,$hmvars){
+		$sql = $origSql = trim($sql);
 		$newsql = "";
+        $wherepos = strpos($sql, " where ");
 		if( (strpos($sql,"delete ")!==false || strpos($sql,"update ")!==false) 
-			&& strpos($sql," where ")===false
-		)
-		{
+			&& $wherepos === false){
 			$this->Err("table action [update, delete] need [where] clause.sql:[".$sql."]");
 		}
-		else
-		{
+		else{
+        	/*
+      		if(strpos($sql, "select ") !== false && $wherepos !== false){
+        		$newsql = substr($sql, 0, $wherepos);     
+      		}
+      		*/
+			#print __FILE__."\n: sql:[".$sql."] sql_new:[".$newsql."]\n";
 			$a = strpos($sql,"?");
 			$i = 0;
 			$n = count($idxarr);
-			while($a!==false)
-			{
-				if($i>=$n)
-				{
-					$this->Err("_enSafe, fields not matched with vars.sql:[".$sql."] i:[".$i."] n:[".$n."].");
+			while($a !== false){
+				#if($i>=$n){
+				if($i>$n){
+					$this->Err("_enSafe, fields not matched with vars.sql:[".$origSql."] i:[".$i."] n:[".$n."].");
 				}
 				$t = substr($sql,0,$a+1);
-				#print "<br/>/inc/class.mysql.php: t:[".$t."] i:[".$i."] vars:[".$idxarr[$i]."] hmv:[".$hmvars[$idxarr[$i]]."]";
+				#print __FILE__.": t:[".$t."] i:[".$i."] vars:[".$idxarr[$i]."] hmv:[".$hmvars[$idxarr[$i]]."]\n";
 				$newsql .= str_replace("?",$this->_QuoteSafe($hmvars[$idxarr[$i]]),$t);
 				$sql = substr($sql,$a+1);
 				$a = strpos($sql,"?");
 				$i++;
 			}
-			if($sql!="")
-			{
+			if($sql!=""){
 				$newsql .=  $sql ;
 			}
-			#print "\n<br/>/inc/class.mysql-1.2.php: sql:[".$sql."] sql_new:[".$newsql."]\n";
+			#print __FILE__."\n: sql:[".$sql."] sql_new:[".$newsql."]\n";
 			return $newsql;
 		}
 	}
@@ -150,27 +143,31 @@ class MySQLDB
 	function _QuoteSafe($value){
 		// Quote variable to make safe
 		// Stripslashes
-		if(get_magic_quotes_gpc()){
+		//if (get_magic_quotes_gpc()){
+		if ($this->ismagicquote){
 			$value = stripslashes($value);
 		}
 		// Quote if not a number or a numeric string
-		if(!is_numeric($value)){
+		if (!is_numeric($value)) {
 			//$value = "'".addslashes($value)."'";
 			$value = "'".mysql_real_escape_string($value,$this->m_link)."'";
+            # in some case, e.g. $value = '010003', which is expected to be a string, but is_numeric return true.
+            # this should be handled by $webapp->execBy with manual sql components...
 		}
+		else{
+			#	
+		} 
 		return $value;
 	}
 
-	function getErrno()
-	{
+	function getErrno(){
 		if ($this->m_link == 0)
 		{
 			$this->_initconnection();
 		}
 		return mysql_errno($this->m_link);
 	}
-	function getError()
-	{
+	function getError(){
 		if ($this->m_link == 0)
 		{
 			$this->_initconnection();
@@ -178,8 +175,7 @@ class MySQLDB
 		return mysql_error($this->m_link);
 	}
 	
-	function FetchArray($result) 
-	{ 
+	function FetchArray($result) { 
 		if ($this->m_link == 0)
 		{
 			$this->_initconnection();
@@ -357,7 +353,7 @@ class MySQLDB
 		}
 		$sql = $this->_enSafe($sql,$idxarr,$hmvars);
 		#print "<br/>/inc/class.mysql.php: readBatch sql:[".$sql."]";	
-        #error_log(__FILE__.": query in readBatch: sql:[".$sql."]\n");
+    #error_log(__FILE__.": query in readBatch: sql:[".$sql."]\n");
 		$rtnarr = array();	
 		$result = mysql_query($sql) or $this->Err($sql);
 		if($result && !is_bool($result))
