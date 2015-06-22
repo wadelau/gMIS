@@ -101,7 +101,18 @@ function correctPNG()
                             <td colspan="2">
                                  <span class="login_txt"> 
                                     {$result}
-                                 <br/><br/><a href="{$nexturl}">继续</a>
+                                 <br/><br/><a href="{$nexturl}">继续 跳转中....</a>
+								 <input name="nexturl" type="hidden" id="nexturl" value="{$nexturl}"/>
+                                 {literal}
+                                 <script type="text/javascript">
+                                 	window.setTimeout(function(){
+                                 		var nexturl=document.getElementById('nexturl');
+                                 		if(nexturl){ nexturl = nexturl.value; }
+                                 		window.location.href = nexturl;
+                                 		}, 3*1000);
+                                 </script>
+                                 {/literal}
+
                                  </span>
                             </td>
                           

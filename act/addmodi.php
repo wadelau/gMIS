@@ -132,9 +132,10 @@ for($hmi=$min_idx; $hmi<=$max_idx;$hmi++){
         if($columni % 2 != 0){
             $out .= "</tr><tr>";
         }
-        $isimg = isImg($hmorig[$field]);
-        $out .= "<td nowrap>".$gtbl->getCHN($field).":</td><td><input type=\"file\" id=\"".$field."\" name=\"".$field."\" size=\"20\" class=\"noneinput wideinput\" ".$gtbl->getJsAction($field)." /> <input type=\"hidden\" name=\"".$field."_orig\" value=\"".$hmorig[$field]."\" /> <br/> ".($hmorig[$field]==''?'':$hmorig[$field])." ".$gtbl->getMemo($field)."</td>";
-        $out .="<td> ".($isimg==1?"<img src=\"".$hmorig[$field]."\" alt=\"-x-\" width=\"118px\" /><br/>".$hmorig[$field]:"")." <script>document.getElementById('".$formid."').enctype='multipart/form-data';</script>  </td></tr><tr>";
+        $fieldv = $hmorig[$field]; $fieldv = str_replace($shortDirName."/","", $fieldv);
+        $isimg = isImg($fieldv);
+        $out .= "<td nowrap>".$gtbl->getCHN($field).":</td><td><input type=\"file\" id=\"".$field."\" name=\"".$field."\" size=\"20\" class=\"noneinput wideinput\" ".$gtbl->getJsAction($field)." /> <input type=\"hidden\" name=\"".$field."_orig\" value=\"".$fieldv."\" /> <br/> ".($fieldv==''?'':$fieldv)." ".$gtbl->getMemo($field)."</td>";
+        $out .="<td> ".($isimg==1?"<img src=\"".$fieldv."\" alt=\"-x-\" width=\"118px\" /><br/>".$fieldv:"")." <script>document.getElementById('".$formid."').enctype='multipart/form-data';</script>  </td></tr><tr>";
 
     }else if($gtbl->getExtraInput($field, $hmorig) != ''){
 

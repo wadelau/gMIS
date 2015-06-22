@@ -68,6 +68,7 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
                 if($gtbl->getId() != ''){ # remove old file if necessary
                     $oldfile = $gtbl->get($field); # this might override what has been set by query string
                     if($oldfile != ""){
+                    	$oldfile = str_replace($shortDirName."/","", $oldfile);
                         unlink($appdir."/".$oldfile);
                     }else{
                         error_log(__FILE__.": oldfile:[$oldfile] not FOUND. field:[$field]");				
