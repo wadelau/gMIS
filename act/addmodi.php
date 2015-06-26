@@ -129,13 +129,13 @@ for($hmi=$min_idx; $hmi<=$max_idx;$hmi++){
         }
 
     }else if($fieldinputtype == 'file'){
-        if($columni % 2 != 0){
+        if($columni % 2 != 0 || $gtbl->getSingleRow($field)){
             $out .= "</tr><tr>";
         }
         $fieldv = $hmorig[$field]; $fieldv = str_replace($shortDirName."/","", $fieldv);
         $isimg = isImg($fieldv);
         $out .= "<td nowrap>".$gtbl->getCHN($field).":</td><td><input type=\"file\" id=\"".$field."\" name=\"".$field."\" size=\"20\" class=\"noneinput wideinput\" ".$gtbl->getJsAction($field)." /> <input type=\"hidden\" name=\"".$field."_orig\" value=\"".$fieldv."\" /> <br/> ".($fieldv==''?'':$fieldv)." ".$gtbl->getMemo($field)."</td>";
-        $out .="<td> ".($isimg==1?"<img src=\"".$fieldv."\" alt=\"-x-\" width=\"118px\" /><br/>".$fieldv:"")." <script>document.getElementById('".$formid."').enctype='multipart/form-data';</script>  </td></tr><tr>";
+        $out .="<td colspan='4'> ".($isimg==1?"<img src=\"".$fieldv."\" alt=\"-x-\" width=\"118px\" /><br/>".$fieldv:"")." <script>document.getElementById('".$formid."').enctype='multipart/form-data';</script>  </td></tr><tr>";
 
     }else if($gtbl->getExtraInput($field, $hmorig) != ''){
 

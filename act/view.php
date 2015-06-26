@@ -79,13 +79,14 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
     }else if($fieldinputtype == 'file'){
         $isimg = isImg($hmorig[$field]);
 		if(strpos($hmorig[$field], "$shortDirName/") !== false){ $hmorig[$field] = str_replace("$shortDirName/", "", $hmorig[$field]); }
+		if($gtbl->getSingleRow($field)){ $out .= "</tr><tr>"; }
         if($isimg){
             $out .= "<td >".$gtbl->getCHN($field).":&nbsp;</td><td> <a href=\"".$hmorig[$field]."\" target=\"_blank\" title=\"打开大图\"><img src=\"".$hmorig[$field]."\" alt=\"-x-\" style=\"width:118px\"/></a><br/>".$rtvdir."/".$hmorig[$field]." </td>";
-			if($gtbl->getSingleRow($field)){ $out .= "</tr><tr>"; }
-        }else{
-            
+        }
+		else{
             $out .= "<td >".$gtbl->getCHN($field).":&nbsp;</td><td> <a href=\"".$hmorig[$field]."\" title=\"".$hmorig[$field]."\" target=\"_blank\">".$hmorig[$field]."</a> </td>";
         }
+		if($gtbl->getSingleRow($field)){ $out .= "</tr><tr>"; }
     
     }else if($gtbl->getExtraInput($field,$hmorig) != ''){
 

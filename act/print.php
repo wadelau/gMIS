@@ -60,6 +60,7 @@ $lastclosed = 0;
 for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
 
     $field = $gtbl->getField($hmi);
+	$fieldv = $hmorig[$field];
     $nextfield = $gtbl->getField($hmi+1);
     $fieldinputtype = $gtbl->getInputType($field);
     $nextfieldinputtype = $gtbl->getInputType($nextfield);
@@ -106,17 +107,27 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
             $out .= "</td>  </tr>";
             $out .= "<tr height=\"30\" valign=\"middle\"  onmouseover=\"javascript:this.style.backgroundColor='".$hlcolor."';\" onmouseout=\"javascript:this.style.backgroundColor='';\">";
 
-    }else{
+    }
+	else{
+
+		if($fieldinputtype == 'file'){
+			$isimg = isImg($fieldv);
+			if(strpos($fieldv, "$shortDirName/") !== false){ $fieldv = str_replace("$shortDirName/", "", $fieldv); }
+			if($isimg){
+				$fieldv= "<img src='".$fieldv."' width='80%' alt='-x-' />";	
+			}
+		}
 
         if($gtbl->getSingleRow($field) == '1'){
-            $out .= "</tr><tr><td>".$gtbl->getCHN($field).":&nbsp;</td><td colspan=\"".($form_cols)."\"> ".$hmorig[$field]." </td> </tr>";
+            $out .= "</tr><tr><td>".$gtbl->getCHN($field).":&nbsp;</td><td colspan=\"".($form_cols)."\"> ".$fieldv." </td> </tr>";
             $out .= "<tr height=\"30\" valign=\"middle\"  onmouseover=\"javascript:this.style.backgroundColor='".$hlcolor."';\" onmouseout=\"javascript:this.style.backgroundColor='';\">";
 
         }else{
-            $out .= "<td nowrap >".$gtbl->getCHN($field).":&nbsp;</td><td> ".$hmorig[$field]." </td>";
+            $out .= "<td nowrap >".$gtbl->getCHN($field).":&nbsp;</td><td> ".$fieldv." </td>";
             $needcloserow = 1;
         }
     }
+
     if(false && $needcloserow == 1){
         if($gtbl->getExtraInput($nextfield) != '' || $gtbl->getSingleRow($nextfield) == '1'){
             $out .= "<td colspan=\"".($form_cols)."\"> </td>";
