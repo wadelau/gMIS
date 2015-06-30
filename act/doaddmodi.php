@@ -11,6 +11,7 @@ if($id != ''){
 for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
     $field = $gtbl->getField($hmi);
     $fieldv = ''; # remedy by wadelau@ufqi.com, Wed Oct 17 12:46:16 CST 2012
+	$fieldInputType = $gtbl->getInputType($field);
     if($field == null | $field == '' 
             || $field == 'id'){
         continue;
@@ -45,10 +46,9 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
 		#print(__FILE__.": field:[$field] fieldv:[$fieldv]");
 		
     }else{
-        if($gtbl->getInputType($field) == 'file'){
+        if($fieldInputType == 'file'){
 
             $fieldv_orig = $_REQUEST[$field.'_orig'];
-
             if($_FILES[$field]['name'] == '' && $fieldv_orig != ''){
                 $fieldv = $fieldv_orig;
             
@@ -110,11 +110,15 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
 			}
             else{
 				if(strpos($fieldv,"<") !== false){ # added by wadelau on Sun Apr 22 22:09:46 CST 2012
-                	#$fieldv = str_replace("<","&lt;", $fieldv);
-                	# allow all html tags except these below 
-                	$fieldv = str_replace("<script","&lt;script", $fieldv);
-                	$fieldv = str_replace("<iframe","&lt;iframe", $fieldv);
-                	$fieldv = str_replace("<embed","&lt;embed", $fieldv);
+					if($fieldInputType == 'textarea'){	
+                		# allow all html tags except these below 
+                		$fieldv = str_replace("<script","&lt;script", $fieldv);
+                		$fieldv = str_replace("<iframe","&lt;iframe", $fieldv);
+                		$fieldv = str_replace("<embed","&lt;embed", $fieldv);
+					}
+					else{
+                		$fieldv = str_replace("<","&lt;", $fieldv);
+					}
             	}
             	if(strpos($fieldv, "\n") !== false){
                 	$fieldv = str_replace("\n", "<br/>", $fieldv);

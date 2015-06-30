@@ -420,38 +420,6 @@ function setSelectIndex(mySelect, myValue){
 }
 //-- setSelectIndex, bgn, Tue May  8 20:59:42 CST 2012
 
-
-//-- generate tuanhao, bgn, Wed Mar 14 19:13:51 CST 2012
-function generateTuanHao(userinfo,targetId,promptMsg){
-
-    var targetObj = document.getElementById(targetId);
-    var oldvar = '';
-    if(targetObj != undefined){
-        oldvar = targetObj.value;
-    }
-    if(oldvar == ''){
-
-        var tuantype = window.prompt(promptMsg,'T');
-        if(tuantype == null){
-            tuantype = 'S';
-        }
-        var useremail = userinfo.email;
-       
-       // var tuanhao = userinfo.branch + '-' + useremail.substring(0,useremail.indexOf('@'));
-        
-        var tuanhao = userinfo.branch + '-' + useremail.substring(0,useremail.indexOf('@')) + '-' + tuantype;
-        var tdate = new Date();
-       
-        tuanhao += '-' + (tdate.getFullYear()+''+(tdate.getMonth()+1)+''+tdate.getDate()+''+tdate.getHours()+''+tdate.getMinutes());
-        
-        //tuanhao += '-' + (tdate.getFullYear()+''+(tdate.getMonth()+1)+''+tdate.getDate()+''+tdate.getHours()+''+tdate.getMinutes());
-        //-window.alert('user-email:['+userinfo.email+'] tuanhao:['+tuanhao+']');
-
-        document.getElementById(targetId).value = tuanhao;
-    }
-}
-//-- generate tuanhao, end, Wed Mar 14 19:13:51 CST 2012
-
 userinfo.input2Select = {};
 //- switchEditable, bgn, Thu Mar 15 20:14:02 CST 2012
 //-- 增加对 select 点击即编辑的支持
@@ -532,7 +500,7 @@ function switchEditable(targetObj,fieldName,fieldType,fieldValue,myUrl,readOnly)
                            sendNotice(false,'Data updated Failed. Please Try again.');
                         }
                     });
-            gta.get(myUrl+'&'+fieldName+'='+newv);
+            gta.get(myUrl+'&'+fieldName+'='+escape(newv));
 
         }else{
             //window.alert('same content. unchanged.');
@@ -594,7 +562,11 @@ function doActSelect(sSel, sUrl, iId){
             if(isconfirm){
                 doAction(targetUrl);
             }
-        }else{
+        }
+		else if(fieldv == 'print'){
+			window.open(sUrl+'&act=print&isoput=1&isheader=0','PrintWindow','scrollbars,toolbar,location=0');
+		}
+		else{
             doActionEx(targetUrl, 'contentarea');
         }
     }else{
