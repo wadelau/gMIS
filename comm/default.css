@@ -152,6 +152,8 @@ table.printtbl td{
             vertical-align:middle;
             border-bottom:1px dotted green;
             border-right:1px dotted green;
+			border-left:1px dotted silver;
+            border-top:1px dotted silver;
             /*
             border-left:1px dotted green;
             border-top:1px dotted green;

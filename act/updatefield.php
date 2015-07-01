@@ -4,7 +4,7 @@ $field = $_REQUEST['field'];
 
 # remedy by wadelau Tue Jun 30 16:17:53 CST 2015
 # same as act/doaddmodi.php
-$fieldv = $_REQUEST[$field];
+$fieldv = urldecode(trim($_REQUEST[$field]));
 if(1){
 	if(strpos($fieldv,"<") !== false){ # added by wadelau on Sun Apr 22 22:09:46 CST 2012
 		if($fieldInputType == 'textarea'){	

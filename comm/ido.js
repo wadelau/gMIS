@@ -5,6 +5,7 @@
 //-- Thu Sep 25 16:07:58 CST 2014
 //-- Mon Sep 29 16:01:21 CST 2014
 //-- Mon Oct 27 15:58:46 CST 2014
+//-- 09:48 Wednesday, July 01, 2015
 //-
 var currenttbl = '';
 var currentdb = '';
@@ -500,7 +501,7 @@ function switchEditable(targetObj,fieldName,fieldType,fieldValue,myUrl,readOnly)
                            sendNotice(false,'Data updated Failed. Please Try again.');
                         }
                     });
-            gta.get(myUrl+'&'+fieldName+'='+escape(newv));
+            gta.get(myUrl+'&'+fieldName+'='+encodeURIComponent(newv));
 
         }else{
             //window.alert('same content. unchanged.');

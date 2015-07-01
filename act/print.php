@@ -1,11 +1,13 @@
 <?php
 # print out a table, fields may come from mutiple tables
 # added by Wadelau, on Sat Feb  4 13:18:25 CST 2012
+# remedy by wadelau@ufqi.com, Wed Jul  1 11:16:57 CST 2015
 
 $smttpl = substr($smttpl,0,strlen($smttpl)-5)."_".$tbl.".html";
 if(1 && is_file($viewdir."/".$smttpl)){
     $out .= __FILE__.": smttpl:[".$smttpl."]\n";
-}else{
+}
+else{
     #$out .= "没有指定打印模板，使用默认模板. ".$viewdir."/".$smttpl."\n";
     $smttpl = '';
 }
@@ -21,7 +23,8 @@ if($hasid){
     $gtbl->setId($id);
     $hmorig = $gtbl->getBy("*", null);
     $gtbl->setId('');
-}else{
+}
+else{
     $fieldargv = "";
     for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
         $field = $gtbl->getField($hmi);
@@ -40,7 +43,7 @@ if($hmorig[0]){
     $hmorig = $hmorig[1][0]; 
 }
 
-$data['hmorig'] = $hmorig;
+$data['hminfo'] = $hmorig;
 
 $printref = $gtbl->getPrintRef(0);
 if($printref != ''){
@@ -51,11 +54,10 @@ if($printref != ''){
         $out .= "\n<span id=\"linkinfo_".$rdnum."\"></span><script type=\"text/javascript\"> doActionEx('./act/readfield.php?tbl=".$refdetail[0]."&pnsk".$linkinfo[0]."=".$hmorig[$linkinfo[1]]."&pnob".$linkinfo[0]."=1&fieldlist=".$refdetail[2]."&isheader=0&isoput=0','linkinfo_".$rdnum."');</script><br/>\n";
     }
 }
-//$out .= "<style>table.printtbl{} table.printtbl td{padding:5px;vertical-align:middle;border-right:1px dotted green;border-bottom:1px dotted green;} </style>";
 $out .= "<table align=\"center\" width=\"800px\" cellspacing=\"0\" cellpadding=\"0\" border=\"0px\" class=\"printtbl\">";
+$out .= "\n<tr height=\"30\" valign=\"middle\"  onmouseover=\"javascript:this.style.backgroundColor='".$hlcolor."';\" onmouseout=\"javascript:this.style.backgroundColor='';\">";
 
-$out .= "<tr height=\"30\" valign=\"middle\"  onmouseover=\"javascript:this.style.backgroundColor='".$hlcolor."';\" onmouseout=\"javascript:this.style.backgroundColor='';\">";
-$lastclosed = 0;
+$lastclosed = 0; $tdi = 0;
 
 for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
 
@@ -64,26 +66,30 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
     $nextfield = $gtbl->getField($hmi+1);
     $fieldinputtype = $gtbl->getInputType($field);
     $nextfieldinputtype = $gtbl->getInputType($nextfield);
-    if($field == null || $field == ''
-            || $field == 'id'){
-
+    if($field == null || $field == ''){
         continue;
     } 
     $hasclosed = 0;
     $needcloserow = 0;
 
     if($field == 'password'){
-        $hmorig[$field] = '';
+        $fieldv = $hmorig[$field] = '----';
+    }
+    if($lastclosed == 1){
+		$out .= "\n<tr height=\"30\" valign=\"middle\"  onmouseover=\"javascript:this.style.backgroundColor='".$hlcolor."';\" onmouseout=\"javascript:this.style.backgroundColor='';\" idata=\"$i-$lastclosed\" fieldname=\"$field\">";
+		$tdi = 0;
     }
 
     if(!$user->canRead($field, '', '', $_REQUEST['id'], $id)){
-        $out .= "<--NOREAD-->";
-
-    }else if($fieldinputtype == 'select'){
-        $out .= "<td>".$gtbl->getCHN($field).":&nbsp;</td><td> ".$gtbl->getSelectOption($field, $hmorig[$field],'',1)."</td>";
-        $needcloserow = 1;
-
-    }else if($gtbl->getFieldPrint($field) != ''){
+		$fieldv = '----';
+        $out .= "<td idata=\"$i\" fieldname=\"$field\">".$gtbl->getCHN($field).":&nbsp;</td><td> ".$fieldv."</td>";
+		$tdi++;
+    }
+	else if($fieldinputtype == 'select'){
+        $out .= "<td idata=\"$i\" fieldname=\"$field\">".$gtbl->getCHN($field).":&nbsp;</td><td> ".$gtbl->getSelectOption($field, $hmorig[$field],'',1)."</td>";
+		$tdi++;
+    }
+	else if($gtbl->getFieldPrint($field) != ''){
         $refdetail = explode(":", $gtbl->getFieldPrint($field));
         $urlpart = "";
         $tmparr = explode(",",$refdetail[1]);
@@ -101,12 +107,10 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
         $urlpart .= "&pnsm=1";
         $rdnum = rand(0,99999);
         if($lastclosed == 0){
-            $out .= "\n</tr>";
+            $out .= "</tr>\n<tr>";
         }
-        $out .= "<tr><td width=\"20%\" nowrap>".$gtbl->getCHN($field).":</td><td colspan=\"".($form_cols)."\"><span id=\"linkinfo_".$rdnum."\"></span><script type=\"text/javascript\"> doActionEx('./act/readfield.php?tbl=".$refdetail[0]."&".$urlpart."&fieldlist=".$refdetail[2]."&isheader=0&isoput=0&mode=intbl','linkinfo_".$rdnum."');</script>\n";
-            $out .= "</td>  </tr>";
-            $out .= "<tr height=\"30\" valign=\"middle\"  onmouseover=\"javascript:this.style.backgroundColor='".$hlcolor."';\" onmouseout=\"javascript:this.style.backgroundColor='';\">";
-
+        $out .= "<td width=\"20%\" nowrap>".$gtbl->getCHN($field).":</td><td colspan=\"".($form_cols)."\"><span id=\"linkinfo_".$rdnum."\"></span><script type=\"text/javascript\"> doActionEx('./act/readfield.php?tbl=".$refdetail[0]."&".$urlpart."&fieldlist=".$refdetail[2]."&isheader=0&isoput=0&mode=intbl','linkinfo_".$rdnum."');</script></td>\n";
+			$tdi++; $needcloserow = 1;
     }
 	else{
 
@@ -114,40 +118,50 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
 			$isimg = isImg($fieldv);
 			if(strpos($fieldv, "$shortDirName/") !== false){ $fieldv = str_replace("$shortDirName/", "", $fieldv); }
 			if($isimg){
-				$fieldv= "<img src='".$fieldv."' width='80%' alt='-x-' />";	
+				$fieldv = "<img src='".$fieldv."' width='80%' alt='-x-' />";	
 			}
 		}
 
         if($gtbl->getSingleRow($field) == '1'){
-            $out .= "</tr><tr><td>".$gtbl->getCHN($field).":&nbsp;</td><td colspan=\"".($form_cols)."\"> ".$fieldv." </td> </tr>";
-            $out .= "<tr height=\"30\" valign=\"middle\"  onmouseover=\"javascript:this.style.backgroundColor='".$hlcolor."';\" onmouseout=\"javascript:this.style.backgroundColor='';\">";
-
-        }else{
-            $out .= "<td nowrap >".$gtbl->getCHN($field).":&nbsp;</td><td> ".$fieldv." </td>";
-            $needcloserow = 1;
+			if($tdi > 0){
+				$out .= "</tr>\n<tr idata=\"$i-$lastclosed\">";
+			}
+            $out .= "<td>".$gtbl->getCHN($field).":&nbsp;</td><td colspan=\"".($form_cols)."\"> ".$fieldv." </td>";
+			$needcloserow = 1;
         }
+		else{
+            $out .= "<td nowrap idata=\"$i\" fieldname=\"$field\">".$gtbl->getCHN($field).":&nbsp;</td><td> ".$fieldv." </td>";
+			$tdi++;
+        }
+		if($needcloserow ==0 
+			&& ($nextfieldinputtype == 'file')){
+            $out .= "<td colspan=\"".($form_cols)."\"> <!-- $field --> </td>";
+			$tdi++;
+		}
     }
 
-    if(false && $needcloserow == 1){
-        if($gtbl->getExtraInput($nextfield) != '' || $gtbl->getSingleRow($nextfield) == '1'){
-            $out .= "<td colspan=\"".($form_cols)."\"> </td>";
-            $out .= "</tr>";
-            $hasclosed = 1;
+    if($needcloserow == 1){
+        if($gtbl->getExtraInput($nextfield) != ''){
+            $out .= "<td colspan=\"".($form_cols)."\"> $field </td>";
         }
+        $out .= "</tr>";
+        $hasclosed = 1;
     }
 
     if($hasclosed == 0 && ++$i % 2 == 0){ 
         $out .= "</tr>";
-        $out .= "<tr height=\"30\" valign=\"middle\"  onmouseover=\"javascript:this.style.backgroundColor='".$hlcolor."';\" onmouseout=\"javascript:this.style.backgroundColor='';\">";
-        $lastclosed = 0;
-    }else{
+        $out .= "\n<tr height=\"30\" valign=\"middle\"  onmouseover=\"javascript:this.style.backgroundColor='".$hlcolor."';\" onmouseout=\"javascript:this.style.backgroundColor='';\" idata=\"$i\" fieldname=\"$nextfield\">";
+        $lastclosed = 0; $tdi = 0;
+    }
+	else if($hasclosed == 1){
         $lastclosed = 1;
     }
 
 }
 
-$out .= "</table> <br/>";
+if($lastclosed < 1){ $out .= "</tr>"; }
 
+$out .= "</table> <br/>";
 $out .= "</div>";
 
 $printref = $gtbl->getPrintRef(1);
