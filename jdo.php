@@ -236,10 +236,11 @@ if(startsWith($act,'add') || startsWith($act, "modify")){
                }
            }
            if($hasid){
-               $out .= "<td > <select id=\"actsel_$i\" name=\"actsel_$i\" class=\"selectsmall\" onchange=\"doActSelect('actsel_".$i."','".str_replace("&id=","&oid=", $url)."&id=".$id."', ".$id.");\">";
+               $out .= "<td > <select id=\"actsel_$i\" name=\"actsel_$i\" class=\"selectsmall\" onchange=\"javascript:doActSelect('actsel_".$i."','".str_replace("&id=","&oid=", $url)."&id=".$id."', ".$id.");\">";
                $out .= "<option value=\"\">-做-</option>";
                $out .= "<option value=\"view\" title=\"查看详细信息\">查看</option>";
                $out .= "<option value=\"modify\">修改</option>";
+			   $out .= "<option value=\"print\">打印</option>";
                $out .= "<option value=\"list-dodelete\">删除</option>";
                $out .= "</select> </td>";
 
