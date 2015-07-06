@@ -187,7 +187,7 @@ if(startsWith($act,'add') || startsWith($act, "modify")){
 				   if(strpos($rec[$field], "$shortDirName/") !== false){ $rec[$field] = str_replace("$shortDirName/", "", $rec[$field]); }
 				   $isimg = isImg($rec[$field]);
                    if($isimg){
-                       $out .= "<img src=\"".$rec[$field]."\" style=\"max-width:99%; max-height:99%\" onload=\"javascript: var baseSize=218; if(this.width > baseSize){ this.style.width = baseSize+'px';}else if(this.height > baseSize){ this.style.height=baseSize+'px'; } \" id=\"img_".$rec[$field]."\" />";
+                       $out .= "<img src=\"".$rec[$field]."\" style=\"max-width:99%; max-height:99%\" onload=\"javascript: var baseSize=118; if(this.width > baseSize){ this.style.width = baseSize+'px';}else if(this.height > baseSize){ this.style.height=baseSize+'px'; } \" id=\"img_".$rec[$field]."\" />";
 
                    }else{
                         $out .= "".shortenStr($rec[$field], $list_disp_limit)."";
