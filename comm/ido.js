@@ -188,7 +188,8 @@ function searchBy(url){
 function sendLinkInfo(vars, rw, fieldtag){
     if(rw == 'w'){
         if(parent.currentlistid){
-            parent.currentlistid[fieldtag] = vars;
+            //parent.currentlistid[fieldtag] = vars;
+            parent.currentlistid[fieldtag] = decodeURIComponent(vars.replace(/\+/g,' '));
         }else{
             //window.alert('parent.currentlistid is ['+parent.currentlistid+'].');
         }
@@ -365,11 +366,11 @@ function fillSubSelect(parentId, childId, logicId, myUrl){
                             if(fieldorig.indexOf(tmpArr[0]) > -1){
                                 issel = true;
                             }
-                            document.getElementById(childId).options[i] = new Option(tmpArr[1]+'('+tmpArr[0]+')',tmpArr[0], true,issel);
+                            document.getElementById(childId).options[i+1] = new Option(tmpArr[1]+'('+tmpArr[0]+')',tmpArr[0], true,issel);
                         }
                     }
                 });
-        gta.get(myUrl+'?tbl=categorytbl&objectid='+fieldv+'&isoput=0&logicid='+logicId);
+        gta.get(myUrl+'?tbl=categorytbl&objectid='+fieldv+'&isoput=0&logicid='+logicId+'&parentid='+parentId+'&childid='+childId);
     
     }else if(logicId == 'area'){
                     console.log("getinto area");
@@ -559,7 +560,7 @@ function doActSelect(sSel, sUrl, iId){
     var targetUrl = sUrl+"&act="+fieldv;
     if(fieldv != ''){
         if(fieldv == 'list-dodelete'){
-            var isconfirm = window.confirm('Are you sure to delete Id:['+iId+']?');
+            var isconfirm = window.confirm('Are you sure to delete/确认要删除 Id:['+iId+']?');
             if(isconfirm){
                 doAction(targetUrl);
             }

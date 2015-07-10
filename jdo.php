@@ -257,7 +257,7 @@ if(startsWith($act,'add') || startsWith($act, "modify")){
                }
                $out .= "<td > <a href=\"javascript:void(0);\" onclick=\"javascript:doActionEx('".$url."&act=modify".$fieldargv."','contentarea')\" >[modify]</a> <br/> <a href=\"javascript:void(0);\" onclick=\"javascript:if(confirm('confirm delete [".$gtbl->getField(1).":".$rec[$gtbl->getField(1)]."]?')){doAction('".$url."&act=list-dodelete".$fieldargv."');}\" >[delete]</a> &nbsp; </td>";
            }
-           $out .= "</tr>"; 
+           $out .= "</tr>\n"; 
            if(!isset($_REQUEST['linkfieldcopy'])){ $fstfields .= $listid[1].","; }else{ $fstfields .= $listid[$_REQUEST['linkfieldcopy']].","; }
         } 
         # record end
@@ -274,14 +274,14 @@ if(startsWith($act,'add') || startsWith($act, "modify")){
                 $out .= "<td>".$tmpsum."</td>";
             }
         }
-        $out .= "<td></td></tr>";
+        $out .= "<td></td></tr>\n";
         # sum end
         $out .= "<tr height=\"35px\"><td style=\"border-bottom:0px\" colspan=\"".($hmsize+2)."\">";
         $out .= "<button name=\"selectallbtn\" type=\"button\" onclick=\"checkAll();\" value=\"\">全选</button>";
         $out .= "<button name=\"reversebtn\" type=\"button\" onclick=\"uncheckAll();\" value=\"\">反选</button>";
         $out .= $navi->getNavi();
         //$out .= " <script> parent.sendLinkInfo('".implode(",",$listid)."','w',''); </script> ";
-        $out .= " <script type=\"text/javascript\"> parent.sendLinkInfo('".substr($fstfields, 0, strlen($fstfields)-1)."','w','".$_REQUEST['field']."'); </script> ";
+        $out .= " <script type=\"text/javascript\"> parent.sendLinkInfo('".urlencode(substr($fstfields, 0, strlen($fstfields)-1))."','w','".$_REQUEST['field']."'); </script> ";
         $out .= "</td></tr>";
     }
     $out .= "</table>";
