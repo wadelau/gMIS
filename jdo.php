@@ -212,7 +212,7 @@ if(startsWith($act,'add') || startsWith($act, "modify")){
                            $fv_short = "<a href=\"".$fhref[0]."\" title=\"".$fhref[1]."\" target=\"".$fhref[2]."\">".$fv_short."</a>";
                        }
                    }
-                   $out .= "<td ondblclick=\"javascript:switchEditable('othercont_div_".$id."_".$field."','".$field."','".$inputtype."','','".$url."&act=updatefield&field=".$field."&id=".$id."','".$gtbl->getReadOnly($field)."');\" title=\"".addslashes($fv_orig)."\" ".$gtbl->getCss($field)."><div id=\"othercont_div_".$id."_".$field."\">".$fv_short."</div></td>";
+                   $out .= "<td ondblclick=\"javascript:switchEditable('othercont_div_".$id."_".$field."','".$field."','".$inputtype."','','".$url."&act=updatefield&field=".$field."&id=".$id."','".$gtbl->getReadOnly($field)."');\" title=\"".str_replace("\"","", $fv_orig)."\" ".$gtbl->getCss($field)."><div id=\"othercont_div_".$id."_".$field."\">".$fv_short."</div></td>";
                    $listid[$dispi] = $rec[$field];
                }
                # hmsum, sum or count each item
