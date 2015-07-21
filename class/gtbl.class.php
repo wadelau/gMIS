@@ -70,7 +70,7 @@ class GTbl extends WebApp
 		
 		$this->prttbl = $tbl;
 		$tbl .= $this->getTblRotateName($tblrotate);
-		error_log(__FILE__.": tbl:[".$this->prttbl."] +span:[".$tbl."]");
+		#error_log(__FILE__.": tbl:[".$this->prttbl."] +span:[".$tbl."]");
 
 		$this->setTbl($tbl);
 		$this->tbl = $tbl;
