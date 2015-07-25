@@ -203,10 +203,10 @@ class GTbl extends WebApp
     }
 
     public function getListFieldCount(){
-        $default = 6; # six fields 
+        $default = 7; # six fields  # seven, since Sat Jul 25 17:23:50 CST 2015
         $tmpstr = $this->hmconf[$this->taglist['table'].$this->sep.$this->prttbl.$this->sep.$this->taglist['listfieldcount']];
         $tmpstr = $tmpstr==null?'':$tmpstr;
-        return $tmpstr = $tmpstr==''?$default:$tmpstr;
+        return $tmpstr = ($tmpstr==''|| $tmpstr < $default)?$default:$tmpstr;
     }
 
     public function getFieldList()

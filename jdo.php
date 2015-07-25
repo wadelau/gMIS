@@ -53,9 +53,9 @@ if(startsWith($act,'add') || startsWith($act, "modify")){
     # list start
     $listid = array();
     $out .= "<table align=\"center\" width=\"98%\" cellspacing=\"0\" cellpadding=\"0\" style=\"\" class=\"mainlist\"><tr height=\"35px\"><td colspan=\"".($hmsize+2)."\">";
-    $out .= "<button name=\"selectallbtn\" type=\"button\" onclick=\"checkAll();\" value=\"\">全选</button>";
+    $out .= "<button name=\"selectallbtn\" type=\"button\" onclick=\"checkAll();\" value=\"\">全选</button> &nbsp;";
     $out .= "<button name=\"reversebtn\" type=\"button\" onclick=\"uncheckAll();\" value=\"\">反选</button>";
-    $out .= "&nbsp; ".$navi->getNavi()." </td></tr>";
+    $out .= "&nbsp; ".$navi->getNavi()." &nbsp;<button name=\"searchor\" onclick=\"javascript:searchBy('".$url."&act=list&pnsm=or');\" title=\"满足其中一个条件即可\">或搜</button>&nbsp;<button name=\"searchand\" href=\"javascript:searchBy('".$url."&act=list&pnsm=and');\" title=\"同时满足所有检索条件\">与搜</button> </td></tr>";
     ## list-sort start
     $out .= "<tr align=\"center\" style=\"font-weight:bold;\" height=\"28px\">";
     if($hasid){
@@ -72,7 +72,7 @@ if(startsWith($act,'add') || startsWith($act, "modify")){
         $dispi++;
         $out .= "<td valign=\"middle\"><a href=\"javascript:void(0);\" title=\"Sort by ".$gtbl->getCHN($field)."\" onclick=\"doAction('".str_replace("&pnob","&xxpnob",$url)."&act=list&pnob".$field."=".($navi->getAsc($field)==0?1:0)."')\">".$gtbl->getCHN($field)."</a></td>";
     }
-    $out .= "<td valign=\"middle\"> 操作 </td></tr>";
+    $out .= "<!-- <td valign=\"middle\"> 操作 </td> --> </tr>";
     ## list-sort end
     ## list-search start
     $untouched = '~~~';
@@ -111,7 +111,7 @@ if(startsWith($act,'add') || startsWith($act, "modify")){
         }
         $out .= "</td>";
     }
-    $out .= "<td><a href=\"javascript:searchBy('".$url."&act=list&pnsm=or');\" title=\"满足其中一个条件即可\">或搜</a><br/><a href=\"javascript:searchBy('".$url."&act=list&pnsm=and');\" title=\"同时满足所有检索条件\">与搜</a></td></tr>";
+    $out .= "<!-- <td><a href=\"javascript:searchBy('".$url."&act=list&pnsm=or');\" title=\"满足其中一个条件即可\">或搜</a><br/><a href=\"javascript:searchBy('".$url."&act=list&pnsm=and');\" title=\"同时满足所有检索条件\">与搜</a></td> --> </tr>";
     ## list-search end
     ## main data loop
     $hm = $gtbl->getBy("*", $navi->getCondition($gtbl, $user));
@@ -126,7 +126,7 @@ if(startsWith($act,'add') || startsWith($act, "modify")){
            $out .= "<tr height=\"35px\" align=\"center\" valign=\"middle\" onmouseover=\"javascript:this.style.backgroundColor='".$hlcolor."';\" onmouseout=\"javascript:this.style.backgroundColor='';\" bgcolor=\"".$bgcolor."\">";
            if($hasid){
                $id = $rec['id']; $listid[] = $id;
-               $out .= "<td nowrap> <input name=\"checkboxid\" type=\"checkbox\" value=\"".$id."\"> &nbsp; <a href='javscript:void(0);' onclick=\"javascript:doActionEx('".$url."&act=view&id=".$id."','contentarea');;\" title=\"详细信息\">".(++$i + (intval($navi->get('pnpn'))-1) * (intval($navi->get('pnps'))))." / ".$id."</a> </td>";
+               $out .= "<td nowrap> <input name=\"checkboxid\" type=\"checkbox\" value=\"".$id."\"> &nbsp; <a onmouseover=\"javascript:showActList('".$id."', 1, '".str_replace("&id=","&oid=", $url)."&id=".$id."');\" onmouseout=\"javascript:showActList('".$id."', 0, '".str_replace("&id=","&oid=", $url)."&id=".$id."');\" href='javscript:void(0);' onclick=\"javascript:doActionEx('".$url."&act=view&id=".$id."','contentarea');;\" title=\"详细信息\">".(++$i + (intval($navi->get('pnpn'))-1) * (intval($navi->get('pnps'))))." / ".$id." &#x25BE;</a> <div id=\"divActList_$id\" style=\"display:none; position: absolute; margin-left:50px; margin-top:-11px; z-index:99; background-color:silver;\">actliat-$id</div> </td>";
 
            }else{
                $out .= "<td > &nbsp; Error! No Id!</td>";
@@ -235,7 +235,9 @@ if(startsWith($act,'add') || startsWith($act, "modify")){
                    }
                }
            }
+           if(0){ # wrap as pop div in id field, wadelau, Sat Jul 25 17:05:57 CST 2015
            if($hasid){
+
                $out .= "<td > <select id=\"actsel_$i\" name=\"actsel_$i\" class=\"selectsmall\" onchange=\"javascript:doActSelect('actsel_".$i."','".str_replace("&id=","&oid=", $url)."&id=".$id."', ".$id.");\">";
                $out .= "<option value=\"\">-做-</option>";
                $out .= "<option value=\"view\" title=\"查看详细信息\">查看</option>";
@@ -257,6 +259,7 @@ if(startsWith($act,'add') || startsWith($act, "modify")){
                }
                $out .= "<td > <a href=\"javascript:void(0);\" onclick=\"javascript:doActionEx('".$url."&act=modify".$fieldargv."','contentarea')\" >[modify]</a> <br/> <a href=\"javascript:void(0);\" onclick=\"javascript:if(confirm('confirm delete [".$gtbl->getField(1).":".$rec[$gtbl->getField(1)]."]?')){doAction('".$url."&act=list-dodelete".$fieldargv."');}\" >[delete]</a> &nbsp; </td>";
            }
+			}
            $out .= "</tr>\n"; 
            if(!isset($_REQUEST['linkfieldcopy'])){ $fstfields .= $listid[1].","; }else{ $fstfields .= $listid[$_REQUEST['linkfieldcopy']].","; }
         } 
@@ -277,7 +280,7 @@ if(startsWith($act,'add') || startsWith($act, "modify")){
         $out .= "<td></td></tr>\n";
         # sum end
         $out .= "<tr height=\"35px\"><td style=\"border-bottom:0px\" colspan=\"".($hmsize+2)."\">";
-        $out .= "<button name=\"selectallbtn\" type=\"button\" onclick=\"checkAll();\" value=\"\">全选</button>";
+        $out .= "<button name=\"selectallbtn\" type=\"button\" onclick=\"checkAll();\" value=\"\">全选</button> &nbsp;";
         $out .= "<button name=\"reversebtn\" type=\"button\" onclick=\"uncheckAll();\" value=\"\">反选</button>";
         $out .= $navi->getNavi();
         //$out .= " <script> parent.sendLinkInfo('".implode(",",$listid)."','w',''); </script> ";

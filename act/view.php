@@ -86,10 +86,8 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
 		else{
             $out .= "<td >".$gtbl->getCHN($field).":&nbsp;</td><td> <a href=\"".$hmorig[$field]."\" title=\"".$hmorig[$field]."\" target=\"_blank\">".$hmorig[$field]."</a> </td>";
         }
-		if($gtbl->getSingleRow($field)){ $out .= "</tr><tr>"; }
-    
-    }else if($gtbl->getExtraInput($field,$hmorig) != ''){
-
+    }
+	else if($gtbl->getExtraInput($field,$hmorig) != ''){
         $out .= "</tr><tr><td>".$gtbl->getCHN($field).":</td><td colspan=\"".$form_cols."\"><span id=\"span_".$act."_".$field."_val_add\"><input id=\"".$field."\" name=\"".$field."\" class=\"search\" value=\"".$hmorig[$field]."\" /></span> <span id=\"span_".$act."_".$field."\"><a href=\"javascript:void(0);\" onclick=\"javascript:doActionEx('".$gtbl->getExtraInput($field,$hmorig)."&act=".$act."&otbl=".$tbl."&field=".$field."&oldv=".$hmorig[$field]."&oid=".$id."','extrainput_".$act."_".$field."_inside');document.getElementById('extrainput_".$act."_".$field."').style.display='block';\">Disp</a></span> <div id=\"extrainput_".$act."_".$field."\" class=\"extrainput\"> ";
 		$out .= "<table width=\"100%\"><tr><td width=\"100%\" style=\"text-align:right\"> <b> <a href=\"javascript:void(0);\" onclick=\"javascript:if('".$id."' != ''){ var linkobj=document.getElementById('".$field."'); if(linkobj != null && '".$id."'!=''){ document.getElementById('".$field."').value=document.getElementById('linktblframe').contentWindow.sendLinkInfo('','r','".$field."');} } document.getElementById('extrainput_".$act."_".$field."').style.display='none';\">X</a> </b> &nbsp; </td></tr><tr><td> <div id=\"extrainput_".$act."_".$field."_inside\"></div></td></tr></table> </div>";
         if($field != 'operatelog'){
@@ -154,7 +152,18 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
 }
 
 $out .= "<tr ><td style=\"border-top: 1px dotted #cccccc; vertical-align:middle;\" colspan=\"".$form_cols."\">  </td></tr>";
-$out .= "<tr><td colspan=\"".$form_cols."\" align=\"center\"><input type=\"button\" name=\"viewbtn\" id=\"viewbtn\" value=\"编辑\" onclick=\"javascript:doActionEx('".$url."&act=modify','contentarea');\"/> <input type=\"button\" name=\"printbtn\" id=\"printbtn\" value=\"打印预览\" onclick=\"javascript:window.open('".$url."&act=print&isoput=1&isheader=0','PrintWindow','scrollbars,toolbar,location=0');\"/>   <input type=\"button\" name=\"cancelbtn\" value=\"关闭\" onclick=\"javascript:parent.switchArea('contentarea_outer','off');\" /> </td></tr>";
+$out .= "<tr><td colspan=\"".$form_cols."\" align=\"center\">
+	<input type=\"button\" name=\"viewbtn\" id=\"viewbtn\" value=\"编辑\" 
+		onclick=\"javascript:doActionEx('".$url."&act=modify','contentarea');\"/> 
+	<input type=\"button\" name=\"printbtn\" id=\"printbtn\" value=\"打印预览\" 
+		onclick=\"javascript:window.open('".$url."&act=print&isoput=1&isheader=0','PrintWindow','scrollbars,toolbar,location=0');\"/>   
+	<input type=\"button\" name=\"deletebtn\" id=\"deletebtn\" value=\"删除\" 
+		onclick=\"javascript:if(window.confirm('Are you sure to delete? / 您确定要删除 id:".$id." 吗?')){doAction('".$url."&act=list-dodelete');}\"/> 
+	<input type=\"button\" name=\"cancelbtn\" value=\"关闭\" 
+		onclick=\"javascript:parent.switchArea('contentarea_outer','off');\" /> 
+	
+	</td></tr>";
+
 $out .= "</table> </fieldset>  <br/>";
 
 

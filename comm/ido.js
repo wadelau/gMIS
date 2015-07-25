@@ -553,9 +553,12 @@ function registerAct(tObj){
 //-- register an action to be run in a few seconds, end
 
 //-- act list, 执行动作, bgn, Sat Jun  2 19:19:12 CST 2012
-function doActSelect(sSel, sUrl, iId){
+function doActSelect(sSel, sUrl, iId, fieldVal){
     
-    var fieldv = document.getElementById(sSel).options[document.getElementById(sSel).selectedIndex].value;
+    var fieldv = fieldVal;
+    if(fieldv == null || fieldv ==''){
+    	fieldv = document.getElementById(sSel).options[document.getElementById(sSel).selectedIndex].value;
+	}
     console.log("doActSelect: fieldv:["+fieldv+"]");
     var targetUrl = sUrl+"&act="+fieldv;
     if(fieldv != ''){
@@ -571,9 +574,15 @@ function doActSelect(sSel, sUrl, iId){
 		else{
             doActionEx(targetUrl, 'contentarea');
         }
-    }else{
-    
     }
+    else{
+    	//--
+    }
+    var actListDiv = document.getElementById('divActList_'+iId);
+    if(actListDiv){
+    	actListDiv.style.display = 'none';
+	}
+
 }
 //-- act list, end, Sat Jun  2 19:19:12 CST 2012
 
@@ -999,7 +1008,6 @@ function input2Search(inputx, obj, div3rd, valueoption){
 			//dataarr[j] = "......Not Found....";	
 			dataarr[j] = "......Searching....";	
 		}
-		//else{
 		if(true){
 			//-- close action
 			j++;
@@ -1012,5 +1020,27 @@ function input2Search(inputx, obj, div3rd, valueoption){
 		userinfo.lastInput2SearchItem = inputVal;
 		userinfo.input2Select.makeSelect = 0; //-- clear makeSelect
 	}
+
+}
+
+function showActList(nId, isOn, sUrl){
+	var divId = 'divActList_'+nId;		
+	//console.log((new Date())+": divId:["+divId+"]");
+	var divObj = document.getElementById(divId);
+	var dispVal = divObj.style.display;
+	if(isOn == 1){ dispVal = 'block'; }else{ dispVal = 'none';}
+	divObj.style.display = dispVal;
+	divObj.onmouseover = function(){ this.style.display='block'; };
+
+	var sCont = '<p>';
+	
+	sCont += '&nbsp; &nbsp;&nbsp;<a href="javascript:void(0);" onclick="javascript:doActSelect(\'\', \''+sUrl+'\', '+nId+', \'view\');">查看View</a>&nbsp; &nbsp;&nbsp;';
+	sCont += '<br/>&nbsp; &nbsp;&nbsp;<a href="javascript:void(0);" onclick="javascript:doActSelect(\'\', \''+sUrl+'\', '+nId+', \'modify\');">修改Edit</a>&nbsp; &nbsp;&nbsp;';
+	sCont += '<br/>&nbsp; &nbsp;&nbsp;<a href="javascript:void(0);" onclick="javascript:doActSelect(\'\', \''+sUrl+'\', '+nId+', \'print\');">打印Print</a>&nbsp; &nbsp;&nbsp;';
+	sCont += '<br/>&nbsp; &nbsp;&nbsp;<a href="javascript:void(0);" onclick="javascript:doActSelect(\'\', \''+sUrl+'\', '+nId+', \'list-dodelete\');">删除Delete</a>&nbsp; &nbsp;&nbsp;';
+
+	sCont += '</p>';
+
+	divObj.innerHTML = sCont;
 
 }
