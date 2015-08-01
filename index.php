@@ -28,7 +28,7 @@ if($hm[0]){
 $hm = $gtbl->execBy("select objname,tblname from ".$_CONFIG['tblpre']."info_objecttbl where addtodesktop > 0 order by addtodesktop");
 if($hm[0]){
 	$hm = $hm[1];
-	$data['module_list_byuser'] = $hm;
+	$data['module_list_byuser'] = $hm; #Todo add2desktop by user 
 }
 
 $hm = $gtbl->execBy("select count(*) as modulecount from ".$_CONFIG['tblpre']."info_objecttbl where state=1");
@@ -36,10 +36,17 @@ if($hm[0]){
 	$hm = $hm[1];
 	$data['module_count'] = $hm[0]['modulecount'];
 }
+
 $hm = $gtbl->execBy("select count(*) as usercount from ".$_CONFIG['tblpre']."info_usertbl where state=1");
 if($hm[0]){
 	$hm = $hm[1];
 	$data['user_count'] = $hm[0]['usercount'];
+}
+
+$hm = $gtbl->execBy("select * from ".$_CONFIG['tblpre']."fin_operatelogtbl order by id desc limit 6");
+if($hm[0]){
+	$hm = $hm[1];
+	$data['log_list'] = $hm;
 }
 
 $fp = fopen("./ido.php", "r");

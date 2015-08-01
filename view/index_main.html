@@ -40,7 +40,7 @@ body {
 		   .wrapper{
 			      position: relative;
 				     float: left;
-					    left: 89px;
+					    left: 49px;
 						   //width: 850px;
 						      margin-bottom: 20px;
 							     //background-color: #cccccc
@@ -77,6 +77,16 @@ body {
 						      height: 70px;
 							     background-color: #cfcfcf
 		   }
+		   .wrapperlog{
+			      position: relative;
+				     float: left;
+					    left: 59px;
+						   width: 670px;
+						      margin-bottom: 20px;
+							     background-color: #cccccc;
+					padding-left:10px;
+					padding-right:20px;
+		   }
 		</style>
 		<table align="center" width="700px"  style="background:transparent"><tr>
 		<td>
@@ -86,7 +96,7 @@ body {
 			{if $mi==0 || ($mi) % 4 == 0}
 			<div class="wrapper">
 			{/if}
-				 <a href="./{$ido}&tbl={$module_list_order[$k]}"><div class="left{($k%4)+1}">{$mi+1}.{$module_list_name[$module_list_order[$k]]}({$module_list_order[$k]})</div></a>
+				 <a href="./{$ido}&tbl={$module_list_order[$k]}"><div class="left{($k%4)+1}"><span style="size:14px; font-weight:bold;">{$mi+1}.{$module_list_name[$module_list_order[$k]]}</span><br/>({$module_list_order[$k]})</div></a>
 			{if ($mi+1) % 4 == 0}
 			</div>
 			{/if}
@@ -109,7 +119,7 @@ body {
 			{if $mi==0 || ($mi) % 4 == 0}
 			<div class="wrapper">
 			{/if}
-				 <a href="./{$ido}&tbl={$v['tblname']}"><div class="left{($k%4)+1}">{$mi+1}.{$v['objname']}({$v['tblname']})</div></a>
+				 <a href="./{$ido}&tbl={$v['tblname']}"><div class="left{($k%4)+1}"><span style="size:14px; font-weight:bold;">{$mi+1}.{$v['objname']}</span><br/>({$v['tblname']})</div></a>
 			{if ($mi+1) % 4 == 0}
 			</div>
 			{/if}
@@ -117,6 +127,20 @@ body {
 		{/foreach}
 		</td>
 		</tr>
+
+		<tr>
+			<td colspan="10">
+			<b title="(操作、管理日志)">OL.操作日志Operation-Log</b><br/>
+			<div id="oplogdiv" class="wrapperlog">
+			<b><pre>时间					用户/Id						执行操作					作用对象/Id</pre></b>
+<pre>{foreach $log_list as $k=>$v}
+{$v['inserttime']}		{$v['useremail']}/{$v['userid']}		{$v['actionstr']}		{$v['parenttype']}/{$v['parentid']}
+{/foreach}</pre>
+			<a href="./ido.php?tbl=fin_operatelogtbl">更多...</a>
+			</div>	
+			</td>
+		</tr>
+
 		<tr><td colspan="10">
 		<script type="text/javascript"> 
 		function diffInYearsAndDays(startDate, endDate) {
@@ -149,6 +173,7 @@ body {
 		</script>
 		<b><i>ii</i></b>.系统已上线 <a href="./"><script type="text/javascript">diff=diffInYearsAndDays('{$system_lastmodify}',(new Date()));document.write(''+diff[0]+' 年 '+diff[1]+' 天');</script></a> , 目前共 <b>{$user_count}</b> 位用户，管理着<b> {$module_count}  </b>个功能模块.  
 		</td></tr>
+
 		<tr><td><b><i>HM</i></b>.<a href="{$front_page}" target="_blank">打开主站</a></td></tr>
 		</table>
 			<!-- <script type="text/javascript"> window.setTimeout(location.href = '{$todourl}', 10*1000); </script> -->

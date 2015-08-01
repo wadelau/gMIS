@@ -172,6 +172,7 @@ if(startsWith($act,'add') || startsWith($act, "modify")){
 
                }else if($inputtype == 'file'){
 					   $fhref = $gtbl->getHref($field, $rec);
+					   if(strpos($rec[$field], "$shortDirName/") !== false){ $rec[$field] = str_replace("$shortDirName/", "", $rec[$field]); }
 					   if(count($fhref) == 0){
 							$fhref = "<a href=\"javascript:void(0);\" onclick=\"window.open('".$rec[$field]."');\" title=\"点击大图或者下载 ".$rec[$field]."\">"; 	   
 						}
@@ -184,7 +185,7 @@ if(startsWith($act,'add') || startsWith($act, "modify")){
 							$fhref = $fhref_tmp;
 						}
                    $out .= "<td> ".$fhref;
-				   if(strpos($rec[$field], "$shortDirName/") !== false){ $rec[$field] = str_replace("$shortDirName/", "", $rec[$field]); }
+				   
 				   $isimg = isImg($rec[$field]);
                    if($isimg){
                        $out .= "<img src=\"".$rec[$field]."\" style=\"max-width:99%; max-height:99%\" onload=\"javascript: var baseSize=118; if(this.width > baseSize){ this.style.width = baseSize+'px';}else if(this.height > baseSize){ this.style.height=baseSize+'px'; } \" id=\"img_".$rec[$field]."\" />";

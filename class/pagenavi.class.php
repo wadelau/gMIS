@@ -200,10 +200,10 @@ class PageNavi extends WebApp{
                         }
                     }else if($fieldopv == 'contains'){
                         $condition .= " ".$pnsm." "."$field like ?";
-                        $gtbl->set($field, "%".$v."%");
+                        $gtbl->set($field, "%".str_replace(' ','%',$v)."%");
                     }else if($fieldopv == 'notcontains'){
                         $condition .= " ".$pnsm." "."$field not like ?";
-                        $gtbl->set($field, "%".$v."%");
+                        $gtbl->set($field, "%".str_replace(' ','%',$v)."%");
                     }else if($fieldopv == 'startswith'){
                         $condition .= " ".$pnsm." "."$field like ?";
                         $gtbl->set($field, $v."%");
