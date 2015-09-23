@@ -107,6 +107,12 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
             $fieldv = $_REQUEST[$field];
 			if($fieldv == ''){
 				$fieldv = $hmfield[$field."_default"];
+					if($fieldv == ''){
+					if(inString('int', $hmfield[$field])){
+						#print __FILE__.": field:[".$field."] type:[".$hmfield[$field]."] is int.";
+						$fieldv = 0;
+					}
+				}
 			}
             else{
 				if(strpos($fieldv,"<") !== false){ # added by wadelau on Sun Apr 22 22:09:46 CST 2012
