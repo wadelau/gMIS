@@ -346,16 +346,18 @@ class GTbl extends WebApp
 
         }else if(strpos($tmpstr,"fromtable") === 0){
             $arr = explode("::",$tmpstr);
-            $tbl = $arr[1];
+            $tbl = $arr[1]; $theTbl = $tbl;
             $dispfield = $arr[2];
             if(isset($arr[3])){
                 #$dispfield .= ",".$arr[3];
             }
 			$hmoption = array();
-			$optval = 'id';
+			$optval = 'id'; $dispname = '';
 			if(isset($arr[4])){ $optval = $arr[4]; }  # alternative 'id', # see xml/fwn_sitetbl, sitetype, Fri Dec 12 13:43:36 CST 2014
+			$hasExist = 0; $maxInitSelectCount = 64; $optioni = 0;
 			if(isset($this->hmconf['selectoption_'.$field])){
-				$hmoption = $this->hmconf['selectoption_'.$field];	
+				$optionlist = $this->hmconf['selectoption_'.$field]; $hasExist = 1;	
+				$hmoption = $this->hmconf['selectoption_hm_'.$field]; 	
 			}
 			else{
 				$oldhmf = $this->hmf;
@@ -363,7 +365,7 @@ class GTbl extends WebApp
 				$this->setTbl($tbl);
 				$hm = $this->getBy("$optval,$dispfield", $arr[3]);  
 				if($hm[0]){
-					$hmoption = $hm[1]; $this->hmconf['selectoption_'.$field] = $hmoption;
+					$hmoption = $hm[1]; # $this->hmconf['selectoption_'.$field] = $hmoption;
 				}
 				$this->hmf = $oldhmf;
 			}
@@ -386,10 +388,45 @@ class GTbl extends WebApp
 					}
 				}
 			   $optionlist .=">".$dispname.(isset($arr[3])?"-".$rec[$arr[3]]:"")." (".$rec[$optval].")</option>\n"; 
+			   if($optioni++ > $maxInitSelectCount){ break; }
 			}
+			$this->hmconf['selectoption_'.$field] = $optionlist;
+			$this->hmconf['selectoption_hm_'.$field] = $hmoption;
             //$this->setTbl($oldtbl);
-
-        }else if(strpos($tmpstr,"|") > 0){ 
+			
+			if($hasExist == 0 && $optioni > $maxInitSelectCount){
+				print "<script type='text/javascript'>parent.lazyLoad('".$field."','select','extra/readtblfield.php?objectid=0&logicid=sitename&tbl=".$theTbl."&field=".$field."');</script><input name='pnsk_".$field."_optionlist' id='pnsk_".$field."_optionlist' value='' type='hidden' />";		
+				#error_log(__FILE__.": field:$field set lazy load...... optioni:$optioni");
+			}
+			if($defaultval != null && $selectval == ''){
+				$hmSelect = array();
+				if(isset($this->hmconf['selectoption_sel_'.$field])){
+					$hmSelect = $this->hmconf['selectoption_sel_'.$field];
+				}
+				else{
+					foreach($hmoption as $k=>$rec){
+						$dispname = $rec[$arr[2]]; $selectval = '';
+						if(strpos($dispfield, ",") !== false){ #! Sat Nov 29 07:35:39 CST 2014
+							$tmparr = explode(",", $dispfield);
+							foreach($tmparr as $k2=>$v2){
+								$dispname .= "-".$rec[$v2];	
+							}
+						}
+						if($rec[$optval] == $defaultval || strpos(",".$defaultval.",", ",".$rec[$optval].",") !== false){
+							$selectval = $dispname.(isset($arr[3])?"-".$rec[$arr[3]]:"")." (".$rec[$optval].")";
+							if($needv == 1){
+								$selectval_mul .= $dispname.(isset($arr[3])?"-".$rec[$arr[3]]:"")." (".$rec[$optval]."),";
+							} 
+						}
+						$hmSelect[$rec[$optval]] = $selectval==''?($dispname."-(".$rec[$optval].")"):$selectval; # multiple support?
+					}
+					$this->hmconf['selectoption_sel_'.$field] = $hmSelect; 
+				}
+				if($selectval == ''){ $selectval = $hmSelect[$defaultval]; }
+				#error_log(__FILE__.": defval:[".$defaultval."] selectval:[".$selectval."]");
+			}
+        }
+		else if(strpos($tmpstr,"|") > 0){ 
             $varlist = explode("|", $tmpstr);
             $tmpstr = "";
             foreach($varlist as $k=>$v){
@@ -418,11 +455,13 @@ class GTbl extends WebApp
         }
         if($needv != 1){
             return $tmpstr;
-        }else{
+        }
+		else{
             #error_log(__FILE__.": field:$field, selectval:$selectval , selectval_mul:$selectval_mul");
             if($ismultiple == 1){
                 return substr($selectval_mul,0, strlen($selectval_mul)-1);
-            }else{
+            }
+			else{
                 return $selectval==''?$defaultval:$selectval; #  = $defaultval;
             }
         }

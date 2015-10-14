@@ -503,8 +503,8 @@ function switchEditable(targetObj,fieldName,fieldType,fieldValue,myUrl,readOnly)
                         }
                     });
             gta.get(myUrl+'&'+fieldName+'='+encodeURIComponent(newv));
-
-        }else{
+        }
+		else{
             //window.alert('same content. unchanged.');
         }
 
@@ -635,21 +635,16 @@ function getUrlByTime(baseUrl, timepara, timeop, timeTag){
 
 //-- old functions
 
-function updateTag(tagtype,tagid,str)
-{
-	try
-	{
-		if(tagtype=='div' || tagtype=='span')
-		{
+function updateTag(tagtype,tagid,str){
+	try{
+		if(tagtype=='div' || tagtype=='span'){
 			document.getElementById(tagid).innerHTML=str;
 		}
-		else
-		{
+		else{
 			document.getElementById(tagid).value=str;
 		}
 	}
-	catch(err)
-	{
+	catch(err){
 		//--
 		window.alert('update err.');
 	}
@@ -960,7 +955,7 @@ function input2Search(inputx, obj, div3rd, valueoption){
 	obj1737.style.display = 'block';
 	if(inputVal.length < 2 || balaTime < 8 || inputVal == lastSearchItem){
 		// || balaTime < 100 
-		console.log('input-length:'+inputVal.length+', balaTime:'+balaTime+', lastItem:'+lastSearchItem+',  thisItem:'+inputVal+', bypass');
+		//console.log('input-length:'+inputVal.length+', balaTime:'+balaTime+', lastItem:'+lastSearchItem+',  thisItem:'+inputVal+', bypass');
 		//obj1737.innerHTML = '';
 		return 0;
 	}
@@ -984,7 +979,32 @@ function input2Search(inputx, obj, div3rd, valueoption){
 			selectLength = hidesele.length;
 			userinfo.input2Select.selectLength = selectLength;
 		}
-		if(hidesele != null){
+		//-- cacheOptionList, added by wadelau, 	Tue Oct 13 08:22:55 CST 2015
+		var cacheOptionList = document.getElementById('pnsk_'+obj+'_optionlist'); //- see lazyLoad and class/gtbl.class
+		//console.log(cacheOptionList.value);
+		if(cacheOptionList != ''){
+			console.log("use high-speed cacheOptionList....");
+			var col = JSON.parse(cacheOptionList.value);
+			for(var opti in col){
+				var seleText = col[opti];
+				var seleVal = opti;
+				//console.log("text:["+seleText+"] val:["+seleVal+"]");	
+				if(seleText.toLowerCase().indexOf(iInputX) > -1){
+					//--
+					if(valueoption == null || valueoption == ''){
+						dataarr[j++] = '<span onmouseover=parent.changeBGC(this,1); onmouseout=parent.changeBGC(this,0); onclick=parent.makeSelect(\''+destobj+'\',this.innerText,\''+selelistdiv+'\',\'pnsk_'+obj+'\');>'+seleText+'-('+seleVal+')</span>';
+					}
+					else if(valueoption == 'NEED_OPTION_VALUE'){ //-- div3rd mode
+						dataarr[j++] = '<span onmouseover=parent.changeBGC(this,1);parent.makeSelect(\''+destobj+'\',\''+seleVal+'\',\''+selelistdiv+'\',\'pnsk_'+obj+'\',1); onmouseout=parent.changeBGC(this,0);userinfo.input2Select.makeSelect=0; onclick=parent.makeSelect(\''+destobj+'\',this.innerText,\''+selelistdiv+'\',\'pnsk_'+obj+'\',4);>'+seleText+'-('+seleVal+')</span>';
+					}
+					if(j>30){
+						dataarr[j++] = '更多.....';
+						break;	
+					}
+				}
+			}
+		}
+		else if(hidesele != null){
 			for(var i=0; i < selectLength; i++){ //- 复制搜索栏里的select选项到当前
 				var seleText = hidesele.options[i].text;
 				var seleVal = hidesele.options[i].value;
@@ -1044,3 +1064,44 @@ function showActList(nId, isOn, sUrl){
 	divObj.innerHTML = sCont;
 
 }
+
+//-- lazy load long list, Wed Oct 14 09:08:51 CST 2015
+function lazyLoad(myObj, myType, myUrl){
+	window.console.log("lazyload is starting.... myurl:["+myUrl+"] myobj:["+myObj+"]");
+	if(true){
+	//document.onreadystatechange = function(){
+	//window.onload = function(){
+	window.setTimeout(function(){
+		if(document.readyState == 'complete' || document.readyState == 'interactive'){
+			sendNotice(true, 'Lazy is loading in process..... myobj:['+myObj+']');
+			var gta = new GTAjax();
+        	gta.set('targetarea', 'addareaextradiv');
+        	gta.set("callback", function(){
+            	//window.alert("getresult:["+this+"]");
+                var s = this;
+				var resultList = JSON.parse(s);
+				//var mySele = document.getElementById(resultList.thefield);
+				console.log("thefield:["+resultList.thefield+"] "+(new Date()));
+				var optionList = {};
+				for(var i=0;i<resultList.result_list.length;i++){
+					var aresult = resultList.result_list[i];
+					//mySele.options[i] = new Option(aresult.sitename+'('+aresult.id+')',aresult.id, true,issel=false);
+					optionList[aresult.id] = aresult.sitename;
+
+				}
+				var myOptionList = document.getElementById(resultList.thefield+'_optionlist');
+				myOptionList.value = JSON.stringify(optionList);
+				console.log("thefield:["+resultList.thefield+"] completed......"+(new Date()));
+				//console.log(JSON.stringify(myOptionList.value));
+				sendNotice(true, 'Lazy Load is done successfully..... myobj:['+myObj+']');
+			});
+        	gta.get(myUrl);
+		}
+		else{
+			sendNotice(false, 'Lazy Loading is waiting.....');
+		}
+	}, 3*1000);
+
+	}
+}
+

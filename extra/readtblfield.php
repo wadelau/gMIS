@@ -5,7 +5,7 @@
 require("../comm/header.inc");
 #require("../class/gtbl.class.php");
 
-$field = $_REQUEST['field'];
+$thefield = $_REQUEST['field'];
 $url = $_SERVER['PHP_SELF']."?bkl=".$_REQUEST['bkl'];
 $logicid = $_REQUEST['logicid'];
 
@@ -15,6 +15,7 @@ $out = "";
 
 $objectid = $_REQUEST['objectid'];
 $tbl = $_CONFIG['tblpre']."info_objecttbl";
+if(isset($_REQUEST['tbl'])){ $tbl = $_CONFIG['tblpre'].$_REQUEST['tbl']; }
 
 $objArr = array();
 if($logicid == 'mingcheng' || startsWith($objectid, "fromtable")){
@@ -71,6 +72,19 @@ if($logicid == 'xiane'){
        //print_r($v);
        $out .= $v['id'].":::".$v['chnname']."\n"; 
     }
+}
+else if($logicid == 'sitename'){
+    $hm = $gtbl->getBy("id,sitename", "parentid='".$objectid."'");
+	if($hm[0]){
+        $hm = $hm[1];
+	}
+    #foreach($hm as $k=>$v){
+       //print_r($v);
+       #$out .= $v['id'].":::".$v['sitename']."\n"; 
+    #}
+	#print_r($_REQUEST);
+	#print "my field:$thefield";
+	$out = json_encode(array('thefield'=>'pnsk_'.$thefield, 'result_list'=>$hm));
 }
 
 print $out;
