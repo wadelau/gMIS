@@ -138,7 +138,7 @@ function mkUrl($file, $req){
         }
     }
     */
-    $needdata = array('id','tbl','db','oid','otbl','oldv','field','linkfield','linkfield2','tit');
+    $needdata = array('id','tbl','db','oid','otbl','oldv','field','linkfield','linkfield2','tit','tblrotate');
     foreach($req as $k=>$v){
         if(in_array($k, $needdata) || startsWith($k,'pn') || startsWith($k, "oppn")){
             if($k == 'oldv'){
@@ -280,6 +280,70 @@ function isImg($file){
 	return $isimg;
 
 }  
+
+# get Ids list from array|hash
+# by wadelau@ufqi.com, Sat Jul 11 09:21:13 CST 2015
+function getIdList($iarray, $ikey){
+	#$tmpIds = "999999,";
+	$tmpIds = "";
+
+	if(count($iarray) > 0){
+		foreach($iarray as $k=>$v){
+			$tmpIds .= $v[$ikey].",";
+		}
+	}
+	#$tmpIds = substr($tmpIds, 0, strlen($tmpIds)-1);
+	$tmpIds .= "999999";
+
+	return $tmpIds;
+
+}
+
+# write log in a simple approach
+# by wadelau@ufqi.com, Sat Oct 17 17:38:26 CST 2015
+# e.g. 
+# debug($user); 
+# debug($user, 'userinfo');  # with tag 'userinfo'
+# debug($user, 'userinfo', 1); # with tag 'userinfo' and in backend and frontend
+function debug($obj, $tag='', $output=null){
+	$caller = debug_backtrace();
+	if(is_array($obj)){
+		if(isset($user)){
+			$s .= $user->toString($obj);
+		}
+		else{
+			$s .= serialize($obj);
+		}
+	}
+	else{
+		$s .= $obj;
+	}
+
+	if($tag != ''){
+		$s = " $tag:[$s]";
+	}
+	$callidx = count($caller) - 2; 
+	$s .= ' func:['.$caller[$callidx]['function'].'] file:['.$caller[$callidx]['file'].']';
+
+	if($output != null){
+		if($output == 0){ # in backend only
+			error_log($s); 
+		}
+		else if($output == 1){ # in backend and frontend
+			error_log($s);
+			print $s;
+		}
+		else if($output == 2){ # in backend and frontend with backtrace
+			$s .= " backtrace:[".serialize($caller)."]";
+			error_log($s);
+			print $s;	
+		}
+	}
+	else{ 
+		error_log($s); # default mode
+	}
+	
+}
 
 
 ?>
