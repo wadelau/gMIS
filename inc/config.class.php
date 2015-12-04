@@ -1,6 +1,7 @@
 <?php
 
 # global constant configurations
+# remedy by wadelau@ufqi.com on 22:31 Friday, December 04, 2015
 
 $tblpre = "";
 $conf = array();
@@ -31,9 +32,10 @@ $conf['dbuser'] 	= '';
 $conf['dbpassword'] 	= '';
 $conf['dbname'] 	= $conf['maindb'];
 
-#
+# misc 
 $conf['frontpage'] = '#-xxx';
 $conf['is_debug'] = 1;
+$conf['html_resp'] = '<!DOCTYPE html><html><head><title>RESP_TITLE</title></head><body>RESP_BODY</body></html>';
 
 # set them all
 Gconf::setConf($conf);
