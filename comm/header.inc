@@ -14,20 +14,17 @@ $shortDirName = $dirArr[count($dirArr)-1]; # the name of gMIS subdir, i.e. admin
 require_once($appdir."/inc/config.class.php");
 $is_debug = $_CONFIG['is_debug'];
 if($is_debug){
-header("Cache-Control: no-store, no-cache, must-revalidate");
-header("Expires: Thu, 01 Jan 1970 00:00:00 GMT");
-error_reporting(E_ALL ^ E_NOTICE);
-error_reporting(-1);
-ini_set('error_reporting', E_ALL ^ E_NOTICE);
-ini_set("display_errors", 1);
+	header("Cache-Control: no-store, no-cache, must-revalidate");
+	header("Expires: Thu, 01 Jan 1970 00:00:00 GMT");
+	error_reporting(E_ALL ^ E_NOTICE);
+	error_reporting(-1);
+	ini_set('error_reporting', E_ALL ^ E_NOTICE);
+	ini_set("display_errors", 1);
 }
 
 require_once($appdir."/class/user.class.php");
 
-#print __FILE__.": docroot:$docroot , rtvdir:$rtvdir , appdir:$appdir. @".date("Y-m-d-H:i:s");
-#exit(0);
 require_once($appdir."/comm/tools.function.php");
-
 
 require($appdir."/class/gtbl.class.php");
 require($appdir."/class/pagenavi.class.php");
@@ -55,7 +52,6 @@ if($userid != ''){
     header("Location: ".$rtvdir."/extra/signupin.php?act=signin&bkl=thisurl");    
 	exit(0);
 }
-header("Content-Type: text/html; charset=utf-8");
 
 #print "userid:$userid\n";
 
@@ -84,8 +80,7 @@ if(isset($_REQUEST['isheader'])){
     }
 } 
 
-if($isoput)
-{
+if($isoput){
     if(!$isheader){ 
 		# another place at view/header.html!
         $out = '<!DOCTYPE html><html>
@@ -172,6 +167,10 @@ $smt->setCacheDir($viewdir.'/cache');
 $smttpl = '';
 global $data;
 $data = array();
+$fmt = isset($_REQUEST['fmt'])?$_REQUEST['fmt']:''; # by wadelau on Tue Nov 24 21:36:56 CST 2015
+if($fmt == ''){
+	header("Content-type: text/html;charset=utf-8");
+}
 
 function exception_handler($exception) {
 	echo '<div class="alert alert-danger">';

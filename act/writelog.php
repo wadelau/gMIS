@@ -12,7 +12,7 @@ if(1){
         $gtbl->set('parentid', $_REQUEST['id']==''?0:$_REQUEST['id']);
         $gtbl->set('parenttype', $tbl);
 
-        $gtbl->set('actionstr', "act:[".$act."] id:[".$_REQUEST['id']."]");
+        $gtbl->set('actionstr', "act:[".$act."] id:[".($_REQUEST['id']==''?$_REQUEST['id.old']:$_REQUEST['id'])."]"); # see act/dodelete.php
 
         $hm = $gtbl->setBy("userid,useremail,parentid,parenttype,actionstr,inserttime",null);
 

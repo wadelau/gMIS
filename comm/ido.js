@@ -17,15 +17,14 @@ if(!window.console){
 }
 
 //-- script used in /manage/items/index.jsp, 20090303, wadelau
-function pnAction(url)
-{
+function pnAction(url){
     if(url.indexOf("act=") == -1 && url.indexOf("?") > -1){
         url += "&act=list";
     }
 	doAction(url);
 }
-function doAction(strUrl)
-{
+
+function doAction(strUrl){
 	var sActive = "actarea";
 	var myAjax = new GTAjax();
 	myAjax.set('targetarea',sActive);
@@ -34,11 +33,10 @@ function doAction(strUrl)
 	var tmp = myAjax.get( appendTab(strUrl) );
 
 }
-function doActionEx(strUrl,sActive)
-{  
 
-	if(sActive=='addareaextra')
-	{
+function doActionEx(strUrl,sActive){  
+
+	if(sActive=='addareaextra'){
 		//document.getElementById('addareaextradiv').style.display='block';
         switchArea('addareaextradiv', 'on');
 	}
@@ -59,16 +57,13 @@ function doActionEx(strUrl,sActive)
 
 }
 
-function _g( str )
-{
+function _g( str ){
 	return document.getElementById( str );
 }
 
 
-function appendTab(strUrl)
-{
-	if(strUrl.indexOf(".php")>-1)
-	{
+function appendTab(strUrl){
+	if(strUrl.indexOf(".php")>-1){
 		if(strUrl.indexOf("tbl")==-1)
 		{
 			//window.alert('need to append acctab.');
@@ -561,12 +556,45 @@ function doActSelect(sSel, sUrl, iId, fieldVal){
 	}
     console.log("doActSelect: fieldv:["+fieldv+"]");
     var targetUrl = sUrl+"&act="+fieldv;
+	var actListDiv = document.getElementById('divActList_'+iId); var hideActListDiv = 1;
+
     if(fieldv != ''){
         if(fieldv == 'list-dodelete'){
-            var isconfirm = window.confirm('Are you sure to delete/确认要删除 Id:['+iId+']?');
-            if(isconfirm){
-                doAction(targetUrl);
-            }
+           var deleteDelay = 11; // seconds
+			if(!actListDiv){
+				console.log('actListDiv was lost.....')
+			}
+			var deleteTimerId = window.setTimeout(function(){
+				window.console.log('delay delete started.......'+(new Date()));
+				var gta = new GTAjax();
+				gta.set('targetarea', 'addareaextradiv');
+				gta.set("callback", function(){
+						var resp = this;
+						//console.log('delete_resp:['+resp+']'); // copy from iframe document ?
+						var resp_1 = /<pre[^>]*>([^<]*)<\/pre>/g;
+						var resp_2 = resp_1.exec(resp);
+						console.log('delete_resp_after:['+resp_2[1]+'] id:['+iId+']');
+						resp = resp_2[1];
+						var json_resp = JSON.parse(resp);
+						var iId = json_resp.resultobj.targetid; //- anonymous func embeded in another anonymos func, cannot share variables in runtime.
+						if(json_resp.resultobj.resultcode == 0){
+							sendNotice(true, 'Data updated Successfully. 操作成功! TargetId:['+iId+']');
+							var its_list_tr = document.getElementById('list_tr_'+iId);
+							its_list_tr.style.backgroundColor = '#404040';
+							var actListDiv = document.getElementById('divActList_'+iId); //- 
+    						actListDiv.style.display = 'none';
+						}
+						else{
+							sendNotice(false, 'Data updated Failed. Please Try again/请重试.');
+						}
+					});
+				gta.get(targetUrl+'&async=1&fmt=json');
+	
+				}, deleteDelay * 1000);
+            
+			actListDiv.innerHTML = '<span style="color:red"> &nbsp; ' + iId + ' will be deleted after '+deleteDelay+' seconds, [<a href="javascript:window.clearTimeout('+deleteTimerId+');switchArea(\'divActList_'+iId+'\',\'off\');console.log(\'delete is canceled.\'+(new Date())); ">Press here to cancel</a>]...</span>'; hideActListDiv = 0;	
+			//if(isconfirm){
+            //}
         }
 		else if(fieldv == 'print'){
 			window.open(sUrl+'&act=print&isoput=1&isheader=0','PrintWindow','scrollbars,toolbar,location=0');
@@ -578,8 +606,8 @@ function doActSelect(sSel, sUrl, iId, fieldVal){
     else{
     	//--
     }
-    var actListDiv = document.getElementById('divActList_'+iId);
-    if(actListDiv){
+	
+    if(actListDiv && hideActListDiv == 1){
     	actListDiv.style.display = 'none';
 	}
 
@@ -737,7 +765,8 @@ function WdatePicker(){
             separator: '-',
             className: 'date-picker-wp'
         });
-    }else{
+    }
+	else{
         sendNotice('DateP has an invalid obj:['+obj+']');
     }
 }
@@ -1051,6 +1080,7 @@ function showActList(nId, isOn, sUrl){
 	if(isOn == 1){ dispVal = 'block'; }else{ dispVal = 'none';}
 	divObj.style.display = dispVal;
 	divObj.onmouseover = function(){ this.style.display='block'; };
+	divObj.onmouseout = function(){ this.style.display='none'; };
 
 	var sCont = '<p>';
 	

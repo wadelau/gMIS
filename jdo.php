@@ -25,10 +25,20 @@ if(startsWith($act,'add') || startsWith($act, "modify")){
     }
 
     if(startsWith($act, "list-dodelete")){
+		$origId = $id;
        include("./act/dodelete.php"); 
 	   $url = str_replace('&id=', '&xoid=', $url); 
+		if($fmt != ''){ 
+		   $data['respobj']['resultobj'] = array('resultcode'=>'0',  # 0 stands for success
+		   		'resulttrace'=>'1511242124', 'targetid'=>$origId); # unique trace id
+		   }
     }
-
+	
+	if(isset($data['respobj']['resultobj'])){
+		# json, xml, Tue Nov 24 21:31:23 CST 2015
+	}
+	else{
+		# html
     $navi = new PageNavi();
     $orderfield = $navi->getOrder();
     if($orderfield == ''){
@@ -123,7 +133,7 @@ if(startsWith($act,'add') || startsWith($act, "modify")){
            if($i%2 == 0){
                 $bgcolor = "";
            }
-           $out .= "<tr height=\"35px\" align=\"center\" valign=\"middle\" onmouseover=\"javascript:this.style.backgroundColor='".$hlcolor."';\" onmouseout=\"javascript:this.style.backgroundColor='';\" bgcolor=\"".$bgcolor."\">";
+           $out .= "<tr height=\"35px\" align=\"center\" valign=\"middle\" onmouseover=\"javascript:this.style.backgroundColor='".$hlcolor."';\" onmouseout=\"javascript:this.style.backgroundColor='';\" bgcolor=\"".$bgcolor."\" id=\"list_tr_".$rec['id']."\">";
            if($hasid){
                $id = $rec['id']; $listid[] = $id;
                $out .= "<td nowrap> <input name=\"checkboxid\" type=\"checkbox\" value=\"".$id."\"> &nbsp; <a onmouseover=\"javascript:showActList('".$id."', 1, '".str_replace("&id=","&oid=", $url)."&id=".$id."');\" onmouseout=\"javascript:showActList('".$id."', 0, '".str_replace("&id=","&oid=", $url)."&id=".$id."');\" href='javscript:void(0);' onclick=\"javascript:doActionEx('".$url."&act=view&id=".$id."','contentarea');;\" title=\"详细信息\">".(++$i + (intval($navi->get('pnpn'))-1) * (intval($navi->get('pnps'))))." / ".$id." &#x25BE;</a> <div id=\"divActList_$id\" style=\"display:none; position: absolute; margin-left:50px; margin-top:-11px; z-index:99; background-color:silver;\">actliat-$id</div> </td>";
@@ -294,6 +304,7 @@ if(startsWith($act,'add') || startsWith($act, "modify")){
     if(startsWith($act, "list-toexcel")){
        include("./act/toexcel.php"); 
     }
+	} # resultobj end
 
 }else if(startsWith($act,"view")){ 
 
