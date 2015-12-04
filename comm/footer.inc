@@ -19,7 +19,16 @@ if($smttpl != ''){
 	$smt->display($smttpl);
 }else{
 	#error_log(__FILE__.": smttpl is empty. not display with Smarty.req:[".$_SERVER['REQUEST_URI']);
-	print $out;
+	#print $out;
+	if($fmt == ''){
+        print $out;
+    }
+    else if($fmt == 'json'){
+        print json_encode($data['respobj']);    
+    }
+    else{
+        debug($fmt, "unknown_fmt"); 
+    }
 }
 
 #error_log(__FILE__.": out:[".$out."]");
