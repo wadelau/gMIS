@@ -1011,7 +1011,7 @@ function input2Search(inputx, obj, div3rd, valueoption){
 		//-- cacheOptionList, added by wadelau, 	Tue Oct 13 08:22:55 CST 2015
 		var cacheOptionList = document.getElementById('pnsk_'+obj+'_optionlist'); //- see lazyLoad and class/gtbl.class
 		//console.log(cacheOptionList.value);
-		if(cacheOptionList != ''){
+		if(cacheOptionList != null && cacheOptionList != ''){
 			console.log("use high-speed cacheOptionList....");
 			var col = JSON.parse(cacheOptionList.value);
 			for(var opti in col){
@@ -1110,16 +1110,17 @@ function lazyLoad(myObj, myType, myUrl){
             	//window.alert("getresult:["+this+"]");
                 var s = this;
 				var resultList = JSON.parse(s);
+				var fieldName = resultList.thefield;
+				var dispField = resultList.dispfield;
 				//var mySele = document.getElementById(resultList.thefield);
 				console.log("thefield:["+resultList.thefield+"] "+(new Date()));
 				var optionList = {};
 				for(var i=0;i<resultList.result_list.length;i++){
 					var aresult = resultList.result_list[i];
 					//mySele.options[i] = new Option(aresult.sitename+'('+aresult.id+')',aresult.id, true,issel=false);
-					optionList[aresult.id] = aresult.sitename;
-
+					optionList[aresult.id] = eval('aresult.'+dispField);
 				}
-				var myOptionList = document.getElementById(resultList.thefield+'_optionlist');
+				var myOptionList = document.getElementById('pnsk_'+fieldName+'_optionlist');
 				myOptionList.value = JSON.stringify(optionList);
 				console.log("thefield:["+resultList.thefield+"] completed......"+(new Date()));
 				//console.log(JSON.stringify(myOptionList.value));

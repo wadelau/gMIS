@@ -20,6 +20,12 @@ if($smttpl != ''){
 }
 else{
 	#error_log(__FILE__.": smttpl is empty. not display with Smarty.req:[".$_SERVER['REQUEST_URI']);
+	if($out_header != ''){
+		$out_header = $htmlheader . $out_header;
+	}
+	else if($out != ''){
+		$out = $htmlheader . $out;
+	}
 	if($fmt == ''){
 		print $out;
 	}

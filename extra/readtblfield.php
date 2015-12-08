@@ -73,18 +73,15 @@ if($logicid == 'xiane'){
        $out .= $v['id'].":::".$v['chnname']."\n"; 
     }
 }
-else if($logicid == 'sitename'){
-    $hm = $gtbl->getBy("id,sitename", "parentid='".$objectid."'");
+else if($logicid != ''){
+    $hm = $gtbl->getBy("id,$logicid", "parentid='".$objectid."'");
 	if($hm[0]){
         $hm = $hm[1];
 	}
-    #foreach($hm as $k=>$v){
-       //print_r($v);
-       #$out .= $v['id'].":::".$v['sitename']."\n"; 
-    #}
-	#print_r($_REQUEST);
-	#print "my field:$thefield";
-	$out = json_encode(array('thefield'=>'pnsk_'.$thefield, 'result_list'=>$hm));
+	$out = json_encode(array('thefield'=>''.$thefield, 'result_list'=>$hm, 'dispfield'=>$logicid));
+}
+else{
+	$out .= "Unknown logicid:[$logicid]. [1512081131]";
 }
 
 print $out;

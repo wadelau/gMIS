@@ -343,7 +343,6 @@ class GTbl extends WebApp
         $selectval_mul = '';
         if($tmpstr == ''){
             # ?    
-
         }else if(strpos($tmpstr,"fromtable") === 0){
             $arr = explode("::",$tmpstr);
             $tbl = $arr[1]; $theTbl = $tbl;
@@ -395,7 +394,7 @@ class GTbl extends WebApp
             //$this->setTbl($oldtbl);
 			
 			if($hasExist == 0 && $optioni > $maxInitSelectCount){
-				print "<script type='text/javascript'>parent.lazyLoad('".$field."','select','extra/readtblfield.php?objectid=0&logicid=sitename&tbl=".$theTbl."&field=".$field."');</script><input name='pnsk_".$field."_optionlist' id='pnsk_".$field."_optionlist' value='' type='hidden' />";		
+				print "<script type='text/javascript'>parent.lazyLoad('".$field."','select','extra/readtblfield.php?objectid=0&logicid=".$dispfield."&tbl=".$theTbl."&field=".$field."');</script><input name='pnsk_".$field."_optionlist' id='pnsk_".$field."_optionlist' value='' type='hidden' />";		
 				#error_log(__FILE__.": field:$field set lazy load...... optioni:$optioni");
 			}
 			if($defaultval != null && $selectval == ''){

@@ -38,7 +38,7 @@ if(!isset($user)){
 } 
 
 $userid = '';
-$out = '';
+$out = ''; $htmlheader = '';
 if(array_key_exists(UID,$_SESSION) && $_SESSION[UID] != '')
 {
 	$userid = $_SESSION[UID];
@@ -83,9 +83,9 @@ if(isset($_REQUEST['isheader'])){
 if($isoput){
     if(!$isheader){ 
 		# another place at view/header.html!
-        $out = '<!DOCTYPE html><html>
+        $htmlheader = '<!DOCTYPE html><html>
             <head>
-            <!-- other stuff -->
+            <!-- other stuff in header.inc -->
             <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
             <title>TITLE - '.$_CONFIG['appname'].' -'.$_CONFIG['agentname'].'</title>
             <link rel="stylesheet" type="text/css" href="'.$rtvdir.'/comm/default.css" />
