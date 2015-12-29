@@ -149,7 +149,7 @@ function searchBy(url){
 							//- omit	
 						}
 						else{
-                			var reg1055 = new RegExp("，");
+                			var reg1055 = new RegExp("，", "g");
 							fieldv = fieldv.replace(reg1055, ","); 
                 			appendquery += "&pnsk"+fieldarr[i]+"="+fieldv;
                     		appendquery += "&oppnsk"+fieldarr[i]+"="+fieldopv;
@@ -157,7 +157,7 @@ function searchBy(url){
 					}
                 }
 				else{
-					var reg1055 = new RegExp("，");
+					var reg1055 = new RegExp("，", "g");
 					fieldv = fieldv.replace(reg1055, ","); 
 					appendquery += "&pnsk"+fieldarr[i]+"="+fieldv;
 				}
