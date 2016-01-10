@@ -6,6 +6,7 @@
 //-- Mon Sep 29 16:01:21 CST 2014
 //-- Mon Oct 27 15:58:46 CST 2014
 //-- 09:48 Wednesday, July 01, 2015
+//- with ido_proj.js , 10:37 Sunday, January 10, 2016
 //-
 var currenttbl = '';
 var currentdb = '';
@@ -201,27 +202,27 @@ function sendLinkInfo(vars, rw, fieldtag){
 //-- auto calculate numbers, designed by Wadelau@ufqi.com, BGN
 //-- 16/02/2012 23:11:28
 /* example:
- * 	onclick="hss_calcu_onf(this);"
- * 	onchange="hss_calcu(this, 'zongzhichu', {'*':'peitongfangshu','+':'otherid'});"
+ * 	onclick="x_calcu_onf(this);"
+ * 	onchange="x_calcu(this, 'zongzhichu', {'*':'peitongfangshu','+':'otherid'});"
  * means: zongzhichu = this.value * peitongfangshu + otherid
  */
-var hss_currentCalcu = {};
-function hss_calcu_onf(thisfield){
+var x_currentCalcu = {};
+function x_calcu_onf(thisfield){
     //window.alert('oldv: ['+thisfield.value+']');
     var fieldid = thisfield.id;
-    hss_currentCalcu.fieldid = thisfield.value==''?0:thisfield.value;
+    x_currentCalcu.fieldid = thisfield.value==''?0:thisfield.value;
 }
-function hss_calcu(thisfield, targetx, otherlist){
+function x_calcu(thisfield, targetx, otherlist){
     var fieldid = thisfield.id;
-    if(hss_currentCalcu.fieldid == null || hss_currentCalcu.fieldid == undefined || hss_currentCalcu.fieldid == 'null'){
+    if(x_currentCalcu.fieldid == null || x_currentCalcu.fieldid == undefined || x_currentCalcu.fieldid == 'null'){
         var tmpobj = document.getElementById(fieldid);
-        hss_currentCalcu.fieldid = tmpobj.value == ''?0:tmpobj.value;
+        x_currentCalcu.fieldid = tmpobj.value == ''?0:tmpobj.value;
     }
     var thisfieldv = thisfield.value==''?0:thisfield.value;
-    var bala = thisfieldv - hss_currentCalcu.fieldid;
+    var bala = thisfieldv - x_currentCalcu.fieldid;
     var tgt = document.getElementById(targetx);
     var formulax  = '';
-    if(tgt != null && isNumber(hss_currentCalcu.fieldid) && isNumber(thisfieldv)){
+    if(tgt != null && isNumber(x_currentCalcu.fieldid) && isNumber(thisfieldv)){
             var oldv = tgt.value==''?0:tgt.value;
             oldv = parseInt(oldv);
             for(var k in otherlist){
@@ -239,10 +240,10 @@ function hss_calcu(thisfield, targetx, otherlist){
             var balax = eval(bala+formulax);
             var newv = oldv + parseInt(balax);
             tgt.value = parseInt(newv);
-            //window.alert('oldv:['+hss_currentCalcu.fieldid+'] new-field: ['+thisfield.value+'] bala:['+bala+'] formula:['+formulax+'] balax:['+balax+'] newv:['+newv+']');
-            //hss_currentCalcu.fieldid = null;
+            //window.alert('oldv:['+x_currentCalcu.fieldid+'] new-field: ['+thisfield.value+'] bala:['+bala+'] formula:['+formulax+'] balax:['+balax+'] newv:['+newv+']');
+            //x_currentCalcu.fieldid = null;
     }else{
-        window.alert('Javascript:hss_calcu: Error! targetx:['+targetx+'] is null or hss_currentCalcu.'+fieldid+':['+hss_currentCalcu.fieldid+'] is not numeric. \n\tClick an input field firstly.');
+        window.alert('Javascript:x_calcu: Error! targetx:['+targetx+'] is null or x_currentCalcu.'+fieldid+':['+x_currentCalcu.fieldid+'] is not numeric. \n\tClick an input field firstly.');
         thisfield.focus();
     }
 }
@@ -250,7 +251,7 @@ function isNumber(n){
 	return !isNaN(parseFloat(n)) && isFinite(n);
 }
 //- added Wed Apr  4 19:57:23 CST 2012
-function hss_calcuTbl(theform, targetx,f){
+function x_calcuTbl(theform, targetx,f){
     var id = theform.id;
     if(typeof id != 'string'){
         id = theform.name;
@@ -276,7 +277,7 @@ function hss_calcuTbl(theform, targetx,f){
                     f = f.replace(new RegExp(' '+fArr[i],"gm"), ' '+fVal);
                     f = f.replace(new RegExp(fArr[i]+' ',"gm"), fVal+' ');
                 }else{
-                    window.alert('hss_calcuTbl: Unknown field:['+fArr[i]+']');
+                    window.alert('x_calcuTbl: Unknown field:['+fArr[i]+']');
                 }
                 //window.alert('field:['+fArr[i]+'] val:['+fVal+'] new formula:['+f+']');
             }
@@ -538,7 +539,7 @@ function sendNotice(isSucc, sMsg){
 //-- notice end, Mon Mar 19 21:41:02 CST 2012
 
 //-- register an action to be run in a few seconds later, bgn
-//-- see xml/hss_useraccesstbl.xml
+//-- see xml/x_useraccesstbl.xml
 function registerAct(tObj){
     if(tObj.status == 'onload'){
         //window.alert('delaytime:['+tObj.delaytime+']');
@@ -1088,7 +1089,6 @@ function showActList(nId, isOn, sUrl){
 	sCont += '<br/>&nbsp; &nbsp;&nbsp;<a href="javascript:void(0);" onclick="javascript:doActSelect(\'\', \''+sUrl+'\', '+nId+', \'modify\');">修改Edit</a>&nbsp; &nbsp;&nbsp;';
 	sCont += '<br/>&nbsp; &nbsp;&nbsp;<a href="javascript:void(0);" onclick="javascript:doActSelect(\'\', \''+sUrl+'\', '+nId+', \'print\');">打印Print</a>&nbsp; &nbsp;&nbsp;';
 	sCont += '<br/>&nbsp; &nbsp;&nbsp;<a href="javascript:void(0);" onclick="javascript:doActSelect(\'\', \''+sUrl+'\', '+nId+', \'list-dodelete\');">删除Delete</a>&nbsp; &nbsp;&nbsp;';
-
 	sCont += '</p>';
 
 	divObj.innerHTML = sCont;
