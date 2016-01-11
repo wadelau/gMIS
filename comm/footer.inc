@@ -26,16 +26,16 @@ else{
 	else if($out != ''){
 		$out = $htmlheader . $out;
 	}
+
 	if($fmt == ''){
-		print $out;
-	}
-	else if($fmt == 'json'){
-		header("Content-type: application/json;charset=utf-8");
-		print json_encode($data['respobj']);	
-	}
-	else{
-		debug($fmt, "unknown_fmt");	
-	}
+        print $out;
+    }
+    else if($fmt == 'json'){
+        print json_encode($data['respobj']);    
+    }
+    else{
+        debug($fmt, "unknown_fmt"); 
+    }
 }
 
 #error_log(__FILE__.": out:[".$out."]");

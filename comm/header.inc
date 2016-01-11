@@ -23,9 +23,7 @@ if($is_debug){
 }
 
 require_once($appdir."/class/user.class.php");
-
 require_once($appdir."/comm/tools.function.php");
-
 require($appdir."/class/gtbl.class.php");
 require($appdir."/class/pagenavi.class.php");
 
@@ -138,6 +136,10 @@ $tblrotate = $_REQUEST['tblrotate'];
 $act = $_REQUEST['act'];
 $tit = $tit==''?$tbl:$tit;
 $id = $_REQUEST['id'];
+$fmt = isset($_REQUEST['fmt'])?$_REQUEST['fmt']:''; # by wadelau on Tue Nov 24 21:36:56 CST 2015
+if($fmt == ''){
+    header("Content-type: text/html;charset=utf-8");
+}
 
 if(strpos($tbl,$_CONFIG['tblpre']) !== 0){
     $tbl = $_CONFIG['tblpre'].$tbl; # 兼容不是以 hss_ 开头的表名
