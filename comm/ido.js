@@ -165,6 +165,8 @@ function searchBy(url){
 
                 var reg = new RegExp("&pnsk"+fieldarr[i]+"=([^&]*)");
                 url = url.replace(reg, "");
+				reg = new RegExp("&oppnsk"+fieldarr[i]+"=([^&]*)");
+				url = url.replace(reg, "");
             }
         }
     }
@@ -572,10 +574,12 @@ function doActSelect(sSel, sUrl, iId, fieldVal){
 				gta.set("callback", function(){
 						var resp = this;
 						//console.log('delete_resp:['+resp+']'); // copy from iframe document ?
-						var resp_1 = /<pre[^>]*>([^<]*)<\/pre>/g;
-						var resp_2 = resp_1.exec(resp);
-						console.log('delete_resp_after:['+resp_2[1]+'] id:['+iId+']');
-						resp = resp_2[1];
+						if(resp.indexOf('<pre') > -1){
+							var resp_1 = /<pre[^>]*>([^<]*)<\/pre>/g;
+							var resp_2 = resp_1.exec(resp);
+							console.log('delete_resp_after:['+resp_2[1]+'] id:['+iId+']');
+							resp = resp_2[1];
+						}
 						var json_resp = JSON.parse(resp);
 						var iId = json_resp.resultobj.targetid; //- anonymous func embeded in another anonymos func, cannot share variables in runtime.
 						if(json_resp.resultobj.resultcode == 0){
