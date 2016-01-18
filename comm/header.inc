@@ -142,7 +142,7 @@ if($fmt == ''){
 }
 
 if(strpos($tbl,$_CONFIG['tblpre']) !== 0){
-    $tbl = $_CONFIG['tblpre'].$tbl; # 兼容不是以 hss_ 开头的表名
+    $tbl = $_CONFIG['tblpre'].$tbl; 
 }
 if(isset($_REQUEST['parent'])){
 	$tmpnewk = 'pnsk'.$_REQUEST['parent'];
