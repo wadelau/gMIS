@@ -585,9 +585,9 @@ function doActSelect(sSel, sUrl, iId, fieldVal){
 						if(json_resp.resultobj.resultcode == 0){
 							sendNotice(true, 'Data updated Successfully. 操作成功! TargetId:['+iId+']');
 							var its_list_tr = document.getElementById('list_tr_'+iId);
-							its_list_tr.style.backgroundColor = '#404040';
+							if(its_list_tr){ its_list_tr.style.backgroundColor = '#404040'; }
 							var actListDiv = document.getElementById('divActList_'+iId); //- 
-    						actListDiv.style.display = 'none';
+    						if(actListDiv){ actListDiv.style.display = 'none'; }
 						}
 						else{
 							sendNotice(false, 'Data updated Failed. Please Try again/请重试.');

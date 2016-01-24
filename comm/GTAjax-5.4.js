@@ -5,12 +5,13 @@
  * @author: wadelau@hotmail.com,wadelau@gmail.com
  * @since: 2006-2-17 14:04
  * @update: Tue Feb  1 20:47:03 GMT 2011
- * @code: 5.3 // a.bc , funcs added b+, errs updated c+ 
+ * @code: 5.4 // a.bc , funcs added b+, errs updated c+ 
  * @NOTICE: DO NOT USE THIS COMMERICALLY WITHOUT AUTHOR'S PAPER AUTHORIZATION
  * Tue Jan 25 12:55:01 GMT 2011
  * Wed Jan 26 17:31:33 GMT 2011
  * Wed Jul 20 08:08:09 BST 2011
  * Fri Mar 16 16:36:52 CST 2012
+ * Sun Jan 24 12:56:43 CST 2016
  */ 
 //---- DO NOT CHANGE ANY PART OF THE CODE UNDER THIS LINE ---
 var GTAj = null ; 
@@ -47,6 +48,7 @@ function GTAjax()
 	GTAj.pswd = 'Processing';
 	GTAj.rtns = null; //--- return status
     GTAj.noticed = 0; //-- form submitting during process will be noticed, added on 20110126
+	GTAj.ti = 0; //-- runing track id, positioning by line no, added on 20160124 
 	GTAj.cA = new Array();
 	GTAj.vA = new Array()
 	GTAj.vA['sbv'] = 'Submit' ;
@@ -799,6 +801,7 @@ function GTAjax()
 			{
                
 				this._SAY(GTAj.sFld, GTAj.vA['sbv'],true);
+				GTAj.ti = 1241259; //-- mmddHHii
 				try
 				{
 					if(GTAj.nEmt2)
@@ -824,6 +827,7 @@ function GTAjax()
                     {
                        this._DBG(GTAj.vA['ib'],'return','nEmt2 is nothing!');
                     }
+					GTAj.ti = 1241300; 
 					if( ( GTAj.sFld!=''|| GTAj.vA['fbl'] ) && !GTAj.vA['rdo'] )
 					{ 
 						if( GTAj.vA['bl'] || GTAj.vA['fbl'] )
@@ -840,6 +844,7 @@ function GTAjax()
 								this._DBG( GTAj.vA['ib'],'GTAjBK.bk'+GTAjStatus.bki,'val');
 								GTAj.sBkCt = '1' ;
 							}
+							GTAj.ti = 1241301; 
 							var sbackstr = '&nbsp;<br/>&nbsp;<br/><a href="javascript:void(0);" onclick="javascript:GTAj.backGTAjax(\''+ GTAj.vA['ta']+'\',\''+GTAjStatus.bki+'\');">&laquo;'+ GTAj.vA['rn']+'</a><br/>&nbsp;' ;
 							if( GTAj.vA['nbl']!='' )
 							{
@@ -855,13 +860,16 @@ function GTAjax()
 						} 
 					}
 
+					GTAj.ti = 1241301; 
                     //-- callback function, added on Sun Mar 11 12:56:18 CST 2012
                     if(GTAj.vA['cb'] != undefined && GTAj.vA['cb'] != ''){
                         //console.log("callback:["+GTAj.vA['cb']+"]");
                         GTAj.vA['cb'].call(GTAj.sRe);
+						GTAj.ti = 1241302; 
                     }
                     else if(GTAj.wFl || ( GTAj.vA['ff'] && !GTAj.vA['rdo'] ) || (!GTAj.wFl && !GTAj.vA['rdo']) ) // GTAj.wFl==true,always write directly
 					{
+						GTAj.ti = 1241303; 
 						if(  typeof  GTAj.vA['ta'] !='undefined' &&  GTAj.vA['ta']!='' )
 						{
 							document.getElementById( GTAj.vA['ta']).innerHTML = GTAj.sRe ;
@@ -881,6 +889,7 @@ function GTAjax()
 					{
 						window.clearTimeout( GTAj.sTd ) ;
 					}
+					GTAj.ti = 1241304; 
 					if( true || GTAj.sTd2 != 0  )
 					{
 						window.clearTimeout( GTAj.sTd2 ) ;
@@ -894,6 +903,7 @@ function GTAjax()
 				}
 				catch(e5)
 				{
+					console.log("e5:["+JSON.stringify(e5)+"] ti:["+GTAj.ti+"]");
 					return this._RGT('finishJob',e5);	
 				}
 				
@@ -1006,11 +1016,11 @@ function GTAjax()
 			{
 				Errmsg += '\n name:'+sObj.name
 						+'\n message:'+sObj.message;
-				if( GTAj.tBro.indexOf('explorer')!= -1 )
+				if(true || GTAj.tBro.indexOf('explorer')!= -1 )
 				{
 					Errmsg += '\n location:'+sObj.location;	
 				}
-				Errmsg += '\n description:'+sObj.description + '. more at '+GTAjVar.helpurl;
+				Errmsg += '\n description:'+sObj.description + '. ['+JSON.stringify(sObj)+'] more at '+GTAjVar.helpurl;
 			}
 			else
 			{
@@ -1132,8 +1142,6 @@ function GTAjax()
 
 	this._RGT = function( eTag, tErr )
 	{
-			//this._RPT(eTag,tErr);
-        //window.alert('i am clicked! FDiv:['+document.getElementById( this.gtFDiv ).innerHTMl+'] _x:['+document.getElementById( this.gtFDiv+'_x' ).innerHTMl+'] _text:['+document.getElementById( this.gtFDiv ).innerText+']');
         //--- reset();
         if( typeof GTAj == 'undefined' || GTAj==null)
         {
@@ -1147,7 +1155,6 @@ function GTAjax()
 		    this._DBG( GTAj.vA['ib'],'need to reset-GTAj', 'req:['+GTAj.reg.req+'] eTag:['+eTag+']' );
         }
 		if( eTag!='' && eTag!='done' && eTag != 'formValidate-0' && eTag != 'formValidate-1' )
-		//if( eTag!='' && eTag!='done') 
 		{
 			this._RPT(eTag,tErr);
 		}
@@ -1158,37 +1165,29 @@ function GTAjax()
 			    this._SAY(GTAj.sFld, GTAj.vA['sbv'], true);
             }
 		}
-        //window.alert('i am clicked! 22');
 		if( GTAj.nEmt2 )
 		{
 			if(GTAj.myBdTt!=null && typeof GTAj.myBdTt !='undefined')
 			{ 
 				try
 				{
-
-        //window.alert('i am clicked! 22--00');
 					GTAj.myBdTt.removeChild(GTAj.nEmt2);
 				}
 				catch(erm)
 				{
-        //window.alert('i am clicked! 22--11');
 				}  
 			}
 			else
 			{
-        //window.alert('i am clicked! 22--22');
+				GTAj.ti = 1241310;
 				document.body.removeChild(GTAj.nEmt2); //--- refer to this._PSD()
 			}
 		}
         else
         {
-            //document.getElementById( this.gtFDiv ).innerHTMl = 'abcd----';
-            //document.getElementById( this.gtFDiv+'_x' ).innerHTMl = 'efgh----';
 		    this._DBG( GTAj.vA['ib'],'reset-GTAj-nEmt2-is-null', 'req:['+GTAj.reg.req+']' );
-            //window.alert('i am clicked! 22--33 div:['+this.gtFDiv+']');
         }
 
-        //window.alert('i am clicked! 33');
 		if( GTAj.sTd != 0  )
 		{
 			window.clearTimeout( GTAj.sTd ) ;
@@ -1225,6 +1224,7 @@ function GTAjax()
 		GTAj.myBdTt = null ;
 		GTAj.rtns = null ;
         GTAj.noticed = 0;
+        GTAj.ti = 0;
 	
 		GTAj.cA = new Array();
 		GTAj.vA = new Array()
@@ -1293,8 +1293,13 @@ function GTAjax()
 						GTAj.myBdTt = document.getElementById( GTAj.vA['ta'] );
 					} 
 					GTAj.nEmt2 = document.createElement('div');
-					GTAj.nEmt2.setAttribute('id', GTAj.gtFDiv);
-					GTAj.nEmt2.style.cssText = divstyle2 ; 
+					if(GTAj.nEmt2){
+						GTAj.nEmt2.setAttribute('id', GTAj.gtFDiv);
+						GTAj.nEmt2.style.cssText = divstyle2 ; 
+					}
+					else{
+						console.log("GTAj.nEmt2 is null.....");	
+					}
 					if(GTAj.myBdTt!=null)
 					{ 
 						GTAj.myBdTt.appendChild(GTAj.nEmt2);
