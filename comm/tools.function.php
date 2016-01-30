@@ -78,7 +78,7 @@ function sendMail($to,$subject,$body, $from='', $local=0){
 
         $_CONFIG['mail_smtp_server'] = "smtp.163.com";
         $_CONFIG['mail_smtp_username'] = "wadelau@163.com";
-        $_CONFIG['mail_smtp_password'] = "myminina.123456";
+        $_CONFIG['mail_smtp_password'] = "my.minina.123456";
         $_CONFIG['isauth'] = true;
         $_CONFIG['mail_smtp_fromuser'] = $_CONFIG['mail_smtp_username'];
 
@@ -124,13 +124,7 @@ function inString($needle, $haystack){
 
 function mkUrl($file, $_REQU){
     $url = $file."?";
-    /*
-    $noneeddata = array('act','PHPSESSID','JSESSIONID','userufqi','iweb_shoppingcart','iweb_user_id','iweb_user_pwd','iweb_username','iweb_head_ico','iweb_safecode');
-        if(!in_array($k,$noneeddata)){
-            $url .= $k."=".$v."&";
-        }
-    }
-    */
+   
     $needdata = array('id','tbl','db','oid','otbl','oldv','field','linkfield','linkfield2','tit','tblrotate');
     foreach($_REQU as $k=>$v){
         if(in_array($k, $needdata) || startsWith($k,'pn') || startsWith($k, "oppn")){
@@ -350,3 +344,97 @@ function debug($obj, $tag='', $output=null){
 	}
 	
 }
+
+# resize image by GD functions
+# wadelau@ufqi.com, Thu Jan 28 22:04:14 CST 2016
+# return resized image
+# $toWidth: int, 10~10000 ?
+# $percentNum: float, 0~1
+# e.g. $destFile = resizeImage($srcFile, 1024);
+# e.g. $destFile = resizeImage($srcFile, 0, 0.55);
+function resizeImage($srcFile, $toWidth, $percentNum=1, $destQuality=85){
+
+	$keepSame = 1; # 0 for cutting edges, 1 for not cutting
+	$edgeCutRate = 7; # 2~10, 10 for least edge-cutting...  
+	$centerRate = 1.5; # 1~5, 5 for largest leaving center...
+
+	$srcInfo = getimagesize($srcFile); # http://www.php.net/getimagesize
+	$srcWidth = $srcInfo[0];
+	$srcHeight = $srcInfo[1];
+	$srcType = $srcInfo[2];
+
+	if($toWidth == 0){
+		if($percentNum == 1 || $percentNum == 0){
+			debug($toWidth, "toWidth-percentNum-eRror");
+		}
+		else{ $toWidth = $srcWidth * $percentNum; }	
+	}
+	else if($percentNum == 1){
+		$percentNum = $toWidth / $srcWidth;
+	}
+	$toHeight = (int)$srcHeight * ($toWidth/$srcWidth);
+
+	$src_x_pos = 0;
+	if(1 && $srcWidth > $toWidth){
+		$src_x_pos = ($srcWidth - $toWidth) / $edgeCutRate;
+		$srcWidth -= $src_x_pos * $centerRate;
+	}
+	else{
+		#$toWidth = $srcWidth; # for enlarge /scale up
+	}
+	$src_y_pos = 0;
+	if(1 && $srcHeight > $toHeight){
+		$src_y_pos = ($srcHeight - $toHeight) / $edgeCutRate;
+		$srcHeight -= $src_y_pos * $centerRate;
+	}
+	else{
+		#$toHeight = $srcHeight; 
+	}
+	$dest_x_pos = 0; $dest_y_pos = 0;
+	#debug($src_x_pos.",".$src_y_pos.",".$percentNum);
+
+	$srcImage = null;
+	if($srcType == 1){ # 'image/gif')
+		$srcImage = imagecreatefromgif($srcFile);
+	}
+	else if($srcType == 2){ # 'image/jpeg'
+		$srcImage = imagecreatefromjpeg($srcFile);
+	}
+	elseif($srcType == 3){ # 'image/png'
+		$srcImage = imagecreatefrompng($srcFile);
+	}
+	elseif($srcType == 17){ # 'image/webp', still unavailable
+		$srcImage = imagecreatefrompng($srcFile);
+	}
+
+	$lastDot = strrpos($srcFile, '.');
+	$destFile = substr($srcFile, 0, $lastDot).'_rs_'.$toWidth.'_'.$percentNum.'.'.substr($srcFile, $lastDot+1, strlen($srcFile));				
+	if($keepSame == 0){
+		$destImage = imagecreatetruecolor($toWidth, $toHeight);
+		imagecopyresampled($destImage, $srcImage, 
+			$dest_x_pos, $dest_y_pos, $src_x_pos, $src_y_pos, 
+				$toWidth, $toHeight, $srcWidth, $srcHeight);
+	}
+	else{
+		$destImage = imagescale($srcImage, $toWidth, $toHeight);
+	}
+
+	$destQuality = $destQuality * $percentNum;
+	$destQuality = $destQuality > 100 ? 100 : $destQuality;
+	if($srcType == 1){
+		imagegif($destImage, $destFile, $destQuality);
+	}
+	else if($srcType == 2){ 
+		imagejpeg($destImage, $destFile, $destQuality);
+	}
+	elseif($srcType == 3){ 
+		imagepng($destImage, $destFile, $destQuality);
+	}
+	elseif($srcType == 17){ 
+		imagewebp($destImage, $destFile, $destQuality);
+	}
+	
+	return $destFile;
+	
+}
+
