@@ -65,7 +65,7 @@ if(startsWith($act,'add') || startsWith($act, "modify")){
     $out .= "<table align=\"center\" width=\"98%\" cellspacing=\"0\" cellpadding=\"0\" style=\"\" class=\"mainlist\"><tr height=\"35px\"><td colspan=\"".($hmsize+2)."\">";
     $out .= "<button name=\"selectallbtn\" type=\"button\" onclick=\"checkAll();\" value=\"\">全选</button> &nbsp;";
     $out .= "<button name=\"reversebtn\" type=\"button\" onclick=\"uncheckAll();\" value=\"\">反选</button>";
-    $out .= "&nbsp; ".$navi->getNavi()." &nbsp;<button name=\"searchor\" onclick=\"javascript:searchBy('".$url."&act=list&pnsm=or');\" title=\"满足其中一个条件即可\">或搜</button>&nbsp;<button name=\"searchand\" href=\"javascript:searchBy('".$url."&act=list&pnsm=and');\" title=\"同时满足所有检索条件\">与搜</button> </td></tr>";
+    $out .= "&nbsp; ".$navi->getNavi()." &nbsp;<button name=\"searchor\" onclick=\"javascript:searchBy('".$url."&act=list&pnsm=or');\" title=\"满足其中一个条件即可\">或搜</button>&nbsp;<button name=\"searchand\" onclick=\"javascript:searchBy('".$url."&act=list&pnsm=and');\" title=\"同时满足所有检索条件\">与搜</button> </td></tr>";
     ## list-sort start
     $out .= "<tr align=\"center\" style=\"font-weight:bold;\" height=\"28px\">";
     if($hasid){
