@@ -181,4 +181,27 @@ function exception_handler($exception) {
 }
 set_exception_handler('exception_handler');
 
+# convert user input data to variables, tag#userdatatovar
+foreach($_REQUEST as $k=>$v){
+    $k = trim($k);
+    if($k != ''){
+        if(preg_match("/([0-9a-z_]+)/i",$k,$matcharr)){
+            $k_orig = $k = $matcharr[1];
+			if(is_string($v)){
+				$v = trim($v);
+				if(stripos($v, "<") > -1){ # <script , <embed, <img, <iframe, etc.  Mon Feb  1 14:48:32 CST 2016
+					$v = str_ireplace("<", "&lt;", $v);
+					$_REQUEST[$k] = $v;
+				}   
+			}
+            $data[$k] = $v;
+            if(preg_match('/[^\x20-\x7e]/', $k)){
+                eval("\${$k} = \"$v\";");
+            }
+        }
+		else{
+        }
+  	}
+}
+
 ?>
