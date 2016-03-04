@@ -36,6 +36,7 @@ $conf['dbname'] 	= $conf['maindb'];
 $conf['frontpage'] = '#-xxx';
 $conf['is_debug'] = 1;
 $conf['html_resp'] = '<!DOCTYPE html><html><head><title>RESP_TITLE</title></head><body>RESP_BODY</body></html>';
+$conf['auto_save_interval'] = 20; # ref extra/htmleditor
 
 # set them all
 Gconf::setConf($conf);

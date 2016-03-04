@@ -8,8 +8,6 @@ require("../comm/header.inc");
 
 $myfield = trim($_REQUEST['field']);
 
-
-
 ?>
 <!DOCTYPE html><html>
 <head>
@@ -44,7 +42,7 @@ document.getElementById('myeditor').value = parent.getCont('<?php print $myfield
 //document.body.onunload = function(){ parent.setCont('content', document.getElementById('uube_mta').innerText);}
 
 // auto-save, Wed Aug 13 15:55:22 CST 2014
-var autosavetime=60*1000;
+var autoSaveInterval = <?php print $_CONFIG['auto_save_interval']; ?> * 1000; // 60*1000;
 window.setTimeout('setAutoSave('+autosavetime+')', autosavetime);
 function setAutoSave(autosavetime){
 	parent.setCont('<?php print $myfield;?>',ue.getContent()); 
