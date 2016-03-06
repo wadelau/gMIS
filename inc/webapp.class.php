@@ -30,6 +30,8 @@ class WebApp implements WebAppInterface{
 	var $isdbg = 1;  # Gconf::get('is_debug');
 	var $sep = "|"; # separating tag for self-defined message body
 
+	var hmfieldinfo = array(); #  container for table structure, -gMIS only,
+	
 	//- constructor
 	function __construct(){
 		//-
@@ -150,6 +152,7 @@ class WebApp implements WebAppInterface{
 		}
 		#error_log(__FILE__.": setBy, sql:[".$sql."] hmf:[".$this->toString($this->hmf)."] [1201241223].\n");
 		#print(__FILE__.": setBy, sql:[".$sql."] hmf:[".$this->toString($this->hmf)."] [1201241223].\n");
+		$this->hmf['hmfieldinfo'] = $this->hmfieldinfo;
 		if($issqlready == 1){
 			if($this->getId() != ""){ $this->hmf["pagesize"] = 1; } # single record
 			$hm = $this->dba->update($sql, $this->hmf);
@@ -192,7 +195,8 @@ class WebApp implements WebAppInterface{
 			$sql .= ' limit '.(($pagenum-1)*$pagesize).','.$pagesize;	
 		}
 		#print __FILE__.':<br/>/inc/webapp.class.php: sql:['.$sql.']';
-        #error_log(__FILE__.": getBy, sql:[".$sql."] hmf:[".$this->toString($this->hmf)."] [1201241223].\n");
+        $this->hmf['hmfieldinfo'] = $this->hmfieldinfo;
+		#error_log(__FILE__.": getBy, sql:[".$sql."] hmf:[".$this->toString($this->hmf)."] [1201241223].\n");
 		$hm = $this->dba->select($sql, $this->hmf);
 		return $hm;
 	}
@@ -263,6 +267,7 @@ class WebApp implements WebAppInterface{
 			$sql .= $conditions;
 			$issqlready = 1;
 		}
+		$this->hmf['hmfieldinfo'] = $this->hmfieldinfo;
 		error_log(__FILE__.": rmBy, sql:[".$sql."] hmf:[".$this->toString($this->hmf)."] [1201241223].\n");
 		if($issqlready == 1){
 			$hm = $this->dba->update($sql, $this->hmf);

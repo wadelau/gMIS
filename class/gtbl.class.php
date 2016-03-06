@@ -650,6 +650,7 @@ class GTbl extends WebApp
 
     public function setFieldList($hmfield){
         $this->hmfield = $hmfield;
+		$this->hmfieldinfo = $this->hmfield;
     }
 
     public function getDelayJsAction($field){

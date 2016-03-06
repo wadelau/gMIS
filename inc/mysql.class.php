@@ -126,7 +126,7 @@ class MySQLDB {
 				}
 				$t = substr($sql,0,$a+1);
 				#print __FILE__.": t:[".$t."] i:[".$i."] vars:[".$idxarr[$i]."] hmv:[".$hmvars[$idxarr[$i]]."]\n";
-				$newsql .= str_replace("?",$this->_QuoteSafe($hmvars[$idxarr[$i]]),$t);
+				$newsql .= str_replace("?",$this->_QuoteSafe($hmvars[$idxarr[$i]], $hmvars['hmfieldinfo'][$idxarr[$i]."_default"]),$t);
 				$sql = substr($sql,$a+1);
 				$a = strpos($sql,"?");
 				$i++;
@@ -139,7 +139,7 @@ class MySQLDB {
 		}
 	}
 	//--- for sql injection, added on 20061113 by wadelau
-	function _QuoteSafe($value){
+	function _QuoteSafe($value, $defaultValue=null){
 		// Quote variable to make safe
 		// Stripslashes
 		//if (get_magic_quotes_gpc()){
@@ -154,7 +154,10 @@ class MySQLDB {
             # this should be handled by $webapp->execBy with manual sql components...
 		}
 		else{
-			#	
+			# in some case, e.g. $value = '010003', which is expected to be a string, but is_numeric return true.
+			if($defaultValue == ''){
+				$value = "'".mysql_real_escape_string($value, $this->m_link)."'";
+			}
 		} 
 		return $value;
 	}
