@@ -1,5 +1,4 @@
 <?php
-# add and modify
 
 $formid = "gtbl_add_form";
 
@@ -139,14 +138,21 @@ for($hmi=$min_idx; $hmi<=$max_idx;$hmi++){
 
     }else if($gtbl->getExtraInput($field, $hmorig) != ''){
 
-            $out .= "</tr><tr><td>".$gtbl->getCHN($field).":</td><td colspan=\"".$form_cols."\"><span id=\"span_".$act."_".$field."\"><input id=\"".$field."\" name=\"".$field."\" class=\"search\" value=\"".$hmorig[$field]."\" /></span> <span id=\"span_".$act."_".$field."_v\"><a href=\"javascript:void(0);\" onclick=\"javascript:doActionEx('".$gtbl->getExtraInput($field, $hmorig)."&act=".$act."&field=".$field."&oldv=".$hmorig[$field]."&otbl=".$tbl."&oid=".$id."','extrainput_".$act."_".$field."_inside');document.getElementById('extrainput_".$act."_".$field."').style.display='block'; document.getElementById('extendicon_${id}_$field').src='./img/minus.gif';\"><img border=\"0\" id=\"extendicon_${id}_$field\" src=\"img/plus.gif\" width=\"15\" height=\"15\"></a></span> <div id=\"extrainput_".$act."_".$field."\" class=\"extrainput\"> ";
-            
-            $out .= "<table width=\"100%\" ><tr><td width=\"100%\" style=\"text-align:right\"> <b> <a href=\"javascript:void(0);\" onclick=\"javascript:if('".$id."' != ''){ var linkobj=document.getElementById('".$field."'); if(linkobj != null){ document.getElementById('".$field."').value=document.getElementById('linktblframe').contentWindow.sendLinkInfo('','r','".$field."');} } document.getElementById('extrainput_".$act."_".$field."').style.display='none';  document.getElementById('extendicon_${id}_$field').src='./img/plus.gif';\">X</a> </b> &nbsp; </td></tr><tr><td> <div id=\"extrainput_".$act."_".$field."_inside\"></div></td></tr></table> </div>";
-            //$out .="  </div>   <br/>".$gtbl->getMemo($field)." </td>  </tr><tr>";
-            if($field != "operatelog" && $id != ''){
-                $out .= "<script type=\"text/javascript\"> parent.doActionEx('".$gtbl->getExtraInput($field, $hmorig)."&act=".$act."&otbl=".$tbl."&field=".$field."&oldv=".$hmorig[$field]."&oid=".$id."','extrainput_".$act."_".$field."_inside');document.getElementById('extrainput_".$act."_".$field."').style.display='block'; </script>";
-            }
-            $out .= "   <br/>".$gtbl->getMemo($field)."</td></tr><tr>";
+		if($act=='add'){
+			$iconImage = 'plus.gif';
+		}
+		else if($act=='modify'){
+			$iconImage = 'minus.gif';
+		}
+
+		$out .= "</tr><tr><td>".$gtbl->getCHN($field).":</td><td colspan=\"".$form_cols."\"><span id=\"span_".$act."_".$field."\"><input id=\"".$field."\" name=\"".$field."\" class=\"search\" value=\"".$hmorig[$field]."\" /></span> <span id=\"span_".$act."_".$field."_v\"><a href=\"javascript:void(0);\" onclick=\"javascript:doActionEx('".$gtbl->getExtraInput($field, $hmorig)."&act=".$act."&field=".$field."&oldv=".$hmorig[$field]."&otbl=".$tbl."&oid=".$id."&isheader=0','extrainput_".$act."_".$field."_inside');document.getElementById('extrainput_".$act."_".$field."').style.display='block'; document.getElementById('extendicon_${id}_$field').src='./img/minus.gif';\"><img border=\"0\" id=\"extendicon_${id}_$field\" src=\"img/".$iconImage."\" width=\"15\" height=\"15\" /></a></span> <div id=\"extrainput_".$act."_".$field."\" class=\"extrainput\"> ";
+		
+		$out .= "<table width=\"100%\" ><tr><td width=\"100%\" style=\"text-align:right\"> <b> <a href=\"javascript:void(0);\" onclick=\"javascript: document.getElementById('extrainput_".$act."_".$field."').style.display='none';  document.getElementById('extendicon_${id}_$field').src='./img/plus.gif';\">X</a> </b> &nbsp; </td></tr><tr><td> <div id=\"extrainput_".$act."_".$field."_inside\"></div></td></tr></table> </div>";
+		//$out .="  </div>   <br/>".$gtbl->getMemo($field)." </td>  </tr><tr>";
+		if($field != "operatelog" && $id != ''){
+			$out .= "<script type=\"text/javascript\"> parent.doActionEx('".$gtbl->getExtraInput($field, $hmorig)."&act=".$act."&otbl=".$tbl."&field=".$field."&oldv=".$hmorig[$field]."&oid=".$id."&isheader=0','extrainput_".$act."_".$field."_inside');document.getElementById('extrainput_".$act."_".$field."').style.display='block'; </script>";
+		}
+		$out .= "   <br/>".$gtbl->getMemo($field)."</td></tr><tr>";
 
     }else{
 
@@ -182,5 +188,6 @@ $out .= "<input type=\"hidden\" id=\"id\" name=\"id\" value=\"".$id."\"/>\n ".$h
 $out .= "<input type=\"button\" name=\"cancelbtn\" value=\"取消\" onclick=\"javascript:switchArea('contentarea_outer','off');\" /> </td></tr>";
 $out .= "</table> </form>  </fieldset>  <br/>";
 
+#$out .= "<script> parent.userinfo.targetId='".$id."'; parent.userinfo.act='".$act."'; </script>"; # relocated to comm/footer.inc
 
 ?>

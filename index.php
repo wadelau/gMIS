@@ -25,6 +25,7 @@ if($hm[0]){
 		}
 	}
 }
+
 $hm = $gtbl->execBy("select objname,tblname from ".$_CONFIG['tblpre']."info_objecttbl where addtodesktop > 0 order by addtodesktop");
 if($hm[0]){
 	$hm = $hm[1];
@@ -47,6 +48,17 @@ $hm = $gtbl->execBy("select * from ".$_CONFIG['tblpre']."fin_operatelogtbl order
 if($hm[0]){
 	$hm = $hm[1];
 	$data['log_list'] = $hm;
+}
+
+# dir list, added by wadelau@ufqi.com, Sat Mar 12 12:45:24 CST 2016
+$navidir = $_REQUEST['navidir'];
+if($navidir != ''){
+	$hm = $gtbl->execBy("select * from ".$_CONFIG['tblpre']."info_menulist where levelcode='".$navidir."' or levelcode like '".$navidir."__'  order by levelcode");
+	if($hm[0]){
+		$hm = $hm[1];
+		$data['navidir_list'] = $hm;
+	}	
+	#debug($hm, '', 1);
 }
 
 $fp = fopen("./ido.php", "r");

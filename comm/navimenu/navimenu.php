@@ -23,7 +23,7 @@ if($hm[0]){
         $li = "".$li;
         if(in_array($li, $hmkeysbylen[2])){
             $linfo = $hmkeys[$li];
-            $dynamicmenu .= '<li><!--'.$li.'.--><a href="javascript:void(0);" class="menulink">'.$linfo['linkname'].'</a>'."\n";
+            $dynamicmenu .= '<li><!--'.$li.'.--><a href="./?navidir='.$linfo['levelcode'].'" orighref="javascript:void(0);" class="menulink">'.$linfo['linkname'].'</a>'."\n";
             $dynamicmenu .= "<ul>\n";
             $lv3 = '';
             $lv4 = '';
@@ -94,14 +94,14 @@ if($hm[0]){
                 <li><a href="./'.$ido.'?tbl=fin_operatelogtbl&tit=操作历史记录&db=&pnskuserid='.$userid.'">操作历史记录</a></li>
                 <li><a href="./'.$ido.'?tbl=info_toolsettbl&tit=常用工具">日常工具</a></li>
 
-                <li> <a href="javascript:">桌面设置</a> </li> 
+                <li> <a href="javascript:void(0);">桌面设置</a> </li> 
 
             </ul>
      </li>
      
 	'.$dynamicmenu.'
 	    
-     <li><a href="javascript:void(0);" class="menulink">系统设置</a> 
+     <li><a href="./?navidir=99" orighref="javascript:void(0);" class="menulink">系统设置</a> 
      <ul> 
         <li><a href="./'.$ido.'?tbl=info_usertbl&tit=&db=">用户信息</a></li> 
         <li><a href="./'.$ido.'?tbl=info_grouptbl&tit=&db=">用户组设置</a></li> 

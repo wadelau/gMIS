@@ -30,7 +30,9 @@ if($_REQUEST['tit'] == ''){
 
 # get detail path
 $module_path = ''; $levelcode = ''; $codelist = '';
-$hm = $gtbl->execBy("select levelcode, linkname, modulename from ".$_CONFIG['tblpre']."info_menulist where modulename='".str_replace($_CONFIG['tblpre'],"",$tbl)."'", null);
+#$hm = $gtbl->execBy("select levelcode, linkname, modulename from ".$_CONFIG['tblpre']."info_menulist where modulename='".str_replace($_CONFIG['tblpre'],"",$tbl)."'", null);
+$hm = $gtbl->execBy("select levelcode, linkname, modulename from ".$_CONFIG['tblpre']."info_menulist where modulename in ('".str_replace($_CONFIG['tblpre'],"",$tbl)."', '".$tbl."')", null);
+#debug($hm);
 if($hm[0]){
 	$levelcode = $hm[1][0]['levelcode'];
 	$codelist = substr($levelcode,0,2)."','".substr($levelcode,0,4)."','".substr($levelcode,0,6)."','".substr($levelcode,0,8); # max 4 levels allowed
@@ -42,14 +44,14 @@ if($hm[0]){
 				$module_path .= "<a href='./".$ido."?sid=".$sid."&tbl=".$v['modulename']."'>".$v['linkname']."</a> &rarr;";	
 			}
 			else{
-				$module_path .= "".$v['linkname']." &rarr;";	
+				$module_path .= "<a href='./?navidir=".$v['levelcode']."'>".$v['linkname']."</a> &rarr;";	
 			}
 			$lastLinkName = $v['linkname'];
 		}
 		$module_path = substr($module_path, 0, strlen($module_path)-6);
 	}
 }
-$module_path = $module_path == '' ? '桌面 & 系统配置 &rarr; '.$tit : $module_path;
+$module_path = $module_path == '' ? '<a href="./?navidir=99">桌面 & 系统配置</a> &rarr; '.$tit : $module_path;
 if($lastLinkName != $tit){ $module_path .= "&nbsp;|&nbsp;".$tit; }
 
 #print __FILE__.": module_path:[$module_path] hm:[".$gtbl->toString($hm)."] tbl:[$tbl] levelcode:[$levelcode] codelist:[$codelist]\n";

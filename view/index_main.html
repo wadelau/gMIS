@@ -33,7 +33,7 @@ body {
 			
             <div id="welcomearea" style="float:left;margin-left:28px">
 			<b> &Pi; <a href="./" style="font-size:17px" >首页</a> <span style="font-size:17px">&rarr;</span></b>
-			欢迎您回来！ 今天是 <script type="text/javascript" src="./comm/show_today.js"></script>
+			欢迎您回来！ 今天是 <a href="#-万年历" target="_blank"><script type="text/javascript" src="./comm/show_today.js"></script></a>
             <br/> 
 
            <style type='text/css'>
@@ -41,9 +41,9 @@ body {
 			      position: relative;
 				     float: left;
 					    left: 49px;
-						   //width: 850px;
+						   /*width: 850px;*/
 						      margin-bottom: 20px;
-							     //background-color: #cccccc
+							     /*background-color: #cccccc*/
 		   }
 		   .left1{
 			      position: relative; word-break:break-all; word-wrap:break-word;
@@ -88,7 +88,32 @@ body {
 					padding-right:20px;
 		   }
 		</style>
-		<table align="center" width="700px"  style="background:transparent"><tr>
+		<table align="center" width="700px"  style="background:transparent">
+
+		{if count($navidir_list)>0}
+		<tr>
+		<td>
+		<b title="浏览菜单导航">ND.{$navidir_list[0]['linkname']}Navigate Directory</b><br/>
+		{$mi=0}
+		{foreach $navidir_list as $k=>$v}
+			{if $k==1000}
+			<!-- {$k} -->
+			{else}
+				{if $mi==0 || ($mi) % 4 == 0}
+				<div class="wrapper">
+				{/if}
+					 <a href="./{$ido}&tbl={$navidir_list[$k]['modulename']}"><div class="left{($k%4)+1}"><span style="size:14px; font-weight:bold;">{$mi+1}.{$navidir_list[$k]['linkname']}</span><br/>({$navidir_list[$k]['modulename']})</div></a>
+				{if ($mi+1) % 4 == 0}
+				</div>
+				{/if}
+				{$mi=$mi+1}
+			{/if}
+		{/foreach}	
+		</td>
+		</tr>
+		{/if}
+
+		<tr>
 		<td>
 		<b title="(根据被调用频率自动排列、调整)">MU.常用Most-Used</b><br/>
 		{$mi=0}
