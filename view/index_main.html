@@ -96,13 +96,13 @@ body {
 		<b title="浏览菜单导航">ND.{$navidir_list[0]['linkname']}Navigate Directory</b><br/>
 		{$mi=0}
 		{foreach $navidir_list as $k=>$v}
-			{if $k==1000}
+			{if $k==0}
 			<!-- {$k} -->
 			{else}
 				{if $mi==0 || ($mi) % 4 == 0}
 				<div class="wrapper">
 				{/if}
-					 <a href="./{$ido}&tbl={$navidir_list[$k]['modulename']}"><div class="left{($k%4)+1}"><span style="size:14px; font-weight:bold;">{$mi+1}.{$navidir_list[$k]['linkname']}</span><br/>({$navidir_list[$k]['modulename']})</div></a>
+					 <a href="./{$ido}&tbl={$navidir_list[$k]['modulename']}"><div class="left{(($k -1) % 4)+1}"><span style="size:14px; font-weight:bold;">{$mi+1}.{$navidir_list[$k]['linkname']}</span><br/>({$navidir_list[$k]['modulename']})</div></a>
 				{if ($mi+1) % 4 == 0}
 				</div>
 				{/if}
