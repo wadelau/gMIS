@@ -144,42 +144,48 @@ function searchBy(url){
                 if(document.getElementById('oppnsk_'+fieldarr[i]) != null){
                     eval("fieldopv = document.getElementById('oppnsk_"+fieldarr[i]+"').options[document.getElementById('oppnsk_"+fieldarr[i]+"').selectedIndex].value;");
 
-                	console.log('fieldop:'+fieldarr[i]+' select:fieldopv:['+fieldv+']');
+                	console.log('fieldv:['+fieldv+'] fieldop:'+fieldarr[i]+' select:fieldopv:['+fieldopv+']');
+
 					if(fieldopv != '----'){
 						if((fieldopv == 'inrange' || fieldopv == 'inlist') && fieldv == ''){
 							//- omit	
 						}
 						else{
-                			var reg1055 = new RegExp("，", "g");
+                			var reg1055 = new RegExp("，", 'gm');
 							fieldv = fieldv.replace(reg1055, ","); 
                 			appendquery += "&pnsk"+fieldarr[i]+"="+fieldv;
                     		appendquery += "&oppnsk"+fieldarr[i]+"="+fieldopv;
 						}
 					}
+					else{
+						//var reg = new RegExp("&oppnsk"+fieldarr[i]+"=([^&]*)");
+    					//url = url.replace(reg, "");
+					}
                 }
 				else{
-					var reg1055 = new RegExp("，", "g");
+					var reg1055 = new RegExp("，", 'gm');
 					fieldv = fieldv.replace(reg1055, ","); 
 					appendquery += "&pnsk"+fieldarr[i]+"="+fieldv;
 				}
 
-                var reg = new RegExp("&pnsk"+fieldarr[i]+"=([^&]*)");
+                var reg = new RegExp("&pnsk"+fieldarr[i]+"=([^&]*)", 'gm');
                 url = url.replace(reg, "");
-				reg = new RegExp("&oppnsk"+fieldarr[i]+"=([^&]*)");
-				url = url.replace(reg, "");
+				reg = new RegExp("&oppnsk"+fieldarr[i]+"=([^&]*)", 'gm');
+    			url = url.replace(reg, "");
             }
         }
     }
     //window.alert("fieldlist:"+fieldlist+", url:["+url+"]");
     console.log("fieldlist:"+fieldlist+", url:["+url+"]");
-    var reg = new RegExp("&pntc=([0-9]*)");
+    var reg = new RegExp("&pntc=([0-9]*)", 'gm');
     url = url.replace(reg, "");
-    reg = new RegExp("&pnpn=([0-9]*)");
+    reg = new RegExp("&pnpn=([0-9]*)", 'gm');
         url = url.replace(reg, "");
-    reg = new RegExp("&pnsk[0-9a-zA-Z]+=([^&]*)");
+    reg = new RegExp("&pnsk[0-9a-zA-Z]+=([^&]*)", 'gm');
         url = url.replace(reg, "");
-    //window.alert("fieldlist:"+fieldlist+", url:["+url+"]");
+    
     doAction(url+appendquery);
+    console.log("fieldlist:"+fieldlist+",last_url:["+url+appendquery+"]");
 
 }
 //-- 挂表操作传递参数
@@ -198,6 +204,7 @@ function sendLinkInfo(vars, rw, fieldtag){
         parent.currentlistid[fieldtag] = '';
         return tmpid;
     }
+    console.log('sendLinkInfo: vars:['+vars+'] rw:['+rw+'] fieldtag:['+fieldtag+']');
     return true;
 }
 
@@ -573,21 +580,26 @@ function doActSelect(sSel, sUrl, iId, fieldVal){
 				gta.set('targetarea', 'addareaextradiv');
 				gta.set("callback", function(){
 						var resp = this;
-						//console.log('delete_resp:['+resp+']'); // copy from iframe document ?
+						console.log('delete_resp:['+resp+']'); // copy from iframe document ?
 						if(resp.indexOf('<pre') > -1){
 							var resp_1 = /<pre[^>]*>([^<]*)<\/pre>/g;
 							var resp_2 = resp_1.exec(resp);
-							console.log('delete_resp_after:['+resp_2[1]+'] id:['+iId+']');
+							//console.log('delete_resp_after:['+resp_2[1]+'] id:['+iId+']');
 							resp = resp_2[1];
 						}
 						var json_resp = JSON.parse(resp);
 						var iId = json_resp.resultobj.targetid; //- anonymous func embeded in another anonymos func, cannot share variables in runtime.
+						//console.log('delete_resp_after-2:['+resp+'] id:['+iId+']');
 						if(json_resp.resultobj.resultcode == 0){
 							sendNotice(true, 'Data updated Successfully. 操作成功! TargetId:['+iId+']');
 							var its_list_tr = document.getElementById('list_tr_'+iId);
-							if(its_list_tr){ its_list_tr.style.backgroundColor = '#404040'; }
+							if(its_list_tr){
+								its_list_tr.style.backgroundColor = '#404040';
+							}
 							var actListDiv = document.getElementById('divActList_'+iId); //- 
-    						if(actListDiv){ actListDiv.style.display = 'none'; }
+							if(actListDiv){
+    							actListDiv.style.display = 'none';
+							}
 						}
 						else{
 							sendNotice(false, 'Data updated Failed. Please Try again/请重试.');
@@ -1138,5 +1150,24 @@ function lazyLoad(myObj, myType, myUrl){
 	}, 3*1000);
 
 	}
+}
+
+//- copy and return, 
+//- wadelau@ufqi.com, Sat Feb 13 10:52:35 CST 2016
+function copyAndReturn(theField){ 
+	var iId = parent.userinfo.targetId;
+	var theAct = parent.userinfo.act;
+	console.log('copyAndReturn: iId:['+iId+'] theAct:['+theAct+']');
+	//if(iId != ''){ //- ? 
+	if( true ){ 
+		var linkobj = document.getElementById(theField); 
+		if(linkobj != null){ 
+			document.getElementById(theField).value = document.getElementById('linktblframe').contentWindow.sendLinkInfo('', 'r', theField);
+		}
+	}
+
+	//document.getElementById('extrainput_'+theAct+'_'+theField).style.display='none'; 
+	//document.getElementById('extendicon_'+iId+'_'+theField).src='./img/plus.gif';
+
 }
 

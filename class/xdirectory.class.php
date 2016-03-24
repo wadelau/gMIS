@@ -35,7 +35,8 @@ class XDirectory extends WebApp{
 			}
 			$i = $this->getNextDir($targetDir, $levelLen, $ilevel, $k);
 			$j = $this->getSubDir($targetDir, $levelLen, $ilevel, $k);
-			$nodeContent = $ilevel."-".$k."-".$v;
+			#$nodeContent = $ilevel."-".$k."-".$v;
+			$nodeContent = $k."-".$v;
 			$nodeContent = "<div class=\"tree\" onmouseover=\"xianshi".$k."()\" onmouseout=\"yincang".$k."()\" id=\"".$k."\">".$nodeContent;
 			$nodeContent .= "&nbsp;&nbsp;<span id=\"nodelink".$k."\"><a href=\"javascript:void(0);\" onclick=\"javascript:parent.sendLinkInfo('".$k."', 'w', current_link_field); parent.copyAndReturn(current_link_field);\">选择该项</a>";
 			$nodeContent .= "&nbsp&nbsp<a href=\"javascript:void(0);\" onclick=\"javascript:parent.sendLinkInfo('".$i."', 'w', current_link_field); parent.copyAndReturn(current_link_field);\">增加同级</a>";	
