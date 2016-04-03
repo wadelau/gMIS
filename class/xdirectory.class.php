@@ -38,9 +38,9 @@ class XDirectory extends WebApp{
 			#$nodeContent = $ilevel."-".$k."-".$v;
 			$nodeContent = $k."-".$v;
 			$nodeContent = "<div class=\"tree\" onmouseover=\"xianshi".$k."()\" onmouseout=\"yincang".$k."()\" id=\"".$k."\">".$nodeContent;
-			$nodeContent .= "&nbsp;&nbsp;<span id=\"nodelink".$k."\"><a href=\"javascript:void(0);\" onclick=\"javascript:parent.sendLinkInfo('".$k."', 'w', current_link_field); parent.copyAndReturn(current_link_field);\">选择该项</a>";
-			$nodeContent .= "&nbsp&nbsp<a href=\"javascript:void(0);\" onclick=\"javascript:parent.sendLinkInfo('".$i."', 'w', current_link_field); parent.copyAndReturn(current_link_field);\">增加同级</a>";	
-			$nodeContent .= "&nbsp&nbsp<a href=\"javascript:void(0);\" onclick=\"javascript:parent.sendLinkInfo('".$j."', 'w', current_link_field); parent.copyAndReturn(current_link_field);\">增加下级</a>";	
+			$nodeContent .= "&nbsp;&nbsp;<span id=\"nodelink".$k."\"><a href=\"javascript:void(0);\" onclick=\"javascript:parent.sendLinkInfo('".$k."', 'w', current_link_field); parent.copyAndReturn(current_link_field);\">该项</a>";
+			$nodeContent .= "&nbsp&nbsp<a href=\"javascript:void(0);\" onclick=\"javascript:parent.sendLinkInfo('".$i."', 'w', current_link_field); parent.copyAndReturn(current_link_field);\">+同级</a>";	
+			$nodeContent .= "&nbsp&nbsp<a href=\"javascript:void(0);\" onclick=\"javascript:parent.sendLinkInfo('".$j."', 'w', current_link_field); parent.copyAndReturn(current_link_field);\">+下级</a>";	
 			$nodeContent .= "</span></div>";			
 			if($lastNode == ''){
 				$dirList .= $nodeContent;								
