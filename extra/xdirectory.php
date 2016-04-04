@@ -60,7 +60,7 @@ $parentCode = $_REQUEST['parentcode'];
 $expandList = array();
 if(strlen($parentCode) > $dirLevelLength){
 	$codeV = '';
-	$codeArr = str_split(substr($parentCode,0,strlen($parentCode)-2), $dirLevelLength);
+	$codeArr = str_split(substr($parentCode,0,strlen($parentCode)-$dirLevelLength), $dirLevelLength);
 	foreach($codeArr as $k=>$v){	
 		$codeV .= $v;		
 		$expandList[$codeV] = $codeV;				
