@@ -76,6 +76,7 @@ if($hm[0]){
 else{
 	$hm = array(0=>array("$icode"=>'00', "$iname"=>'所有/All'));	
 }
+#debug($hm);
 if(1){
 	foreach($hm as $k=>$v){
 		if($v[$icode] == ''){ 
