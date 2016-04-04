@@ -78,6 +78,9 @@ else{
 }
 if(1){
 	foreach($hm as $k=>$v){
+		if($v[$icode] == ''){ 
+			$v[$icode] = '00'; # init hierarchy
+		}
 		$list[$v[$icode]] = $v[$iname];	
 	}
 	$out .= '<style type="text/css">';
