@@ -67,11 +67,16 @@ if(strlen($parentCode) > $dirLevelLength){
 	}	
 }
 
+$list = array();
 $sqlCondi = "1=1 order by $icode asc";
 $hm = $xdirectory->getBy("$icode, $iname", "$sqlCondi");
 if($hm[0]){
 	$hm = $hm[1];
-	$list = array();
+}
+else{
+	$hm = array(0=>array("$icode"=>'00', "$iname"=>'所有/All'));	
+}
+if(1){
 	foreach($hm as $k=>$v){
 		$list[$v[$icode]] = $v[$iname];	
 	}
@@ -99,7 +104,7 @@ $out .= '
 		';		
 		
 foreach($expandList as $k=>$v){		
-$out .= '
+	$out .= '
 				var ull = $("#'.$v.'").next(".node");
 				ull.slideDown();
 				$("#'.$v.'").addClass("ce_ceng_open");
@@ -122,8 +127,9 @@ $out .= '
 					}
 				});				
 		';
+
 foreach($list as $k=>$v){
-$out .='
+	$out .='
 				function xianshi'.$k.'() {
 					document.getElementById("nodelink'.$k.'").style.display="inline";
 				}
@@ -132,7 +138,11 @@ $out .='
 				}	
 	   ';	
 }		
+
 $out .='</script>';
+
 }
+
 require("../comm/footer.inc");
+
 ?>

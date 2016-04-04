@@ -46,7 +46,7 @@ $hmsize = count($hmfield) + 1;
 $gtbl->setFieldSort($hmfieldsort, $hmsize, $hmi);
 $gtbl->setFieldList($hmfield);
 
-$opfield = array('operator','author','op','creator');
+$opfield = array('operator','author','op','creator','operatorid', 'authorid', 'creatorid');
 $timefield = array('inserttime','insertime','updatetime','endtime','editime','edittime','modifytime');
 
 
