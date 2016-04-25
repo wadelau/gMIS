@@ -30,7 +30,7 @@ class WebApp implements WebAppInterface{
 	var $isdbg = 1;  # Gconf::get('is_debug');
 	var $sep = "|"; # separating tag for self-defined message body
 
-	var hmfieldinfo = array(); #  container for table structure, -gMIS only,
+	var $hmfieldinfo = array(); #  container for table structure, -gMIS only,
 	
 	//- constructor
 	function __construct(){
