@@ -3,7 +3,7 @@
 # global constant configurations
 # remedy by wadelau@ufqi.com on 22:31 Friday, December 04, 2015
 
-$tblpre = "";
+$tblpre = "TABLE_PRE";
 $conf = array();
 
 $conf['tblpre'] 	= $tblpre;
@@ -12,28 +12,28 @@ $conf['appchnname'] 	= '好事顺信管';
 $conf['appdir']		= $appdir;
 
 $conf['rtvdir'] 	= $rtvdir;
-$conf['agentname'] 	= '-people-lab';
+$conf['agentname'] 	= 'AGENT_NAME';
 $conf['agentalias']	= 'gMIS-Admin';
 $conf['smarty']		= $appdir.'/class/Smarty-3.1.7/libs';
 
 $conf['uploaddir']	= 'upld';
 $conf['septag']		= '_J_A_Z_';
 
-$conf['maindb']		= '';
+$conf['maindb']		= 'DB_NAME';
 $conf['maintbl']	= $tblpre.'customertbl';
 $conf['usertbl']	= $tblpre.'info_usertbl';
 $conf['welcometbl']	= $tblpre.'info_welcometbl';
 $conf['operatelogtbl']	= $tblpre.'fin_operatelogtbl';
 
 # db info
-$conf['dbhost'] 	= '';
-$conf['dbport'] 	= '';
-$conf['dbuser'] 	= '';
-$conf['dbpassword'] 	= '';
+$conf['dbhost'] 	= 'DB_HOST';
+$conf['dbport'] 	= 'DB_PORT';
+$conf['dbuser'] 	= 'DB_USER';
+$conf['dbpassword'] 	= 'DB_PASSWORD';
 $conf['dbname'] 	= $conf['maindb'];
 
 # misc 
-$conf['frontpage'] = '#-xxx';
+$conf['frontpage'] = '#-gMIS';
 $conf['is_debug'] = 1;
 $conf['html_resp'] = '<!DOCTYPE html><html><head><title>RESP_TITLE</title></head><body>RESP_BODY</body></html>';
 $conf['auto_save_interval'] = 20; # ref extra/htmleditor
