@@ -34,7 +34,11 @@
         <chnname>表索引</chnname>
         <extrainput>extra/linktbl.php?tbl=info_objectindexkeytbl&amp;linkfield=parentid</extrainput>
     </field>
-
+    <field name="addtodesktop">
+        <chnname>桌面快捷</chnname>
+        <inputtype>select</inputtype>
+        <selectoption>1:显示|0:不显示</selectoption>
+    </field>
     <field name="state">
         <chnname>状态</chnname>
     </field>
