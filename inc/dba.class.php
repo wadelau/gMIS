@@ -3,6 +3,7 @@
  * v0.1
  * wadelau@gmail.com
  * since Wed Jul 13 18:22:06 UTC 2011
+ * mysqli added by wadelau@ufqi.com,  Sun May  1 18:51:33 CST 2016
  */
 
 require_once(__ROOT__."/inc/conn.class.php");
@@ -25,8 +26,7 @@ class DBA
 	 * mandatory return $hm = (0 => true|false, 1 => string|array);
 	 * Thu Jul 21 11:31:47 UTC 2011, wadelau@gmail.com
 	 */
-	function update($sql, $hmvars)
-	{
+	function update($sql, $hmvars){
 		$hm = array();
 		$idxarr = $this->hm2idxArray($sql,$hmvars);
         #print_r($idxarr);
@@ -48,15 +48,13 @@ class DBA
 	/* 
 	 * mandatory return $hm = (0 => true|false, 1 => string|array);
 	 */
-	function select($sql, $hmvars)
-	{
+	function select($sql, $hmvars){
 		$hm = array();
 		$result = 0;
 		$idxarr = $this->hm2idxArray($sql,$hmvars);
     	#print_r($idxarr);
 		$haslimit1 = 0;
-		if(strpos($sql,"limit 1 ") != false ||(array_key_exists('pagesize',$hmvars) && $hmvars['pagesize'] == 1))
-		{
+		if(strpos($sql,"limit 1 ") != false ||(array_key_exists('pagesize',$hmvars) && $hmvars['pagesize'] == 1)){
 			$result = $this->dbconn->readSingle($sql, $hmvars,$idxarr); # why need this?
 			$haslimit1 = 1;
 		}
