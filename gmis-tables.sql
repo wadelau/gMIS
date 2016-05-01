@@ -299,7 +299,7 @@ CREATE TABLE `gmis_info_usertbl` (
   `realname` char(32) NOT NULL DEFAULT '',
   `email` char(32) NOT NULL DEFAULT '',
   `usergroup` tinyint(1) NOT NULL DEFAULT '0',
-  `branchoffice` char(16) NOT NULL,
+  `branchoffice` char(16) NOT NULL default '',
   `operatearea` char(255) NOT NULL DEFAULT '',
   `inserttime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updatetime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',

@@ -40,6 +40,7 @@ class WebApp implements WebAppInterface{
         }
 		$this->isdbg = Gconf::get('is_debug');
 	}
+
 	//-
 	function set($field,$value=null){ # update, Sat May 16 08:54:54 CST 2015
 		if($value === null){
@@ -57,6 +58,7 @@ class WebApp implements WebAppInterface{
 			$this->hmf[$field] = $value;
 		}
 	}
+
 	//-
 	function get($field){
 		if(array_key_exists($field,$this->hmf)){

@@ -37,7 +37,7 @@ $conf['frontpage'] = 'FRONT_PAGE';
 $conf['is_debug'] = 1;
 $conf['html_resp'] = '<!DOCTYPE html><html><head><title>RESP_TITLE</title></head><body>RESP_BODY</body></html>';
 $conf['auto_save_interval'] = 20; # ref extra/htmleditor
-$conf['auto_install'] = 'AUTO_INSTALL';
+$conf['auto_install'] = 'INSTALL_AUTO';
 
 # set them all
 Gconf::setConf($conf);
