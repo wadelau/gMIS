@@ -114,11 +114,9 @@ class DBA
 						$nextpos = strpos($sql,$spacek."=",$kpos+1);
 			  			$nextpos = $nextpos === false ? strpos($sql,$spacek." ",$kpos+1) : $nextpos;
 
-						while($nextpos !== false)
-						{
+						while($nextpos !== false){
 							$tmparr[$nextpos] = $k.".".(count($tmpposarr)>0?$tmpposarr[$k]:""); 
-							/* 
-							 *  Attention: 
+							/* *  Attention: 
 							 *      one field matches more than two values, 
 							 *      name it as "field.2","field.3", "field.N", etc, as hash key
 							 *  e.g. in sql: "... where age > ? and age < ? and gender=? ", settings go like:
@@ -131,8 +129,7 @@ class DBA
 							$tmpiposarr[$k]++;
 						}
 					}
-					else
-					{
+					else{
 						#print "<br/>/inc/class.dba.php:  hm2idxArray NOT exist k:[".$k."] sql:[".$sql."] ";
 						#print_r($tmparr); 
 					}
@@ -148,8 +145,7 @@ class DBA
 		$sqllen = strlen($sql);
 		$tmpi = 0;
 		for($i=0;$i<$sqllen;$i++){
-			if(array_key_exists($i,$tmparr))
-			{
+			if(array_key_exists($i,$tmparr)){
 				$idxarr[$tmpi] = $tmparr[$i];
 				$tmpi++;
 			}

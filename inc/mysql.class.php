@@ -58,13 +58,14 @@ class MySQLDB {
 		print "<br/>/inc/class.mysql-1.2.php: current db:[".$this->m_name."].";
 	}	
 
+	//-
 	function _initconnection(){
 		if ($this->m_link==0){
 			$real_host = $this->m_host.":".$this->m_port;    
 			//echo $real_host,$this->m_user,$this->m_password;
 			$this->mode = function_exists('mysqli_connect') ? 'mysqli' : 'mysql';
 			if($this->mode == 'mysqli'){
-				$this->m_link = new mysqli($real_host, $this->m_user, $this->m_password, $this->m_name);	
+				$this->m_link = new mysqli($this->m_host, $this->m_user, $this->m_password, $this->m_name, $this->m_port);	
 			}
 			else{
 				$this->m_link = mysql_connect($real_host,$this->m_user,$this->m_password) or die($this->Err("mysql connect")); 

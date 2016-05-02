@@ -120,7 +120,7 @@ function getSerialByVal($needle, $haystack){
 }
 
 # check dir read & writeable
-function dir_writeable($dir) {
+function dirWriteable($dir) {
 
 	$writeable = 0;
 	if(!is_dir($dir)) {
@@ -158,7 +158,7 @@ function execInBackground($cmd) {
 } 
 
 # replace string in file
-function replace_in_file($myFile, $oldStr, $newStr){
+function replaceInFile($myFile, $oldStr, $newStr){
 	
 	$cmd = "perl -i.orig.php -p -e 's/$oldStr/$newStr/gi' '$myFile'";
 	#print $cmd;
@@ -238,7 +238,7 @@ else if($step == 'dolicense'){
 # part-1, evn detection
 else if($step == 'env'){
 	# checks
-	$dir_w = dir_writeable($appdir);
+	$dir_w = dirWriteable($appdir);
 	$out .= "安装目录[$rtvdir]: ";
 	if($dir_w){
 		$out .= "可写";	
@@ -359,11 +359,11 @@ else if($step == 'db'){
 			}
 			else{
 
-				replace_in_file($config_file, 'DB_HOST', $dbhost);
-				replace_in_file($config_file, 'DB_PORT', $dbport);
-				replace_in_file($config_file, 'DB_NAME', $dbname);
-				replace_in_file($config_file, 'DB_USER', $dbuser);
-				replace_in_file($config_file, 'DB_PASSWORD', $dbpwd);
+				replaceInFile($config_file, 'DB_HOST', $dbhost);
+				replaceInFile($config_file, 'DB_PORT', $dbport);
+				replaceInFile($config_file, 'DB_NAME', $dbname);
+				replaceInFile($config_file, 'DB_USER', $dbuser);
+				replaceInFile($config_file, 'DB_PASSWORD', $dbpwd);
 
 				$out .= "<br/>MySQL 数据库功能正常, 继续进行下一步.";
 				$out .= xForm($file."&step=db&istep=createtable", array('tablepre'=>array('dispname'=>'数据表前缀', 'value'=>'gmis')));
@@ -379,8 +379,8 @@ else if($step == 'db'){
 		if(substr($tblpre, -1) != '_'){ $tblpre .= "_"; }
 		#print $tblpre;
 		if($tblpre != '' && $tblpre != 'gmis_'){
-			replace_in_file($config_file, 'TABLE_PRE', $tblpre);
-			replace_in_file('./gmis-tables.sql', 'gmis_', $tblpre);
+			replaceInFile($config_file, 'TABLE_PRE', $tblpre);
+			replaceInFile('./gmis-tables.sql', 'gmis_', $tblpre);
 			sleep(2);
 		}
  
@@ -425,8 +425,8 @@ else if($step == 'init'){
 	else if($istep == 'save'){
 		include_once($config_file);
 		# set init
-		replace_in_file($config_file, 'AGENT_NAME', $_REQUEST['agentname']);
-		replace_in_file($config_file, 'FRONT_PAGE', $_REQUEST['frontpage']);
+		replaceInFile($config_file, 'AGENT_NAME', $_REQUEST['agentname']);
+		replaceInFile($config_file, 'FRONT_PAGE', $_REQUEST['frontpage']);
 
 		# save super admin 
  		$sql = 'use '.$_CONFIG['dbname'].''; #source '.$appdir.'/gmis-tables.sql;';
@@ -466,7 +466,7 @@ else if($step == 'finalize'){
 		execInBackground($cmd);
 		
 		# mark installed
-		replace_in_file($config_file, 'INSTALL_AUTO', 'INSTALL_DONE');
+		replaceInFile($config_file, 'INSTALL_AUTO', 'INSTALL_DONE');
 
 		#
 		$out .= "Finalize and clearance done. 恭喜安装完成!";
