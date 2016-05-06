@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 5.5.25a, for Linux (i686)
 --
--- Host: localhost    Database: findikdb
+-- Host: localhost    Database: gmisdb
 -- ------------------------------------------------------
 -- Server version	5.5.25a-log
 
