@@ -18,6 +18,7 @@
         <field name="userid">
             <chnname>用户名</chnname>
             <inputtype>select</inputtype>
+			<selectoption>fromtable::info_usertbl::email</selectoption>
         </field>
         <field name="objectgroup" type="text">
             <chnname>单元模块组</chnname>
