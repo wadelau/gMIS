@@ -477,7 +477,12 @@ class GTbl extends WebApp
 					foreach($matches[1] as $k=>$v){
 						#print_r($v);
 						#print __FILE__.": matched:[".$v."],,,\n";
-						$tmpstr = str_replace("THIS_$v", $result[$v], $tmpstr);
+						if($v == 'TABLE'){
+							$tmpstr = str_replace("THIS_$v", $this->hmf['tbl'], $tmpstr);
+						}
+						else{
+							$tmpstr = str_replace("THIS_$v", $result[$v], $tmpstr);
+						}
 					}
 				}	
 			}	
