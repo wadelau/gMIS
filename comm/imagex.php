@@ -1,24 +1,20 @@
 <?php
-/*
- * some funcs related to image
- * remedy by wadelau@ufqi.com
- * update 10:37 15 June 2016
- */
+
+# verifycode generation
+# wadelau@ufqi.com
+# Tue Jul 24 18:37:49 CST 2012
+# Thu Apr 18 15:18:19 CST 2013
+# Thu Sep  5 09:17:54 CST 2013
+# Mon Nov  4 09:03:36 CST 2013
+# Mon Feb 17 08:40:23 CST 2014
+# Thu Feb 20 11:02:01 CST 2014
 
 session_start();
 
+//- default is output an img
 if(true){
 	
-	# verifycode generation
-	# wadelau@ufqi.com
-	# Tue Jul 24 18:37:49 CST 2012
-	# Thu Apr 18 15:18:19 CST 2013
-	# Thu Sep  5 09:17:54 CST 2013
-	# Mon Nov  4 09:03:36 CST 2013
-	# Mon Feb 17 08:40:23 CST 2014
-	# Thu Feb 20 11:02:01 CST 2014
-	
-	$letters = str_split('23456789ABCDEFGHJKLMNPRSTUVWXYabcdefghijkmnpqrstuvwxy');
+	$letters = str_split('23456789ABCDEFGHJKLMNPRSTUVWXY');
 	$llen = count($letters) - 1;
 	$charc = 4;
 	$verifycode = '';
@@ -45,26 +41,21 @@ if(true){
 	$i = 0;
 	$bg = imagecolorallocate($im, rand(135,255), rand(125,255), rand(115,255));
 	imagefilledellipse($im, $startPos*3/2, 28, 80, 30, $bg);
-	$textcolor = imagecolorallocate($im, rand(50,200), rand(40,200), rand(30, 200));
+	$textcolor = imagecolorallocate($im, rand(0,200), rand(10,200), rand(5, 200));
 	foreach($codeArr as $k=>$v){
 		$y = rand(0,intval($height/2)) + 1;
 		$fontsize = rand(3,9);
-		$fontspace = rand(6,11);
+			$fontspace = rand(7,10);
 		imagestring($im, $fontsize, $startPos, $y, $v, $textcolor);
-		if($i == rand(0,$charc-1)){
-			imagestring($im, $fontsize, $startPos+$_x[$i], $y+$_y[$i], $v, $textcolor);
-		}
-		else{
-			imagestring($im, $fontsize, $startPos, $y, $v, $textcolor);
-		}
+		imagestring($im, $fontsize, $startPos+$_x[$i], $y+$_y[$i], $v, $textcolor);
 		#imagestring($im, (rand(2,7)), $startPos+$_x[$i], 1+rand(0,6)+$_y[$i], $v, $textcolor);
 		#imagettftext($im, 20, 0, 10, 20, $textcolor, "", $v);
 		$startPos += $fontspace;
 		$i++;
 	}
 
-	$linecount = 1; # more lines and harder to recognize
-	for($j=0; $j<$linecount; $j++){
+	#for($j=0; $j<2; $j++){
+	for($j=0; $j<1; $j++){
 		#imageline($im, rand(1,$startPos2), rand(2, $height),  rand($startPos2, $width), rand(2, $height) , $textcolor);
 		imagearc($im, rand(4,$startPos2)+40, rand(10, $height),  rand($startPos2, $width), rand(5, $height), 50, 15 , $textcolor);
 		$textcolor = imagecolorallocate($im, rand(10,240), rand(0,240), rand(5, 240));
@@ -168,6 +159,6 @@ function resizeImage($srcFile, $toWidth, $percentNum=1, $destQuality=85){
 	
 }
 
-exit(0);
+exit();
 
 ?>

@@ -1,8 +1,8 @@
 <?php
-/* Cache service connection, connecting app with cache data for high performance
+/* Socket connection handling, work with cache, session and other services need socket conn
  * v0.1
  * wadelau@ufqi.com
- * Sat Jul 23 09:50:58 UTC 2011
+ * 14:10 13 June 2016
  */
 
 if(!defined('__ROOT__')){
@@ -10,9 +10,9 @@ if(!defined('__ROOT__')){
 }
 
 require_once(__ROOT__."/inc/config.class.php");
-#require_once(__ROOT__."/inc/class.connectionpool.php");
 
-class Cache {
+
+class SocketX {
 
  	//- construct
 	function __construct(){
