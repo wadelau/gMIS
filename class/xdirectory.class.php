@@ -7,16 +7,16 @@ require_once(__ROOT__.'/inc/webapp.class.php');
 
 class XDirectory extends WebApp{
 
-    function XDirectory($tbl = ''){
+    function __construct($tbl = ''){
+
         $this->dba = new DBA();
+
         if($tbl != ''){
-			if($_SESSION['language'] && $_SESSION['language'] == "en_US")
-			{
+			if(false && $_SESSION['language'] && $_SESSION['language'] == "en_US"){
 				//$this->setTbl(Gconf::get('tblpre').'en_'.$tbl);
 				$this->setTbl('en_'.$tbl);
 			}
-			else
-			{
+			else{
 				//$this->setTbl(Gconf::get('tblpre').$tbl);
 				$this->setTbl($tbl);
 			}

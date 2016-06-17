@@ -3,23 +3,33 @@
  * v0.1
  * wadelau@gmail.com
  * since Wed Jul 13 18:22:06 UTC 2011
- * mysqli added by wadelau@ufqi.com,  Sun May  1 18:51:33 CST 2016
+ * Thu Sep 11 16:34:20 CST 2014
  */
 
-require_once(__ROOT__."/inc/conn.class.php");
-require_once(__ROOT__."/inc/mysql.class.php");
+ini_set("memory_limit","256M");
 
-class DBA 
-{
+require(__ROOT__."/inc/conn.class.php");
+include(__ROOT__."/inc/mysql.class.php");
+include(__ROOT__."/inc/mysqlix.class.php");
+include(__ROOT__."/inc/pdox.class.php");
+include(__ROOT__."/inc/sqlserver.class.php");
+include(__ROOT__."/inc/oracle.class.php");
+
+class DBA {
+	
 	var $conf = null; 
 	var $dbconn = null;
 
 	//-construct
-	function DBA()
-	{
+	function __construct($dbconf=null){
+		
+		$dbconf = ($dbconf==null ? 'Config_Master' : $dbconf);
 		//-
-		$this->conf = new Config_Master; //- need to be changed to Config_zoneli when sync to product enviro.
-		$this->dbconn = new MySQLDB($this->conf);
+		$this->conf = new $dbconf; //- need to be changed to Config_zoneli when sync to product enviro.
+		#$this->dbconn = new MySQLDB($this->conf);
+		$dbDriver = Gconf::get('dbdriver');
+		$this->dbconn = new $dbDriver($this->conf);
+		
 	}	
 
 	/* 
@@ -31,13 +41,11 @@ class DBA
 		$idxarr = $this->hm2idxArray($sql,$hmvars);
         #print_r($idxarr);
 		$tmphm = $this->dbconn->query($sql,$hmvars,$idxarr);
-		if($tmphm[0])
-		{
+		if($tmphm[0]){
 			$hm[0] = true;
 			$hm[1] = array('insertid'=>$this->dbconn->getInsertId(),'affectedrows'=>$this->dbconn->getAffectedRows());
 		}
-		else
-		{
+		else{
 			$hm[0] = false;
 			$hm[1] = $tmphm[1];
 		}
@@ -54,7 +62,8 @@ class DBA
 		$idxarr = $this->hm2idxArray($sql,$hmvars);
     	#print_r($idxarr);
 		$haslimit1 = 0;
-		if(strpos($sql,"limit 1 ") != false ||(array_key_exists('pagesize',$hmvars) && $hmvars['pagesize'] == 1)){
+		if(strpos($sql,"limit 1 ") != false ||(array_key_exists('pagesize',$hmvars) && $hmvars['pagesize'] == 1))
+		{
 			$result = $this->dbconn->readSingle($sql, $hmvars,$idxarr); # why need this?
 			$haslimit1 = 1;
 		}
@@ -115,8 +124,10 @@ class DBA
 			  			$nextpos = $nextpos === false ? strpos($sql,$spacek." ",$kpos+1) : $nextpos;
 
 						while($nextpos !== false){
-							$tmparr[$nextpos] = $k.".".(count($tmpposarr)>0?$tmpposarr[$k]:""); 
-							/* *  Attention: 
+							
+							$tmparr[$nextpos] = $k.(count($tmpposarr)>0?".".$tmpposarr[$k]:""); 
+							/* 
+							 *  Attention: 
 							 *      one field matches more than two values, 
 							 *      name it as "field.2","field.3", "field.N", etc, as hash key
 							 *  e.g. in sql: "... where age > ? and age < ? and gender=? ", settings go like:
@@ -129,7 +140,8 @@ class DBA
 							$tmpiposarr[$k]++;
 						}
 					}
-					else{
+					else
+					{
 						#print "<br/>/inc/class.dba.php:  hm2idxArray NOT exist k:[".$k."] sql:[".$sql."] ";
 						#print_r($tmparr); 
 					}
@@ -145,7 +157,8 @@ class DBA
 		$sqllen = strlen($sql);
 		$tmpi = 0;
 		for($i=0;$i<$sqllen;$i++){
-			if(array_key_exists($i,$tmparr)){
+			if(array_key_exists($i,$tmparr))
+			{
 				$idxarr[$tmpi] = $tmparr[$i];
 				$tmpi++;
 			}

@@ -11,10 +11,10 @@
 if(!defined('__ROOT__')){
   define('__ROOT__', dirname(dirname(__FILE__)));
 }
+
 require_once(__ROOT__.'/inc/webapp.class.php'); 
 
-class GTbl extends WebApp
-{
+class GTbl extends WebApp{
 	public $sep = '';
 	private $hmfield = array();
 	private $hmconf = array();
@@ -56,12 +56,15 @@ class GTbl extends WebApp
 			'stat' => 'stat', # 对该字段统计时的计算方法, sum|count|average
 			'input2select' => 'input2select', # filter much more select options to a few of them...., Mon Jul 28 15:12:17 CST 2014
 			'rotatespan'=>'rotatespan', # table names contains variable datetime, e.g. _201412, _201501, Mon Jan  5 15:31:29 CST 2015
+			'myid'=>'myid', # get table's self-defined id, see inc/webapp.class, e.g. product_id, article_id, Wed Jun  8 13:26:07 CST 2016
+			''=>''
 			);
 
 	private static $MAX_FIELD_LIST = 99;
 
+
 	//-
-	function GTbl($tbl, $hmconf, $sep, $tblrotate=null){
+	function __construct($tbl, $hmconf, $sep, $tblrotate=null){
 		//-
 		$this->dba = new DBA();
 		
@@ -74,6 +77,8 @@ class GTbl extends WebApp
 
 		$this->setTbl($tbl);
 		$this->tbl = $tbl;
+		$this->setMyId($this->getMyIdName());
+		debug(__FILE__.": get id name:[".$this->getMyId()."]");
 		
 	}
 
@@ -138,7 +143,7 @@ class GTbl extends WebApp
 
     public function getOrderBy(){
         $tmpstr = $this->hmconf[$this->taglist['table'].$this->sep.$this->prttbl.$this->sep.$this->taglist['orderby']];
-        return $tmpstr = $tmpstr==null?'id':$tmpstr;
+        return $tmpstr = $tmpstr==null?$this->getMyId():$tmpstr;
     }
 
     public function getPrintRef($after=0){
@@ -477,7 +482,12 @@ class GTbl extends WebApp
 					foreach($matches[1] as $k=>$v){
 						#print_r($v);
 						#print __FILE__.": matched:[".$v."],,,\n";
-						$tmpstr = str_replace("THIS_$v", $result[$v], $tmpstr);
+						if($v == 'TABLE'){
+							$tmpstr = str_replace("THIS_$v", $this->hmf['tbl'], $tmpstr);
+						}
+						else{
+							$tmpstr = str_replace("THIS_$v", $result[$v], $tmpstr);
+						}
 					}
 				}	
 			}	
@@ -746,7 +756,8 @@ class GTbl extends WebApp
 		$tmpname = (String)$value['name'];
 		if($key == 'table'){
 			if(substr($tmpname, 0, strlen($tblpre)) !==  $tblpre){
-				$value['name'] = $tblpre.$tmpname;
+				#$value['name'] = $tblpre.$tmpname;
+				$value['name'] = $tmpname;
 			}
 		}
 		$hm[$key.$sep.$value['name']] = $tmpname;
@@ -789,6 +800,7 @@ class GTbl extends WebApp
         return array($hm,$hmsortinxml);
     }
 
+	//-
     function filterHiddenField($field, $opfield, $timefield){
        $ishidden = false;
        if($field == null || $field == ''
@@ -821,6 +833,51 @@ class GTbl extends WebApp
         return $tmpstr = $tmpstr==null?'':$tmpstr;
 	}
     
+
+	//-
+	public function getMyIdName(){
+		$tmpstr = $this->hmconf[$this->taglist['table'].$this->sep.$this->prttbl.$this->sep.$this->taglist['myid']];
+		return $tmpstr = $tmpstr==null?'id':$tmpstr;
+	}
+
+	//- @override, test a table with or without $_CONFIG['tblpre']
+	//- Xenxin, Thu Jun 16 17:03:49 CST 2016
+	public function setTbl($tbl=''){
+	
+		$realtbl = '';
+		if($tbl == null || $tbl == ''){
+			$tbl = parent::getTbl();	
+		}	
+
+		$hm = parent::execBy('show tables like "%'.$tbl.'%" ');
+		if($hm[0]){
+			$tmpv = '';
+			foreach($hm[1] as $rk=>$rv){
+				foreach($rv as $vk=> $vv){
+					$tmpv = $vv;
+					#debug(__FILE__.": read k:$rk, vk:$vk vv:$vv");
+					break; # just the first row
+				}
+			}
+			$realtbl = $tmpv;
+			#debug(__FILE__.": get result: real tbl:[".$realtbl."]");
+			
+		}
+		else{
+			$tblpre = Gconf::get('tblpre');
+			if(startsWith($tbl, $tblpre)){
+				$realtbl = str_replace($tblpre, "", $tbl);
+			}
+			else{
+				$realtbl = $tblpre.$tbl;
+			}
+		}
+
+		parent::setTbl($realtbl);
+
+		return $realtbl;
+
+	}
 
 }
 ?>

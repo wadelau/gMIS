@@ -27,7 +27,7 @@ if(startsWith($act,'add') || startsWith($act, "modify")){
     if(startsWith($act, "list-dodelete")){
 		$origId = $id;
        include("./act/dodelete.php"); 
-	   $url = str_replace('&id=', '&xoid=', $url); 
+	   $url = str_replace('&'.$gtbl->getMyId().'=', '&xoid=', $url); 
 		if($fmt != ''){ 
 		   $data['respobj']['resultobj'] = array('resultcode'=>'0',  # 0 stands for success
 		   		'resulttrace'=>'1511242124', 'targetid'=>$origId); # unique trace id
@@ -43,7 +43,7 @@ if(startsWith($act,'add') || startsWith($act, "modify")){
     $orderfield = $navi->getOrder();
     if($orderfield == ''){
         $orderfield = $gtbl->getOrderBy();
-        $navi->set('isasc', $orderfield=='id'?1:0);
+        $navi->set('isasc', $orderfield==$gtbl->getMyId()?1:0);
     }
     $gtbl->set("pagesize", $navi->get('pnps'));
     $gtbl->set("pagenum", $navi->get('pnpn'));
@@ -69,7 +69,7 @@ if(startsWith($act,'add') || startsWith($act, "modify")){
     ## list-sort start
     $out .= "<tr align=\"center\" style=\"font-weight:bold;\" height=\"28px\">";
     if($hasid){
-        $out .= "<td valign=\"middle\" nowrap>&nbsp;<a href=\"javascript:void(0);\" title=\"Sort by ID\" onclick=\"javascript:doAction('".str_replace("&pnob","&xxpnob",$url)."&act=list&pnobid=".($navi->getAsc('id')==0?1:0)."'); \">序/编号</a></td>";
+        $out .= "<td valign=\"middle\" nowrap>&nbsp;<a href=\"javascript:void(0);\" title=\"Sort by ID\" onclick=\"javascript:doAction('".str_replace("&pnob","&xxpnob",$url)."&act=list&pnobid=".($navi->getAsc($gtbl->getMyId())==0?1:0)."'); \">序/编号</a></td>";
     }else{
         $out .= "<td valign=\"middle\">Nbr.</td>";
     }
@@ -88,7 +88,7 @@ if(startsWith($act,'add') || startsWith($act, "modify")){
     $untouched = '~~~';
     $out .= "<tr align=\"center\" style=\"font-weight:bold;\">";
     $out .= "<td valign=\"middle\"><input type=\"hidden\" name=\"fieldlist\" id=\"fieldlist\" value=\"".implode(",",array_keys($hmfield))."\" /> <input type=\"hidden\" name=\"fieldlisttype\" id=\"fieldlisttype\" value=\"".$gtbl->getFieldType()."\"/>";
-    $out .= "<div style=\"display:none\" id=\"pnsk_id_op_div\"><select style=\"width:60px\" name=\"oppnsk_id\" id=\"oppnsk_id\">".$gtbl->getLogicOp('id')."</select></div>";
+    $out .= "<div style=\"display:none\" id=\"pnsk_id_op_div\"><select style=\"width:60px\" name=\"oppnsk_id\" id=\"oppnsk_id\">".$gtbl->getLogicOp($gtbl->getMyId())."</select></div>";
     $out .= "<input value=\"".($id==''?$_REQUEST['pnskid']:$id)."\" style=\"width:50px;".($id==''?"color:white;":"")."\" id=\"pnsk_id\" name=\"pnsk_id\" ";
     $out .= "style=\"COLOR:#777;\" title=\"Search By ...\" onclick=\"this.select();this.style.color='black';\" onfocus=\"document.getElementById('pnsk_id_op_div').style.display='block';\" onkeydown=\"javascript:if(event.keyCode == 13){ searchBy('".$url."&act=list&pnsm=and');}\" /></td>";
     for($hmi=$dispi=$min_idx; $hmi<=$max_idx; $hmi++){
@@ -133,10 +133,10 @@ if(startsWith($act,'add') || startsWith($act, "modify")){
            if($i%2 == 0){
                 $bgcolor = "";
            }
-           $out .= "<tr height=\"35px\" align=\"center\" valign=\"middle\" onmouseover=\"javascript:this.style.backgroundColor='".$hlcolor."';\" onmouseout=\"javascript:this.style.backgroundColor='';\" bgcolor=\"".$bgcolor."\" id=\"list_tr_".$rec['id']."\">";
+           $out .= "<tr height=\"35px\" align=\"center\" valign=\"middle\" onmouseover=\"javascript:this.style.backgroundColor='".$hlcolor."';\" onmouseout=\"javascript:this.style.backgroundColor='';\" bgcolor=\"".$bgcolor."\" id=\"list_tr_".$rec[$gtbl->getMyId()]."\">";
            if($hasid){
-               $id = $rec['id']; $listid[] = $id;
-               $out .= "<td nowrap> <input name=\"checkboxid\" type=\"checkbox\" value=\"".$id."\"> &nbsp; <a onmouseover=\"javascript:showActList('".$id."', 1, '".str_replace("&id=","&oid=", $url)."&id=".$id."');\" onmouseout=\"javascript:showActList('".$id."', 0, '".str_replace("&id=","&oid=", $url)."&id=".$id."');\" href='javscript:void(0);' onclick=\"javascript:doActionEx('".$url."&act=view&id=".$id."','contentarea');;\" title=\"详细信息\">".(++$i + (intval($navi->get('pnpn'))-1) * (intval($navi->get('pnps'))))." / ".$id." &#x25BE;</a> <div id=\"divActList_$id\" style=\"display:none; position: absolute; margin-left:50px; margin-top:-11px; z-index:99; background-color:silver;\">actliat-$id</div> </td>";
+               $id = $rec[$gtbl->getMyId()]; $listid[] = $id;
+               $out .= "<td nowrap> <input name=\"checkboxid\" type=\"checkbox\" value=\"".$id."\"> &nbsp; <a onmouseover=\"javascript:showActList('".$id."', 1, '".str_replace("&".$gtbl->getMyId()."=","&oid=", $url)."&".$gtbl->getMyId()."=".$id."');\" onmouseout=\"javascript:showActList('".$id."', 0, '".str_replace("&".$gtbl->getMyId()."=","&oid=", $url)."&".$gtbl->getMyId()."=".$id."');\" href='javscript:void(0);' onclick=\"javascript:doActionEx('".$url."&act=view&".$gtbl->getMyId()."=".$id."','contentarea');;\" title=\"详细信息\">".(++$i + (intval($navi->get('pnpn'))-1) * (intval($navi->get('pnps'))))." / ".$id." &#x25BE;</a> <div id=\"divActList_$id\" style=\"display:none; position: absolute; margin-left:50px; margin-top:-11px; z-index:99; background-color:silver;\">actliat-$id</div> </td>";
 
            }else{
                $out .= "<td > &nbsp; Error! No Id!</td>";
@@ -150,7 +150,7 @@ if(startsWith($act,'add') || startsWith($act, "modify")){
                $dispi++;
                $inputtype = $gtbl->getInputType($field);
 
-               if(!$user->canRead($field,'','', $_REQUEST['id'],$id)){
+               if(!$user->canRead($field,'','', $_REQUEST[$gtbl->getMyId()],$id)){
                     $out .= "<td> * </td>";
 
                }else if($inputtype == 'select'){
@@ -175,7 +175,7 @@ if(startsWith($act,'add') || startsWith($act, "modify")){
 				   if($gtbl->getInput2Select($field)==1){ $myinputtype = "input2select";  }
                    $tmpv_orig = $tmpv=$gtbl->getSelectOption($field, $rec[$field],'',1, $gtbl->getSelectMultiple($field));
                    $tmpv = shortenStr($tmpv, $list_disp_limit);
-                   $out .= "<td ondblclick=\"javascript:switchEditable('othercont_div_".$id."_".$field."','".$field."','".$myinputtype."','".$rec[$field]."','".$url."&act=updatefield&field=".$field."&id=".$id."','".$readonly."');\" ".$gtbl->getCss($field, $rec[$field])." title=\"".$tmpv_orig."\"><div id=\"othercont_div_".$id."_".$field."\">".$fhref.$tmpv.$fhref_end."</div>";
+                   $out .= "<td ondblclick=\"javascript:switchEditable('othercont_div_".$id."_".$field."','".$field."','".$myinputtype."','".$rec[$field]."','".$url."&act=updatefield&field=".$field."&".$gtbl->getMyId()."=".$id."','".$readonly."');\" ".$gtbl->getCss($field, $rec[$field])." title=\"".$tmpv_orig."\"><div id=\"othercont_div_".$id."_".$field."\">".$fhref.$tmpv.$fhref_end."</div>";
                    $out .= "</td>";
 
                    $listid[$dispi] = $tmpv_orig;
@@ -223,7 +223,7 @@ if(startsWith($act,'add') || startsWith($act, "modify")){
                            $fv_short = "<a href=\"".$fhref[0]."\" title=\"".$fhref[1]."\" target=\"".$fhref[2]."\">".$fv_short."</a>";
                        }
                    }
-                   $out .= "<td ondblclick=\"javascript:switchEditable('othercont_div_".$id."_".$field."','".$field."','".$inputtype."','','".$url."&act=updatefield&field=".$field."&id=".$id."','".$gtbl->getReadOnly($field)."');\" title=\"".str_replace("\"","", $fv_orig)."\" ".$gtbl->getCss($field)."><div id=\"othercont_div_".$id."_".$field."\">".$fv_short."</div></td>";
+                   $out .= "<td ondblclick=\"javascript:switchEditable('othercont_div_".$id."_".$field."','".$field."','".$inputtype."','','".$url."&act=updatefield&field=".$field."&".$gtbl->getMyId()."=".$id."','".$gtbl->getReadOnly($field)."');\" title=\"".str_replace("\"","", $fv_orig)."\" ".$gtbl->getCss($field)."><div id=\"othercont_div_".$id."_".$field."\">".$fv_short."</div></td>";
                    $listid[$dispi] = $rec[$field];
                }
                # hmsum, sum or count each item
@@ -249,7 +249,7 @@ if(startsWith($act,'add') || startsWith($act, "modify")){
            if(0){ # wrap as pop div in id field, wadelau, Sat Jul 25 17:05:57 CST 2015
            if($hasid){
 
-               $out .= "<td > <select id=\"actsel_$i\" name=\"actsel_$i\" class=\"selectsmall\" onchange=\"javascript:doActSelect('actsel_".$i."','".str_replace("&id=","&oid=", $url)."&id=".$id."', ".$id.");\">";
+               $out .= "<td > <select id=\"actsel_$i\" name=\"actsel_$i\" class=\"selectsmall\" onchange=\"javascript:doActSelect('actsel_".$i."','".str_replace("&".$gtbl->getMyId()."=","&oid=", $url)."&".$gtbl->getMyId()."=".$id."', ".$id.");\">";
                $out .= "<option value=\"\">-做-</option>";
                $out .= "<option value=\"view\" title=\"查看详细信息\">查看</option>";
                $out .= "<option value=\"modify\">修改</option>";
