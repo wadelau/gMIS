@@ -7,6 +7,14 @@ $docroot = $_SERVER['DOCUMENT_ROOT'];
 $rtvdir = dirname(dirname(__FILE__)); # relative dir
 $rtvdir = str_replace($docroot,"", $rtvdir);
 $appdir = $docroot.$rtvdir;
+if($rtvdir == ''){
+	$tmpDirArr = explode("/", $_SERVER['PHP_SELF']);
+	$rtvdir = '/'.$tmpDirArr[1];
+	$tmpDirArr = null;
+}
+#print "docroot:[$docroot] rtvdir:[$rtvdir] appdir:[$appdir].";
+#exit;
+
 
 $dirArr = explode("/", $rtvdir);
 $shortDirName = $dirArr[count($dirArr)-1]; # the name of gMIS subdir, i.e. admin, mgmt ...Sat May 23 22:43:21 CST 2015
@@ -165,8 +173,19 @@ if($fmt == ''){
 }
 
 if(strpos($tbl,$_CONFIG['tblpre']) !== 0){
-    $tbl = $_CONFIG['tblpre'].$tbl; 
+    $tbl = $_CONFIG['tblpre'].$tbl; //- default is appending tbl prefix 
 }
+# tbl test, see inc/webapp.class::setTbl
+
+if(true){ # used in mix mode to cover all kinds of table with or without tbl prefix
+	$oldtbl = $tbl;
+	$tbl = (new GTbl($tbl, null, ''))->setTbl($tbl);
+	if($tbl != $oldtbl){
+		$_REQUEST['tbl'] = $tbl;
+		debug("table remedy done. table:[$tbl] with no oldtbl:[".$oldtbl."]");
+	}
+}
+
 if(isset($_REQUEST['parent'])){
 	$tmpnewk = 'pnsk'.$_REQUEST['parent'];
 	$_REQUEST[$tmpnewk] = $_REQUEST[$_REQUEST['parent']]; 	

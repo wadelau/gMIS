@@ -13,7 +13,9 @@
         </field>
         <field name="levelcode">
             <chnname>层代码</chnname>
+        	<extrainput>extra/xdirectory.php?tbl=THIS_TABLE&amp;icode=levelcode&amp;iname=linkname&amp;parentcode=THIS_levelcode</extrainput>
         </field>
+
         <field name="modulename" type="text">
             <chnname>模块名字</chnname>
         </field>
@@ -26,7 +28,6 @@
             <chnname>显示标题</chnname>
         </field>
 
-		
 		<field name="thedb" type="text">
 			<chnname>数据</chnname>
         </field>
@@ -38,14 +39,10 @@
 		<field name="xiazai" type="text">
 			<chnname>下载专区</chnname>
         </field>
-		
-
-
-
 
 		<field name="inserttime" type="text">
             <chnname>创建时间</chnname>
-			        </field>
+		</field>
 
 		<field name="updatetime" type="text">
             <chnname>更新时间</chnname>
@@ -56,8 +53,9 @@
         </field>
 
 		<field name="state" type="text">
-        <chnname>状态</chnname>
-        <inputtype>select</inputtype>
-        <selectoption>0:停用|1:正常|2:冻结</selectoption>
+        	<chnname>状态</chnname>
+        	<inputtype>select</inputtype>
+        	<selectoption>0:停用|1:正常|2:冻结</selectoption>
         </field>
+
 </tablecfg>

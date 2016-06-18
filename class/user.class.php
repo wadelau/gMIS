@@ -27,8 +27,7 @@ class User extends WebApp
     var $specifyAcc = array(); # 记录针对当前用户或者当前组的特殊权限, Sun May 13 16:42:45 CST 2012
 
 	//-
-	function User()
-	{
+	function __construct(){
 		//-
 		$this->dba = new DBA();
         #$this->setTbl($_CONFIG['usertbl']);
@@ -119,7 +118,7 @@ class User extends WebApp
         }
         #print "obj:[".$req['tbl']."] objgroup:[".$objgrp."] objid:[".$objid."]\n";
 
-        $sql = "select id,accesstype,objectfield,userid,usergroup from ".Gconf::get('tblpre')."useraccesstbl where state=1 and (userid='".$this->getId()."' or userid=0) and (usergroup='".$this->getGroup()."' or usergroup=0) and (objectid='".$objid."' or objectid=0) and (objectgroup='".$objgrp."' or objectgroup=0) order by id desc, accesstype desc limit 100";
+        $sql = "select id,accesstype,objectfield,userid,usergroup from ".Gconf::get('tblpre')."useraccesstbl where state=1 and (userid='".$this->getId()."' or userid=0) and (usergroup='".$this->getGroup()."' or usergroup=0) and (objectid='".$objid."' or objectid=0) and (objectgroup='".$objgrp."' or objectgroup=0) order by ".$this->getMyId()." desc, accesstype desc limit 100";
         #print "sql:[".$sql."]";
         $tmphm = $this->execBy($sql, null);
         #print "chkAccess:";

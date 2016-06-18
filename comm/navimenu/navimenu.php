@@ -19,8 +19,8 @@ if($hm[0]){
     }
     #print_r($hmkeys);
     #print_r($hmkeysbylen);
-    for($li = 10; $li <= 99; $li++){
-        $li = "".$li;
+    for($li = 0; $li <= 99; $li++){
+        $li = "".sprintf("%02d",$li);
         if(in_array($li, $hmkeysbylen[2])){
             $linfo = $hmkeys[$li];
             $dynamicmenu .= '<li><!--'.$li.'.--><a href="./?navidir='.$linfo['levelcode'].'" orighref="javascript:void(0);" class="menulink">'.$linfo['linkname'].'</a>'."\n";

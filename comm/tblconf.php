@@ -5,12 +5,14 @@ $isadmin = false;
 $hlcolor = '#afc4e2'; $form_cols = 6; $hashiddenfield = false;
 
 $hmconf = GTbl::xml2hash($xmlpathpre, $elementsep, $db, $tbl);
+#print_r($hmconf);
 $gtbl = new GTbl($tbl, $hmconf[0], $elementsep, $tblrotate);
 $hmfield = $hmfieldsort = array();
 $hmfieldsortinxml = $hmconf[1];
 
 $sql = "desc $tbl";
 $hm = $gtbl->execBy($sql, null);
+
 $max_idx = $hmi = 99; # max number of fields count
 $min_idx = 0; $dispi = 0; $max_disp_cols = $gtbl->getListFieldCount(); # display field count
 $hasid = false; $hmj = count($hmfieldsortinxml); #1; remedy Sun Jul 22 22:26:09 CST 2012
@@ -34,7 +36,7 @@ if($hm[0]){
         }
         $hmfieldsort[$tmpsort] = $field;
         $min_index = $tmpsort;
-        if(!$hasid && $field == 'id'){
+        if(!$hasid && $field == $gtbl->getMyId()){
             $hasid = true;
         }
     }
@@ -49,5 +51,6 @@ $gtbl->setFieldList($hmfield);
 $opfield = array('operator','author','op','creator','operatorid', 'authorid', 'creatorid');
 $timefield = array('inserttime','insertime','updatetime','endtime','editime','edittime','modifytime');
 
+$id = $_REQUEST[$gtbl->getMyId()];
 
 ?>

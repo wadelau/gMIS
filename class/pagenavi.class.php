@@ -13,7 +13,7 @@ require_once(__ROOT__.'/inc/webapp.class.php');
 
 class PageNavi extends WebApp{
 
-   public function PageNavi(){
+   public function __construct(){
 
        $this->dba = new DBA(); # added by wadelau@ufqi.com, Wed Jul 11 14:31:52 CST 2012
 
@@ -284,7 +284,7 @@ class PageNavi extends WebApp{
             $tmpval = $varr2[2];
             $tmpval = "(".$this->addQuote($tmpval).")";
        }
-       $condition .= "select $field from ".$varr[1]." where ".$varr2[0]." ".$tmpop." ".$tmpval." order by id desc";
+       $condition .= "select $field from ".$varr[1]." where ".$varr2[0]." ".$tmpop." ".$tmpval." order by ".$this->getMyId()." desc";
        return $condition;
    }  
 }

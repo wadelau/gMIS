@@ -3,41 +3,42 @@
 # global constant configurations
 # remedy by wadelau@ufqi.com on 22:31 Friday, December 04, 2015
 
-$tblpre = "TABLE_PRE";
+$tblpre = "gmis_";
 $conf = array();
 
 $conf['tblpre'] 	= $tblpre;
-$conf['appname'] 	= 'HaoSSH';
+$conf['appname'] 	= '<a href="#-gmis">-gMIS</a>';
 $conf['appchnname'] 	= '好事顺信管';
 $conf['appdir']		= $appdir;
 
 $conf['rtvdir'] 	= $rtvdir;
-$conf['agentname'] 	= 'AGENT_NAME';
+$conf['agentname'] 	= '-PBTT-MIS';
 $conf['agentalias']	= 'gMIS-Admin';
-$conf['smarty']		= $appdir.'/class/Smarty-3.1.7/libs';
+$conf['smarty']		= $appdir.'/class/Smarty';
 
 $conf['uploaddir']	= 'upld';
 $conf['septag']		= '_J_A_Z_';
 
-$conf['maindb']		= 'DB_NAME';
+$conf['maindb']		= '';
 $conf['maintbl']	= $tblpre.'customertbl';
 $conf['usertbl']	= $tblpre.'info_usertbl';
 $conf['welcometbl']	= $tblpre.'info_welcometbl';
 $conf['operatelogtbl']	= $tblpre.'fin_operatelogtbl';
 
 # db info
-$conf['dbhost'] 	= 'DB_HOST';
-$conf['dbport'] 	= 'DB_PORT';
-$conf['dbuser'] 	= 'DB_USER';
-$conf['dbpassword'] 	= 'DB_PASSWORD';
+$conf['dbhost'] 	= '';
+$conf['dbport'] 	= '3306';
+$conf['dbuser'] 	= '';
+$conf['dbpassword'] 	= '';
 $conf['dbname'] 	= $conf['maindb'];
+$conf['dbdriver']	= 'MYSQLIX'; # 'MYSQL', 'MYSQLIX', 'PDOX', 'SQLSERVER', 'ORACLE' in support, UPCASE only
 
 # misc 
-$conf['frontpage'] = 'FRONT_PAGE';
+$conf['frontpage'] = '-PBTT';
 $conf['is_debug'] = 1;
 $conf['html_resp'] = '<!DOCTYPE html><html><head><title>RESP_TITLE</title></head><body>RESP_BODY</body></html>';
 $conf['auto_save_interval'] = 20; # ref extra/htmleditor
-$conf['auto_install'] = 'INSTALL_AUTO';
+$conf['auto_install'] = 'INSTALL_DONE';
 
 # set them all
 Gconf::setConf($conf);

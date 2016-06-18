@@ -27,7 +27,7 @@ if($hasid){
     for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
         $field = $gtbl->getField($hmi);
         if($field == null | $field == '' 
-                || $field == 'id'){
+                || $field == $gtbl->getMyId()){
             continue;
         }
         if(array_key_exists($field, $_REQUEST)){
@@ -56,7 +56,7 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
     $field = $gtbl->getField($hmi);
     $fieldinputtype = $gtbl->getInputType($field);
     if($field == null || $field == ''
-            ){ # || $field == 'id'
+            ){ 
 
         continue;
     } 
@@ -69,7 +69,7 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
         $hmorig[$field] = '';
     }
 
-    if(!$user->canRead($field,'','', $_REQUEST['id'], $id)){
+    if(!$user->canRead($field,'','', $_REQUEST[$gtbl->getMyId()], $id)){
         $out .= "<--NOREAD-->";
 
     }else if($fieldinputtype == 'select'){

@@ -44,7 +44,7 @@ if($hm[0]){
 	$data['user_count'] = $hm[0]['usercount'];
 }
 
-$hm = $gtbl->execBy("select * from ".$_CONFIG['tblpre']."fin_operatelogtbl order by id desc limit 6");
+$hm = $gtbl->execBy("select * from ".$_CONFIG['tblpre']."fin_operatelogtbl order by ".$gtbl->getMyId()." desc limit 6");
 if($hm[0]){
 	$hm = $hm[1];
 	$data['log_list'] = $hm;
