@@ -1,0 +1,7 @@
+
+####
+
+-gMIS updated @ 16:48 17 June 2016
+
++setMyIdName, for compatible with table which has no field as 'id';
++setTbl override, for compatible with table which has no table prefix.

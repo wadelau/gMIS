@@ -37,7 +37,11 @@ class MYSQLIX {
 		if (!is_object($this->m_link)){
 			$real_host = $this->m_host.":".$this->m_port;
 			$this->m_link = new mysqli($this->m_host, $this->m_user, 
-				$this->m_password, $this->m_name, $this->m_port);           
+				$this->m_password, $this->m_name, $this->m_port);
+
+			if(Gconf::get('db_enable_utf8_affirm')){
+				$this->query("SET NAMES 'utf8'", null, null);
+			}
 		}
 		return $this->m_link;
 		
