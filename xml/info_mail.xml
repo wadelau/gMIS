@@ -21,7 +21,6 @@
             <inputtype>select</inputtype>
             <selectoption>0:停用|1:正常|2:冻结</selectoption>
         </field>
-        </field>
         <field name="updatetime" type="text">
             <chnname>更新时间</chnname>
         </field>

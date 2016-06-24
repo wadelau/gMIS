@@ -5,14 +5,14 @@ $fieldlist = array();
 
 if($hasid){
     $gtbl->setId($id);
-    $fieldargv[] = "id=?";
+    $fieldargv[] = $gtbl->getMyId()."=?";
 }
 else{
     $fieldargv = "";
     for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
         $field = $gtbl->getField($hmi);
         if($field == null | $field == '' 
-                || $field == 'id'){
+                || $field == $gtbl->getMyId()){
             continue;
         }
         if(array_key_exists($field, $_REQUEST)){
@@ -37,8 +37,8 @@ include("./act/trigger.php");
 # some triggers end, added on Sat May 26 10:22:27 CST 2012
 
 $gtbl->setId('');
-$_REQUEST['id.old'] = $_REQUEST['id'];
-$_REQUEST['id'] = ''; # remedy Thu Apr 17 08:41:11 CST 2014
+$_REQUEST[$gtbl->getMyId().'.old'] = $_REQUEST[$gtbl->getMyId()];
+$_REQUEST[$gtbl->getMyId()] = ''; # remedy Thu Apr 17 08:41:11 CST 2014
 $id = '';
 
 if($hm[0]){
