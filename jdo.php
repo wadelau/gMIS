@@ -171,7 +171,7 @@ if(startsWith($act,'add') || startsWith($act, "modify")){
 
 				   $myinputtype = $inputtype;
                    $readonly = $gtbl->getReadOnly($field);
-                   if($gtbl->getJsAction($field) != ''){ $readonly = 'readonly'; }
+                   if($gtbl->getJsAction($field) != '' || $gtbl->getSelectMultiple($field)==1){ $readonly = 'readonly'; }
 				   if($gtbl->getInput2Select($field)==1){ $myinputtype = "input2select";  }
                    $tmpv_orig = $tmpv=$gtbl->getSelectOption($field, $rec[$field],'',1, $gtbl->getSelectMultiple($field));
                    $tmpv = shortenStr($tmpv, $list_disp_limit);
@@ -223,7 +223,9 @@ if(startsWith($act,'add') || startsWith($act, "modify")){
                            $fv_short = "<a href=\"".$fhref[0]."\" title=\"".$fhref[1]."\" target=\"".$fhref[2]."\">".$fv_short."</a>";
                        }
                    }
-                   $out .= "<td ondblclick=\"javascript:switchEditable('othercont_div_".$id."_".$field."','".$field."','".$inputtype."','','".$url."&act=updatefield&field=".$field."&".$gtbl->getMyId()."=".$id."','".$gtbl->getReadOnly($field)."');\" title=\"".str_replace("\"","", $fv_orig)."\" ".$gtbl->getCss($field)."><div id=\"othercont_div_".$id."_".$field."\">".$fv_short."</div></td>";
+				   $readonly = $gtbl->getReadOnly($field);
+                   if($inputtype == 'textarea'){ $readonly = true; }
+                   $out .= "<td ondblclick=\"javascript:switchEditable('othercont_div_".$id."_".$field."','".$field."','".$inputtype."','','".$url."&act=updatefield&field=".$field."&".$gtbl->getMyId()."=".$id."','".$readonly."');\" title=\"".str_replace("\"","", $fv_orig)."\" ".$gtbl->getCss($field)."><div id=\"othercont_div_".$id."_".$field."\">".$fv_short."</div></td>";
                    $listid[$dispi] = $rec[$field];
                }
                # hmsum, sum or count each item
@@ -325,7 +327,5 @@ if(startsWith($act,'add') || startsWith($act, "modify")){
 }
 
 require("./comm/footer.inc");
-
-print $out;
 
 ?>

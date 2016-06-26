@@ -86,7 +86,7 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
 		$tdi++;
     }
 	else if($fieldinputtype == 'select'){
-        $out .= "<td idata=\"$i\" fieldname=\"$field\">".$gtbl->getCHN($field).":&nbsp;</td><td> ".$gtbl->getSelectOption($field, $hmorig[$field],'',1)."</td>";
+        $out .= "<td idata=\"$i\" fieldname=\"$field\">".$gtbl->getCHN($field).":&nbsp;</td><td> ".$gtbl->getSelectOption($field, $hmorig[$field],'',1, $gtbl->getSelectMultiple($field) )."</td>";
 		$tdi++;
     }
 	else if($gtbl->getFieldPrint($field) != ''){

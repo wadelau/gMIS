@@ -97,6 +97,9 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
 
         }else if($gtbl->getSelectMultiple($field)){
 
+            #print __FILE__;
+			#print_r($_REQUEST);
+
             if(is_array($_REQUEST[$field])){ 
                 $fieldv = implode(",", $_REQUEST[$field]);
             }else{
@@ -137,6 +140,7 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
 	}
 
 	#print(__FILE__.": field:[$field] fieldv:[$fieldv]");
+
 }
 
 #print(__FILE__.": fieldlist:[".$gtbl->toString($fieldlist)."]");

@@ -74,7 +74,7 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
 
     }else if($fieldinputtype == 'select'){
 
-		$out .= "<td>".$gtbl->getCHN($field).":&nbsp;</td><td> ".$gtbl->getSelectOption($field, $hmorig[$field],'',1)."</td>";
+		$out .= "<td>".$gtbl->getCHN($field).":&nbsp;</td><td> ".$gtbl->getSelectOption($field, $hmorig[$field],'', $gtbl->getSelectMultiple($field))."</td>";
         
     }else if($fieldinputtype == 'file'){
         $isimg = isImg($hmorig[$field]);

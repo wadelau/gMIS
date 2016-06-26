@@ -432,6 +432,7 @@ userinfo.input2Select = {};
 //-- 增加对 select 点击即编辑的支持
 function switchEditable(targetObj,fieldName,fieldType,fieldValue,myUrl,readOnly){
     if(readOnly != ''){
+    	console.log("field:["+fieldName+"] is not configed to edit in this view. e.g. multiple select, textarea.");
         return true;
     }
 	var theobj = targetObj;

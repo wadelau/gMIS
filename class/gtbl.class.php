@@ -236,7 +236,7 @@ class GTbl extends WebApp{
         }
 		# check rotatespan, Mon Jan  5 16:55:48 CST 2015
 		$rotatespan = $this->rotatetag;
-		error_log(__FILE__.": rotatespan:$rotatespan");
+		#error_log(__FILE__.": rotatespan:$rotatespan");
 		if($rotatespan != ''){
 			$tmpArr = array('M'=>'month', 'Y'=>'year', 'D'=>'day', 'W'=>'week');
 			$tmpArr1 = array('M'=>'Ym', 'Y'=>'Y', 'D'=>'Ymd', 'W'=>'YW');
@@ -433,6 +433,7 @@ class GTbl extends WebApp{
 		else if(strpos($tmpstr,"|") > 0){ 
             $varlist = explode("|", $tmpstr);
             $tmpstr = "";
+			$hmoption = $varlist;
             foreach($varlist as $k=>$v){
                 $arr = explode(":", $v);
                 $optionlist .= "<option value=\"".$arr[0]."\"";
@@ -453,9 +454,28 @@ class GTbl extends WebApp{
         }else{
             if($ismultiple == 0){
                 $tmpstr = "<select id=\"".$tagpre.$field."\" name=\"".$tagpre.$field."\" ".$this->getJsAction($field)." ".$this->getAccept($field)." ".$this->getCss($field).">".$optionlist."</select>";
-            }else{
-                $tmpstr = "<select id=\"".$tagpre.$field."\" name=\"".$tagpre.$field."[]\" ".$this->getJsAction($field)." ".$this->getAccept($field)." multiple=\"multiple\">".$optionlist."</select>";
             }
+			else{
+                #$tmpstr = "<select id=\"".$tagpre.$field."\" name=\"".$tagpre.$field."[]\" ".$this->getJsAction($field)." ".$this->getAccept($field)." multiple=\"multiple\">".$optionlist."</select>";
+            
+				$tmpstr = "";
+                $oi = 1;
+                #print __FILE__;
+                #print_r($hmoption);
+                $hmTmp = array();
+                foreach($hmoption as $kh=>$vh){
+                	$hmTmp[$vh[$optval]] = $vh;	
+                }
+                sort($hmTmp);
+                foreach($hmTmp as $ko=>$vo){
+                	$tmpstr .= ($oi++).".<input type='checkbox' name='".$tagpre.$field."[]' value='".$vo[$optval]."'"
+                		.(inList($vo[$optval], $defaultval) ? " checked" : "")."/> ".$vo[$arr[2]]."(".$vo[$optval].")&nbsp;&nbsp;&nbsp;";	
+                	if(($oi-1) % 5 == 0){
+                		$tmpstr .= "<br/>";
+                	}
+                }
+
+			}
         }
         if($needv != 1){
             return $tmpstr;
