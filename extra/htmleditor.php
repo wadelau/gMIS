@@ -4,7 +4,7 @@
 # auto-save, Wed Aug 13 15:55:22 CST 2014
 
 $isoput = 0;
-require("../comm/header.inc");
+require("../comm/header.inc.php");
 
 $myfield = trim($_REQUEST['field']);
 
@@ -56,6 +56,6 @@ function setAutoSave(autosavetime){
 
 <?php
 
-require("../comm/footer.inc");
+require("../comm/footer.inc.php");
 
 ?>

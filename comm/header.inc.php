@@ -3,6 +3,10 @@
 global $appdir,$userid, $user, $gtbl;
 date_default_timezone_set("Asia/Chongqing");
 
+error_reporting(E_ALL & ~E_NOTICE);
+session_start(); # in initial stage, using php built-in session manager
+define('UID',$_CONFIG['agentalias'].'_user_id');
+
 $docroot = $_SERVER['DOCUMENT_ROOT'];
 $rtvdir = dirname(dirname(__FILE__)); # relative dir
 $rtvdir = str_replace($docroot,"", $rtvdir);
@@ -34,9 +38,6 @@ require_once($appdir."/class/user.class.php");
 require_once($appdir."/comm/tools.function.php");
 require($appdir."/class/gtbl.class.php");
 require($appdir."/class/pagenavi.class.php");
-
-session_start(); # in initial stage, using php built-in session manager
-define('UID',$_CONFIG['agentalias'].'_user_id');
 
 if(!isset($user)){
     $user = new User(); 
@@ -194,7 +195,7 @@ if(isset($_REQUEST['parent'])){
 
 # check access control
 $superAccess = '';
-include($appdir."/act/checkaccess.inc");
+include($appdir."/act/checkaccess.inc.php");
 
 # template file info
 require($_CONFIG['smarty']."/Smarty.class.php");

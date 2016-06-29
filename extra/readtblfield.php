@@ -2,7 +2,7 @@
 # read field list of a table, answer ido.js::fillSubSelect 
 # Sun Mar 11 15:44:20 CST 2012
 
-require("../comm/header.inc");
+require("../comm/header.inc.php");
 #require("../class/gtbl.class.php");
 
 $thefield = $_REQUEST['field'];
@@ -89,7 +89,7 @@ print $out;
 $out = "";
 $isoput = false;
 
-require("../comm/footer.inc");
+require("../comm/footer.inc.php");
 
 
 ?>

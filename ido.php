@@ -1,5 +1,5 @@
 <?php
-require("./comm/header.inc");
+require("./comm/header.inc.php");
 
 $out = str_replace('TITLE','欢迎', $out); 
 $isgo = true;
@@ -133,7 +133,7 @@ $smt->assign('content',$out);
 $smt->assign('rtvdir', $rtvdir);
 $smt->assign('randi', rand(0,9999).rand(0,9999));
 
-require("./comm/footer.inc");
+require("./comm/footer.inc.php");
 
 #print $out;
 

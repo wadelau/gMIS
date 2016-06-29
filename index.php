@@ -2,7 +2,7 @@
 
 $_REQUEST['tbl'] = ''; #  'fin_todotbl'; Wed Oct 22 09:10:01 CST 2014
 
-require("./comm/header.inc");
+require("./comm/header.inc.php");
 
 $out = str_replace('TITLE','欢迎', $out);  $data['title'] = '欢迎';
 
@@ -93,6 +93,6 @@ $smt->assign('content',$out);
 $smt->assign('rtvdir', $rtvdir);
 $smt->assign('isheader', $isheader);
 
-require("./comm/footer.inc");
+require("./comm/footer.inc.php");
 
 ?>

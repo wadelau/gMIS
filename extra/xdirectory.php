@@ -3,7 +3,7 @@
 # wadelau@ufqi.com on Sun Jan 31 10:22:15 CST 2016
 
 #$isoput = false;
-require("../comm/header.inc");
+require("../comm/header.inc.php");
 
 include("../comm/tblconf.php");
 include_once($appdir."/class/xdirectory.class.php");
@@ -147,6 +147,6 @@ $out .='</script>';
 
 }
 
-require("../comm/footer.inc");
+require("../comm/footer.inc.php");
 
 ?>

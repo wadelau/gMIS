@@ -1,7 +1,7 @@
 <?php
 
 
-require("../comm/header.inc");
+require("../comm/header.inc.php");
 #require("../class/gtbl.class.php");
 
 $_REQUEST['tbl'] = $_CONFIG['tblpre'].'info_usertbl';
@@ -131,7 +131,7 @@ if($act == 'signin'){
 
 $smt->assign('rtvdir', $rtvdir);
 
-require("../comm/footer.inc");
+require("../comm/footer.inc.php");
 
 #print $out; # disabled after Smarty since Tue Feb 14 22:52:20 CST 2012
 

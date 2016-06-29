@@ -3,7 +3,7 @@
 # read xml conf and save table chnname in hss_info_objecttbl
 # Mon Feb 13 22:26:18 CST 2012
 
-require("../comm/header.inc");
+require("../comm/header.inc.php");
 
 $act = $_REQUEST['act'];
 $id = $_REQUEST['id'];
@@ -61,7 +61,7 @@ if($hm[0]){
     $out .= "<br/><br/>&nbsp;";
 }
 
-require("../comm/footer.inc");
+require("../comm/footer.inc.php");
 
 print $out;
 

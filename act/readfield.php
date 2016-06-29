@@ -1,6 +1,6 @@
 <?php
 
-require("../comm/header.inc");
+require("../comm/header.inc.php");
 #require("../class/gtbl.class.php");
 #require("../class/pagenavi.class.php");
 
@@ -146,7 +146,7 @@ $out .= "</table>";
 
 # list mode ?
 
-require("../comm/footer.inc");
+require("../comm/footer.inc.php");
 
 print $out;
 

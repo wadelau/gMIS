@@ -3,7 +3,7 @@
 # Mon Jul 28 15:38:57 CST 2014
 
 $isoput = false;
-require("./comm/header.inc");
+require("./comm/header.inc.php");
 
 # read table config, IMPORTANT
 require("./comm/tblconf.php");
@@ -326,6 +326,6 @@ if(startsWith($act,'add') || startsWith($act, "modify")){
     $out .= "Ooops! No such action:[$act].<br/>&nbsp;\n";
 }
 
-require("./comm/footer.inc");
+require("./comm/footer.inc.php");
 
 ?>

@@ -1,6 +1,6 @@
 <?php
 $isoput = false;
-require("../comm/header.inc");
+require("../comm/header.inc.php");
 #require("../class/gtbl.class.php");
 
 $tbl = $field = $fieldv = $fieldargv = $filename = $act = '';
@@ -56,7 +56,7 @@ $out .= "</td></tr>";
 $out .= "</table>";
 
 
-require("../comm/footer.inc");
+require("../comm/footer.inc.php");
 
 print $out;
 
