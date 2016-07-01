@@ -5,3 +5,7 @@
 
 +setMyIdName, for compatible with table which has no field as 'id';
 +setTbl override, for compatible with table which has no table prefix.
+
+-gMIS  updated @ 10:22 27 June 2016
+
++multiple selections to checkbox
