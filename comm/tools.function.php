@@ -327,18 +327,31 @@ function debug($obj, $tag='', $output=null){
 	$s .= ' func:['.$caller[$callidx]['function'].'] file:['.$caller[$callidx]['file'].']';
 
 	if($output != null){
-		if($output == 0){ # in backend only
-			error_log($s); 
-		}
-		else if($output == 1){ # in backend and frontend
-			error_log($s);
-			print $s;
-		}
-		else if($output == 2){ # in backend and frontend with backtrace
-			$s .= " backtrace:[".serialize($caller)."]";
-			error_log($s);
-			print $s;	
-		}
+	    
+	    if(startsWith($output, "file:")){
+	        $f = str_replace('file:', '', $output).date('Ymd', time()).'.log';
+	        file_put_contents($f, $s, FILE_APPEND);
+	        error_log($s);
+	    
+	    }
+	    else{
+    		$output = intval($output);
+	        if ($output == 0) { // in backend only
+    			error_log ( $s );
+    		}
+    		else if ($output == 1) { // in backend and frontend
+    			error_log ( $s );
+    			print $s;
+    		}
+    		else if ($output == 2) { // in backend and frontend with backtrace
+    			$s .= " backtrace:[" . serialize ( $caller ) . "]";
+    			error_log ( $s );
+    			print $s;
+    		}
+    		else{
+    		    error_log(__FILE__.': Unknown log output:['.$output.']. s:['.$s.']');
+    		}
+	    }
 	}
 	else{ 
 		error_log($s); # default mode
