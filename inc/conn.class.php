@@ -31,7 +31,7 @@ class Config_Master{
 }
 
 # db slave
-class Config_Slave{
+class Config_stat{
 	var $mDbHost     = "";	
 	var $mDbUser     = "";
 	var $mDbPassword = ""; 
