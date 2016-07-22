@@ -13,7 +13,7 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
     $fieldv = ''; # remedy by wadelau@ufqi.com, Wed Oct 17 12:46:16 CST 2012
 	$fieldInputType = $gtbl->getInputType($field);
     if($field == null | $field == '' 
-            || $field == 'id'){
+            || $field == $gtbl->getMyId()){
         continue;
 
     }else if(!$user->canWrite($field)){
