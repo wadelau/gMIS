@@ -50,6 +50,9 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
 
             $fieldv_orig = $_REQUEST[$field.'_orig'];
             if($_FILES[$field]['name'] == '' && $fieldv_orig != ''){
+				if(strpos($fieldv_orig, $shortDirName) === false){
+                    $fieldv_orig = $shortDirName."/".$fieldv_orig;
+                }
                 $fieldv = $fieldv_orig;
             
             }else if($_FILES[$field]['name'] != ''){
