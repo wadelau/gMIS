@@ -133,6 +133,10 @@ function searchBy(url){
                 //window.alert('field:'+fieldarr[i]+' select:fieldv:['+fieldv+']');
                 console.log('field:'+fieldarr[i]+' select:fieldv:['+fieldv+']');
                 if(fieldv == ""){
+					var reg = new RegExp("&pnsk"+fieldarr[i]+"=([^&]*)", 'gm');
+					url = url.replace(reg, "");
+					reg = new RegExp("&oppnsk"+fieldarr[i]+"=([^&]*)", 'gm');
+					url = url.replace(reg, "");
                     continue;
                 }
             }else{
