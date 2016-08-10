@@ -8,6 +8,5 @@ It is a general Management Information System based on -GWA2 and configurable I/
 
 Those shared some common functions and most of them just needed to achieve basic goals (CURDLS) for a table. So we conducted many practices to find one to meet this kind of demand, for all, forever.”
 
-----
 -NatureDNS: -gMIS , -吉密斯 , -鸡觅食
 
