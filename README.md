@@ -17,6 +17,6 @@ This project has been started and pondered during the study in [Univ. of Derby](
 
 and it is based on some observations and demands from [ChinaM](http://chinam.com). 
 
-In the short time in [Sina](http://weibo.com) Corp, 
+In the short time in [Sina](http://weibo.com) Corp., 
 
 it has been created from top to down and the polishing work are continuing and lasting till now. 
