@@ -113,7 +113,7 @@ for($hmi=$min_idx; $hmi<=$max_idx;$hmi++){
 
 		if(true){
         	$out .= "<td nowrap>".$gtbl->getCHN($field).":&nbsp;</td>";
-        	$out .= "<td colspan='4'>".$gtbl->getSelectOption($field, $hmorig[$field],'',0,$gtbl->getSelectMultiple($field))." <br/> ".$gtbl->getMemo($field)." <input type=\"hidden\" id=\"".$field."_select_orig\" name=\"".$field."_select_orig\" value=\"".$hmorig[$field]."\" /></td>";
+        	$out .= "<td>".$gtbl->getSelectOption($field, $hmorig[$field],'',0,$gtbl->getSelectMultiple($field))." <br/> ".$gtbl->getMemo($field)." <input type=\"hidden\" id=\"".$field."_select_orig\" name=\"".$field."_select_orig\" value=\"".$hmorig[$field]."\" /></td>";
         	$opentr = 0;
 		}
 
