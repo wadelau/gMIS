@@ -126,7 +126,7 @@ class PageNavi extends WebApp{
 
    function getCondition($gtbl, $user){
        $condition = "";
-       $pnsm = $_REQUEST['pnsm']; $pnsm = $pnsm==''?"or":'and';
+       $pnsm = $_REQUEST['pnsm']; $pnsm = $pnsm==''?"or":$pnsm;
        $hmfield = $gtbl->getFieldList();
 
        $hidesk = $gtbl->getHideSk($user); # xml/hss_tuanduitbl.xml
