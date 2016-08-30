@@ -1,6 +1,6 @@
 # gMIS
 
-![gmis](https://ufqi.com/dev/gmis/gmis-logo-201606.png)
+![gmis]()
 
 genral Management Information System (通用管理信息系统)
 
@@ -13,10 +13,11 @@ Those shared some common functions and most of them just needed to achieve basic
 -NatureDNS: -gMIS , -吉密斯 , -鸡觅食
 
 ### History
-This project has been started and pondered during the study in [Univ. of Derby](http://www.derby.ac.uk), 
 
-and it is based on some observations and demands from [ChinaM](http://chinam.com). 
+This project has been started and pondered during the study in [Univ. of Derby](http://www.derby.ac.uk), 2011, 
+
+and it is based on some observations and demands from [ChinaM](http://chinam.com), prior to 2010. 
 
 In the short time in [Sina](http://weibo.com) Corp., 
 
-it has been created from top to down and the polishing work are continuing and lasting till now. 
+and it has been created from top to down and the polishing work are continuing and lasting till now. 
