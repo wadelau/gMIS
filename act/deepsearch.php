@@ -1,0 +1,160 @@
+<?php
+/*
+ * deep and complex search on all fields
+ * added by wadelau@ufqi.com for pbtt
+ * Mon Aug 29 18:34:45 CST 2016
+ */
+
+$formid = "gtbl_search_form";
+
+$hiddenfields = "";
+
+$colsPerRow = 2;
+if($_REQUEST['otbl'] != ''){
+    $colsPerRow = 2;
+}
+
+# reset old?
+$url = str_replace("&pnsk", "&oldpnsk", $url);
+
+$out .= "<fieldset style=\"border-color:#5f8ac5;border: 1px solid #5f8ac5;\"><legend><h4>深度复合检索</h4></legend><form id=\""
+	.$formid."\" name=\"".$formid."\" method=\"post\" action=\"".$url."&act=list-dodeepsearch\" "
+	.$gtbl->getJsActionTbl()."><table align=\"center\" width=\"98%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0px\">";
+$out .= "<tr><td width=\"11%\">&nbsp;</td>
+            <td width=\"22%\">&nbsp;</td>
+            <td width=\"11%\">&nbsp;</td>
+            <td width=\"22%\">&nbsp;</td>
+            <td width=\"11%\">&nbsp;</td>
+            <td width=\"22%\">&nbsp;</td>
+            </tr>";
+			
+$hmorig = array(); 
+
+if(true){
+    foreach($_REQUEST as $k=>$v){
+        if(startsWith($k,"pnsk")){
+            $hmorig[substr($k,4)] = $v;
+        }
+		else if(startsWith($k, 'parent')){ # Attention! parentid
+			$k2 = $v;
+			$hmorig[$k2] = $_REQUEST[$k2];	
+		}
+    }
+    for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
+        $field = $gtbl->getField($hmi);
+        if($field == null | $field == '' 
+                || $field == 'id'){
+            continue;
+        }
+        $fielddf = $gtbl->getDefaultValue($field);
+        if($fielddf != ''){
+            $tmparr = explode(":", $fielddf);
+            if($tmparr[0] == 'request'){ # see xml/hss_info_attachfiletbl.xml
+                $hmorig[$field] = $_REQUEST[$tmparr[1]];
+            }else{
+                $hmorig[$field] = $tmparr[0]; # see xml/hss_tuanduitbl.xml
+            }
+        }
+    } 
+
+}
+
+if($hmorig[0]){
+    $hmorig = $hmorig[1][0]; 
+}
+
+$closedtr = 1; $opentr = 0; # just open a tr, avoid blank line, Sun Jun 26 10:08:55 CST 2016
+$columni = 0; $my_form_cols = 4;
+
+for($hmi=$min_idx; $hmi<=$max_idx;$hmi++){
+    $field = $gtbl->getField($hmi);
+    $fieldinputtype = $gtbl->getInputType($field);
+    
+    $filedtmpv = $_REQUEST['pnsk_'.$field];
+    if(isset($fieldtmpv)){
+    	$hmorig[$field] = $fieldtmpv;	
+    }
+
+	if($field == null || $field == ''){
+		continue;
+	}
+	if($fieldinputtype == 'hidden'){
+        $hiddenfields .= "<input type=\"hidden\" name=\"".$field."\" id=\"".$field."\" value=\"".$hmorig[$field]."\"/>\n";
+    }
+    if($gtbl->filterHiddenField($field, $opfield,$timefield)){
+        continue;
+    }
+    if($field == 'password'){
+        $hmorig[$field] = '';
+        continue;
+    }
+    else if($fieldinputtype == 'file'){
+		continue;
+	}
+
+    if($closedtr == 1){
+        $out .= "<tr height=\"30px\" valign=\"middle\"  onmouseover=\"javascript:this.style.backgroundColor='"
+        	.$hlcolor."';\" onmouseout=\"javascript:this.style.backgroundColor='';\">";
+        $closedtr = 0; $opentr = 1;
+    }
+
+    if($fieldinputtype == 'select'){
+
+        if($gtbl->getSingleRow($field) == '1' && $opentr < 1){
+			$out .= "</tr><tr height=\"30px\" valign=\"middle\"  onmouseover=\"javascript:this.style.backgroundColor='"
+				.$hlcolor."';\" onmouseout=\"javascript:this.style.backgroundColor='';\">"; 
+		}
+
+		$out .= "<td nowrap>".$gtbl->getCHN($field).":&nbsp;</td>";
+		$out .= "<td> <select style=\"width:60px\" name=\"oppnsk$field\" id=\"oppnsk$field\">".$gtbl->getLogicOp($field)."</select> "
+			.$gtbl->getSelectOption($field, $hmorig[$field],'',0,$gtbl->getSelectMultiple($field))." <br/> "
+			.$gtbl->getMemo($field)." <input type=\"hidden\" id=\"".$field."_select_orig\" name=\"".$field
+			."_select_orig\" value=\"".$hmorig[$field]."\" /></td>";
+		$opentr = 0;
+
+        if($gtbl->getSingleRow($field) == '1'){
+			$out .= "</tr><tr height=\"30px\" valign=\"middle\"  onmouseover=\"javascript:this.style.backgroundColor='"
+				.$hlcolor."';\" onmouseout=\"javascript:this.style.backgroundColor='';\">"; $opentr = 1;
+		}
+
+    }
+    else{
+
+		$out .= "<td nowrap ".$gtbl->getCss($field)."> ".$gtbl->getCHN($field).": </td><td> "
+			. "<select style=\"width:60px\" name=\"oppnsk$field\" id=\"oppnsk$field\">"
+			.$gtbl->getLogicOp($field)."</select> <input type=\"text\" id=\"pnsk"
+			.$field."\" name=\"pnsk".$field."\" "
+			."value=\"".$hmorig[$field]."\" ".$gtbl->getJsAction($field).$gtbl->getAccept($field)." "
+			.$gtbl->getReadOnly($field)." /> <br/> ".$gtbl->getMemo($field)."</td>";
+		$opentr = 0;
+
+    }
+
+    $out .= $gtbl->getDelayJsAction($field);       
+
+    $columni++;
+
+    if($columni % $colsPerRow == 0){
+        $out .= "</tr>";
+        $closedtr = 1;
+    }
+
+    if(++$rows % 6 == 0 && $closedtr == 1){
+        $out .= "<tr height=\"30px\" valign=\"middle\"  onmouseover=\"javascript:this.style.backgroundColor='"
+        	.$hlcolor."';\" onmouseout=\"javascript:this.style.backgroundColor='';\" ><td style=\"border-top: 1px dotted #cccccc; "
+        	."vertical-align:middle;\" colspan=\"".$my_form_cols."\">  </td> </tr>";
+    }
+
+}
+
+$out .= "<tr height=\"10px\"><td style=\"border-top: 1px dotted #cccccc; vertical-align:middle;\" colspan=\"".$my_form_cols."\">  </td></tr>";
+$out .= "<tr><td colspan=\"".$my_form_cols."\" align=\"center\">"
+	."条件之间关系: <select id='pnsm' name='pnsm'><option value='and'>并且</option> <option value='or'>或者</option> </select> "
+	."&nbsp;&nbsp;&nbsp;&nbsp;<input type=\"submit\" name=\"addsub\" id=\"addsub\" value=\"递交\" "
+	."onclick=\"javascript:doActionEx(this.form.name,'actarea');\" /> \n";
+$out .= "<input type=\"hidden\" id=\"id\" name=\"id\" value=\"".$id."\"/>\n ".$hiddenfields."\n";
+$out .= "&nbsp;&nbsp;&nbsp;&nbsp;<input type=\"button\" name=\"cancelbtn\" value=\"取消\" "
+	."onclick=\"javascript:switchArea('contentarea_outer','off');\" /> </td></tr>";
+$out .= "</table> </form>  </fieldset>  <br/>";
+
+?>
