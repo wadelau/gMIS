@@ -327,7 +327,13 @@ if(startsWith($act,'add') || startsWith($act, "modify")){
 
     include("./act/updatefield.php");
 
-}else{
+}
+else if($act == 'deepsearch'){
+
+    include("./act/deepsearch.php");
+
+}
+else{
 
     $out .= "Ooops! No such action:[$act].<br/>&nbsp;\n";
 }
