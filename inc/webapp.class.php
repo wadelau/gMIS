@@ -367,6 +367,7 @@ class WebApp implements WebAppInterface{
         if(strpos($fieldtype, "int") !== false
             || strpos($fieldtype, "float") !== false
             || strpos($fieldtype, "double") !== false
+			|| strpos($fieldtype, "decimal") !== false
             || strpos($fieldtype, "date") !== false){
             
             $isNumeric = 1;

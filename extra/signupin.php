@@ -32,6 +32,7 @@ if($act == 'signin'){
     */
     $smt->assign('action',$url.'&act=dosignin');
     $smt->assign('title','用户登录');
+	$smt->assign('bkl', $_REQUEST['bkl']);
 
 }else if($act == 'dosignin'){
     
@@ -55,8 +56,10 @@ if($act == 'signin'){
             $userid = $_SESSION[UID];
             $result .= '<br/><br/>很好! 登录成功！ 欢迎回来, '.$user->getEmail()." !";
 
-            if(false){ 
-                //- go to $thisurl ?
+			$bkl = Base62x::decode($_REQUEST['bkl']);
+            if($bkl != ''){ 
+                //- go to $thisurl
+				$nexturl = $bkl;
             }else{
                 //- 
                 $nexturl = $rtvdir."/";

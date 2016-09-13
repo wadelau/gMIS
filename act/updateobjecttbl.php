@@ -28,7 +28,7 @@ if($hm[0]){
     $hm = $hm[1];
     #print_r($hm);
     foreach($hm as $k=>$v){
-       $tbl = $v['Tables_in_'.strtolower($db)];
+       $tbl = $v['Tables_in_'.trim($db)];
         #print "$k => ".$tbl."\n"; 
        if($tbl != ""){
            $tmpconf = GTbl::xml2hash($xmlpathpre, $elementsep, $db, $tbl);

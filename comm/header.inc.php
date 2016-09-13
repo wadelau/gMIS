@@ -38,6 +38,7 @@ require_once($appdir."/class/user.class.php");
 require_once($appdir."/comm/tools.function.php");
 require($appdir."/class/gtbl.class.php");
 require($appdir."/class/pagenavi.class.php");
+require($appdir."/class/base62x.class.php");
 
 if(!isset($user)){
     $user = new User(); 
@@ -46,6 +47,8 @@ if(!isset($user)){
 
 $userid = '';
 $out = ''; $htmlheader = '';
+$thisUrl = 'http' . (isset($_SERVER['HTTPS']) ? 's' : '') . '://' . "{$_SERVER['HTTP_HOST']}/{$_SERVER['REQUEST_URI']}";
+
 if(array_key_exists(UID,$_SESSION) && $_SESSION[UID] != '')
 {
 	$userid = $_SESSION[UID];
@@ -56,7 +59,7 @@ if($userid != ''){
 }else if(strpos($_SERVER['PHP_SELF'],'signupin.php') === false
 	&& strpos($_SERVER['PHP_SELF'],'readtblfield.php') === false){
 
-    header("Location: ".$rtvdir."/extra/signupin.php?act=signin&bkl=thisurl");    
+    header("Location: ".$rtvdir."/extra/signupin.php?act=signin&bkl=".Base62x::encode($thisUrl));    
 	exit(0);
 }
 
@@ -135,7 +138,7 @@ if($isoput){
 
             $welcomemsg .= "<a href='".$rtvdir."/ido.php?tbl=info_usertbl&id=".$userid."&act=view' class='whitelink'>";
             $welcomemsg .= $user->getEmail()."</a> !</b>&nbsp; ";
-            $welcomemsg .= "<a href=\"".$rtvdir."/extra/signupin.php?act=resetpwd&userid=".$userid."\" class='whitelink'>重置密码</a> &nbsp;.&nbsp;<a href=\"".$rtvdir."/extra/signupin.php?act=signout&bkl=thisurl\"";
+            $welcomemsg .= "<a href=\"".$rtvdir."/extra/signupin.php?act=resetpwd&userid=".$userid."\" class='whitelink'>重置密码</a> &nbsp;.&nbsp;<a href=\"".$rtvdir."/extra/signupin.php?act=signout&bkl=".Base62x::encode($thisUrl)."\"";
             $welcomemsg .= " class='whitelink'>退出</a> &nbsp;";
 
             $menulist = '';
@@ -183,7 +186,6 @@ if(true){ # used in mix mode to cover all kinds of table with or without tbl pre
 	$tbl = (new GTbl($tbl, null, ''))->setTbl($tbl);
 	if($tbl != $oldtbl){
 		$_REQUEST['tbl'] = $tbl;
-		debug("table remedy done. table:[$tbl] with no oldtbl:[".$oldtbl."]");
 	}
 }
 

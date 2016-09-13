@@ -27,7 +27,7 @@ class PageNavi extends WebApp{
        $url = $file."?".preg_replace("/&pnpn=([0-9]*)/","",$query);
        $this->hmf['url'] = $url;
        $para = array();
-       $pdef = array('pnpn'=>1,'pnps'=>30,'pntc'=>0);
+       $pdef = array('pnpn'=>1,'pnps'=>50,'pntc'=>0);
        foreach($_REQUEST as $k=>$v){
            $para[$k] = ($v==''||$v==null)?$pdef[$k]:$v;
            #$this->hmf[$k]=$para[$k];

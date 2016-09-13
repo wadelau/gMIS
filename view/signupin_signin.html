@@ -17,8 +17,16 @@ body {
 -->
 </style>
 <script language="JavaScript">
-function correctPNG()
-{
+//- go to top window
+//- added by Xenxin@ufqi.com, Tue Sep 13 09:43:42 CST 2016
+if(true){
+    if (top.frames.length>0){
+        window.setTimeout("top.location = window.location;",100);
+    }
+}
+
+
+function correctPNG(){
     var arVersion = navigator.appVersion.split("MSIE")
     var version = parseFloat(arVersion[1])
     if ((version >= 5.5) && (document.body.filters)) {
@@ -35,9 +43,9 @@ function correctPNG()
              if (img.align == "right"){ imgStyle = "float:right;" + imgStyle; }
              if (img.parentElement.href){ imgStyle = "cursor:hand;" + imgStyle; }
              var strNewHTML = "<span " + imgID + imgClass + imgTitle
-             + " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
-             + "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
-             + "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"; 
+				+ " style=\"" + "width:" + img.width + "px; height:" + img.height + "px;" + imgStyle + ";"
+				+ "filter:progid:DXImageTransform.Microsoft.AlphaImageLoader"
+				+ "(src=\'" + img.src + "\', sizingMethod='scale');\"></span>"; 
              img.outerHTML = strNewHTML;
              j = j-1;
           }
@@ -123,6 +131,7 @@ function correctPNG()
                             </tr>
                             -->
                         </table>
+						<input type="hidden" name="bkl" id="bkl" value="{$bkl}"/>
                     </form>
 
        </td> 

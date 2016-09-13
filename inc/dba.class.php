@@ -6,7 +6,7 @@
  * Thu Sep 11 16:34:20 CST 2014
  */
 
-ini_set("memory_limit","256M");
+ini_set("memory_limit","512M");
 
 require(__ROOT__."/inc/conn.class.php");
 include(__ROOT__."/inc/mysql.class.php");

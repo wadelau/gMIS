@@ -82,8 +82,7 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
 					mkdir($appdir."/".$filedir);	
 				}
 				$filename = basename($_FILES[$field]['name']);
-				$filename = `$appdir/comm/base62x -encode "$filename"`;
-				$filename = str_replace("\n", "", $filename);
+				$filename = Base62x::encode($filename);
                 $filename = date("dHi")."_".substr($filename,0,64).".".$tmpfileext;
 				#print __FILE__.": filename:[$filename]";
                 if(move_uploaded_file($_FILES[$field]['tmp_name'], $appdir."/".$filedir."/".$filename)){
@@ -91,7 +90,7 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
                 }else{
                     $out .= __FILE__.": file:[$filename] fail. 201202251535";
                 }
-                #$fieldv = $filedir."/".$filename; 
+                #$fieldv = $filedir."/".$filename;
                 $fieldv = $shortDirName."/".$filedir."/".$filename; 
                 $filearr['filename'] = basename($_FILES[$field]['name']); # sometimes original name may be different with uploadedfile.
                 $filearr['filesize'] = $_FILES[$field]['size'];
@@ -99,9 +98,6 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
             }
 
         }else if($gtbl->getSelectMultiple($field)){
-
-            #print __FILE__;
-			#print_r($_REQUEST);
 
             if(is_array($_REQUEST[$field])){ 
                 $fieldv = implode(",", $_REQUEST[$field]);

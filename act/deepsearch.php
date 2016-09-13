@@ -82,7 +82,7 @@ for($hmi=$min_idx; $hmi<=$max_idx;$hmi++){
         $hiddenfields .= "<input type=\"hidden\" name=\"".$field."\" id=\"".$field."\" value=\"".$hmorig[$field]."\"/>\n";
     }
     if($gtbl->filterHiddenField($field, $opfield,$timefield)){
-        continue;
+        #continue;
     }
     if($field == 'password'){
         $hmorig[$field] = '';

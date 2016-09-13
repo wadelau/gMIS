@@ -73,7 +73,14 @@ class GTbl extends WebApp{
 		
 		$this->prttbl = $tbl;
 		$tbl .= $this->getTblRotateName($tblrotate);
-		#error_log(__FILE__.": tbl:[".$this->prttbl."] +span:[".$tbl."]");
+		if($hmconf[$this->taglist['table'].$this->sep.$this->prttbl] != $this->prttbl){
+		  if(startsWith($this->prttbl, Gconf::get('tblpre'))){
+		      $this->prttbl = str_replace(Gconf::get('tblpre'), '', $this->prttbl);
+		  }
+		  else{
+		      error_log(__FILE__.":gtbl.class: error with tblname:[".$this->prttbl."].");
+		  }
+		}
 
 		$this->setTbl($tbl);
 		$this->tbl = $tbl;
@@ -869,17 +876,33 @@ class GTbl extends WebApp{
 			$tbl = parent::getTbl();	
 		}	
 
-		$hm = parent::execBy('show tables like "%'.$tbl.'%" ');
+		$tblpre = Gconf::get('tblpre');
+		$hasTblpre = startsWith($tbl, $tblpre);
+		$hm = parent::execBy('show tables like "%'.$tbl.'" ');
 		if($hm[0]){
 			$tmpv = '';
 			foreach($hm[1] as $rk=>$rv){
 				foreach($rv as $vk=> $vv){
-					$tmpv = $vv;
-					#debug(__FILE__.": read k:$rk, vk:$vk vv:$vv");
-					break; # just the first row
+				    if(!$hasTblpre && startsWith($vv, $tblpre)){
+				        $tmpv = $vv;
+				        break;
+				    }
+					else if($hasTblpre && substr($vv, strpos($vv, '_')+1) == $tbl){
+                        $tmpv = $vv;
+                        break;
+                    }
+				    else if($vv == $tbl){
+				        $tmpv = $vv;
+				        break;
+				    }
 				}
 			}
-			$realtbl = $tmpv;
+			if($tmpv != ''){
+			    $realtbl = $tmpv;
+			}
+			else{
+			    debug(__FILE__.": unable to find real tbl for [$tbl].");
+			}
 			#debug(__FILE__.": get result: real tbl:[".$realtbl."]");
 			
 		}

@@ -190,7 +190,11 @@ if(startsWith($act,'add') || startsWith($act, "modify")){
 					   $fhref = $gtbl->getHref($field, $rec);
 					   if(strpos($rec[$field], "$shortDirName/") !== false){ $rec[$field] = str_replace("$shortDirName/", "", $rec[$field]); }
 					   if(count($fhref) == 0){
-							$fhref = "<a href=\"javascript:void(0);\" onclick=\"window.open('".$rec[$field]."');\" title=\"点击大图或者下载 ".$rec[$field]."\">"; 	   
+						   $fieldT = '';
+						   if($rec[$field] != ''){ 
+								$fieldT = Base62x::decode(substr($rec[$field], strpos($rec[$field],'_')+1)).' -- '; 
+							}
+							$fhref = "<a href=\"javascript:void(0);\" onclick=\"window.open('".$rec[$field]."');\" title=\"".$fieldT."点击大图或者下载 ".$rec[$field]."\">"; 	   
 						}
 						else{
 							if(strpos($fhref[0],"javascript") !== false){
