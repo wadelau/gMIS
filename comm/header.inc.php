@@ -47,7 +47,11 @@ if(!isset($user)){
 
 $userid = '';
 $out = ''; $htmlheader = '';
-$thisUrl = 'http' . (isset($_SERVER['HTTPS']) ? 's' : '') . '://' . "{$_SERVER['HTTP_HOST']}/{$_SERVER['REQUEST_URI']}";
+$reqUri = $_SERVER['REQUEST_URI'];
+$reqUri = startsWith($reqUri, '/') ? $reqUri : '/'.$reqUri;
+$reqUri = str_replace('jdo.php', 'ido.php', $reqUri);
+
+$thisUrl = 'http' . (isset($_SERVER['HTTPS']) ? 's' : '') . '://' . "{$_SERVER['HTTP_HOST']}{$reqUri}";
 
 if(array_key_exists(UID,$_SESSION) && $_SESSION[UID] != '')
 {
