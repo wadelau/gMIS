@@ -108,8 +108,8 @@ for($hmi=$min_idx; $hmi<=$max_idx;$hmi++){
 		$out .= "<td nowrap>".$gtbl->getCHN($field).":&nbsp;</td>";
 		$out .= "<td> <select style=\"width:60px\" name=\"oppnsk$field\" id=\"oppnsk$field\">".$gtbl->getLogicOp($field)."</select> "
 			.$gtbl->getSelectOption($field, $hmorig[$field],'',0,$gtbl->getSelectMultiple($field))." <br/> "
-			.$gtbl->getMemo($field)." <input type=\"hidden\" id=\"".$field."_select_orig\" name=\"".$field
-			."_select_orig\" value=\"".$hmorig[$field]."\" /></td>";
+			.$gtbl->getMemo($field)." <input type=\"hidden\" id=\"pnsk".$field."\" name=\"pnsk".$field
+			."\" value=\"".$hmorig[$field]."\" /></td>";
 		$opentr = 0;
 
         if($gtbl->getSingleRow($field) == '1'){

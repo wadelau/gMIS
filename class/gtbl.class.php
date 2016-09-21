@@ -599,11 +599,17 @@ class GTbl extends WebApp{
             if($file == 'THIS'){
                 $file = $result[$field];
             }
+			else if(strpos($file, 'THIS') !== false){
+				$file = str_replace('THIS',$result[$field], $file); # <href>http://THIS::a=1::跳转登录::blank=1</href>
+			}
             $pArr = explode(",", $vArr[1]);
             $title = $vArr[2];
             if($title == 'THIS'){
                 $title = $result[$field];
             }
+			else if(strpos($title, 'THIS') !== false){
+				$title = str_replace('THIS',$result[$field], $title);
+			}  
             foreach($pArr as $k=>$v){
                 $para = explode("=", $v);
                 $tUrl .= $para[0].'=';
