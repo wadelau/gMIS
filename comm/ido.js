@@ -557,7 +557,9 @@ function sendNotice(isSucc, sMsg){
 function registerAct(tObj){
     if(tObj.status == 'onload'){
         //window.alert('delaytime:['+tObj.delaytime+']');
-        window.setTimeout(unescape(tObj.action), tObj.delaytime*1000);
+		var actx = unescape(tObj.action);
+		actx = actx.replace('+', ' '); //- need to be replaced with -Base62x
+        window.setTimeout(actx, tObj.delaytime*1000);
     }
 }
 //-- register an action to be run in a few seconds, end

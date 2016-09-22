@@ -86,7 +86,7 @@ if(startsWith($act,'add') || startsWith($act, "modify")){
             continue;
         }
         $dispi++;
-        $out .= "<td valign=\"middle\"><a href=\"javascript:void(0);\" title=\"Sort by ".$gtbl->getCHN($field)."\" onclick=\"doAction('".str_replace("&pnob","&xxpnob",$url)."&act=list&pnob".$field."=".($navi->getAsc($field)==0?1:0)."')\">".$gtbl->getCHN($field)."</a></td>";
+        $out .= "<td valign=\"middle\"><a href=\"javascript:void(0);\" title=\"Sort by ".$gtbl->getCHN($field)."\" onclick=\"doAction('".str_replace("&pnob","&xxpnob",$url)."&act=list&pnob".$field."=".($navi->getAsc($field)==0?1:0)."')\">".$gtbl->getCHN($field)."&#8639;&#8642;</a></td>";
     }
     $out .= "<!-- <td valign=\"middle\"> 操作 </td> --> </tr>";
     ## list-sort end
@@ -134,7 +134,8 @@ if(startsWith($act,'add') || startsWith($act, "modify")){
     if($hm[0]){
         $hm = $hm[1]; $i = 0; $fstfields = ''; $hmsum = array();
         # record start
-        foreach($hm as $k=>$rec){ 
+        foreach($hm as $k=>$rec){
+			$gtbl->set($gtbl->resultset, $rec);
            $bgcolor = "#DCDEDE";
            if($i%2 == 0){
                 $bgcolor = "";
@@ -235,8 +236,9 @@ if(startsWith($act,'add') || startsWith($act, "modify")){
                    }
 				   $readonly = $gtbl->getReadOnly($field);
                    if($inputtype == 'textarea'){ $readonly = true; }
-                   $out .= "<td ondblclick=\"javascript:switchEditable('othercont_div_".$id."_".$field."','".$field."','".$inputtype."','','".$url."&act=updatefield&field=".$field."&".$gtbl->getMyId()."=".$id."','".$readonly."');\" title=\"".str_replace("\"","", $fv_orig)."\" ".$gtbl->getCss($field)."><div id=\"othercont_div_".$id."_".$field."\">".$fv_short."</div></td>";
-                   $listid[$dispi] = $rec[$field];
+                   $out .= "<td ondblclick=\"javascript:switchEditable('othercont_div_".$id."_".$field."','".$field."','".$inputtype."','','".$url."&act=updatefield&field=".$field."&".$gtbl->getMyId()."=".$id."','".$readonly."');\" title=\"".str_replace("\"","", $fv_orig)."\" ".$gtbl->getCss($field)." ".$gtbl->getJsAction($field, $rec)."><div id=\"othercont_div_".$id."_".$field."\">".$fv_short."</div></td>";
+                   $out .= $gtbl->getDelayJsAction($field);
+				   $listid[$dispi] = $rec[$field];
                }
                # hmsum, sum or count each item
                if($gtbl->getInputType($field) != 'select' 

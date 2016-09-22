@@ -61,7 +61,7 @@ class GTbl extends WebApp{
 			);
 
 	private static $MAX_FIELD_LIST = 99;
-
+	const RESULTSET = 'resultset';
 
 	//-
 	function __construct($tbl, $hmconf, $sep, $tblrotate=null){
@@ -70,6 +70,7 @@ class GTbl extends WebApp{
 		
 		$this->hmconf = $hmconf;
 		$this->sep = $sep;
+		$this->resultset = self::RESULTSET;
 		
 		$this->prttbl = $tbl;
 		$tbl .= $this->getTblRotateName($tblrotate);
@@ -316,9 +317,11 @@ class GTbl extends WebApp{
         return $tmpstr = $tmpstr==null?'':$tmpstr;
     }
 
-    public function getJsAction($field){
+    public function getJsAction($field, $result=null){
         $tmpstr = $this->hmconf[$this->taglist['field'].$this->sep.$field.$this->sep.$this->taglist['jsaction']];
         $tmpstr = $tmpstr==null?'':$tmpstr;
+		$tmpstr = str_replace('THIS_ID', $result[$this->getMyId()], $tmpstr);
+		$tmpstr = str_replace('THIS', $result[$field], $tmpstr);
         $jsact = '';
         if($tmpstr != ''){
             $mularr = explode("|",$tmpstr);
@@ -699,6 +702,11 @@ class GTbl extends WebApp{
     public function getDelayJsAction($field){
         $tmpstr = $this->hmconf[$this->taglist['field'].$this->sep.$field.$this->sep.$this->taglist['delayjsaction']];
         $tmpstr = $tmpstr==null?'':$tmpstr;
+		if($result == null){
+			$result = $this->get($this->resultset);
+		}
+		$tmpstr = str_replace('THIS_ID', $result[$this->getMyId()], $tmpstr);
+		$tmpstr = str_replace('THIS', $result[$field], $tmpstr);
         $jsact = "";
         if($tmpstr != ""){
             $arr = explode("|", $tmpstr);
