@@ -705,9 +705,11 @@ class GTbl extends WebApp{
 		if($result == null){
 			$result = $this->get($this->resultset);
 		}
-		$tmpstr = str_replace('THIS_ID', $result[$this->getMyId()], $tmpstr);
-		$tmpstr = str_replace('THIS', $result[$field], $tmpstr);
-        $jsact = "";
+		if(is_array($result)){
+			$tmpstr = str_replace('THIS_ID', $result[$this->getMyId()], $tmpstr);
+			$tmpstr = str_replace('THIS', $result[$field], $tmpstr);
+        }
+		$jsact = "";
         if($tmpstr != ""){
             $arr = explode("|", $tmpstr);
             foreach($arr as $k=>$v){
