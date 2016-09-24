@@ -22,6 +22,7 @@ function getSmtTpl($file, $act){
  * @param array $post values to send 
  * @param array $options for cURL 
  * @return string 
+ ***** WILL BE REPLACED WITH WebApp::setBy(':url', ARGS);
  */ 
 function curlPost($url, array $post = NULL, array $options = array()){ 
     $defaults = array( 
@@ -122,10 +123,11 @@ function inString($needle, $haystack){
     return ($pos === false ? false : true);
 }
 
-function mkUrl($file, $_REQU){
+function mkUrl($file, $_REQU, $gtbl=null){
     $url = $file."?";
    
-    $needdata = array('id','tbl','db','oid','otbl','oldv','field','linkfield','linkfield2','tit','tblrotate');
+    $needdata = array('id','tbl','db','oid','otbl','oldv','field','linkfield',
+		'linkfield2','tit','tblrotate', $gtbl->getMyId());
     foreach($_REQU as $k=>$v){
         if(in_array($k, $needdata) || startsWith($k,'pn') || startsWith($k, "oppn")){
             if($k == 'oldv'){

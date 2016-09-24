@@ -56,7 +56,7 @@ if($lastLinkName != $tit){ $module_path .= "&nbsp;|&nbsp;".$tit; }
 
 #print __FILE__.": module_path:[$module_path] hm:[".$gtbl->toString($hm)."] tbl:[$tbl] levelcode:[$levelcode] codelist:[$codelist]\n";
 
-$url = mkUrl("jdo.php", $_REQUEST); # ".($isheader?"</h3>":"")." 
+$url = mkUrl("jdo.php", $_REQUEST, $gtbl); # ".($isheader?"</h3>":"")." 
 
 $out .= "<table align=\"center\" width=\"98%\"  style=\"background:transparent\">";
 $out .= "<tr><td width=\"40%\" ".($isheader?"class=\"f17px\"":"").">  <b> &Pi; <a href=\"./\">首页</a> <span class=\"f17px\">&rarr;</span> ".$module_path." </b> </td>";

@@ -11,7 +11,7 @@ require("./comm/tblconf.php");
 # check tbl action
 require("./act/tblcheck.php");
 
-$url = mkUrl("jdo.php",$_REQUEST);
+$url = mkUrl("jdo.php",$_REQUEST, $gtbl);
 $list_disp_limit = 28;
 #print "url:[$url]\n";
 # act handler
@@ -311,6 +311,18 @@ if(startsWith($act,'add') || startsWith($act, "modify")){
         //$out .= " <script> parent.sendLinkInfo('".implode(",",$listid)."','w',''); </script> ";
         $out .= " <script type=\"text/javascript\"> parent.sendLinkInfo('".urlencode(substr($fstfields, 0, strlen($fstfields)-1))."','w','".$_REQUEST['field']."'); </script> ";
         $out .= "</td></tr>";
+    }
+	else{
+        $queryFields = '';
+        foreach($_REQUEST as $k=>$v){
+            if(startsWith($k, 'pnsk')){
+                $queryFields .= $gtbl->getCHN(str_replace('pnsk', '', $k))." "
+				.$_REQUEST['op'.$k]." ".$v." <a href=\"javascript:pnAction('"
+				.str_replace($k, 'old'.$k, $url)."');\" title='Remove this filter/去掉此条件'>"
+				."[X]</a><br/>";
+            }
+        }
+        $out .= "<tr><td colspan='".$max_disp_cols."' style='text-align:center'><br/>No Data for These Criterions. / 没有符合条件的数据.<br/><br/>".$queryFields."<br/>1609240951<br/></td></tr>";
     }
     $out .= "</table>";
     # list end

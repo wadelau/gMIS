@@ -558,7 +558,7 @@ function registerAct(tObj){
     if(tObj.status == 'onload'){
         //window.alert('delaytime:['+tObj.delaytime+']');
 		var actx = unescape(tObj.action);
-		actx = actx.replace('+', ' '); //- need to be replaced with -Base62x
+		actx = actx.replace('+', ' '); //- need to be replaced with -Base62x, 09:14 24 September 2016
         window.setTimeout(actx, tObj.delaytime*1000);
     }
 }
