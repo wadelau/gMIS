@@ -9,6 +9,7 @@
  	https://ufqi.com/dev/base62x/?_via=-naturedns
  * Tue Aug  9 21:18:14 CST 2016
  * bugfix, 13:39 13 September 2016
+ * bugfix, Thu Sep 29 04:06:26 UTC 2016
  */
 
 
@@ -25,7 +26,6 @@ class Base62x {
 	const DECD = "-dec";
 	const DEBG = "-v";
 	const CVTN = "-n";
-	/* for PHP7.0-, move arrays into functions */
 	const b62x = array('0','1','2','3','4','5','6','7','8','9',
 		'A','B','C','D','E','F','G','H','I','J','K','L','M','N',
 		'O','P','Q','R','S','T','U','V','W','X','Y','Z','a','b',
@@ -35,7 +35,6 @@ class Base62x {
 	const xpos = 64; # b62x[64] = 'x'
 	static $rb62x = array();
 	const ascmax = 127;
-	/* for PHP7.0-, move arrays into functions */
 	const asclist = array('4','5','6','7','8','9', '0',
 		'A','B','C','D','E','F','G','H','I','J','K','L','M','N',
 		'O','P','Q','R','S','T','U','V','W','X','Y','Z','a','b',
@@ -83,12 +82,13 @@ class Base62x {
 			$op = array();
 			$i = 0; $m = 0;
 			if($asctype == 1){
+				$ixtag = ord($xtag);
 				do{
 					$inputArr[$i] = ord($inputArr[$i]);
 					if($ascidx[$inputArr[$i]] > -1){
 						$op[$m] = $xtag; $op[++$m] = $ascidx[$inputArr[$i]];	
 					}
-					else if($inputArr[$i] == $xtag){
+					else if($inputArr[$i] == $ixtag){
 						$op[$m] = $xtag; $op[++$m] = $xtag;
 					}
 					else{
@@ -97,7 +97,7 @@ class Base62x {
 					$m++;
 				}
 				while(++$i < $inputlen);
-				$op[$m++] = $xtag; # asctype has a tag 'x' appended
+				$op[++$m] = $xtag; # asctype has a tag 'x' appended
 			}
 			else{
 				$c0 = 0; $c1 = 0; $c2 = 0; $c3 = 0;

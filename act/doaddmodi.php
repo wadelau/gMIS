@@ -163,7 +163,7 @@ if($hm[0]){
         $id = $gtbl->getId();
     }
 	# read newly-written data, Tue Sep 27 13:28:06 CST 2016
-	$hmNew = $gtbl->getBy('*', 'id="'.$id.'"');
+	$hmNew = $gtbl->getBy('*', $gtbl->myId.'="'.$id.'"');
 	if($hmNew[0]){
 		$hmNew = $hmNew[1][0];
 		#debug(__FILE__.": resultset-tag:[".$gtbl->resultset."]");
