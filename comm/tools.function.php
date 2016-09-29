@@ -56,9 +56,8 @@ function curlPost($url, array $post = NULL, array $options = array()){
 function sendMail($to,$subject,$body, $from='', $local=0){
     $rtnarr = array();
 	
+	$from = $from=='' ? $_CONFIG['adminmail'] : $from;
 	if($local == 0){
-		$from = $from==''?$_CONFIG['adminmail']:$from;
-
 		$mailstr = 'To:'.$to.'\n';
 		$mailstr .= 'Subject:'.$subject.'\n';
 		$mailstr .= 'Content-Type:text/html;charset=UTF-8\n';
@@ -75,18 +74,17 @@ function sendMail($to,$subject,$body, $from='', $local=0){
 	}
 	else if($local == 1){
         global $_CONFIG;
-        include($_CONFIG['appdir']."/mod/mailer.class.php");
+        include($_CONFIG['appdir']."/class/mailer.class.php");
 
         $_CONFIG['mail_smtp_server'] = "smtp.163.com";
         $_CONFIG['mail_smtp_username'] = "wadelau@163.com";
-        $_CONFIG['mail_smtp_password'] = "my.minina.123456";
+        $_CONFIG['mail_smtp_password'] = "";
         $_CONFIG['isauth'] = true;
         $_CONFIG['mail_smtp_fromuser'] = $_CONFIG['mail_smtp_username'];
 
         $mail = new Mailer($_CONFIG['mail_smtp_server'],25,$_CONFIG['isauth'],$_CONFIG['mail_smtp_username'],$_CONFIG['mail_smtp_password']);
 
         $mail->debug = true;;
-        $from==''?'bangco@'.$_CONFIG['agentname']:$from;
         if($_CONFIG['isauth']){
             $from = $_CONFIG['mail_smtp_fromuser'];
         }

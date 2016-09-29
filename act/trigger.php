@@ -4,6 +4,9 @@
 
 error_log(__FILE__.": act:[$act] id:[$id] triggers:[".$triggers=$gtbl->getTrigger($id)."]");
 $IDTAG = 'id';
+if(!isset($fieldlist)){
+	$fieldlist = array();
+}
 #if($act == 'list-dodelete'){
 if(1){
     if($id != ''){
@@ -118,6 +121,7 @@ foreach($fieldlist as $i=>$field){
 
                 }else if($tArr[1] == 'extraact'){ # see xml/hss_tuandui_shouzhitbl.xml
                     $extraact = $tArr[2];
+					$args = $tArr[3];
                     include($appdir."/".$extraact);
 
                 }    

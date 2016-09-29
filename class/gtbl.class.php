@@ -320,8 +320,7 @@ class GTbl extends WebApp{
     public function getJsAction($field, $result=null){
         $tmpstr = $this->hmconf[$this->taglist['field'].$this->sep.$field.$this->sep.$this->taglist['jsaction']];
         $tmpstr = $tmpstr==null?'':$tmpstr;
-		$tmpstr = str_replace('THIS_ID', $result[$this->getMyId()], $tmpstr);
-		$tmpstr = str_replace('THIS', $result[$field], $tmpstr);
+		$tmpstr = $this->fillThis($tmpstr, $field);
         $jsact = '';
         if($tmpstr != ''){
             $mularr = explode("|",$tmpstr);
@@ -575,8 +574,10 @@ class GTbl extends WebApp{
             $tmpstr = $this->hmconf[$this->taglist['table'].$this->sep.$this->prttbl.$this->sep.$this->taglist['trigger']];
         }else{
             $tmpstr = $this->hmconf[$this->taglist['field'].$this->sep.$field.$this->sep.$this->taglist['trigger']];
-    	}    
-        return $tmpstr = $tmpstr==null?'':$tmpstr;
+    	}
+		$tmpstr = $tmpstr==null ? '' : $tmpstr;
+		$tmpstr = $this->fillThis($tmpstr, $field);		
+        return $tmpstr;
     }
 
     public function setTrigger($field,$trigger){
@@ -702,13 +703,7 @@ class GTbl extends WebApp{
     public function getDelayJsAction($field){
         $tmpstr = $this->hmconf[$this->taglist['field'].$this->sep.$field.$this->sep.$this->taglist['delayjsaction']];
         $tmpstr = $tmpstr==null?'':$tmpstr;
-		if($result == null){
-			$result = $this->get($this->resultset);
-		}
-		if(is_array($result)){
-			$tmpstr = str_replace('THIS_ID', $result[$this->getMyId()], $tmpstr);
-			$tmpstr = str_replace('THIS', $result[$field], $tmpstr);
-        }
+		$tmpstr = $this->fillThis($tmpstr, $field);
 		$jsact = "";
         if($tmpstr != ""){
             $arr = explode("|", $tmpstr);
@@ -936,6 +931,31 @@ class GTbl extends WebApp{
 
 		return $realtbl;
 
+	}
+	
+	//-
+	//- replace THIS* in settings, 14:23 27 September 2016
+	function fillThis($tmpstr, $field=null){
+
+		if($tmpstr != '' && strpos($tmpstr, 'THIS') > 0){
+
+		if($result == null){
+        	$result = $this->get($this->resultset);	
+        }
+        #debug(__FILE__.": tmpstr:[$tmpstr] resultset:");
+        #debug($result);
+        if(is_array($result)){
+			$tmpstr = str_replace('THIS_ID', $result[$this->getMyId()], $tmpstr);
+			$tmpstr = str_replace('THIS_TBL', $this->getTbl(), $tmpstr);
+			if($field != null && $field != ''){
+				$tmpstr = str_replace('THIS_'.$field, $result[$field], $tmpstr);
+				$tmpstr = str_replace('THIS', $result[$field], $tmpstr);
+			}
+		}
+
+		}
+        #debug(__FILE__.": tmpstr:[$tmpstr]");
+		return $tmpstr;
 	}
 
 }

@@ -3,7 +3,7 @@
 class Mailer  
 {  
   
-    function Mailer($relay_host = "", $smtp_port = 25,$auth = false,$user,$pass){  
+    function __construct($relay_host = "", $smtp_port = 25,$auth = false,$user,$pass){  
    
 		$this->debug = FALSE;  
 		

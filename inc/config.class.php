@@ -41,6 +41,8 @@ $conf['html_resp'] = '<!DOCTYPE html><html><head><title>RESP_TITLE</title></head
 $conf['auto_save_interval'] = 20; # ref extra/htmleditor
 $conf['auto_install'] = 'INSTALL_DONE';
 
+$conf['adminmail'] = 'system@local';
+
 # set them all
 Gconf::setConf($conf);
 global $_CONFIG; # will be used in page scripts

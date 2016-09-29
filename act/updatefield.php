@@ -38,6 +38,18 @@ if($hm[0]){
     $out .= "--SUCC--";
 }
 
+# read newly-written data, Tue Sep 27 13:28:06 CST 2016
+$hmNew = $gtbl->getBy('*', 'id="'.$id.'"');
+if($hmNew[0]){
+	$hmNew = $hmNew[1][0];
+	#debug(__FILE__.": resultset-tag:[".$gtbl->resultset."]");
+	$gtbl->set($gtbl->resultset, $hmNew);
+	#debug($gtbl->get($gtbl->resultset));
+}
+# some triggers bgn, added on Fri Mar 23 21:51:12 CST 2012
+include("./act/trigger.php");
+# some triggers end, added on Fri Mar 23 21:51:12 CST 2012
+
 $gtbl->setId(''); # clear targetId
 
 ?>
