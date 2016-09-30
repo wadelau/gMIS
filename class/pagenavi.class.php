@@ -157,7 +157,7 @@ class PageNavi extends WebApp{
                     $field = $arr[0];
                     $linkfield = $arr[1];
                 }
-				if(isset($_REQUEST[$field] && $_REQUEST[$field] != $v){
+				if(isset($_REQUEST[$field]) && $_REQUEST[$field] != $v){
 					$v = $_REQUEST[$field];
 				}
                 if(strpos($v,"tbl:") === 0){ #http://ufqi.com:81/dev/gtbl/ido.php?tbl=hss_dijietbl&tit=%E5%AF%BC%E6%B8%B8%E8%A1%8C%E7%A8%8B&db=&pnsktuanid=tbl:hss_findaoyoutbl:id=2 
@@ -181,7 +181,9 @@ class PageNavi extends WebApp{
                     if($fieldopv == null || $fieldopv == ''){
                         $fieldopv = "=";
                     }
-					
+					else{
+                        $fieldopv = str_replace('&lt;', '<', $fieldopv);
+                    }
 					if($fieldopv == '----'){
 						# omit...	
 					}
