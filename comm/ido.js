@@ -7,6 +7,7 @@
 //-- Mon Oct 27 15:58:46 CST 2014
 //-- 09:48 Wednesday, July 01, 2015
 //- with ido_proj.js , 10:37 Sunday, January 10, 2016
+//- wrap iId as string, 09:03 09 October 2016
 //-
 var currenttbl = '';
 var currentdb = '';
@@ -1108,10 +1109,10 @@ function showActList(nId, isOn, sUrl){
 
 	var sCont = '<p>';
 	
-	sCont += '&nbsp; &nbsp;&nbsp;<a href="javascript:void(0);" onclick="javascript:doActSelect(\'\', \''+sUrl+'\', '+nId+', \'view\');">查看View</a>&nbsp; &nbsp;&nbsp;';
-	sCont += '<br/>&nbsp; &nbsp;&nbsp;<a href="javascript:void(0);" onclick="javascript:doActSelect(\'\', \''+sUrl+'\', '+nId+', \'modify\');">修改Edit</a>&nbsp; &nbsp;&nbsp;';
-	sCont += '<br/>&nbsp; &nbsp;&nbsp;<a href="javascript:void(0);" onclick="javascript:doActSelect(\'\', \''+sUrl+'\', '+nId+', \'print\');">打印Print</a>&nbsp; &nbsp;&nbsp;';
-	sCont += '<br/>&nbsp; &nbsp;&nbsp;<a href="javascript:void(0);" onclick="javascript:doActSelect(\'\', \''+sUrl+'\', '+nId+', \'list-dodelete\');">删除Delete</a>&nbsp; &nbsp;&nbsp;';
+	sCont += '&nbsp; &nbsp;&nbsp;<a href="javascript:void(0);" onclick="javascript:doActSelect(\'\', \''+sUrl+'\', \''+nId+'\', \'view\');">查看View</a>&nbsp; &nbsp;&nbsp;';
+	sCont += '<br/>&nbsp; &nbsp;&nbsp;<a href="javascript:void(0);" onclick="javascript:doActSelect(\'\', \''+sUrl+'\', \''+nId+'\', \'modify\');">修改Edit</a>&nbsp; &nbsp;&nbsp;';
+	sCont += '<br/>&nbsp; &nbsp;&nbsp;<a href="javascript:void(0);" onclick="javascript:doActSelect(\'\', \''+sUrl+'\', \''+nId+'\', \'print\');">打印Print</a>&nbsp; &nbsp;&nbsp;';
+	sCont += '<br/>&nbsp; &nbsp;&nbsp;<a href="javascript:void(0);" onclick="javascript:doActSelect(\'\', \''+sUrl+'\', \''+nId+'\', \'list-dodelete\');">删除Delete</a>&nbsp; &nbsp;&nbsp;';
 	sCont += '</p>';
 
 	divObj.innerHTML = sCont;
