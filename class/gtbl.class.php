@@ -75,8 +75,8 @@ class GTbl extends WebApp{
 		$this->prttbl = $tbl;
 		$tbl .= $this->getTblRotateName($tblrotate);
 		if($hmconf[$this->taglist['table'].$this->sep.$this->prttbl] != $this->prttbl){
-		  if(startsWith($this->prttbl, Gconf::get('tblpre'))){
-		      $this->prttbl = str_replace(Gconf::get('tblpre'), '', $this->prttbl);
+		  if(startsWith($this->prttbl, GConf::get('tblpre'))){
+		      $this->prttbl = str_replace(GConf::get('tblpre'), '', $this->prttbl);
 		  }
 		  else{
 		      error_log(__FILE__.":gtbl.class: error with tblname:[".$this->prttbl."].");
@@ -779,7 +779,7 @@ class GTbl extends WebApp{
             print __FILE__.": separator is empty. [1201231153]\n";
             return $hm;
         }
-	$tblpre = Gconf::get('tblpre');
+	$tblpre = GConf::get('tblpre');
 	$tblconf = str_replace($tblpre, "", $tbl);
         if(file_exists($xmlpath."/".$tblconf.".xml")){
             $xmlobj = simplexml_load_file($xmlpath."/".$tblconf.".xml");
@@ -887,7 +887,7 @@ class GTbl extends WebApp{
 			$tbl = parent::getTbl();	
 		}	
 
-		$tblpre = Gconf::get('tblpre');
+		$tblpre = GConf::get('tblpre');
 		$hasTblpre = startsWith($tbl, $tblpre);
 		$hm = parent::execBy('show tables like "%'.$tbl.'" ');
 		if($hm[0]){
@@ -918,7 +918,7 @@ class GTbl extends WebApp{
 			
 		}
 		else{
-			$tblpre = Gconf::get('tblpre');
+			$tblpre = GConf::get('tblpre');
 			if(startsWith($tbl, $tblpre)){
 				$realtbl = str_replace($tblpre, "", $tbl);
 			}

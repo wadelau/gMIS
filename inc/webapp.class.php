@@ -27,7 +27,7 @@ class WebApp implements WebAppInterface{
 	var $dba = null;
 	var $hm = array();
 	var $hmf = array(); # container for the Object which extends this class	
-	var $isdbg = 1;  # Gconf::get('is_debug');
+	var $isdbg = 1;
 	var $sep = "|"; # separating tag for self-defined message body
 
 	var $hmfieldinfo = array(); #  container for table structure, -gMIS only,
@@ -40,7 +40,7 @@ class WebApp implements WebAppInterface{
 		if($this->dba == null){ # Wed Oct 22 10:23:03 CST 2014
           $this->dba = new DBA();
         }
-		$this->isdbg = Gconf::get('is_debug');
+		$this->isdbg = GConf::get('is_debug');
 	}
 
 	//-

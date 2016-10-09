@@ -13,11 +13,11 @@ class XDirectory extends WebApp{
 
         if($tbl != ''){
 			if(false && $_SESSION['language'] && $_SESSION['language'] == "en_US"){
-				//$this->setTbl(Gconf::get('tblpre').'en_'.$tbl);
+				//$this->setTbl(GConf::get('tblpre').'en_'.$tbl);
 				$this->setTbl('en_'.$tbl);
 			}
 			else{
-				//$this->setTbl(Gconf::get('tblpre').$tbl);
+				//$this->setTbl(GConf::get('tblpre').$tbl);
 				$this->setTbl($tbl);
 			}
 		}

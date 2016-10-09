@@ -44,14 +44,14 @@ $conf['auto_install'] = 'INSTALL_DONE';
 $conf['adminmail'] = 'system@local';
 
 # set them all
-Gconf::setConf($conf);
+GConf::setConf($conf);
 global $_CONFIG; # will be used in page scripts
-$_CONFIG = Gconf::getConf();
+$_CONFIG = GConf::getConf();
 
 
 # configuration container
 
-class Gconf{
+class GConf{
 
 	private static $conf = array();
 

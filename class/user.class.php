@@ -105,8 +105,8 @@ class User extends WebApp
         #print "userid:[".$this->getId()."] usergroup:[".$this->getGroup()."]\n";
         $reason = '';
         $result = true;
-        $tmptbl = Gconf::get('tblpre').$req['tbl'];
-        $tmphm = $this->execBy('select id as objid, objgroup from '.Gconf::get('tblpre').'info_objecttbl where tblname="'.$tmptbl.'"', '');
+        $tmptbl = GConf::get('tblpre').$req['tbl'];
+        $tmphm = $this->execBy('select id as objid, objgroup from '.GConf::get('tblpre').'info_objecttbl where tblname="'.$tmptbl.'"', '');
         #print_r($tmphm);
         $objgrp = ''; $objid = '';
         if($tmphm[0]){
@@ -118,7 +118,7 @@ class User extends WebApp
         }
         #print "obj:[".$req['tbl']."] objgroup:[".$objgrp."] objid:[".$objid."]\n";
 
-        $sql = "select id,accesstype,objectfield,userid,usergroup from ".Gconf::get('tblpre')."useraccesstbl where state=1 and (userid='".$this->getId()."' or userid=0) and (usergroup='".$this->getGroup()."' or usergroup=0) and (objectid='".$objid."' or objectid=0) and (objectgroup='".$objgrp."' or objectgroup=0) order by ".$this->getMyId()." desc, accesstype desc limit 100";
+        $sql = "select id,accesstype,objectfield,userid,usergroup from ".GConf::get('tblpre')."useraccesstbl where state=1 and (userid='".$this->getId()."' or userid=0) and (usergroup='".$this->getGroup()."' or usergroup=0) and (objectid='".$objid."' or objectid=0) and (objectgroup='".$objgrp."' or objectgroup=0) order by ".$this->getMyId()." desc, accesstype desc limit 100";
         #print "sql:[".$sql."]";
         $tmphm = $this->execBy($sql, null);
         #print "chkAccess:";
