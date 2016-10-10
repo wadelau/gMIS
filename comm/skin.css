@@ -231,3 +231,14 @@ a:visited {
 	list-style-type: none;
 	list-style-image: none;
 }
+
+.mainlist tr{
+    text-align: center;
+}
+.mainlist tr:hover{
+    background-color: #afc4e2;
+}
+
+.login_bg table{
+    text-align: center;
+}

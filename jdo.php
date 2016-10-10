@@ -62,7 +62,7 @@ if(startsWith($act,'add') || startsWith($act, "modify")){
     }
     # list start
     $listid = array();
-    $out .= "<table align=\"center\" width=\"98%\" cellspacing=\"0\" cellpadding=\"0\" style=\"\" class=\"mainlist\">"
+    $out .= "<table width=\"98%\" cellspacing=\"0\" cellpadding=\"0\" style=\"\" class=\"mainlist\">"
             ."<tr height=\"35px\"><td colspan=\"".($hmsize+2)."\">";
     $out .= "<button name=\"selectallbtn\" type=\"button\" onclick=\"checkAll();\" value=\"\">全选</button> &nbsp;";
     $out .= "<button name=\"reversebtn\" type=\"button\" onclick=\"uncheckAll();\" value=\"\">反选</button>";
@@ -73,7 +73,7 @@ if(startsWith($act,'add') || startsWith($act, "modify")){
             ."&nbsp;&nbsp;<button name='deepsearch' onclick=\"javascript:doActionEx('"
     	    .$url."&act=deepsearch', 'contentarea');\" title=\"深度复合查询\">深搜</button></td></tr>";
     ## list-sort start
-    $out .= "<tr align=\"center\" style=\"font-weight:bold;\" height=\"28px\">";
+    $out .= "<tr style=\"font-weight:bold;\" height=\"28px\">";
     if($hasid){
         $out .= "<td valign=\"middle\" nowrap>&nbsp;<a href=\"javascript:void(0);\" title=\"Sort by ID\" onclick=\"javascript:doAction('".str_replace("&pnob","&xxpnob",$url)."&act=list&pnobid=".($navi->getAsc($gtbl->getMyId())==0?1:0)."'); \">序/编号</a></td>";
     }else{
@@ -92,7 +92,7 @@ if(startsWith($act,'add') || startsWith($act, "modify")){
     ## list-sort end
     ## list-search start
     $untouched = '~~~';
-    $out .= "<tr align=\"center\" style=\"font-weight:bold;\">";
+    $out .= "<tr style=\"font-weight:bold;\">";
     $out .= "<td valign=\"middle\"><input type=\"hidden\" name=\"fieldlist\" id=\"fieldlist\" value=\"".implode(",",array_keys($hmfield))."\" /> <input type=\"hidden\" name=\"fieldlisttype\" id=\"fieldlisttype\" value=\"".$gtbl->getFieldType()."\"/>";
     $out .= "<div style=\"display:none\" id=\"pnsk_id_op_div\"><select style=\"width:60px\" name=\"oppnsk_id\" id=\"oppnsk_id\">".$gtbl->getLogicOp($gtbl->getMyId())."</select></div>";
     $out .= "<input value=\"".($id==''?$_REQUEST['pnskid']:$id)."\" style=\"width:50px;".($id==''?"color:white;":"")."\" id=\"pnsk_id\" name=\"pnsk_id\" ";
@@ -140,7 +140,7 @@ if(startsWith($act,'add') || startsWith($act, "modify")){
            if($i%2 == 0){
                 $bgcolor = "";
            }
-           $out .= "<tr height=\"35px\" align=\"center\" valign=\"middle\" onmouseover=\"javascript:this.style.backgroundColor='".$hlcolor."';\" onmouseout=\"javascript:this.style.backgroundColor='';\" bgcolor=\"".$bgcolor."\" id=\"list_tr_".$rec[$gtbl->getMyId()]."\">";
+           $out .= "<tr height=\"35px\" valign=\"middle\" bgcolor=\"".$bgcolor."\" id=\"list_tr_".$rec[$gtbl->getMyId()]."\">";
            if($hasid){
                $id = $rec[$gtbl->getMyId()]; $listid[] = $id;
                $out .= "<td nowrap> <input name=\"checkboxid\" type=\"checkbox\" value=\"".$id."\"> &nbsp; <a onmouseover=\"javascript:showActList('".$id."', 1, '".str_replace("&".$gtbl->getMyId()."=","&oid=", $url)."&".$gtbl->getMyId()."=".$id."');\" onmouseout=\"javascript:showActList('".$id."', 0, '".str_replace("&".$gtbl->getMyId()."=","&oid=", $url)."&".$gtbl->getMyId()."=".$id."');\" href='javscript:void(0);' onclick=\"javascript:doActionEx('".$url."&act=view&".$gtbl->getMyId()."=".$id."','contentarea');;\" title=\"详细信息\">".(++$i + (intval($navi->get('pnpn'))-1) * (intval($navi->get('pnps'))))." / ".$id." &#x25BE;</a> <div id=\"divActList_$id\" style=\"display:none; position: absolute; margin-left:50px; margin-top:-11px; z-index:99; background-color:silver;\">actliat-$id</div> </td>";
@@ -290,7 +290,7 @@ if(startsWith($act,'add') || startsWith($act, "modify")){
         } 
         # record end
         # sum bgn
-        $out .= "<tr height=\"35px\" align=\"center\" valign=\"middle\" onmouseover=\"javascript:this.style.backgroundColor='".$hlcolor."';\" onmouseout=\"javascript:this.style.backgroundColor='';\" bgcolor=\"".$bgcolor."\"><td>&nbsp;</td>";
+        $out .= "<tr height=\"35px\" valign=\"middle\" bgcolor=\"".$bgcolor."\"><td>&nbsp;</td>";
         foreach($hmsum as $k=>$v){
             if($gtbl->filterHiddenField($k,$opfield,$timefield)){ # || $gtbl->getInputType($k) == 'select'
                 $out .= "<td> - </td>";
