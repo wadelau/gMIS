@@ -111,11 +111,11 @@ class DBA {
 					{
 			   			if($selectpos !== false && $kpos > $wherepos){
 							$tmparr[$kpos] = $k;	# in case "select a, b, c where a = ?"; # by wadelau on Sat Nov  3 20:35:46 CST 2012
-							$tmpposarr[$k] = 2;
+							$tmpposarr[$k]++;
 			   			}
 						else if($selectpos === false){
 							$tmparr[$kpos] = $k;	# in case "select a, b, c where a = ?"; # by wadelau on Sat Nov  3 20:35:46 CST 2012
-							$tmpposarr[$k] = 2;
+							$tmpposarr[$k]++;
 			   			} 
 
 						#$tmparr[$kpos] = $k;	
@@ -125,7 +125,7 @@ class DBA {
 
 						while($nextpos !== false){
 							
-							$tmparr[$nextpos] = $k.(count($tmpposarr)>0?".".$tmpposarr[$k]:""); 
+							$tmparr[$nextpos] = $k.($tmpposarr[$k]!='' ? ".".$tmpposarr[$k] : ""); 
 							/* 
 							 *  Attention: 
 							 *      one field matches more than two values, 
