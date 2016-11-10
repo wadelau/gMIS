@@ -73,15 +73,18 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
         $out .= "<--NOREAD-->";
 
     }else if($fieldinputtype == 'select'){
-
 		$out .= "<td>".$gtbl->getCHN($field).":&nbsp;</td><td> ".$gtbl->getSelectOption($field, $hmorig[$field],'', $gtbl->getSelectMultiple($field))."</td>";
         
     }else if($fieldinputtype == 'file'){
+		$origValue = $hmorig[$field];
+        if($origValue != '' && $srcprefix != '' && !startsWith($origValue, 'http')){
+            $hmorig[$field] = $srcprefix.'/'.$hmorig[$field];
+        }
         $isimg = isImg($hmorig[$field]);
 		if(strpos($hmorig[$field], "$shortDirName/") !== false){ $hmorig[$field] = str_replace("$shortDirName/", "", $hmorig[$field]); }
 		if($gtbl->getSingleRow($field)){ $out .= "</tr><tr>"; }
         if($isimg){
-            $out .= "<td >".$gtbl->getCHN($field).":&nbsp;</td><td> <a href=\"".$hmorig[$field]."\" target=\"_blank\" title=\"打开大图\"><img src=\"".$hmorig[$field]."\" alt=\"-x-\" style=\"width:118px\"/></a><br/>".$rtvdir."/".$hmorig[$field]." </td>";
+            $out .= "<td >".$gtbl->getCHN($field).":&nbsp;</td><td> <a href=\"".$hmorig[$field]."\" target=\"_blank\" title=\"打开大图\"><img src=\"".$hmorig[$field]."\" alt=\"-x-\" style=\"width:118px\"/></a><br/>".($srcprefix==''?$rtvdir."/":'').$hmorig[$field]." </td>";
         }
 		else{
             $out .= "<td >".$gtbl->getCHN($field).":&nbsp;</td><td> <a href=\"".$hmorig[$field]."\" title=\"".$hmorig[$field]."\" target=\"_blank\">".$hmorig[$field]."</a> </td>";

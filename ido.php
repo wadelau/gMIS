@@ -112,8 +112,8 @@ if($act == ''){
 
 $out .= "<!--bottom line-->";
 
-$out .= "<table align=\"center\" width=\"98%\"  style=\"background:transparent\"> <tr><td width=\"25%\"> <b>  &Pi; <a href=\"./\">首页</a> <span style=\"font-size:17px\">&rarr;</span> ".$module_path." </b> &nbsp; </td>";
-$out .= "<td style=\"text-align:left;margin-right:58px\" colspan=\"18\"> &nbsp;  <button onclick=\"javascript:doActionEx('".$url."&act=add','contentarea');\">新增</button>  &nbsp;&nbsp; <button id=\"refrehbtn2\" name=\"refreshbtn2\" onclick=\"javascript:window.location.reload();\" title=\"刷新\">刷新</button>  &nbsp;&nbsp;&nbsp; </td> </tr></table>\n";
+$out .= "<table align=\"center\" width=\"98%\"  style=\"background:transparent\"> <tr><td width=\"25%\" colspan=\"4\"> <b>  &Pi; <a href=\"./\">首页</a> <span style=\"font-size:17px\">&rarr;</span> ".$module_path." </b> &nbsp; </td>";
+$out .= "<td style=\"text-align:left;margin-right:58px\" colspan=\"15\"> &nbsp;  <button onclick=\"javascript:doActionEx('".$url."&act=add','contentarea');\">新增</button>  &nbsp;&nbsp; <button id=\"refrehbtn2\" name=\"refreshbtn2\" onclick=\"javascript:window.location.reload();\" title=\"刷新\">刷新</button>  &nbsp;&nbsp;&nbsp; </td> </tr></table>\n";
 
 $out_footer = "<hr width=\"1\"/> &nbsp;&nbsp;&nbsp;<span id=\"noticediv\" style=\"color:green;\"> </span>";
 

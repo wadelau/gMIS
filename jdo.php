@@ -190,6 +190,11 @@ if(startsWith($act,'add') || startsWith($act, "modify")){
                }else if($inputtype == 'file'){
 					   $fhref = $gtbl->getHref($field, $rec);
 					   if(strpos($rec[$field], "$shortDirName/") !== false){ $rec[$field] = str_replace("$shortDirName/", "", $rec[$field]); }
+					   $origValueF = $hmorig[$field];
+					   $srcprefix = $gtbl->getSrcPrefix();
+					   if($origValueF != '' && $srcprefix != '' && !startsWith($origValueF, 'http')){
+						   $rec[$field] = $srcprefix.'/'.$rec[$field];
+						}
 					   if(count($fhref) == 0){
 						   $fieldT = '';
 						   if($rec[$field] != ''){ 

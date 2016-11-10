@@ -57,7 +57,7 @@ class GTbl extends WebApp{
 			'input2select' => 'input2select', # filter much more select options to a few of them...., Mon Jul 28 15:12:17 CST 2014
 			'rotatespan'=>'rotatespan', # table names contains variable datetime, e.g. _201412, _201501, Mon Jan  5 15:31:29 CST 2015
 			'myid'=>'myid', # get table's self-defined id, see inc/webapp.class, e.g. product_id, article_id, Wed Jun  8 13:26:07 CST 2016
-			''=>''
+			'srcprefix'=>'srcprefix', # set for files and/or images
 			);
 
 	private static $MAX_FIELD_LIST = 99;
@@ -66,7 +66,8 @@ class GTbl extends WebApp{
 	//-
 	function __construct($tbl, $hmconf, $sep, $tblrotate=null){
 		//-
-		$this->dba = new DBA();
+		//$this->dba = new DBA(); # see parent::__construct() below.
+		parent::__construct();
 		
 		$this->hmconf = $hmconf;
 		$this->sep = $sep;
@@ -274,6 +275,16 @@ class GTbl extends WebApp{
         return $tmpstr;
     }
 
+	# get src prefix for files and images
+	# 17:59 09 November 2016
+	function getSrcPrefix(){
+		$default = ''; # 
+        $tmpstr = $this->hmconf[$this->taglist['table'].$this->sep.$this->prttbl.$this->sep.$this->taglist['srcprefix']];
+        $tmpstr = $tmpstr==null?'':$tmpstr;
+		debug(__FILE__.": get srcprefix:[$tmpstr]");
+        return $tmpstr=='' ? $default : $tmpstr;
+	}
+	
 
     # functions based on $field, below
 

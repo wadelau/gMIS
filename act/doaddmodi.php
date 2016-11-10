@@ -27,12 +27,29 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
 		$fieldvlist[$field] = $fieldv;
 
     }else if(in_array($field,$timefield)){
-        $fieldv = 'NOW()'; 
-        $fieldlist[] = $field;
-        #$gtbl->set($field, $fieldv);
-        $fieldvlist[$field] = $fieldv;
+		$fieldv = '';
+        if($gtbl->getId() == ''){
+            # insert
+            if(inList($field, 'inserttime,insertime,insertd,created,starttime')){ # see comm/tblconf.php
+                $fieldv = date("Y-m-d H:i:s", time()); # 'NOW()';
+                $fieldlist[] = $field;
+            }
+        }
+        else{
+            # update
+            if(inList($field, 'updatetime,endtime,editime,edittime,modifytime,updated')){
+                $fieldv = date("Y-m-d H:i:s", time()); # 'NOW()';
+                $fieldlist[] = $field;
+            }
+        }
+        if($fieldv != ''){
+            $fieldvlist[$field] = $fieldv;
+        }
+        else{
+            debug(__FILE__.": unclassified timefield:[$field]. 1611101112.");
+        }
         continue;
-    
+		
     }else if($field == 'password'){
         if($_REQUEST[$field] != ''){
            $fieldv = sha1($_REQUEST[$field]); 
@@ -106,7 +123,7 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
             }
 
         }else{
-            $fieldv = $_REQUEST[$field];
+            $fieldv = trim($_REQUEST[$field]);
 			if($fieldv == ''){
 				$fieldv = $hmfield[$field."_default"];
 					if($fieldv == ''){

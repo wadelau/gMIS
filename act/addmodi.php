@@ -1,7 +1,7 @@
 <?php
 
 $formid = "gtbl_add_form";
-
+$srcprefix = $gtbl->getSrcPrefix();
 $hiddenfields = "";
 
 $colsPerRow = 3;
@@ -145,6 +145,10 @@ for($hmi=$min_idx; $hmi<=$max_idx;$hmi++){
         }
 
     }else if($fieldinputtype == 'file'){
+		$origValue = $hmorig[$field];
+        if($origValue != '' && $srcprefix != '' && !startsWith($origValue, 'http')){
+            $hmorig[$field] = $srcprefix.'/'.$hmorig[$field];
+        }
         if($columni % 2 != 0 || $gtbl->getSingleRow($field)){
             $out .= "</tr><tr height=\"30px\" valign=\"middle\"  onmouseover=\"javascript:this.style.backgroundColor='".$hlcolor."';\" onmouseout=\"javascript:this.style.backgroundColor='';\">";
 			$opentr = 1;

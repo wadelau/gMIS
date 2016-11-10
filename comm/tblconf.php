@@ -51,7 +51,7 @@ $gtbl->setFieldList($hmfield);
 
 $opfield = array('operator','author','op','creator','operatorid', 'authorid', 'creatorid',
         'insertu', 'updateu', 'ioperator');
-$timefield = array('inserttime','insertime','updatetime','endtime','editime','edittime',
+$timefield = array('inserttime','insertime','updatetime','starttime','endtime','editime','edittime',
         'modifytime','created');
 
 $id = $_REQUEST[$gtbl->getMyId()];
