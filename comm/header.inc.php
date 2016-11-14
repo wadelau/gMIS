@@ -166,9 +166,9 @@ $i = $j = $id = 0;
 $tbl = $field = $fieldv = $fieldargv = $url = $act = '';
 $xmlpathpre = $appdir."/xml";
 $elementsep = $_CONFIG['septag'];
-$db = $_REQUEST['db'];
-$mydb = $_CONFIG['dbname'];
-$db = $db==''?$mydb:$db;
+$db = $_REQUEST['db']; # data db which may differs from $mydb, see ido.php and comm/tblconf.php
+$mydb = $_CONFIG['dbname']; # main db on which the app relies
+$db = $db=='' ? $mydb : $db;
 $tit = $_REQUEST['tit'];
 $tbl = $_REQUEST['tbl'];
 $tblrotate = $_REQUEST['tblrotate'];

@@ -67,7 +67,9 @@ class GTbl extends WebApp{
 	function __construct($tbl, $hmconf, $sep, $tblrotate=null){
 		//-
 		//$this->dba = new DBA(); # see parent::__construct() below.
-		parent::__construct();
+		$mydb = $hmconf['db'];
+	    $args = array('dbconf'=>$mydb);
+	    parent::__construct($args);
 		
 		$this->hmconf = $hmconf;
 		$this->sep = $sep;
@@ -780,18 +782,18 @@ class GTbl extends WebApp{
     //- max depth: 4
     public static function xml2hash($xmlpath, $sep, $db, $tbl){
         $i = 0;
-        $hm = array();
+        $hm = array('db'=>$db);
         $hmsortinxml = array();
         $attribute = array('name','type');
         if($xmlpath == ''){
-            print __FILE__.": xmlpath is empty. [1201231150]\n";
+            debug(__FILE__.": xmlpath is empty. [1201231150]", 2);
             return $hm;
         }else if($sep == ''){
-            print __FILE__.": separator is empty. [1201231153]\n";
+            debug(__FILE__.": separator is empty. [1201231153]", 2);
             return $hm;
         }
-	$tblpre = GConf::get('tblpre');
-	$tblconf = str_replace($tblpre, "", $tbl);
+		$tblpre = GConf::get('tblpre');
+		$tblconf = str_replace($tblpre, "", $tbl);
         if(file_exists($xmlpath."/".$tblconf.".xml")){
             $xmlobj = simplexml_load_file($xmlpath."/".$tblconf.".xml");
             #print __FILE__.": xmlstr: [".print_r($xmlobj)."]\n";
@@ -802,45 +804,45 @@ class GTbl extends WebApp{
                 if(!array_key_exists($sortk, $hmsortinxml)){
                     $hmsortinxml[$sortk] = $i; $i++;
                 }
-		$tmpname = (String)$value['name'];
-		if($key == 'table'){
-			if(substr($tmpname, 0, strlen($tblpre)) !==  $tblpre){
-				#$value['name'] = $tblpre.$tmpname;
-				$value['name'] = $tmpname;
+				$tmpname = (String)$value['name'];
+				if($key == 'table'){
+					if(substr($tmpname, 0, strlen($tblpre)) !==  $tblpre){
+						#$value['name'] = $tblpre.$tmpname;
+						$value['name'] = $tmpname;
+					}
+				}
+				$hm[$key.$sep.$value['name']] = $tmpname;
+
+				foreach($value as $key1=>$value1){
+					#print "leve-1: $key1: [$value1] typeof:[".gettype($value1)."]\n";
+					$tmpkey1 = $key.$sep.$value['name'].$sep.$key1;
+					if(!array_key_exists($tmpkey1,$hm)){
+						$hm[$tmpkey1] = (String)$value1;
+					}else{
+						$hm[$tmpkey1] = $hm[$tmpkey1]."|".(String)$value1; 
+					}
+
+					foreach($value1 as $key2=>$value2){
+						#print "leve-2: $key2: [$value2] typeof:[".gettype($value2)."]\n";
+						$tmpkey2 = $key.$sep.$value['name'].$sep.$key1.$value1['name'].$sep.$key2;
+						if(!array_key_exists($tmpkey2,$hm)){
+							$hm[$tmpkey2] = (String)$value2;
+						}else{
+							$hm[$tmpkey2] = $hm[$tmpkey2]."|".(String)$value2; 
+						}
+
+						foreach($value2 as $key3=>$value3){
+							#print "leve-3: $key3: [$value3] typeof:[".gettype($value3)."]\n";
+							$tmpkey3 = $key.$sep.$value['name'].$sep.$key1.$value1['name'].$sep.$key2.$sep.$value2['name'].$sep.$key3;
+							if(!array_key_exists($tmpkey3,$hm)){
+								$hm[$tmpkey3] = (String)$value3;
+							}else{
+								$hm[$tmpkey3] = $hm[$tmpkey3]."|".(String)$value3; 
+							}
+						}
+					}
+				} 
 			}
-		}
-		$hm[$key.$sep.$value['name']] = $tmpname;
-
-                foreach($value as $key1=>$value1){
-                    #print "leve-1: $key1: [$value1] typeof:[".gettype($value1)."]\n";
-                    $tmpkey1 = $key.$sep.$value['name'].$sep.$key1;
-                    if(!array_key_exists($tmpkey1,$hm)){
-                        $hm[$tmpkey1] = (String)$value1;
-                    }else{
-                        $hm[$tmpkey1] = $hm[$tmpkey1]."|".(String)$value1; 
-                    }
-
-                    foreach($value1 as $key2=>$value2){
-                        #print "leve-2: $key2: [$value2] typeof:[".gettype($value2)."]\n";
-                        $tmpkey2 = $key.$sep.$value['name'].$sep.$key1.$value1['name'].$sep.$key2;
-                        if(!array_key_exists($tmpkey2,$hm)){
-                            $hm[$tmpkey2] = (String)$value2;
-                        }else{
-                            $hm[$tmpkey2] = $hm[$tmpkey2]."|".(String)$value2; 
-                        }
-
-                        foreach($value2 as $key3=>$value3){
-                            #print "leve-3: $key3: [$value3] typeof:[".gettype($value3)."]\n";
-                            $tmpkey3 = $key.$sep.$value['name'].$sep.$key1.$value1['name'].$sep.$key2.$sep.$value2['name'].$sep.$key3;
-                            if(!array_key_exists($tmpkey3,$hm)){
-                                $hm[$tmpkey3] = (String)$value3;
-                            }else{
-                                $hm[$tmpkey3] = $hm[$tmpkey3]."|".(String)$value3; 
-                            }
-                        }
-                    }
-                } 
-            }
         }else{
             error_log(__FILE__.": ".$xmlpath."/".$tblconf.".xml was not found.");
         }

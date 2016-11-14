@@ -88,8 +88,8 @@ if($hm[0]){
 	 
         <a href="./" class="menulink"><img src="./img/my-desktop.png" alt="my desktop" height="10px" /> 我的桌面</a>
             <ul> 
-                <li><a href="./'.$ido.'?tbl=fin_todotbl&tit=待处理事项&db=&pnsktouser='.$userid.'&pnsm=1&pnskstate=0&pnsktogroup='.$user->getGroup().'&pnsc='.$pnscTodo.'&pnsck='.$pnsckTodo.'">待处理事项</a></li> 
-                <li><a href="./'.$ido.'?tbl=fin_todotbl&tit=已处理事项&db=&pnsktouser='.$userid.'&pnsm=1&pnskstate=1&pnsktogroup='.$user->getGroup().'&pnsc='.$pnscTodo.'&pnsck='.$pnsckTodo.'">已处理事项</a></li> 
+                <li><a href="./'.$ido.'?tbl=fin_todotbl&tit=待处理事项&db=&pnsktouser='.$userid.'&pnsm=1&pnskstate=1&pnsktogroup='.$user->getGroup().'&pnsc='.$pnscTodo.'&pnsck='.$pnsckTodo.'">待处理事项</a></li> 
+                <li><a href="./'.$ido.'?tbl=fin_todotbl&tit=已处理事项&db=&pnsktouser='.$userid.'&pnsm=1&pnskstate=0&pnsktogroup='.$user->getGroup().'&pnsc='.$pnscTodo.'&pnsck='.$pnsckTodo.'">已处理事项</a></li> 
                 <li><a href="./'.$ido.'?tbl=mynotetbl&tit=我的笔记&db=&pnskoperator='.$userid.'">我的笔记</a></li> 
                 <li><a href="./'.$ido.'?tbl=fin_operatelogtbl&tit=操作历史记录&db=&pnskuserid='.$userid.'">操作历史记录</a></li>
                 <li><a href="./'.$ido.'?tbl=info_toolsettbl&tit=常用工具">日常工具</a></li>

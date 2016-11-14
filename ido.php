@@ -21,7 +21,7 @@ $out = ""; # re-init it
 
 if($isgo){
 
-$hmconf = GTbl::xml2hash($xmlpathpre, $elementsep, $db, $tbl);
+$hmconf = GTbl::xml2hash($xmlpathpre, $elementsep, $mydb, $tbl);
 $gtbl = new GTbl($tbl, $hmconf[0], $elementsep);
 #print __FILE__.": hmconf:".print_r($hmconf);
 if($_REQUEST['tit'] == ''){
@@ -131,7 +131,7 @@ $smt->assign('out_footer', $out_footer);
 
 $smt->assign('content',$out);
 $smt->assign('rtvdir', $rtvdir);
-$smt->assign('randi', rand(0,9999).rand(0,9999));
+$smt->assign('randi', rand(0,999999).rand(0,999999));
 
 require("./comm/footer.inc.php");
 

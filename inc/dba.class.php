@@ -24,6 +24,9 @@ class DBA {
 	function __construct($dbconf=null){
 		
 		$dbconf = ($dbconf==null ? 'Config_Master' : $dbconf);
+		if($dbconf == 'A'){ # for db alias converter
+			$dbconf = "Config_Master";
+		}
 		//-
 		$this->conf = new $dbconf; //- need to be changed to Config_zoneli when sync to product enviro.
 		#$this->dbconn = new MySQLDB($this->conf);
