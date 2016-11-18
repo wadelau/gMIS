@@ -14,22 +14,37 @@
     <field name="taskname">
       <chnname>任务名</chnname>
     </field>
+	<field name="taskmemo">
+      <chnname>任务描述</chnname>
+	  <inputtype>textarea</inputtype>
+    </field>
+	
     <field name="tasktype">
       <chnname>任务类型</chnname>
+	  <selectoption>1:Type1|2:Type2|3:Type3|0:Other</selectoption>
     </field>	
 
     <field name="triggerbyparent">
-      <chnname>父任务触发</chnname>
+      <chnname>需方组</chnname>
+	   <selectoption>fromtable::info_grouptbl::groupname</selectoption>
     </field>
     <field name="triggerbyparentid">
-      <chnname>父任务ID</chnname>
+      <chnname>需方用户</chnname>
+	  <selectoption>fromtable::info_usertbl::email</selectoption>
     </field>	 
      <field name="togroup">
-      <chnname>目标组</chnname>
+      <chnname>供方组</chnname>
+	  <selectoption>fromtable::info_grouptbl::groupname</selectoption>
     </field> 
      <field name="touser">
-      <chnname>目标用户</chnname>
+      <chnname>供方用户</chnname>
+	  <selectoption>fromtable::info_usertbl::email</selectoption>
     </field> 
+	
+	<field name="state">
+		<chnname>状态</chnname>
+		<selectoption>1:待做|2:进行中|0:已完成</selectoption>
+	</field>
 
 </tablecfg>
 

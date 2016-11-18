@@ -279,11 +279,11 @@ class GTbl extends WebApp{
 
 	# get src prefix for files and images
 	# 17:59 09 November 2016
-	function getSrcPrefix(){
+	public function getSrcPrefix(){
 		$default = ''; # 
         $tmpstr = $this->hmconf[$this->taglist['table'].$this->sep.$this->prttbl.$this->sep.$this->taglist['srcprefix']];
         $tmpstr = $tmpstr==null?'':$tmpstr;
-		debug(__FILE__.": get srcprefix:[$tmpstr]");
+		#debug(__FILE__.": get srcprefix:[$tmpstr]");
         return $tmpstr=='' ? $default : $tmpstr;
 	}
 	
@@ -395,6 +395,7 @@ class GTbl extends WebApp{
 				}
 				$this->hmf = $oldhmf;
 			}
+			$optionlist = '';
 			foreach($hmoption as $k=>$rec){
 				$dispname = $rec[$arr[2]];
 				if(strpos($dispfield, ",") !== false){ #! Sat Nov 29 07:35:39 CST 2014

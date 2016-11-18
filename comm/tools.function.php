@@ -160,14 +160,22 @@ function shortenStr($str, $len=0){
 
 }
 
-function base62x($s,$dec=0,$numType=''){
+function base62x($s,$dec=0,$numType=null){
     # e.g. base62x('abcd', 0, '8');
     # e.g. base62x('abcd', 1, '16');
     $type = "-enc";
     if($dec == 1){
         $type = "-dec";
     }
-    return $s=exec('/www/webroot/tools/base62x '.$type.($numType==''?'':' -n '.$numType).' \''.$s.'\'');
+    $s2 = '';
+    #require_once("../class/base62x.class.php"); # already include
+    if($type == "-enc"){
+        $s2 = Base62x::encode($s, $numType);
+    }
+    else{
+        $s2 = Base62x::decode($s, $numType);
+    }
+    return $s2;
 }
 
 /**

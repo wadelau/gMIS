@@ -308,6 +308,19 @@ class User extends WebApp
         return $str;
     }
 
-
+    //- user list
+    //- Fri, 18 Nov 2016 19:13:07 +0800
+    public function getUserList(){
+        $list = array();
+        $hm = $this->getBy('*', '1=1');
+        if($hm[0]){
+            $hm = $hm[1];
+            foreach ($hm as $k=>$v){
+                $list[$v['id']] = $v;
+            }
+        }
+        return $list;
+    }
+    
 }
 ?>

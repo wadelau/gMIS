@@ -8,7 +8,19 @@ $out = str_replace('TITLE','欢迎', $out);  $data['title'] = '欢迎';
 
 $gtbl = new WebApp();
 
-$module_list = ""; $hm_module_order = array();  $hm_module_name = array();
+$module_list = ""; $hm_module_order = array();  $hm_module_name = array(); $hm_todo_list = array();
+
+$hm = $gtbl->execBy($sql="select * from ".$_CONFIG['tblpre']."fin_todotbl where (togroup in (" # for multiple groups
+        .$user->getGroup().") or touser=".$user->getId().") order by state desc, id desc limit 6 ", null);
+if($hm[0]){
+    $hm = $hm[1];
+    foreach ($hm as $k=>$v){
+        $hm_todo_list[$v['id']] = $v;
+    }
+}
+$data['todo_state'] = array('0'=>'已完成', '1'=>'待做', '2'=>'进行中');
+$data['user_list'] = $user->getUserList();
+
 $hm = $gtbl->execBy("select count(parenttype) as modulecount, parenttype from ".$_CONFIG['tblpre']."fin_operatelogtbl where inserttime > '".date("Y-m-d", time()-(86400*60))." 00:00:00' group by parenttype order by modulecount desc limit 8", null);
 if($hm[0]){
 	$hm = $hm[1];
@@ -30,6 +42,13 @@ $hm = $gtbl->execBy("select objname,tblname from ".$_CONFIG['tblpre']."info_obje
 if($hm[0]){
 	$hm = $hm[1];
 	$data['module_list_byuser'] = $hm; #Todo add2desktop by user 
+}
+else{
+    $hm = $gtbl->execBy("select objname,tblname from ".$_CONFIG['tblpre']."info_objecttbl order by rand() limit 4");
+    if($hm[0]){
+        $hm = $hm[1];
+        $data['module_list_byuser'] = $hm;
+    }
 }
 
 $hm = $gtbl->execBy("select count(*) as modulecount from ".$_CONFIG['tblpre']."info_objecttbl where state=1");
@@ -73,7 +92,7 @@ if($fp){
 
 $data['module_list_order'] = $hm_module_order;
 $data['module_list_name'] = $hm_module_name;
-
+$data['todo_list'] = $hm_todo_list;
 
 $smttpl = getSmtTpl(__FILE__,$act);
 

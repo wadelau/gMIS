@@ -177,7 +177,7 @@ class MYSQLIX {
 		else{
 			$newsql = "";
 			$wherepos = strpos($sql, " where ");
-			if( (strpos($sql,"delete ")!==false || strpos($sql,"update ")!==false) 
+			if( (strpos($sql,"delete ")===0 || strpos($sql,"update ")===0) 
 				&& $wherepos === false){
 				$this->sayErr("table action [update, delete] need [where] clause.sql:[".$sql."]");
 			}

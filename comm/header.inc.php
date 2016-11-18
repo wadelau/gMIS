@@ -38,7 +38,7 @@ require_once($appdir."/class/user.class.php");
 require_once($appdir."/comm/tools.function.php");
 require($appdir."/class/gtbl.class.php");
 require($appdir."/class/pagenavi.class.php");
-require($appdir."/class/base62x.class.php");
+require_once($appdir."/class/base62x.class.php");
 
 if(!isset($user)){
     $user = new User(); 

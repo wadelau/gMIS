@@ -42,7 +42,7 @@ body {
 		   .wrapper{
 			      position: relative;
 				     float: left;
-					    left: 49px;
+					    left: 29px;
 						   /*width: 850px;*/
 						      margin-bottom: 20px;
 							     /*background-color: #cccccc*/
@@ -82,7 +82,7 @@ body {
 		   .wrapperlog{
 			      position: relative;
 				     float: left;
-					    left: 59px;
+					    left: 39px;
 						   width: 670px;
 						      margin-bottom: 20px;
 							     background-color: #cccccc;
@@ -90,7 +90,29 @@ body {
 					padding-right:20px;
 		   }
 		</style>
-		<table width="700px"  style="background:transparent; text-align:center;">
+		<table style="width:700px; background:transparent; align:center">
+
+		<tr>
+			<td colspan="10">
+			<b title="(工作、任务列表)">WT.工作表Work-Todo</b><br/>
+			<div id="tododiv" class="wrapperlog">
+			<table style="border:0px; background:transparent;">
+				<tr style="font-weight: bold;"><td>序号</td><td>事项/任务</td><td>状态</td><td>需求方</td><td>供应方</td><td>更新时间</td></tr>
+				{foreach $todo_list as $k=>$v}
+				<tr>
+				<td>{$v['id']}.</td>
+				<td><a href="./ido.php?tbl=fin_todotbl&pnskstate={$v['state']}&tit=事项管理">{$v['taskname']}</a></td>
+				<td>{$todo_state[$v['state']]}</td>
+				<td>{$user_list[$v['triggerbyparentid']]['email']}</td>
+				<td>{$user_list[$v['touser']]['email']}</td>
+				<td>{$v['updatetime']}</td>
+				</tr>
+				{/foreach}
+				<tr><td><a href="./ido.php?tbl=fin_todotbl&tit=事项管理">更多...</a></td></tr>
+			</table>
+			</div>	
+			</td>
+		</tr>
 
 		{if count($navidir_list)>0}
 		<tr>
@@ -159,7 +181,7 @@ body {
 			<td colspan="10">
 			<b title="(操作、管理日志)">OL.操作日志Operation-Log</b><br/>
 			<div id="oplogdiv" class="wrapperlog">
-			<b><pre>时间					用户/Id						执行操作					作用对象/Id</pre></b>
+			<pre><b>时间					用户/Id						执行操作					作用对象/Id</b>
 <pre>{foreach $log_list as $k=>$v}
 {$v['inserttime']}		{$v['useremail']}/{$v['userid']}		{$v['actionstr']}		{$v['parenttype']}/{$v['parentid']}
 {/foreach}</pre>

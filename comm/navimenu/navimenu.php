@@ -4,6 +4,7 @@ $ido = "ido.php";
 $myNavi = new PageNavi();
 $pnscTodo = "state=? and (touser like ? or togroup like ?)";
 $pnsckTodo = $myNavi->signPara($pnscTodo);
+$pnscTodo = base62x($pnscTodo);
 
 $dynamicmenu = '';
 $hm = $myNavi->execBy("select levelcode,linkname,modulename,dynamicpara,disptitle,thedb from ".$_CONFIG['tblpre']."info_menulist where state=1 order by levelcode", null);

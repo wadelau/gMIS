@@ -228,11 +228,11 @@ class PageNavi extends WebApp{
                 }
             }
        }
-      
        $condition = substr($condition, 4); # first pnsm seg 
        #error_log(__FILE__.":getCondition: condition: $condition");
        $pnsc = $_REQUEST['pnsc'];
        if($pnsc != ''){
+		    $pnsc = base62x($pnsc, $dec=1);
             $chkpnsc = $this->signPara($pnsc, $_REQUEST['pnsck']);
             if($chkpnsc){
                 $condition = $pnsc;
