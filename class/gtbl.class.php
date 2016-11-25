@@ -395,7 +395,7 @@ class GTbl extends WebApp{
 				}
 				$this->hmf = $oldhmf;
 			}
-			$optionlist = '';
+			$optionlist = '<option value="">-选择-</option>';
 			foreach($hmoption as $k=>$rec){
 				$dispname = $rec[$arr[2]];
 				if(strpos($dispfield, ",") !== false){ #! Sat Nov 29 07:35:39 CST 2014

@@ -45,6 +45,11 @@
 		<chnname>状态</chnname>
 		<selectoption>1:待做|2:进行中|0:已完成</selectoption>
 	</field>
+	
+	<field name="operator">
+      <chnname>操作人</chnname>
+	  <selectoption>fromtable::info_usertbl::email</selectoption>
+    </field>
 
 </tablecfg>
 

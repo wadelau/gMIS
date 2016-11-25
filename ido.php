@@ -89,7 +89,7 @@ if(count($refArr) > 0){
     }
 }
 
-$out .= "&nbsp;&nbsp;<button id=\"refreshbtn\" name=\"refreshbtn\" onclick=\"javascript:window.location.reload();\" title=\"刷新\">刷新</button> &nbsp;&nbsp; &nbsp;</td></tr>";
+$out .= "&nbsp;&nbsp;&nbsp;<button id=\"refreshbtn\" name=\"refreshbtn\" onclick=\"javascript:window.location.reload();\" title=\"刷新\">刷新</button> &nbsp;&nbsp; &nbsp;</td></tr>";
 
 $out .= "</table>";
 

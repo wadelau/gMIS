@@ -66,12 +66,14 @@ if(startsWith($act,'add') || startsWith($act, "modify")){
             ."<tr height=\"35px\"><td colspan=\"".($hmsize+2)."\">";
     $out .= "<button name=\"selectallbtn\" type=\"button\" onclick=\"checkAll();\" value=\"\">全选</button> &nbsp;";
     $out .= "<button name=\"reversebtn\" type=\"button\" onclick=\"uncheckAll();\" value=\"\">反选</button>";
-    $out .= "&nbsp; ".$navi->getNavi()." &nbsp;<button name=\"searchor\" onclick=\"javascript:searchBy('"
-            .$url."&act=list&pnsm=or');\" title=\"满足其中一个条件即可\">或搜</button>&nbsp;"
-            ."<button name=\"searchand\" onclick=\"javascript:searchBy('"
-            .$url."&act=list&pnsm=and');\" title=\"同时满足所有检索条件\">与搜</button>"
-            ."&nbsp;&nbsp;<button name='deepsearch' onclick=\"javascript:doActionEx('"
-    	    .$url."&act=deepsearch', 'contentarea');\" title=\"深度复合查询\">深搜</button></td></tr>";
+    $out .= "&nbsp; ".$navi->getNavi()." &nbsp;&nbsp;&nbsp;<button name='deepsearch' onclick=\"javascript:doActionEx('"
+    	.$url."&act=deepsearch', 'contentarea');\" title=\"深度复合查询\">深  搜</button>"
+    	."&nbsp;&nbsp;<button name='deepsearch' onclick=\"javascript:doActionEx('"
+    	.$url."&act=pivot', 'contentarea');\" title=\"数据透视分析\">透  视</button>";
+    $out .= "&nbsp;<div style=\"float:right;\"><button name=\"searchor\" onclick=\"javascript:searchBy('"
+    	.$url."&act=list&pnsm=or');\" title=\"满足其中一个条件即可\">或搜</button>&nbsp;&nbsp;&nbsp;<button name=\"searchand\" onclick=\"javascript:searchBy('"
+    	.$url."&act=list&pnsm=and');\" title=\"同时满足所有检索条件\">并搜</button></div>"
+    	."</td></tr>";
     ## list-sort start
     $out .= "<tr style=\"font-weight:bold;\" height=\"28px\">";
     if($hasid){
