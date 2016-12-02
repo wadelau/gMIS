@@ -53,6 +53,7 @@ CREATE TABLE `gmis_fin_todotbl` (
   `operator` char(32) NOT NULL DEFAULT '',
   `state` tinyint(1) NOT NULL DEFAULT '1',
   `taskmemo` char(255) NOT NULL DEFAULT '',
+  `taskfile` char(255) NOT NULL DEFAULT '',
   `updatetime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

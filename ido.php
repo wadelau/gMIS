@@ -22,6 +22,7 @@ $out = ""; # re-init it
 if($isgo){
 
 $hmconf = GTbl::xml2hash($xmlpathpre, $elementsep, $mydb, $tbl);
+$hmconf[0]['mydb'] = $mydb; # Thu, 1 Dec 2016 19:43:30 +0800
 $gtbl = new GTbl($tbl, $hmconf[0], $elementsep);
 #print __FILE__.": hmconf:".print_r($hmconf);
 if($_REQUEST['tit'] == ''){

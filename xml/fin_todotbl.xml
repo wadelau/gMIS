@@ -4,7 +4,7 @@
         <chnname>待处理任务管理表</chnname>
         <listfieldcount>6</listfieldcount> <!--max_disp_cols-->
         <since>20121024</since>
-        <creator>daguoli</creator>
+        <creator>Xenxin</creator>
         <!-- <superaccess>inherit::id=USER_ID::rw</superaccess> -->
     </table>
     <field name="id">
@@ -21,12 +21,13 @@
 	
     <field name="tasktype">
       <chnname>任务类型</chnname>
-	  <selectoption>1:Type1|2:Type2|3:Type3|0:Other</selectoption>
+	  <selectoption>1:OfferSync|2:OfferExpo|3:OfferDSP|0:Other</selectoption>
     </field>	
 
     <field name="triggerbyparent">
       <chnname>需方组</chnname>
 	   <selectoption>fromtable::info_grouptbl::groupname</selectoption>
+	   <listview>0</listview>
     </field>
     <field name="triggerbyparentid">
       <chnname>需方用户</chnname>
@@ -35,21 +36,33 @@
      <field name="togroup">
       <chnname>供方组</chnname>
 	  <selectoption>fromtable::info_grouptbl::groupname</selectoption>
+	  <listview>0</listview>
     </field> 
      <field name="touser">
       <chnname>供方用户</chnname>
 	  <selectoption>fromtable::info_usertbl::email</selectoption>
     </field> 
-	
+	<field name="inserttime">
+      <chnname>開始時間</chnname>
+	  <listview>2</listview>
+    </field> 
+		<field name="updatetime">
+      <chnname>更新時間</chnname>
+	  <listview>2</listview>
+    </field> 
 	<field name="state">
 		<chnname>状态</chnname>
 		<selectoption>1:待做|2:进行中|0:已完成</selectoption>
 	</field>
-	
-	<field name="operator">
+	<field name="taskfile">
+      <chnname>附件</chnname>
+	  <inputtype>file</inputtype>
+    </field>
+
+	 <field name="operator">
       <chnname>操作人</chnname>
 	  <selectoption>fromtable::info_usertbl::email</selectoption>
     </field>
-
+		
 </tablecfg>
 

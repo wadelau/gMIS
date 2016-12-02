@@ -5,6 +5,7 @@ $isadmin = false;
 $hlcolor = '#afc4e2'; $form_cols = 6; $hashiddenfield = false;
 
 $hmconf = GTbl::xml2hash($xmlpathpre, $elementsep, $db, $tbl);
+$hmconf[0]['mydb'] = $mydb;
 #print_r($hmconf);
 $gtbl = new GTbl($tbl, $hmconf[0], $elementsep, $tblrotate);
 $tbl = $gtbl->getTbl();

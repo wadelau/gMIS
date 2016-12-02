@@ -62,14 +62,25 @@ class GTbl extends WebApp{
 
 	private static $MAX_FIELD_LIST = 99;
 	const RESULTSET = 'resultset';
+	public $db = ''; # data db
+	public $mydb = ''; # the app, -gMIS runs on it, may differ with $db
 
 	//-
 	function __construct($tbl, $hmconf, $sep, $tblrotate=null){
 		//-
 		//$this->dba = new DBA(); # see parent::__construct() below.
-		$mydb = $hmconf['db'];
-	    $args = array('dbconf'=>$mydb);
+		$mydb = $hmconf['mydb'];
+		$db = $hmconf['db'];
+	    $args = array('dbconf'=>$db);
 	    parent::__construct($args);
+	    $this->$mydb = $mydb;
+	    # restore db after gMIS init.
+	    $reqdb = $_REQUEST['db'];
+	    if($reqdb != $mydb){
+	        $this->db = $db = $hmconf['db'] = $reqdb;
+	    
+	    }
+	    debug(__FILE__.": db:$db mydb:$mydb");
 		
 		$this->hmconf = $hmconf;
 		$this->sep = $sep;
@@ -255,7 +266,8 @@ class GTbl extends WebApp{
 			$tmptag = $tmpArr[$rotatespan];
 			for($tmpi=1; $tmpi<5; $tmpi++){
 				$mytag = date($tmpArr1[$rotatespan], strtotime("-$tmpi $tmptag"));		
-				$refArr[] = array("name"=>$mytag, "href"=>'jdo.php?tbl='.$this->prttbl.'&amp;act=list&amp;tblrotate='.$mytag, 'target'=>'actarea');
+				$refArr[] = array("name"=>$mytag, "href"=>'jdo.php?tbl='.$this->prttbl
+				        .'&amp;act=list&amp;tblrotate='.$mytag.'&amp;db='.$this->db, 'target'=>'actarea');
 			}
 			#print_r($tmpArr2);
 			

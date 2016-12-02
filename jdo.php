@@ -72,7 +72,7 @@ if(startsWith($act,'add') || startsWith($act, "modify")){
     	.$url."&act=pivot', 'contentarea');\" title=\"数据透视分析\">透  视</button>";
     $out .= "&nbsp;<div style=\"float:right;\"><button name=\"searchor\" onclick=\"javascript:searchBy('"
     	.$url."&act=list&pnsm=or');\" title=\"满足其中一个条件即可\">或搜</button>&nbsp;&nbsp;&nbsp;<button name=\"searchand\" onclick=\"javascript:searchBy('"
-    	.$url."&act=list&pnsm=and');\" title=\"同时满足所有检索条件\">并搜</button></div>"
+    	.$url."&act=list&pnsm=and');\" title=\"同时满足所有检索条件\">并搜</button>&nbsp;&nbsp;</div>"
     	."</td></tr>";
     ## list-sort start
     $out .= "<tr style=\"font-weight:bold;\" height=\"28px\">";
