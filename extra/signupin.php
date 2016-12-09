@@ -38,9 +38,16 @@ if($act == 'signin'){
     
     $issucc = false;
     $nexturl = '';
+	$islan = false;
+    $myip = Wht::getIp();
+    if(cidr_match($myip, '10.0.0.0/8') || cidr_match($myip, '172.16.0.0/12') 
+            || cidr_match($myip, '192.168.0.0/16')){
+        $islan = true;
+    }
+    #debug(__FILE__.": myip:$myip islan:$islan");
     
     $verifycode = strtoupper(trim($_REQUEST['verifycode']));
-    if($verifycode != '' && $verifycode == $_SESSION['verifycode']){
+    if($islan || ($verifycode != '' && $verifycode == $_SESSION['verifycode'])){
          
     $user->set('email',$_REQUEST['email']);
     $user->set('password',$_REQUEST['password']);
@@ -133,6 +140,16 @@ if($act == 'signin'){
 }
 
 $smt->assign('rtvdir', $rtvdir);
+
+# private ip identified, 20:50 07 December 2016
+function cidr_match($ip, $range){
+    list ($subnet, $bits) = explode('/', $range);
+    $ip = ip2long($ip);
+    $subnet = ip2long($subnet);
+    $mask = -1 << (32 - $bits);
+    $subnet &= $mask; # nb: in case the supplied subnet wasn't correctly aligned
+    return ($ip & $mask) == $subnet;
+}
 
 require("../comm/footer.inc.php");
 

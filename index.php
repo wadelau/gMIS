@@ -11,14 +11,14 @@ $gtbl = new WebApp();
 $module_list = ""; $hm_module_order = array();  $hm_module_name = array(); $hm_todo_list = array();
 
 $hm = $gtbl->execBy($sql="select * from ".$_CONFIG['tblpre']."fin_todotbl where (togroup in (" # for multiple groups
-        .$user->getGroup().") or touser=".$user->getId().") order by state desc, id desc limit 6 ", null);
+        .$user->getGroup().") or touser=".$user->getId().") and state in (1,2) order by state desc, id desc limit 6 ", null);
 if($hm[0]){
     $hm = $hm[1];
     foreach ($hm as $k=>$v){
         $hm_todo_list[$v['id']] = $v;
     }
 }
-$data['todo_state'] = array('0'=>'已完成', '1'=>'待做', '2'=>'进行中');
+$data['todo_state'] = array('0'=>'已完成', '1'=>'待做', '2'=>'进行中', '3'=>'擱置', '4'=>'取消');
 $data['user_list'] = $user->getUserList();
 
 $hm = $gtbl->execBy("select count(parenttype) as modulecount, parenttype from ".$_CONFIG['tblpre']."fin_operatelogtbl where inserttime > '".date("Y-m-d", time()-(86400*60))." 00:00:00' group by parenttype order by modulecount desc limit 8", null);

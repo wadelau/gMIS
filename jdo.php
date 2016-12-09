@@ -69,7 +69,7 @@ if(startsWith($act,'add') || startsWith($act, "modify")){
     $out .= "&nbsp; ".$navi->getNavi()." &nbsp;&nbsp;&nbsp;<button name='deepsearch' onclick=\"javascript:doActionEx('"
     	.$url."&act=deepsearch', 'contentarea');\" title=\"深度复合查询\">深  搜</button>"
     	."&nbsp;&nbsp;<button name='deepsearch' onclick=\"javascript:doActionEx('"
-    	.$url."&act=pivot', 'contentarea');\" title=\"数据透视分析\">透  视</button>";
+    	.$url."&act=pivot&pntc=".$navi->get('totalcount')."', 'contentarea');\" title=\"数据透视分析\">透  视</button>";
     $out .= "&nbsp;<div style=\"float:right;\"><button name=\"searchor\" onclick=\"javascript:searchBy('"
     	.$url."&act=list&pnsm=or');\" title=\"满足其中一个条件即可\">或搜</button>&nbsp;&nbsp;&nbsp;<button name=\"searchand\" onclick=\"javascript:searchBy('"
     	.$url."&act=list&pnsm=and');\" title=\"同时满足所有检索条件\">并搜</button>&nbsp;&nbsp;</div>"
@@ -142,10 +142,10 @@ if(startsWith($act,'add') || startsWith($act, "modify")){
            if($i%2 == 0){
                 $bgcolor = "";
            }
-           $out .= "<tr height=\"35px\" valign=\"middle\" bgcolor=\"".$bgcolor."\" id=\"list_tr_".$rec[$gtbl->getMyId()]."\">";
+           $out .= "<tr height=\"35px\" valign=\"middle\" bgcolor=\"".$bgcolor."\" id=\"list_tr_".(++$i)."\">"; # rec[$gtbl->getMyId()]
            if($hasid){
                $id = $rec[$gtbl->getMyId()]; $listid[] = $id;
-               $out .= "<td nowrap> <input name=\"checkboxid\" type=\"checkbox\" value=\"".$id."\"> &nbsp; <a onmouseover=\"javascript:showActList('".$id."', 1, '".str_replace("&".$gtbl->getMyId()."=","&oid=", $url)."&".$gtbl->getMyId()."=".$id."');\" onmouseout=\"javascript:showActList('".$id."', 0, '".str_replace("&".$gtbl->getMyId()."=","&oid=", $url)."&".$gtbl->getMyId()."=".$id."');\" href='javscript:void(0);' onclick=\"javascript:doActionEx('".$url."&act=view&".$gtbl->getMyId()."=".$id."','contentarea');;\" title=\"详细信息\">".(++$i + (intval($navi->get('pnpn'))-1) * (intval($navi->get('pnps'))))." / ".$id." &#x25BE;</a> <div id=\"divActList_$id\" style=\"display:none; position: absolute; margin-left:50px; margin-top:-11px; z-index:99; background-color:silver;\">actliat-$id</div> </td>";
+               $out .= "<td nowrap> <input name=\"checkboxid\" type=\"checkbox\" value=\"".$id."\"> &nbsp; <a onmouseover=\"javascript:showActList('".$i."', 1, '".str_replace("&".$gtbl->getMyId()."=","&oid=", $url)."&".$gtbl->getMyId()."=".$id."');\" onmouseout=\"javascript:showActList('".$id."', 0, '".str_replace("&".$gtbl->getMyId()."=","&oid=", $url)."&".$gtbl->getMyId()."=".$id."');\" href='javscript:void(0);' onclick=\"javascript:doActionEx('".$url."&act=view&".$gtbl->getMyId()."=".$id."','contentarea');;\" title=\"详细信息\">".($i + (intval($navi->get('pnpn'))-1) * (intval($navi->get('pnps'))))." / ".$id." &#x25BE;</a> <div id=\"divActList_$i\" style=\"display:none; position: absolute; margin-left:50px; margin-top:-11px; z-index:99; background-color:silver;\">actlist-$i</div> </td>";
 
            }else{
                $out .= "<td > &nbsp; Error! No Id!</td>";

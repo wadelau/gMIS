@@ -209,7 +209,7 @@ function sendLinkInfo(vars, rw, fieldtag){
         parent.currentlistid[fieldtag] = '';
         return tmpid;
     }
-    console.log('sendLinkInfo: vars:['+vars+'] rw:['+rw+'] fieldtag:['+fieldtag+']');
+    //console.log('sendLinkInfo: vars:['+vars+'] rw:['+rw+'] fieldtag:['+fieldtag+']');
     return true;
 }
 
@@ -1178,4 +1178,90 @@ function copyAndReturn(theField){
 	//document.getElementById('extendicon_'+iId+'_'+theField).src='./img/plus.gif';
 
 }
+
+
+userinfo.showList = {}; //- holder of current active showing div
+//- show pivot list
+//- Xenxin@Ufqi, 18:23 05 December 2016
+function showPivotList(nId, isOn, sUrl, sName){
+	var divPrefix = 'divPivotList_';
+	var divId = divPrefix + nId;
+	if(userinfo.showList){
+		var oldnId = userinfo.showList.divPrefix;
+		if(oldnId && oldnId != nId){
+			//console.log("found oldnId:["+oldnId+"], try to switch off.");
+			showPivotList(oldnId, 0, sUrl, sName);
+		}
+	}
+	//console.log((new Date())+": divId:["+divId+"]");
+	var divObj = document.getElementById(divId);
+	var dispVal = divObj.style.display;
+	if(isOn == 1){ dispVal = 'block'; }else{ dispVal = 'none';}
+	divObj.style.display = dispVal;
+	divObj.onmouseover = function(){ this.style.display='block'; };
+	divObj.onmouseout = function(){ this.style.display='none'; };
+
+	var sCont = '<p> &nbsp; <b>'+nId+'. '+sName+'</b>: ';
+	var opList = {'addgroupby':'組項列', 'addgroupbyymd':'組項列Ymd', 'addgroupbyother':'組項列Other(?)',  'addvaluebysum':'值列Sum', 
+			'addvaluebycount':'值列Count', 'addvaluebycountdistinct':'值列Count去重',
+			'addvaluebyavg':'值列Average', 'addvaluebymiddle':'值列Median(?)', 'addvaluebymax':'值列Max', 
+			'addvaluebymin':'值列Min', 'addvaluebystddev_pop':'值列Stddev_Pop', 
+			'addvaluebystddev_samp':'值列Stddev_Samp',
+			'addvaluebyother':'值列Other(?)', 'addorderby':'排序項'};
+	var opi = 1;
+	for(var op in opList){
+		sCont += '&nbsp; &nbsp;'+nId+'.'+(opi++)+'&nbsp;<a href="javascript:void(0);" onclick="javascript:doPivotSelect(\''+sUrl+'\', \''
+			+nId+'\', \''+op+'\', 1, \''+sName+'\');">+'+opList[op]+'</a>&nbsp; &nbsp;&nbsp;';
+	}
+	sCont += '</p>';
+
+	divObj.innerHTML = sCont;
+	if(!userinfo.showList){
+		userinfo.showList = {};
+	}
+	userinfo.showList.divPrefix = nId;
+}
+
+//- select/unselect pivot field
+//- Xenxin@Ufqi, 18:29 05 December 2016
+function doPivotSelect(sField, iId, sOp, isOn, sName){
+	var rtn = true;
+	var spanObj = _g('span_groupby');
+	var fieldObj = _g('groupby');
+	var fieldValue = fieldObj.value;
+	if(sOp == 'addgroupby'  || sOp == 'addgroupbyymd'){
+		spanObj = _g('span_groupby');
+		fieldObj = _g('groupby');
+	}
+	else if(sOp == 'addorderby'){
+		spanObj = _g('span_orderby');
+		fieldObj = _g('orderby');
+	}
+	else{
+		spanObj = _g('span_calculateby');
+		fieldObj = _g('calculateby');
+	}
+	fieldValue = fieldObj.value;
+	//console.log("span:["+spanObj.innerHTML+"] field:["+fieldValue+"]");
+	var tmps = sName+'('+sField+') '+sOp+'   <a href="javascript:doPivotSelect(\''
+				+sField+'\', \''+iId+'\', \''+sOp+'\', 0, \''+sName+'\');"> X(Rm) </a>'
+				+'   <a href="javascript:doPivotSelect(\''
+				+sField+'\', \''+iId+'\', \'addorderby\', 1, \''+sName+'\');"> ↿⇂(Od) </a><br>';
+	if(isOn == 1){
+		if(fieldValue.indexOf(sField+sOp) == -1){
+			spanObj.innerHTML += tmps;
+			fieldObj.value += ','+sField+'::'+sOp;
+		}
+	}
+	else{
+		fieldValue = fieldValue.replace(','+sField+'::'+sOp, '');
+		fieldObj.value = fieldValue;
+		var spanValue = spanObj.innerHTML;
+		spanValue = spanValue.replace(tmps, '');
+		spanObj.innerHTML = spanValue;
+	}
+	return rtn;
+}
+
+
 

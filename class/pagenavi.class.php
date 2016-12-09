@@ -126,7 +126,9 @@ class PageNavi extends WebApp{
 
    function getCondition($gtbl, $user){
        $condition = "";
-       $pnsm = $_REQUEST['pnsm']; $pnsm = $pnsm==''?"or":$pnsm;
+       $pnsm = $_REQUEST['pnsm']; 
+       $pnsm = $pnsm=='' ? "or" : $pnsm;
+       $pnsm = $pnsm=='1'? "and" : $pnsm;
        $hmfield = $gtbl->getFieldList();
 
        $hidesk = $gtbl->getHideSk($user); # xml/hss_tuanduitbl.xml
@@ -220,6 +222,10 @@ class PageNavi extends WebApp{
                         $condition .= " ".$pnsm." "."$field <> ?";
                         $gtbl->set($field, $v);
                     }
+					else if($fieldopv == 'notregexp'){
+                        $condition .= " ".$pnsm." "."$field not regexp ?";
+                        $gtbl->set($field, $v);
+                    }
 					else{ 
                         $condition .= " ".$pnsm." $field $fieldopv ?"; # this should be numeric only.
                         $gtbl->set($field, $v);
@@ -238,7 +244,7 @@ class PageNavi extends WebApp{
                 $condition = $pnsc;
             }
        }
-       #error_log(__FILE__.":getCondition -2 : condition: $condition");
+       error_log(__FILE__.":getCondition -2 : condition: $condition");
        return $condition; 
    }
 

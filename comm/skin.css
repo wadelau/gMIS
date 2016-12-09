@@ -54,7 +54,7 @@
 	text-decoration: none;
 	height: 38px;
 	width: 100%;
-	position: ¹Ì¶¨;
+	position: ï¿½Ì¶ï¿½;
 	line-height: 38px;
 }
 .login_txt_bt {
@@ -87,7 +87,7 @@
 	height: 18px;
 	width: 100%;
 	overflow: hidden;
-	position: ¹Ì¶¨;
+	position: ï¿½Ì¶ï¿½;
 }
 
 .left_bt {
@@ -238,6 +238,11 @@ a:visited {
 .mainlist tr:hover{
     background-color: #afc4e2;
 }
+
+.pivot_resultset tr:hover{ /* Tue, 6 Dec 2016 17:41:34 +0800*/
+	background-color: #afc4e2;	
+}
+
 
 .login_bg table{
     text-align: center;

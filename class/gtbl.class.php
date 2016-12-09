@@ -80,7 +80,7 @@ class GTbl extends WebApp{
 	        $this->db = $db = $hmconf['db'] = $reqdb;
 	    
 	    }
-	    debug(__FILE__.": db:$db mydb:$mydb");
+	    #debug(__FILE__.": db:$db mydb:$mydb");
 		
 		$this->hmconf = $hmconf;
 		$this->sep = $sep;
@@ -377,7 +377,7 @@ class GTbl extends WebApp{
                 return $tmpstr;
             }
         }
-        $optionlist = '<option value="">-选择-</option>';
+        $optionlist = '<option value="" title="沒有篩選條件">-無选择-</option>';
         $selectval = '';
         $selectval_mul = '';
         if($tmpstr == ''){
@@ -392,7 +392,7 @@ class GTbl extends WebApp{
 			$hmoption = array();
 			$optval = 'id'; $dispname = '';
 			if(isset($arr[4])){ $optval = $arr[4]; }  # alternative 'id', # see xml/fwn_sitetbl, sitetype, Fri Dec 12 13:43:36 CST 2014
-			$hasExist = 0; $maxInitSelectCount = 64; $optioni = 0;
+			$hasExist = 0; $maxInitSelectCount = 512; $optioni = 0;
 			if(isset($this->hmconf['selectoption_'.$field])){
 				$optionlist = $this->hmconf['selectoption_'.$field]; $hasExist = 1;	
 				$hmoption = $this->hmconf['selectoption_hm_'.$field]; 	
@@ -407,7 +407,7 @@ class GTbl extends WebApp{
 				}
 				$this->hmf = $oldhmf;
 			}
-			$optionlist = '<option value="">-选择-</option>';
+			$optionlist = '<option value="" title="沒有篩選條件">-無选择-</option>';
 			foreach($hmoption as $k=>$rec){
 				$dispname = $rec[$arr[2]];
 				if(strpos($dispfield, ",") !== false){ #! Sat Nov 29 07:35:39 CST 2014
@@ -752,21 +752,23 @@ class GTbl extends WebApp{
     }
 
     public function getLogicOp($field){
-        $intop = array('----'=>'忽略', '='=>'等于',
+        $intop = array('='=>'等于', '----'=>'忽略,不使用此條件', 
                 '!='=>'不等于',
                 '>'=>'大于',
                 '>='=>'大于等于',
                 '<'=>'小于',
                 '<='=>'小于等于',
                 'inlist'=>'等于列表中的一个,如: 1,2,3',
-                'inrange'=>'在一个值域中,如: min,max');
-        $strop = array('----'=>'忽略','='=>'等于',
+                'inrange'=>'在一个值域中,如: min,max',);
+        $strop = array('contains'=>'包含','----'=>'忽略,不使用此條件',
+				'='=>'等于',
                 '!='=>'不等于',
-                'contains'=>'包含',
                 'notcontains'=>'不包含',
                 'inlist'=>'等于列表中的一个,如: 1,2,3',
                 'startswith'=>'以...开头',
-                'endswith'=>'以...结尾');
+                'endswith'=>'以...结尾',
+				'regexp'=>'正則式匹配',
+                'notregexp'=>'正則式非匹配',);
         $rtn = "";
         $hmfield = $this->hmfield;
         $isint = 0;
@@ -974,7 +976,13 @@ class GTbl extends WebApp{
 			$tmpstr = str_replace('THIS_ID', $result[$this->getMyId()], $tmpstr);
 			$tmpstr = str_replace('THIS_TBL', $this->getTbl(), $tmpstr);
 			if($field != null && $field != ''){
-				$tmpstr = str_replace('THIS_'.$field, $result[$field], $tmpstr);
+			    if(preg_match_all('/THIS_([a-zA-Z]+)/', $tmpstr, $matchArr)){
+			        $v = $matchArr[1];
+			        foreach ($v as $k1=>$v1){
+			            #debug("k1:$k1 v1:$v1");
+			            $tmpstr = str_replace('THIS_'.$v1, $result[$v1], $tmpstr);
+			        }
+			    }
 				$tmpstr = str_replace('THIS', $result[$field], $tmpstr);
 			}
 		}

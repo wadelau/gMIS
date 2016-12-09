@@ -73,6 +73,13 @@ if($logicid == 'xiane'){
        $out .= $v['id'].":::".$v['chnname']."\n"; 
     }
 }
+else if($logicid == 'tblname'){ # info_objectfieldtbl, remedy Thu, 8 Dec 2016 19:47:41 +0800
+    $hm = $gtbl->getBy("id,$logicid", null);
+    if($hm[0]){
+        $hm = $hm[1];
+    }
+    $out = json_encode(array('thefield'=>''.$thefield, 'result_list'=>$hm, 'dispfield'=>$logicid));
+}
 else if($logicid != ''){
     $hm = $gtbl->getBy("id,$logicid", "parentid='".$objectid."'");
 	if($hm[0]){

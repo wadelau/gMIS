@@ -42,9 +42,9 @@ if($hm[0]){
             #print_r($tmphm);
            $objectid = $tmphm[1][0]['id'];
            if($objectid > 0){
-               $sql = "update $objecttbl set objname='".$tblchn."',operator='sysop',updatetime=NOW() where tblname='".$tbl."'";
+               $sql = "update IGNORE $objecttbl set objname='".$tblchn."',operator='sysop',updatetime=NOW() where tblname='".$tbl."'";
            }else{
-               $sql = "insert into $objecttbl set objname='".$tblchn."', tblname='".$tbl."',operator='sysop',updatetime=NOW()";
+               $sql = "insert IGNORE into $objecttbl set objname='".$tblchn."', tblname='".$tbl."',operator='sysop',updatetime=NOW()";
            }
             #print "sql:$sql\n";
            $tmpgtbl->execBy($sql, null);

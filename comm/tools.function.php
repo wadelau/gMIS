@@ -125,7 +125,10 @@ function mkUrl($file, $_REQU, $gtbl=null){
     $url = $file."?";
    
     $needdata = array('id','tbl','db','oid','otbl','oldv','field','linkfield',
-		'linkfield2','tit','tblrotate', $gtbl->getMyId());
+		'linkfield2','tit','tblrotate');
+	if(isset($gtbl)){
+        $needdata[] = $gtbl->getMyId();
+    }
     foreach($_REQU as $k=>$v){
         if(in_array($k, $needdata) || startsWith($k,'pn') || startsWith($k, "oppn")){
             if($k == 'oldv'){
@@ -369,6 +372,8 @@ function debug($obj, $tag='', $output=null){
 
 
 //- client ip read
+//- should replaced with Wht::getIp
+//- Tue, 6 Dec 2016 11:12:05 +0800
 function getIp() {
 	
 	$ip = '';
@@ -401,4 +406,109 @@ function getIp() {
 	
 	return $ip;
 	
+ }
+
+ // Wht: Web and/or HTTP Tools
+ // get/set data from input and/or out and filter as expected
+ // added by wadelau@ufqi.com
+ // 19:11 20 June 2016
+ class Wht {
+ 
+     private  static $hmt = array(); # container of variables for set
+ 
+     # get input from src
+     public static function get($src, $k = null, $defaultValue = null) {
+         // src=$_RQUEST, $_SERVER, $_COOKIE, $_SESSION, php://input, ...
+         $rtn = '';
+ 
+         if (! $src) {
+             $src = $_REQUEST;
+         }
+         if (! $k) {
+             $k = 'all';
+         }
+ 
+         if ($k == 'all') {
+             $rtn = serialize ( $src );
+         }
+         else {
+             $rtn = trim($src[$k]);
+         }
+ 
+         if (!$rtn && $defaultValue != null) {
+             $rtn = $defaultValue;
+         }
+ 
+         $rtn = str_replace ( '<', '&lt;', $rtn );
+         $rtn = str_replace ( '"', '&quot;', $rtn );
+ 
+         return $rtn;
+ 
+     }
+ 
+     # set output to dest
+     public static function set($dest, $k, $v) {
+         // dest=setHeader, setStatus, setCookie ...
+         self::$hmt['set'][$dest] = array($k, $v);
+ 
+     }
+ 
+     # flush set, usually at the end of a request handler
+     public static function flushSet(){
+ 
+         foreach (self::$hmt['set'] as $tk=>$tv){
+             	
+             $dest = $tk; $k = $tv[0]; $v = $tv[1];
+             if($dest == 'setheader'){
+                 header($k, $v);
+             }
+             else if($dest == 'setstatus'){
+                 http_response_code($v);
+             }
+             else if($dest == 'setcookie'){
+                 setcookie($k, $v['value'], $v['expire']);
+             }
+             else{
+                 debug(__FILE__.": Unknown set:[$dest]");
+             }
+ 
+         }
+ 
+     }
+ 
+     //- client ip read
+     public static function getIp() {
+ 
+         $ip = '';
+ 
+         if (@$_SERVER["REMOTE_ADDR"]){ $ip = $_SERVER["REMOTE_ADDR"]; }
+         else if (@$_SERVER["HTTP_X_FORWARDED_FOR"]){ $ip = $_SERVER["HTTP_X_FORWARDED_FOR"]; }
+         else if (@$_SERVER["HTTP_CLIENT_IP"]){ $ip = $_SERVER["HTTP_CLIENT_IP"]; }
+         else if (@getenv( "HTTP_X_FORWARDED_FOR" )){ $ip = getenv( "HTTP_X_FORWARDED_FOR" ); }
+         else if (@getenv( "HTTP_CLIENT_IP" )){ $ip = getenv( "HTTP_CLIENT_IP" ); }
+         else if (@getenv( "REMOTE_ADDR" )){ $ip = getenv( "REMOTE_ADDR" ); }
+         else{ $ip = "Unknown";}
+ 
+         if (($ip == "Unknown" or $ip == "127.0.0.1"
+                 or strpos( $ip, "172.31." ) === 0)
+                 and @$_SERVER["HTTP_X_REAL_IP"]){
+                     	
+                     $ip = $_SERVER["HTTP_X_REAL_IP"];
+         }
+         if (($ip == "Unknown" or $ip == "127.0.0.1" or strpos( $ip, "172.31." ) === 0)
+                 and @$_SERVER["HTTP_X_FORWARDED_FOR"]) {
+                     	
+                     $ip = $_SERVER["HTTP_X_FORWARDED_FOR"];
+                     if (($tmppos=strrpos($ip," "))>0){
+                         $ip=substr($ip,$tmppos+1);
+                     }
+                     if (($tmppos=strrpos($ip,","))>0){
+                         $ip=substr($ip,$tmppos+1);
+                     }
+                 }
+ 
+                 return $ip;
+ 
+     }
+ 
  }
