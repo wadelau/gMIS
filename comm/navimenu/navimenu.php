@@ -33,7 +33,7 @@ if($hm[0]){
                     $linfo = $hmkeys[$v1];
                     #$dynamicmenu .= 'level2- v1:'.$v1.", \n";
                     if($linfo['modulename'] == ''){
-                        $dynamicmenu .= '<li><a href="javascript:void(0);" class="sub">'.$linfo['linkname'].'</a>'."<ul>\n<!--LEVEL-3--></ul>\n</li>\n";
+                        $dynamicmenu .= '<li><a href="./?navidir='.$linfo['levelcode'].'" class="sub">'.$linfo['linkname'].'</a>'."<ul>\n<!--LEVEL-3--></ul>\n</li>\n";
                     }
 					else{
 						if($linfo['disptitle'] == ''){ $linfo['disptitle'] = $linfo['linkname'];}

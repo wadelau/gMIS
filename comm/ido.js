@@ -188,6 +188,8 @@ function searchBy(url){
         url = url.replace(reg, "");
     reg = new RegExp("&pnsk[0-9a-zA-Z]+=([^&]*)", 'gm');
         url = url.replace(reg, "");
+	reg = new RegExp("&id=([^&]*)", 'gm'); //- remove old id query, Mon, 12 Dec 2016 13:41:21 +0800
+        url = url.replace(reg, "");
     
     doAction(url+appendquery);
     console.log("fieldlist:"+fieldlist+",last_url:["+url+appendquery+"]");
@@ -981,6 +983,7 @@ function makeSelect(sId, sCont, sDiv, sSele, iStop){
 		userinfo.input2Select.makeSelect = 0;
 	}
 }
+
 function input2Search(inputx, obj, div3rd, valueoption){
 	var lastSearchTime = userinfo.lastInput2SearchTime;
 	var lastSearchItem = userinfo.lastInput2SearchItem;
@@ -1109,10 +1112,14 @@ function showActList(nId, isOn, sUrl){
 
 	var sCont = '<p>';
 	
-	sCont += '&nbsp; &nbsp;&nbsp;<a href="javascript:void(0);" onclick="javascript:doActSelect(\'\', \''+sUrl+'\', \''+nId+'\', \'view\');">查看View</a>&nbsp; &nbsp;&nbsp;';
-	sCont += '<br/>&nbsp; &nbsp;&nbsp;<a href="javascript:void(0);" onclick="javascript:doActSelect(\'\', \''+sUrl+'\', \''+nId+'\', \'modify\');">修改Edit</a>&nbsp; &nbsp;&nbsp;';
-	sCont += '<br/>&nbsp; &nbsp;&nbsp;<a href="javascript:void(0);" onclick="javascript:doActSelect(\'\', \''+sUrl+'\', \''+nId+'\', \'print\');">打印Print</a>&nbsp; &nbsp;&nbsp;';
-	sCont += '<br/>&nbsp; &nbsp;&nbsp;<a href="javascript:void(0);" onclick="javascript:doActSelect(\'\', \''+sUrl+'\', \''+nId+'\', \'list-dodelete\');">删除Delete</a>&nbsp; &nbsp;&nbsp;';
+	sCont += '&nbsp; &nbsp;&nbsp;<a href="javascript:void(0);" onclick="javascript:doActSelect(\'\', \''+sUrl+'\', \''
+		+nId+'\', \'view\');">查看View</a>&nbsp; &nbsp;&nbsp;';
+	sCont += '<br/>&nbsp; &nbsp;&nbsp;<a href="javascript:void(0);" onclick="javascript:doActSelect(\'\', \''+sUrl+'\', \''
+		+nId+'\', \'modify\');">修改Edit</a>&nbsp; &nbsp;&nbsp;';
+	sCont += '<br/>&nbsp; &nbsp;&nbsp;<a href="javascript:void(0);" onclick="javascript:doActSelect(\'\', \''+sUrl+'\', \''
+		+nId+'\', \'print\');">打印Print</a>&nbsp; &nbsp;&nbsp;';
+	sCont += '<br/>&nbsp; &nbsp;&nbsp;<a href="javascript:void(0);" onclick="javascript:doActSelect(\'\', \''+sUrl+'\', \''
+		+nId+'\', \'list-dodelete\');">删除Delete</a>&nbsp; &nbsp;&nbsp;';
 	sCont += '</p>';
 
 	divObj.innerHTML = sCont;
@@ -1202,16 +1209,26 @@ function showPivotList(nId, isOn, sUrl, sName){
 	divObj.onmouseout = function(){ this.style.display='none'; };
 
 	var sCont = '<p> &nbsp; <b>'+nId+'. '+sName+'</b>: ';
-	var opList = {'addgroupby':'組項列', 'addgroupbyymd':'組項列Ymd', 'addgroupbyother':'組項列Other(?)',  'addvaluebysum':'值列Sum', 
+	var opList = {'addgroupby':'組項列', 'addgroupbyymd':'組項列Ymd', 'addgroupbyother':'組項列Other(?)', 
+			'__SEPRTa':1,
+			'addvaluebysum':'值列Sum', 
 			'addvaluebycount':'值列Count', 'addvaluebycountdistinct':'值列Count去重',
 			'addvaluebyavg':'值列Average', 'addvaluebymiddle':'值列Median(?)', 'addvaluebymax':'值列Max', 
 			'addvaluebymin':'值列Min', 'addvaluebystddev_pop':'值列Stddev_Pop', 
 			'addvaluebystddev_samp':'值列Stddev_Samp',
-			'addvaluebyother':'值列Other(?)', 'addorderby':'排序項'};
+			'addvaluebyother':'值列Other(?)',
+			'__SEPRTb':1,
+			'addorderby':'排序項'};
 	var opi = 1;
 	for(var op in opList){
-		sCont += '&nbsp; &nbsp;'+nId+'.'+(opi++)+'&nbsp;<a href="javascript:void(0);" onclick="javascript:doPivotSelect(\''+sUrl+'\', \''
-			+nId+'\', \''+op+'\', 1, \''+sName+'\');">+'+opList[op]+'</a>&nbsp; &nbsp;&nbsp;';
+		if(op.indexOf('__SEPRT') > -1){
+			sCont += "<br/>";
+		}
+		else{
+			sCont += '&nbsp; &nbsp;'+nId+'.'+(opi++)+'&nbsp;<a href="javascript:void(0);" onclick="javascript:doPivotSelect(\''
+				+sUrl+'\', \''
+				+nId+'\', \''+op+'\', 1, \''+sName+'\');">+'+opList[op]+'</a>&nbsp; &nbsp;&nbsp;';
+		}
 	}
 	sCont += '</p>';
 
@@ -1259,6 +1276,76 @@ function doPivotSelect(sField, iId, sOp, isOn, sName){
 		var spanValue = spanObj.innerHTML;
 		spanValue = spanValue.replace(tmps, '');
 		spanObj.innerHTML = spanValue;
+	}
+	return rtn;
+}
+
+//- filter something of user input and replace with matched
+//- work with regexp by Xenxin@Ufqi
+//- 19:14 16 December 2016
+/* e.g. 
+<jsaction>onblur::filterReplace('pnsk_THISNAME', '[^0-9]*([0-9]+)[^0-9]*');|onkeyup::filterReplace('pnsk_THISNAME', '[^0-9]*([0-9]+)[^0-9]*');|onpaste::filterReplace('pnsk_THISNAME', '[^0-9]*([0-9]+)[^0-9]*');|</jsaction>
+*/
+userinfo.filterReplaceI = {};
+function filterReplace(myField, myRegx){
+	var rtn = 0;
+	var realdo = false;
+	var frpk = myField + myRegx;
+	if(!userinfo.filterReplaceI){
+		userinfo.filterReplaceI = {frpk:1};
+		window.setTimeout('filterReplace(\''+myField+'\', \''+myRegx+'\')', 10);
+		//console.log("set a delay exec. 1612161417.");
+	}
+	else{
+		var sregi = userinfo.filterReplaceI.frpk;
+		if(!sregi){
+			userinfo.filterReplaceI.frpk = 1;
+			window.setTimeout('filterReplace(\''+myField+'\', \''+myRegx+'\')', 10);
+			//console.log("set a delay exec. 1612161407.");
+		}
+		else if(sregi == 1){
+			userinfo.filterReplaceI.frpk = 0;
+			realdo = true;
+		}
+	}
+	if(realdo){
+		var obj = _g(myField);
+		if(obj){
+			var isVal = true;
+			var val = null;
+			if(obj.value){
+				val = obj.value;
+			}
+			else if(obj.innerText){
+				val = obj.innerText;
+				isVal = false;
+			}
+			else{
+				console.log("obj.value failed. 16121138.");
+			}
+			var regx = new RegExp(myRegx, 'gm');
+			// number: "[^0-9]*([0-9]+)[^0-9]*"
+			// string: ?
+			var mtch = regx.exec(val);
+			if(mtch){
+				//console.log("0:"+mtch[0]); // whole matched string
+				console.log("1:"+mtch[1]); // first group
+				val = mtch[1];
+			}
+			else{
+				console.log("mtch failed.");
+				val = '';
+			}
+			if(isVal){
+				obj.value = val;
+			}
+			else{
+				obj.innerText = val;
+			}
+		}
+		else{
+			console.log("obj failed. 16121151.");
+		}
 	}
 	return rtn;
 }

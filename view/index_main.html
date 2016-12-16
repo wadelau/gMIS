@@ -92,9 +92,39 @@ body {
 		</style>
 		<table style="width:700px; background:transparent; align:center">
 
+		{if count($navidir_list)>0}
+		<tr>
+		<td>
+		<b title="浏览菜单导航">ND.{$navidir_list[0]['linkname']} Navigate Directory</b><br/>
+		{$mi=0}
+		{foreach $navidir_list as $k=>$v}
+			{if $k==0}
+			<!-- {$k} -->
+			{else}
+				{if $mi==0 || ($mi) % 4 == 0}
+				<div class="wrapper">
+				{/if}
+					 {if $navidir_list[$k]['modulename'] == ''}
+					 <a href="./?navidir={$navidir_list[$k]['levelcode']}">
+					 {else}
+					 <a href="./{$ido}&tbl={$navidir_list[$k]['modulename']}">
+					 {/if}
+					 <div class="left{(($k -1) % 4)+1}">
+					 	<span style="size:14px; font-weight:bold;">{$mi+1}.{$navidir_list[$k]['linkname']}</span>
+					 	<br/>({$navidir_list[$k]['modulename']})</div></a>
+				{if ($mi+1) % 4 == 0}
+				</div>
+				{/if}
+				{$mi=$mi+1}
+			{/if}
+		{/foreach}	
+		</td>
+		</tr>
+		{/if}
+		
 		<tr>
 			<td colspan="10">
-			<b title="(工作、任务列表)">WT.工作表Work-Todo</b><br/>
+			<b title="(工作、任务列表)">WT.工作表 Work-Todo</b><br/>
 			<div id="tododiv" class="wrapperlog">
 			<table style="border:0px; background:transparent;">
 				<tr style="font-weight: bold;"><td>序号</td><td>事项/任务</td><td>状态</td><td>需求方</td><td>供应方</td><td>更新时间</td></tr>
@@ -114,32 +144,9 @@ body {
 			</td>
 		</tr>
 
-		{if count($navidir_list)>0}
 		<tr>
 		<td>
-		<b title="浏览菜单导航">ND.{$navidir_list[0]['linkname']}Navigate Directory</b><br/>
-		{$mi=0}
-		{foreach $navidir_list as $k=>$v}
-			{if $k==0}
-			<!-- {$k} -->
-			{else}
-				{if $mi==0 || ($mi) % 4 == 0}
-				<div class="wrapper">
-				{/if}
-					 <a href="./{$ido}&tbl={$navidir_list[$k]['modulename']}"><div class="left{(($k -1) % 4)+1}"><span style="size:14px; font-weight:bold;">{$mi+1}.{$navidir_list[$k]['linkname']}</span><br/>({$navidir_list[$k]['modulename']})</div></a>
-				{if ($mi+1) % 4 == 0}
-				</div>
-				{/if}
-				{$mi=$mi+1}
-			{/if}
-		{/foreach}	
-		</td>
-		</tr>
-		{/if}
-
-		<tr>
-		<td>
-		<b title="(根据被调用频率自动排列、调整)">MU.常用Most-Used</b><br/>
+		<b title="(根据被调用频率自动排列、调整)">MU.常用 Most-Used</b><br/>
 		{$mi=0}
 		{foreach $module_list_order as $k=>$v}
 			{if $mi==0 || ($mi) % 4 == 0}
@@ -162,7 +169,7 @@ body {
 		</td>
 		</tr><tr>
 		<td>
-		<b title="（用户自定义的快捷列表，在“系统设置--单元模块”中选择某个模块，修改其中“添加到桌面”即可）">DT.桌面Desktop</b><br/>
+		<b title="（用户自定义的快捷列表，在“系统设置--单元模块”中选择某个模块，修改其中“添加到桌面”即可）">DT.桌面 Desktop</b><br/>
 		{$mi=0}
 		{foreach $module_list_byuser as $k=>$v}
 			{if $mi==0 || ($mi) % 4 == 0}
@@ -179,7 +186,7 @@ body {
 
 		<tr>
 			<td colspan="10">
-			<b title="(操作、管理日志)">OL.操作日志Operation-Log</b><br/>
+			<b title="(操作、管理日志)">OL.操作日志 Operation-Log</b><br/>
 			<div id="oplogdiv" class="wrapperlog">
 			<pre><b>时间					用户/Id						执行操作					作用对象/Id</b>
 <pre>{foreach $log_list as $k=>$v}

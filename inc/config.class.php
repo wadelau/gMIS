@@ -21,6 +21,7 @@ if(true){
 
 	$conf['uploaddir']	= 'upld';
 	$conf['septag']		= '_J_A_Z_';
+	$conf['skiptag']    = '----';
 
 	$conf['maindb']		= '';
 	$conf['maintbl']	= $tblpre.'customertbl';

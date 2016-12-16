@@ -53,8 +53,7 @@ $reqUri = str_replace('jdo.php', 'ido.php', $reqUri);
 
 $thisUrl = 'http' . (isset($_SERVER['HTTPS']) ? 's' : '') . '://' . "{$_SERVER['HTTP_HOST']}{$reqUri}";
 
-if(array_key_exists(UID,$_SESSION) && $_SESSION[UID] != '')
-{
+if(array_key_exists(UID,$_SESSION) && $_SESSION[UID] != ''){
 	$userid = $_SESSION[UID];
 }
 if($userid != ''){
@@ -174,7 +173,7 @@ $tbl = $_REQUEST['tbl'];
 $tblrotate = $_REQUEST['tblrotate'];
 $act = $_REQUEST['act'];
 $tit = $tit==''?$tbl:$tit;
-$id = $_REQUEST['id'];
+$id = isset($_REQUEST['pnskid']) ? $_REQUEST['pnskid'] : $_REQUEST['id'];
 $fmt = isset($_REQUEST['fmt'])?$_REQUEST['fmt']:''; # by wadelau on Tue Nov 24 21:36:56 CST 2015
 if($fmt == ''){
     header("Content-type: text/html;charset=utf-8");

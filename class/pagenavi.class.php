@@ -106,7 +106,7 @@ class PageNavi extends WebApp{
    }
 
    function getAsc($field=''){
-       $isasc = 0; # 0: 0->1, asc, 1: 1->0, desc
+       $isasc = 0; # 1: 0->1, asc; 0: 1->0, desc
        if(array_key_exists('isasc',$this->hmf)){
             if($field == '' || ($field != '' && $this->getOrder() == $field)){
                 $isasc = $this->hmf['isasc']; 
@@ -115,7 +115,7 @@ class PageNavi extends WebApp{
            foreach($_REQUEST as $k=>$v){
                if(($field == '' || $field == substr($k,4)) && strpos($k,"pnob") === 0){
                    if($v == 1){
-                       $isasc = 1; 
+                       $isasc = 0; 
                        break;
                    }
                }
@@ -147,8 +147,10 @@ class PageNavi extends WebApp{
 				}
            }
        }
-      # error_log(__FILE__.": req:".$this->toString($_REQUEST));
-
+	   # error_log(__FILE__.": req:".$this->toString($_REQUEST));
+	   $skiptag = Gconf::get('skiptag');
+	   $hasId = $gtbl->get('hasid');
+       $myId = $gtbl->getMyId();
        foreach($_REQUEST as $k=>$v){
             if($k != 'pnsk' && strpos($k,"pnsk") === 0){
                 $field = substr($k, 4);
@@ -162,22 +164,25 @@ class PageNavi extends WebApp{
 				if(isset($_REQUEST[$field]) && $_REQUEST[$field] != $v){
 					$v = $_REQUEST[$field];
 				}
-                if(strpos($v,"tbl:") === 0){ #http://ufqi.com:81/dev/gtbl/ido.php?tbl=hss_dijietbl&tit=%E5%AF%BC%E6%B8%B8%E8%A1%8C%E7%A8%8B&db=&pnsktuanid=tbl:hss_findaoyoutbl:id=2 
+                if(strpos($v,"tbl:") === 0){
+					#http://ufqi.com:81/dev/gtbl/ido.php?tbl=hss_dijietbl&tit=%E5%AF%BC%E6%B8%B8%E8%A1%8C%E7%A8%8B&db=&pnsktuanid=tbl:hss_findaoyoutbl:id=2 
                     $condition .= " ".$pnsm." ".$field." in (".$this->embedSql($linkfield,$v).")";
-                
-                }else if(strpos($v,"in::") === 0){ # <hidesk>tuanid=id::in::tbl:hss_tuanduitbl:operatearea=IN=USER_OPERATEAREA</hidesk>
-                    error_log(__FILE__.": k:$k, v:$v");
+                }
+				else if(strpos($v,"in::") === 0){ 
+					# <hidesk>tuanid=id::in::tbl:hss_tuanduitbl:operatearea=IN=USER_OPERATEAREA</hidesk>
+                    #error_log(__FILE__.": k:$k, v:$v");
                     $tmparr = explode("::", $v);
                     $tmpop = $tmparr[0];
                     $tmpval = $tmparr[1];
                     if(strpos($tmpval,"tbl:") === 0){
                         $tmpval = $this->embedSql($linkfield, $tmpval);
-                    }else{
+                    }
+					else{
                         $tmpval = $this->addQuote($tmpval);
                     }
-                    $condition .= " and $field in ($tmpval)";
-
-                }else{
+                    $condition .= " $pnsm $field in ($tmpval)";
+                }
+				else{
                     # remedy on Sun Jun 17 07:54:59 CST 2012 by wadelau
                     $fieldopv = $_REQUEST['oppnsk'.$field]; # refer to ./class/gtbl.class.php: getLogicOp,
                     if($fieldopv == null || $fieldopv == ''){
@@ -186,10 +191,16 @@ class PageNavi extends WebApp{
 					else{
                         $fieldopv = str_replace('&lt;', '<', $fieldopv);
                     }
-					if($fieldopv == '----'){
+					if($fieldopv == $skiptag){
 						# omit...	
 					}
-                    else if($fieldopv == 'inlist'){
+                    if($hasId && $field == $myId){
+					    # use primary or unique key to query, Fri, 16 Dec 2016 19:29:44 +0800
+					    $condition = " $pnsm $field $fieldopv ?";
+					    $gtbl->set($field, $v);
+					    break;
+					}
+					else if($fieldopv == 'inlist'){
                         if($this->isNumeric($hmfield[$field]) && strpos($hmfiled[$field],'date') === false){
                             # numeric
                         }else{

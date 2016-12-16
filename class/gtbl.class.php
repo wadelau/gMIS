@@ -62,6 +62,7 @@ class GTbl extends WebApp{
 
 	private static $MAX_FIELD_LIST = 99;
 	const RESULTSET = 'resultset';
+	public $PRIUNI = 'primaryunique';
 	public $db = ''; # data db
 	public $mydb = ''; # the app, -gMIS runs on it, may differ with $db
 
@@ -163,7 +164,7 @@ class GTbl extends WebApp{
     }
 
 
-    public function getOrderBy(){
+    public function getOrderBy(){ # <orderby>statdate desc</orderby>
         $tmpstr = $this->hmconf[$this->taglist['table'].$this->sep.$this->prttbl.$this->sep.$this->taglist['orderby']];
         return $tmpstr = $tmpstr==null?$this->getMyId():$tmpstr;
     }
@@ -752,7 +753,8 @@ class GTbl extends WebApp{
     }
 
     public function getLogicOp($field){
-        $intop = array('='=>'等于', '----'=>'忽略,不使用此條件', 
+		$skiptag = Gconf::get('skiptag');
+        $intop = array('='=>'等于', $skiptag=>'忽略,不使用此條件', 
                 '!='=>'不等于',
                 '>'=>'大于',
                 '>='=>'大于等于',
@@ -760,7 +762,7 @@ class GTbl extends WebApp{
                 '<='=>'小于等于',
                 'inlist'=>'等于列表中的一个,如: 1,2,3',
                 'inrange'=>'在一个值域中,如: min,max',);
-        $strop = array('contains'=>'包含','----'=>'忽略,不使用此條件',
+        $strop = array('contains'=>'包含', $skiptag=>'忽略,不使用此條件',
 				'='=>'等于',
                 '!='=>'不等于',
                 'notcontains'=>'不包含',
@@ -963,34 +965,48 @@ class GTbl extends WebApp{
 	
 	//-
 	//- replace THIS* in settings, 14:23 27 September 2016
-	function fillThis($tmpstr, $field=null){
-
+	public function fillThis($tmpstr, $field=null){
 		if($tmpstr != '' && strpos($tmpstr, 'THIS') > 0){
-
-		if($result == null){
-        	$result = $this->get($this->resultset);	
-        }
-        #debug(__FILE__.": tmpstr:[$tmpstr] resultset:");
-        #debug($result);
-        if(is_array($result)){
-			$tmpstr = str_replace('THIS_ID', $result[$this->getMyId()], $tmpstr);
-			$tmpstr = str_replace('THIS_TBL', $this->getTbl(), $tmpstr);
-			if($field != null && $field != ''){
-			    if(preg_match_all('/THIS_([a-zA-Z]+)/', $tmpstr, $matchArr)){
-			        $v = $matchArr[1];
-			        foreach ($v as $k1=>$v1){
-			            #debug("k1:$k1 v1:$v1");
-			            $tmpstr = str_replace('THIS_'.$v1, $result[$v1], $tmpstr);
-			        }
-			    }
-				$tmpstr = str_replace('THIS', $result[$field], $tmpstr);
+			if($result == null){
+				$result = $this->get($this->resultset);	
 			}
-		}
-
+			#debug(__FILE__.": tmpstr:[$tmpstr] resultset:");
+			#debug($result);
+			$tmpstr = str_replace('THISNAME', $field, $tmpstr);
+			if(is_array($result)){
+				$tmpstr = str_replace('THIS_ID', $result[$this->getMyId()], $tmpstr);
+				$tmpstr = str_replace('THIS_TBL', $this->getTbl(), $tmpstr);
+				if($field != null && $field != ''){
+					if(preg_match_all('/THIS_([a-zA-Z]+)/', $tmpstr, $matchArr)){
+						$v = $matchArr[1];
+						foreach ($v as $k1=>$v1){
+							#debug("k1:$k1 v1:$v1");
+							$tmpstr = str_replace('THIS_'.$v1, $result[$v1], $tmpstr);
+						}
+					}
+					$tmpstr = str_replace('THIS', $result[$field], $tmpstr);
+				}
+			}
 		}
         #debug(__FILE__.": tmpstr:[$tmpstr]");
 		return $tmpstr;
 	}
 
+	//- unique parameters for non id
+	//- Xenxin@Ufqi, Fri, 16 Dec 2016 20:10:24 +0800
+	public function getUniquePara($rec){
+	    $rtn = '';
+	    $priuni = $this->get($this->PRIUNI);
+	    #debug(__FILE__.": priuni: ".$this->toString($priuni));
+	    $fields = isset($priuni['PRI']) ? $priuni['PRI'] : $priuni['UNI'];
+	    foreach ($fields as $k=>$v){
+	        $rtn .= "$v=".$rec[$v].'&';
+	    }
+	    if($rtn != ''){
+	        $rtn = substr($rtn, 0, strlen($rtn)-1);
+	    }
+	    return $rtn;
+	}
+	
 }
 ?>

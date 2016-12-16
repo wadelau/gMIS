@@ -57,7 +57,7 @@ if($printref != ''){
 $out .= "<table align=\"center\" width=\"800px\" cellspacing=\"0\" cellpadding=\"0\" border=\"0px\" class=\"printtbl\">";
 $out .= "\n<tr height=\"30\" valign=\"middle\"  onmouseover=\"javascript:this.style.backgroundColor='".$hlcolor."';\" onmouseout=\"javascript:this.style.backgroundColor='';\">";
 
-$lastclosed = 0; $tdi = 0;
+$lastclosed = 0; $tdi = 0; $skiptag = $_CONFIG['skiptag'];
 
 for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
 
@@ -73,7 +73,7 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
     $needcloserow = 0;
 
     if($field == 'password'){
-        $fieldv = $hmorig[$field] = '----';
+        $fieldv = $hmorig[$field] = $skiptag;
     }
     if($lastclosed == 1){
 		$out .= "\n<tr height=\"30\" valign=\"middle\"  onmouseover=\"javascript:this.style.backgroundColor='".$hlcolor."';\" onmouseout=\"javascript:this.style.backgroundColor='';\" idata=\"$i-$lastclosed\" fieldname=\"$field\">";
@@ -81,7 +81,7 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
     }
 
     if(!$user->canRead($field, '', '', $_REQUEST['id'], $id)){
-		$fieldv = '----';
+		$fieldv = $skiptag;
         $out .= "<td idata=\"$i\" fieldname=\"$field\">".$gtbl->getCHN($field).":&nbsp;</td><td> ".$fieldv."</td>";
 		$tdi++;
     }

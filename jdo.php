@@ -42,12 +42,19 @@ if(startsWith($act,'add') || startsWith($act, "modify")){
     $navi = new PageNavi();
     $orderfield = $navi->getOrder();
     if($orderfield == ''){
-        $orderfield = $gtbl->getOrderBy();
-        $navi->set('isasc', $orderfield==$gtbl->getMyId()?1:0);
+        $orderfield = $orderfield=='' ? '1' : $orderfield;
+        if(strpos($orderfield, ' ') !== false){
+            $tmpArr = explode(' ', $orderfield);
+            $orderfield = $tmpArr[0];
+            $navi->set('isasc', ($tmpArr[1]=='desc' ? 0 : 1));
+        }
+        else{
+            $navi->set('isasc', ($orderfield==$gtbl->getMyId()||$orderfield=='1')?0:1);
+        }
     }
     $gtbl->set("pagesize", $navi->get('pnps'));
     $gtbl->set("pagenum", $navi->get('pnpn'));
-    $gtbl->set("orderby",$orderfield." ".($navi->getAsc()==0?"asc":"desc"));
+    $gtbl->set("orderby", $orderfield." ".($navi->getAsc()==0?"desc":"asc"));
     if($_REQUEST['pntc'] == '' || $_REQUEST['pntc'] == '0' || $navi->get('neednewpntc') == 1){
 		$pagenum = $gtbl->get('pagenum');
 		$gtbl->set('pagenum', 1);
@@ -78,7 +85,8 @@ if(startsWith($act,'add') || startsWith($act, "modify")){
     $out .= "<tr style=\"font-weight:bold;\" height=\"28px\">";
     if($hasid){
         $out .= "<td valign=\"middle\" nowrap>&nbsp;<a href=\"javascript:void(0);\" title=\"Sort by ID\" onclick=\"javascript:doAction('".str_replace("&pnob","&xxpnob",$url)."&act=list&pnobid=".($navi->getAsc($gtbl->getMyId())==0?1:0)."'); \">序/编号</a></td>";
-    }else{
+    }
+	else{
         $out .= "<td valign=\"middle\">Nbr.</td>";
     }
     for($hmi=$dispi=$min_idx; $hmi<=$max_idx; $hmi++){
@@ -90,14 +98,14 @@ if(startsWith($act,'add') || startsWith($act, "modify")){
         $dispi++;
         $out .= "<td valign=\"middle\"><a href=\"javascript:void(0);\" title=\"Sort by ".$gtbl->getCHN($field)."\" onclick=\"doAction('".str_replace("&pnob","&xxpnob",$url)."&act=list&pnob".$field."=".($navi->getAsc($field)==0?1:0)."')\">".$gtbl->getCHN($field)."&#8639;&#8642;</a></td>";
     }
-    $out .= "<!-- <td valign=\"middle\"> 操作 </td> --> </tr>";
+    $out .= "</tr>";
     ## list-sort end
     ## list-search start
     $untouched = '~~~';
     $out .= "<tr style=\"font-weight:bold;\">";
     $out .= "<td valign=\"middle\"><input type=\"hidden\" name=\"fieldlist\" id=\"fieldlist\" value=\"".implode(",",array_keys($hmfield))."\" /> <input type=\"hidden\" name=\"fieldlisttype\" id=\"fieldlisttype\" value=\"".$gtbl->getFieldType()."\"/>";
     $out .= "<div style=\"display:none\" id=\"pnsk_id_op_div\"><select style=\"width:60px\" name=\"oppnsk_id\" id=\"oppnsk_id\">".$gtbl->getLogicOp($gtbl->getMyId())."</select></div>";
-    $out .= "<input value=\"".($id==''?$_REQUEST['pnskid']:$id)."\" style=\"width:50px;".($id==''?"color:white;":"")."\" id=\"pnsk_id\" name=\"pnsk_id\" ";
+    $out .= "<input value=\"".($id=='' ? $untouched : $id)."\" style=\"width:50px;".($id==''?"color:white;":"")."\" id=\"pnsk_id\" name=\"pnsk_id\" ";
     $out .= "style=\"COLOR:#777;\" title=\"Search By ...\" onclick=\"this.select();this.style.color='black';\" onfocus=\"document.getElementById('pnsk_id_op_div').style.display='block';\" onkeydown=\"javascript:if(event.keyCode == 13){ searchBy('".$url."&act=list&pnsm=and');}\" /></td>";
     for($hmi=$dispi=$min_idx; $hmi<=$max_idx; $hmi++){
         $field = $gtbl->getField($hmi);
@@ -125,7 +133,7 @@ if(startsWith($act,'add') || startsWith($act, "modify")){
             $tmpfieldv = $_REQUEST['pnsk'.$field];
             if(!isset($tmpfieldv)){ $tmpfieldv = $untouched; }
             $out .= "<div style=\"display:none\" id=\"pnsk_{$field}_op_div\"><select name=\"oppnsk_{$field}\" id=\"oppnsk_{$field}\" style=\"width:60px\">".$gtbl->getLogicOp($field)."</select></div>";
-            $out .= "<input value=\"".$tmpfieldv."\" id=\"pnsk_".$field."\" name=\"pnsk_".$field."\" style=\"COLOR:#777;width:50px;".($tmpfieldv==$untouched?"color:white;":"")."\" title=\"Search By ...\" onclick=\"this.select();this.style.color='black';\" onfocus=\"document.getElementById('pnsk_".$field."_op_div').style.display='block';\" onkeydown=\"javascript:if(event.keyCode == 13){ searchBy('".$url."&act=list&pnsm=and');}\" />";
+            $out .= "<input value=\"".$tmpfieldv."\" id=\"pnsk_".$field."\" name=\"pnsk_".$field."\" style=\"COLOR:#777;width:50px;".($tmpfieldv==$untouched?"color:white;":"")."\" title=\"Search By ...\" onclick=\"this.select();this.style.color='black';\" onfocus=\"document.getElementById('pnsk_".$field."_op_div').style.display='block';\" onkeydown=\"javascript:if(event.keyCode == 13){ searchBy('".$url."&act=list&pnsm=and');}\" ".$gtbl->getJsAction($field)."/>";
         }
         $out .= "</td>";
     }
@@ -148,7 +156,8 @@ if(startsWith($act,'add') || startsWith($act, "modify")){
                $out .= "<td nowrap> <input name=\"checkboxid\" type=\"checkbox\" value=\"".$id."\"> &nbsp; <a onmouseover=\"javascript:showActList('".$i."', 1, '".str_replace("&".$gtbl->getMyId()."=","&oid=", $url)."&".$gtbl->getMyId()."=".$id."');\" onmouseout=\"javascript:showActList('".$id."', 0, '".str_replace("&".$gtbl->getMyId()."=","&oid=", $url)."&".$gtbl->getMyId()."=".$id."');\" href='javscript:void(0);' onclick=\"javascript:doActionEx('".$url."&act=view&".$gtbl->getMyId()."=".$id."','contentarea');;\" title=\"详细信息\">".($i + (intval($navi->get('pnpn'))-1) * (intval($navi->get('pnps'))))." / ".$id." &#x25BE;</a> <div id=\"divActList_$i\" style=\"display:none; position: absolute; margin-left:50px; margin-top:-11px; z-index:99; background-color:silver;\">actlist-$i</div> </td>";
 
            }else{
-               $out .= "<td > &nbsp; Error! No Id!</td>";
+               $url_uni_extra = $gtbl->getUniquePara($rec);
+               $out .= "<td nowrap> <input name=\"checkboxid\" type=\"checkbox\" value=\"".$id."\"> &nbsp; <a onmouseover=\"javascript:showActList('".$i."', 1, '".$url."&".$url_uni_extra."');\" onmouseout=\"javascript:showActList('".$i."', 0, '".$url."&".$url_uni_extra."');\" href='javscript:void(0);' onclick=\"javascript:doActionEx('".$url."&act=view&".$url_uni_extra."','contentarea');;\" title=\"详细信息\">".($i + (intval($navi->get('pnpn'))-1) * (intval($navi->get('pnps'))))." / ".$id." &#x25BE;</a> <div id=\"divActList_$i\" style=\"display:none; position: absolute; margin-left:50px; margin-top:-11px; z-index:99; background-color:silver;\">actlist-$i</div> </td>";
            }
            for($hmi=$dispi=$min_idx; $hmi<=$max_idx; $hmi++){
                $field = $gtbl->getField($hmi);
@@ -267,31 +276,6 @@ if(startsWith($act,'add') || startsWith($act, "modify")){
                    }
                }
            }
-           if(0){ # wrap as pop div in id field, wadelau, Sat Jul 25 17:05:57 CST 2015
-           if($hasid){
-
-               $out .= "<td > <select id=\"actsel_$i\" name=\"actsel_$i\" class=\"selectsmall\" onchange=\"javascript:doActSelect('actsel_".$i."','".str_replace("&".$gtbl->getMyId()."=","&oid=", $url)."&".$gtbl->getMyId()."=".$id."', ".$id.");\">";
-               $out .= "<option value=\"\">-做-</option>";
-               $out .= "<option value=\"view\" title=\"查看详细信息\">查看</option>";
-               $out .= "<option value=\"modify\">修改</option>";
-			   $out .= "<option value=\"print\">打印</option>";
-               $out .= "<option value=\"list-dodelete\">删除</option>";
-               $out .= "</select> </td>";
-
-           }else{
-               $fieldargv = "";
-               for($hmi=$dispj=$min_idx; $hmi<=$max_idx; $hmi++){
-                   $field = $gtbl->getField($hmi);
-                   if($gtbl->filterHiddenField($field,$opfield,$timefield) 
-                           || $gtbl->getListView($field) == 0 || $dispj > $max_disp_cols){
-                       continue;
-                   } 
-                   $dispj++;
-                   $fieldargv .= "&".$field."=".$rec[$field];
-               }
-               $out .= "<td > <a href=\"javascript:void(0);\" onclick=\"javascript:doActionEx('".$url."&act=modify".$fieldargv."','contentarea')\" >[modify]</a> <br/> <a href=\"javascript:void(0);\" onclick=\"javascript:if(confirm('confirm delete [".$gtbl->getField(1).":".$rec[$gtbl->getField(1)]."]?')){doAction('".$url."&act=list-dodelete".$fieldargv."');}\" >[delete]</a> &nbsp; </td>";
-           }
-			}
            $out .= "</tr>\n"; 
            if(!isset($_REQUEST['linkfieldcopy'])){ $fstfields .= $listid[1].","; }else{ $fstfields .= $listid[$_REQUEST['linkfieldcopy']].","; }
         } 
@@ -306,7 +290,7 @@ if(startsWith($act,'add') || startsWith($act, "modify")){
                 if($gtbl->getStat($k) == 'average'){
                     $tmpsum = sprintf("%.2f",$tmpsum/$i);
                 }
-                $out .= "<td>".$tmpsum."</td>";
+                $out .= "<td>".(is_int($tmpsum) ? number_format($tmpsum) : $tmpsum)."</td>";
             }
         }
         $out .= "<td></td></tr>\n";
@@ -320,16 +304,26 @@ if(startsWith($act,'add') || startsWith($act, "modify")){
         $out .= "</td></tr>";
     }
 	else{
-        $queryFields = '';
+        $queryFields = ''; $skiptag = $_CONFIG['skiptag'];
         foreach($_REQUEST as $k=>$v){
-            if(startsWith($k, 'pnsk')){
-                $queryFields .= $gtbl->getCHN(str_replace('pnsk', '', $k))." "
-				.$_REQUEST['op'.$k]." ".$v." <a href=\"javascript:pnAction('"
-				.str_replace($k, 'old'.$k, $url)."');\" title='Remove this filter/去掉此条件'>"
-				."[X]</a><br/>";
+            $opv = $_REQUEST['op'.$k];
+            if(startsWith($k, 'pnsk') && $opv != $skiptag){
+                $queryFields .= $gtbl->getCHN(str_replace('pnsk', '', $k))." &nbsp;  &nbsp; ";
+                $field = $k;
+                $inputtype = $gtbl->getInputType($field);
+                if($inputtype == 'select'){
+                    $tmpv = $gtbl->getSelectOption($field, $opv, 1, $gtbl->getSelectMultiple($field));
+                    $queryFields .= $tmpv;
+                }
+                else{   
+                    $queryFields .= $opv; 
+                }
+                $queryFields .= " &nbsp;  &nbsp; ".$v." &nbsp;  &nbsp; <a href=\"javascript:pnAction('".str_replace($k, 'old'.$k, $url)
+                        ."');\" title='Remove this filter/去掉此条件'>[X]</a><br/>";
             }
         }
-        $out .= "<tr><td colspan='".$max_disp_cols."' style='text-align:center'><br/>No Data for These Criterions. / 没有符合条件的数据.<br/><br/>".$queryFields."<br/>1609240951<br/></td></tr>";
+        $out .= "<tr><td colspan='".$max_disp_cols."' style='text-align:center'><br/>No Data for These Criterions. "
+                ."/ 没有符合条件的数据. 請嘗試去掉一些條件再試試<br/><br/>".$queryFields."<br/>1609240951.<br/><br/></td></tr>";
     }
     $out .= "</table>";
     # list end

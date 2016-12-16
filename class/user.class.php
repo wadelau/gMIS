@@ -8,7 +8,6 @@
 if(!defined('__ROOT__')){
   define('__ROOT__', dirname(dirname(__FILE__)));
 }
-#print __FILE__.": root:".__ROOT__." ---- ";
 require_once(__ROOT__.'/inc/webapp.class.php'); 
 
 

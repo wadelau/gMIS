@@ -18,6 +18,7 @@ $hm = $gtbl->execBy($sql, null);
 $max_idx = $hmi = 99; # max number of fields count
 $min_idx = 0; $dispi = 0; $max_disp_cols = $gtbl->getListFieldCount(); # display field count
 $hasid = false; $hmj = count($hmfieldsortinxml); #1; remedy Sun Jul 22 22:26:09 CST 2012
+$priuni = array(); # primary key and/or unique key
 if($hm[0]){
     $hm = $hm[1];
     foreach($hm as $k=>$v){
@@ -27,7 +28,8 @@ if($hm[0]){
             $field = strtolower($field);
         }
         else if(strtolower($field) == 'name' || strtolower($field) == 'type'){
-            print __FILE__.": field:[".$field."] in tbl:[".$tbl."]. It's bad idea to name a field as 'name' or 'type'. plz change it to xxxname or namexxx.\n";
+            print __FILE__.": field:[".$field."] in tbl:[".$tbl
+				."]. It's bad idea to name a field as 'name' or 'type'. plz change it to xxxname or namexxx.\n";
         }
         $hmfield[$field] = $fieldv;
         $hmfield[$field."_default"] = $v['Default'];
@@ -41,10 +43,47 @@ if($hm[0]){
         if(!$hasid && $field == $gtbl->getMyId()){
             $hasid = true;
         }
+		if($v['Key'] == 'PRI'){
+            $priuni[$v['Key']][] = $v['Field'];
+        }
+        else if($v['Key'] == 'UNI'){
+            $priuni[$v['Key']][] = $v['Field'];
+        }
     }
 }
 #print_r($hmfield);
 #print_r($hmfieldsort);
+if(count($priuni) < 1){ # no pri and no uni, fucking the tbl!
+    foreach ($hmfield as $k=>$v){
+        if(strpos($k, '_default') === false){
+            $priuni['UNI'][] = $k;
+            if($ki++ > $max_disp_cols){
+                break;
+            }
+        }
+    }
+}
+else{
+    if(count($priuni['PRI']) == 1){
+        $tmpId = $priuni['PRI'][0];
+        if($tmpId != $gtbl->getMyId()){
+            $gtbl->setMyId($tmpId);
+            if(!$hasid){ $hasid = true; }
+        }
+    }
+    else if(count($priuni['UNI']) == 1){
+        $tmpId = $priuni['UNI'][0];
+        if($tmpId != $gtbl->getMyId()){
+            $gtbl->setMyId($tmpId);
+            if(!$hasid){ $hasid = true; }
+        }
+    }
+}
+if($gtbl->getMyId() == 'id' && !isset($hmfield['id'])){
+    $gtbl->setMyId(''); $hasid = false;
+}
+$gtbl->set($gtbl->PRIUNI, $priuni);
+$gtbl->set('hasid', $hasid);
 
 $hmsize = count($hmfield) + 1;
 $gtbl->setFieldSort($hmfieldsort, $hmsize, $hmi);
@@ -55,6 +94,12 @@ $opfield = array('operator','author','op','creator','operatorid', 'authorid', 'c
 $timefield = array('inserttime','insertime','updatetime','starttime','endtime','editime','edittime',
         'modifytime','created');
 
-$id = $_REQUEST[$gtbl->getMyId()];
+$idName = $gtbl->getMyId(); # need to replace all following, Fri, 16 Dec 2016 19:43:16 +0800
+$id = $_REQUEST[$idName];
+if($id == '' && isset($_REQUEST['pnsk'.$idName])){
+    $id = $_REQUEST['pnsk'.$idName];
+}
+#print __FILE__.": hasid:[$hasid] id-name:[".$gtbl->getMyId()."] id-value:[$id] priuni:";
+#print_r($priuni);
 
 ?>

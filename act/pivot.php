@@ -273,8 +273,8 @@ $out .= "<td><fieldset><legend title='目標數據表排序項'>排序項</legen
         ."</span><input type='hidden' name='orderby' id='orderby' value=',".$firstField."::addorderby'/></fieldset></td>"
         ."</tr>";
 	
-$out .= "<tr><td colspan='$tblspan'> <input type=\"submit\" name=\"addsub\" id=\"addsub\" value=\"递   交\" "
-        ."onclick=\"javascript:doActionEx(this.form.name,'pivotarea');\" /> \n";
+$out .= "<tr><td colspan='$tblspan'> <input type=\"submit\" name=\"addsub\" id=\"addsub\" "
+        ."onclick=\"javascript:doActionEx(this.form.name,'pivotarea');\" /> \n"; #  value=\"递   交\"
         $out .= "<input type=\"hidden\" id=\"id\" name=\"id\" value=\"".$id."\"/>\n ".$hiddenfields."\n";
         $out .= "&nbsp;&nbsp;&nbsp;&nbsp;<input type=\"button\" name=\"cancelbtn\" value=\"取   消\" "
                 ."onclick=\"javascript:switchArea('contentarea_outer','off');\" /> </td></tr></table>";

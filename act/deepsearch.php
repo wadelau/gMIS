@@ -19,7 +19,8 @@ $url = str_replace("&pnsk", "&oldpnsk", $url);
 
 $out .= "<fieldset style=\"border-color:#5f8ac5;border: 1px solid #5f8ac5;\"><legend><h4>深度复合搜索</h4></legend><form id=\""
 	.$formid."\" name=\"".$formid."\" method=\"post\" action=\"".$url."&act=list-dodeepsearch\" "
-	.$gtbl->getJsActionTbl()."><table align=\"center\" width=\"98%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0px\">";
+	.$gtbl->getJsActionTbl()."><table cellspacing=\"0\" cellpadding=\"0\" "
+	." style=\"border:0px solid black; width:86%; margin-left:auto; margin-right:auto;\">";
 $out .= "<tr><td width=\"11%\">&nbsp;</td>
             <td width=\"22%\">&nbsp;</td>
             <td width=\"11%\">&nbsp;</td>
@@ -65,6 +66,7 @@ if($hmorig[0]){
 
 $closedtr = 1; $opentr = 0; # just open a tr, avoid blank line, Sun Jun 26 10:08:55 CST 2016
 $columni = 0; $my_form_cols = 4;
+$skiptag = $_CONFIG['skiptag'];
 
 for($hmi=$min_idx; $hmi<=$max_idx;$hmi++){
     $field = $gtbl->getField($hmi);
@@ -106,7 +108,8 @@ for($hmi=$min_idx; $hmi<=$max_idx;$hmi++){
 		}
 
 		$out .= "<td nowrap>".$gtbl->getCHN($field).":&nbsp;</td>";
-		$out .= "<td> <select style=\"width:60px\" name=\"oppnsk$field\" id=\"oppnsk$field\">".$gtbl->getLogicOp($field)."</select> "
+		$out .= "<td> <select style=\"width:60px\" name=\"oppnsk$field\" id=\"oppnsk$field\">"
+			.$gtbl->getLogicOp($field, $skiptag)."</select> "
 			.$gtbl->getSelectOption($field, $hmorig[$field],'',0,$gtbl->getSelectMultiple($field))." <br/> "
 			.$gtbl->getMemo($field)." <input type=\"hidden\" id=\"pnsk".$field."\" name=\"pnsk".$field
 			."\" value=\"".$hmorig[$field]."\" /></td>";
@@ -122,7 +125,7 @@ for($hmi=$min_idx; $hmi<=$max_idx;$hmi++){
 
 		$out .= "<td nowrap ".$gtbl->getCss($field)."> ".$gtbl->getCHN($field).": </td><td> "
 			. "<select style=\"width:60px\" name=\"oppnsk$field\" id=\"oppnsk$field\">"
-			.$gtbl->getLogicOp($field)."</select> <input type=\"text\" id=\"pnsk"
+			.$gtbl->getLogicOp($field, $skiptag)."</select> <input type=\"text\" id=\"pnsk"
 			.$field."\" name=\"pnsk".$field."\" "
 			."value=\"".$hmorig[$field]."\" ".$gtbl->getJsAction($field).$gtbl->getAccept($field)." "
 			.$gtbl->getReadOnly($field)." /> <br/> ".$gtbl->getMemo($field)."</td>";
@@ -150,8 +153,8 @@ for($hmi=$min_idx; $hmi<=$max_idx;$hmi++){
 $out .= "<tr height=\"10px\"><td style=\"border-top: 1px dotted #cccccc; vertical-align:middle;\" colspan=\"".$my_form_cols."\">  </td></tr>";
 $out .= "<tr><td colspan=\"".$my_form_cols."\" align=\"center\">"
 	."条件之间关系: <select id='pnsm' name='pnsm'><option value='and'>并且</option> <option value='or'>或者</option> </select> "
-	."&nbsp;&nbsp;&nbsp;&nbsp;<input type=\"submit\" name=\"addsub\" id=\"addsub\" value=\"递交\" "
-	."onclick=\"javascript:doActionEx(this.form.name,'actarea');\" /> \n";
+	."&nbsp;&nbsp;&nbsp;&nbsp;<input type=\"submit\" name=\"addsub\" id=\"addsub\" "
+	."onclick=\"javascript:doActionEx(this.form.name,'actarea');\" /> \n"; #  value=\"递交\"
 $out .= "<input type=\"hidden\" id=\"id\" name=\"id\" value=\"".$id."\"/>\n ".$hiddenfields."\n";
 $out .= "&nbsp;&nbsp;&nbsp;&nbsp;<input type=\"button\" name=\"cancelbtn\" value=\"取消\" "
 	."onclick=\"javascript:switchArea('contentarea_outer','off');\" /> </td></tr>";
