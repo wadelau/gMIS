@@ -193,6 +193,7 @@ class PageNavi extends WebApp{
                     }
 					if($fieldopv == $skiptag){
 						# omit...	
+						continue;
 					}
                     if($hasId && $field == $myId){
 					    # use primary or unique key to query, Fri, 16 Dec 2016 19:29:44 +0800

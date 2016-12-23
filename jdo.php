@@ -306,19 +306,22 @@ if(startsWith($act,'add') || startsWith($act, "modify")){
 	else{
         $queryFields = ''; $skiptag = $_CONFIG['skiptag'];
         foreach($_REQUEST as $k=>$v){
-            $opv = $_REQUEST['op'.$k];
+            $opv = Wht::get($_REQUEST, 'op'.$k);
+            $opv = $opv=='' ? '=' : $opv;
             if(startsWith($k, 'pnsk') && $opv != $skiptag){
-                $queryFields .= $gtbl->getCHN(str_replace('pnsk', '', $k))." &nbsp;  &nbsp; ";
-                $field = $k;
+                $queryFields .= $gtbl->getCHN(str_replace('pnsk', '', $k))." &nbsp;  &nbsp; "
+                        .$opv." &nbsp;  &nbsp; ";
+                $field = str_replace('pnsk', '', $k);
                 $inputtype = $gtbl->getInputType($field);
                 if($inputtype == 'select'){
-                    $tmpv = $gtbl->getSelectOption($field, $opv, 1, $gtbl->getSelectMultiple($field));
-                    $queryFields .= $tmpv;
+                    $tmpv = $gtbl->getSelectOption($field, $v,'',1, $gtbl->getSelectMultiple($field));
+                    $queryFields .= $tmpv."(".$v.")";
                 }
                 else{   
-                    $queryFields .= $opv; 
+                    $queryFields .= $v; 
                 }
-                $queryFields .= " &nbsp;  &nbsp; ".$v." &nbsp;  &nbsp; <a href=\"javascript:pnAction('".str_replace($k, 'old'.$k, $url)
+                $queryFields .= " &nbsp;  &nbsp; <a href=\"javascript:pnAction('"
+                        .str_replace($k, 'old'.$k, $url)
                         ."');\" title='Remove this filter/去掉此条件'>[X]</a><br/>";
             }
         }
