@@ -138,7 +138,7 @@ body {
 				<td>{$v['updatetime']}</td>
 				</tr>
 				{/foreach}
-				<tr><td style="white-space:nowrap;"><a href="./ido.php?tbl=fin_todotbl&pnobstate=1&tit=事项管理">更多...</a></td></tr>
+				<tr><td style="white-space:nowrap;"><a href="./ido.php?tbl=fin_todotbl&pnobstate=1&tit=事项管理&pnsktouserid={$userid}">更多...</a></td></tr>
 			</table>
 			</div>	
 			</td>
@@ -232,12 +232,10 @@ body {
 
 		<tr><td><b><i>HM</i></b>.<a href="{$front_page}" target="_blank">打开主站</a></td></tr>
 		</table>
-			<!-- <script type="text/javascript"> window.setTimeout(location.href = '{$todourl}', 10*1000); </script> -->
-
+		<!-- <script type="text/javascript">window.setTimeout(location.href='{$todourl}', 10*60*1000);</script> -->
 		<br/>
             </div>
 		<br/>
-
         </td>
       </tr>
      </table>
