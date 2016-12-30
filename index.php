@@ -105,7 +105,7 @@ $smt->assign('historyurl','ido.php?tbl=info_operatelogtbl&tit=操作历史记录
 
 $navi = new PageNavi(); 
 
-$pnsc = "state=? and (touser like ? or togroup like ?)";
+$pnsc = "state=? and (touser like '".$user->getId()."' or togroup like '".$user->getGroup()."')";
 $smt->assign('todourl','ido.php?tbl=fin_todotbl&tit=待处理任务&a1=1&pnskstate=0&pnsm=1&pnsktouser='.$userid.'&pnsc='.$pnsc.'&pnsck='.$navi->signPara($pnsc).'&pnsktogroup='.$user->getGroup());
 
 $smt->assign('content',$out);

@@ -152,15 +152,19 @@ function substr_unicode($str, $s, $l = null) {
     return join("", array_slice(preg_split("//u", $str, -1, PREG_SPLIT_NO_EMPTY), $s, $l));
 }
 
-function shortenStr($str, $len=0){
+function shortenStr($str, $len = 0) {
     $newstr = '';
-    if($len == 0){
+    if ($len == 0) {
         $len = 10;
     }
-    $newstr = substr_unicode($str, 0, $len);
-
+    if(strlen($str) <= $len){
+        $newstr = $str;
+    }
+    else{
+        $newstr = substr_unicode ( $str, 0, $len );
+    }
+    $str = null;
     return $newstr;
-
 }
 
 function base62x($s,$dec=0,$numType=null){
