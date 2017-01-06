@@ -11,8 +11,11 @@ $data['agentname'] = $_CONFIG['agentname'];
 $data['appchnname'] = $_CONFIG['appchnname'];
 $data['appname'] = $_CONFIG['appname'];
 $data['front_page'] = $_CONFIG['frontpage'];
+$data['adminmail'] = $_CONFIG['adminmail'];
 if($smttpl != ''){
 	$data['url'] = $url;
+	$data['isdebug'] = $is_debug;
+	$data['randi'] = $randi;
 	foreach($data as $k=>$v){
 		$smt->assign($k, $v);
 	}

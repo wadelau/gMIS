@@ -19,7 +19,6 @@ if($rtvdir == ''){
 #print "docroot:[$docroot] rtvdir:[$rtvdir] appdir:[$appdir].";
 #exit;
 
-
 $dirArr = explode("/", $rtvdir);
 $shortDirName = $dirArr[count($dirArr)-1]; # the name of gMIS subdir, i.e. admin, mgmt ...Sat May 23 22:43:21 CST 2015
 
@@ -32,6 +31,12 @@ if($is_debug){
 	error_reporting(-1);
 	ini_set('error_reporting', E_ALL ^ E_NOTICE);
 	ini_set("display_errors", 1);
+}
+else{
+    header("Cache-Control: max-age=604800"); # a week?
+    error_reporting(E_ERROR | E_PARSE);
+    ini_set('error_reporting', E_ERROR | E_PARSE);
+    ini_set("display_errors", 0);
 }
 
 require_once($appdir."/class/user.class.php");
@@ -125,10 +130,11 @@ if($isoput){
             <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
             <title>TITLE - '.$_CONFIG['appname'].' -'.$_CONFIG['agentname'].'</title>
             <link rel="stylesheet" type="text/css" href="'.$rtvdir.'/comm/default.css" />
-            <script type="text/javascript" language="javascript" src="'.$rtvdir.'/comm/GTAjax-5.4.js" charset=\"utf-8\"></script>
-            <script type="text/javascript" language="javascript" src="'.$rtvdir.'/comm/ido.js?i='.rand(0,9999).'" charset=\"utf-8\"></script>
-            <script type="text/javascript" language="javascript" src="'.$rtvdir.'/comm/popdiv.js" charset=\"utf-8\"></script>
-            <script type="text/javascript" language="javascript" src="'.$rtvdir.'/comm/navimenu/navimenu.js" charset=\"utf-8\"></script>
+            <script type="text/javascript" src="'.$rtvdir.'/comm/GTAjax-5.4.js" charset=\"utf-8\"></script>
+            <script type="text/javascript" src="'.$rtvdir.'/comm/ido.js?i='.($is_debug==1?rand(0,9999):'').'" charset=\"utf-8\"></script>
+            <script type="text/javascript" src="'.$rtvdir.'/comm/ido_pro.js?i='.($is_debug==1?rand(0,9999):'').'" charset=\"utf-8\"></script>
+            <script type="text/javascript" src="'.$rtvdir.'/comm/popdiv.js" charset=\"utf-8\"></script>
+            <script type="text/javascript" src="'.$rtvdir.'/comm/navimenu/navimenu.js" charset=\"utf-8\"></script>
 
             <link rel="stylesheet" type="text/css" href="'.$rtvdir.'/comm/navimenu/navimenu.css" />
             </head>
@@ -161,7 +167,7 @@ if($isoput){
 }
 
 # initialize new parameters
-$i = $j = $id = 0;
+$i = $j = $id = 0; $randi =0;
 $tbl = $field = $fieldv = $fieldargv = $url = $act = '';
 $xmlpathpre = $appdir."/xml";
 $elementsep = $_CONFIG['septag'];
@@ -178,6 +184,7 @@ $fmt = isset($_REQUEST['fmt'])?$_REQUEST['fmt']:''; # by wadelau on Tue Nov 24 2
 if($fmt == ''){
     header("Content-type: text/html;charset=utf-8");
 }
+$randi = rand(100000, 999999);
 
 if(strpos($tbl,$_CONFIG['tblpre']) !== 0){
     $tbl = $_CONFIG['tblpre'].$tbl; //- default is appending tbl prefix 

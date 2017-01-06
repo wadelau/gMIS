@@ -17,19 +17,7 @@ $url = $_SERVER['PHP_SELF']."?bkl=".str_replace('<', '&lt;', $_REQUEST['bkl']);
 $smttpl = getSmtTpl(__FILE__,$act);
 
 #print_r($_SERVER);
-
 if($act == 'signin'){
-    /*
-    $out .= "<fieldset><legend>用户登录</legend>
-        <form name='user_signin' id='user_signin' method='post' action='".$url."&act=dosignin'>
-        <br/>
-        电子邮箱: <br/><input name='email' id='email' />
-        <br/><br/>
-        密码: <br/><input type='password' name='password' id='password' />
-        <br/><br/><input type='submit' name='submitbtn' id='submitbtn' />
-        </form>
-        </fieldset>";
-    */
     $smt->assign('action',$url.'&act=dosignin');
     $smt->assign('title','用户登录');
 	$smt->assign('bkl', $_REQUEST['bkl']);
@@ -113,7 +101,7 @@ if($act == 'signin'){
         }else{
             $nexturl = $rtvdir."/ido.php?tbl=".$_CONFIG['tblpre']."info_usertbl&tit=&db=";
             $result = "";
-            $result .= " Loading.... <script type=\"text/javascript\">var newpwd=window.prompt('请输入新密码','');if(newpwd!=''){window.top.location.href='".$rtvdir."/extra/signupin.php?act=resetpwd&userid=".$userid."&issubmit=1&newpwd='+newpwd;}else{document.location.href='".$nexturl."';}</script>";
+            $result .= " Loading.... <script type=\"text/javascript\">var newpwd=window.prompt('请输入新密码','');if(newpwd!=''&&newpwd!=null){window.top.location.href='".$rtvdir."/extra/signupin.php?act=resetpwd&userid=".$userid."&issubmit=1&newpwd='+newpwd;}else{document.location.href='".$nexturl."';}</script>";
             $result .= "失败！ 重置密码失败，请重试. 201205092158."; 
         }
     }else if($user->getGroup() == 1){ # admin group

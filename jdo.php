@@ -46,15 +46,18 @@ if(startsWith($act,'add') || startsWith($act, "modify")){
         if(strpos($orderfield, ' ') !== false){
             $tmpArr = explode(' ', $orderfield);
             $orderfield = $tmpArr[0];
-            $navi->set('isasc', ($tmpArr[1]=='desc' ? 0 : 1));
+            $navi->set('isasc', ($tmpArr[1]=='desc' ? 1 : 0));
         }
         else{
-            $navi->set('isasc', ($orderfield==$gtbl->getMyId()||$orderfield=='1')?0:1);
+            # @todo
+        }
+        if($orderfield == $gtbl->getMyId()){
+            $navi->set('isasc', 1);
         }
     }
     $gtbl->set("pagesize", $navi->get('pnps'));
     $gtbl->set("pagenum", $navi->get('pnpn'));
-    $gtbl->set("orderby", $orderfield." ".($navi->getAsc()==0?"desc":"asc"));
+    $gtbl->set("orderby", $orderfield." ".($navi->getAsc()==1?"desc":"asc"));
     if($_REQUEST['pntc'] == '' || $_REQUEST['pntc'] == '0' || $navi->get('neednewpntc') == 1){
 		$pagenum = $gtbl->get('pagenum');
 		$gtbl->set('pagenum', 1);

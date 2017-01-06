@@ -101,12 +101,12 @@ class PageNavi extends WebApp{
                 break;
             }
         }
-        #error_log(__FILE__.":getOrder:$order");
+        #debug(__FILE__.":getOrder:$order");
         return $order;
    }
 
    function getAsc($field=''){
-       $isasc = 0; # 1: 0->1, asc; 0: 1->0, desc
+       $isasc = 0; # 0: 0->1, asc; 1: 1->0, desc
        if(array_key_exists('isasc',$this->hmf)){
             if($field == '' || ($field != '' && $this->getOrder() == $field)){
                 $isasc = $this->hmf['isasc']; 
@@ -115,7 +115,8 @@ class PageNavi extends WebApp{
            foreach($_REQUEST as $k=>$v){
                if(($field == '' || $field == substr($k,4)) && strpos($k,"pnob") === 0){
                    if($v == 1){
-                       $isasc = 0; 
+                       $isasc = 1; 
+                       $this->hmf['isasc'] = $isasc;
                        break;
                    }
                }

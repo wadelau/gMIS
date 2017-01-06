@@ -132,7 +132,6 @@ $smt->assign('out_footer', $out_footer);
 
 $smt->assign('content',$out);
 $smt->assign('rtvdir', $rtvdir);
-$smt->assign('randi', rand(0,999999).rand(0,999999));
 
 require("./comm/footer.inc.php");
 

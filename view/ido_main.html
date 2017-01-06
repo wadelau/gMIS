@@ -3,33 +3,40 @@
 <!--
 body {
 	margin-left: 5px;
-	margin-top: 5px;
+	margin-top: 1px;
 	margin-right: 5px;
-	margin-bottom: 0px;
+	margin-bottom: 1px;
 	background-color: #1D3647;
 }
 -->
 </style>
-<table style="cellpadding:0px; cellspacing:0px; width:100%;border-collapse:collapse;">
+<table style="border:0px;width:100%;border-collapse:collapse; border-spacing:0px;">
     {if $isheader == 1}
        <tr>
-        <td valign="top">
-        <table style="cellpadding:0px; cellspacing:0px; width:100%;border-collapse:collapse;" class="login_top_bg" style="background-image: url(./img/login-top-bg-small.png);background-repeat: repeat-x;">
-          <tr>
-            <td width="33%" height="28px" style=""><a href="./" style="color:#ABCAD3;font-weight:bold; font-size:12px">&nbsp;{$agentname} </a></td>
-            <td width="5%"> <div id="top_notice_div" style="postion:absolute; width:400px; top:20px; left:20px; text-align:center;z-index:99"></div> </td>
-            <td width="62%" style="text-align:right;" class="login-buttom-txt"> {$welcomemsg} </td>
+        <td valign="top" style="padding:0px;">
+        <table class="login_top_bg" 
+        	style="border:0px;width:100%;background-image: url(./img/login-top-bg-small.png);background-repeat: repeat-x; 
+        	border-collapse:collapse; border-spacing:0px;"> <!-- cellpadding="0" cellspacing="0" width="100%" border="0px"  -->
+          <tr style="padding:0px; background-image:url({$rtvdir}/img/login-top-bg-small-updown.png); background-repeat:repeat-x;">
+            <td width="33%" style="padding:0px;height:27px;">
+            	<a href="./" style="color:#ABCAD3;font-weight:bold;font-size:16px;font-family:Tahoma,Geneva,sans-serif;"
+            		title="HomePage/首頁">
+            		&nbsp;{$agentname} </a>
+            </td>
+            <td width="5%" style="padding:0px;"> <div id="top_notice_div" style="postion:absolute; width:400px; top:20px; left:20px; text-align:center;z-index:99"></div> </td>
+            <td width="62%" style="text-align:right;padding:0px;" class="login-buttom-txt"> {$welcomemsg} </td>
           </tr>
         </table>
         </td>
       </tr>
     {/if}
   <tr>
-    <td valign="top">
-
-     <table style="cellpadding:0px; cellspacing:0px; width:100%; height:98%;border-collapse:collapse;" class="login_bg">
+     <td valign="top" style="padding:0px;">
+     <table 
+     	style="border:0px;width:100%;height:98%;border-collapse:collapse; border-spacing:0px;border-padding:0px;" 
+     	class="login_bg"> <!-- width="100%" height="98%" border="0px" cellpadding="0" cellspacing="0"  -->
       <tr>
-        <td width="98%" height="{if $isheader == 0}390px%{else}699px{/if}" align="left">
+        <td width="98%" height="{if $isheader == 0}390px%{else}699px{/if}" align="left" style="padding:0px;">
 		{$out_header}
 			
         {$content}
@@ -38,7 +45,6 @@ body {
         </td>
       </tr>
      </table>
-
     </td>
   </tr>
  

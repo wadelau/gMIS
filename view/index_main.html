@@ -3,33 +3,39 @@
 <!--
 body {
 	margin-left: 5px;
-	margin-top: 5px;
+	margin-top: 1px;
 	margin-right: 5px;
-	margin-bottom: 0px;
+	margin-bottom: 1px;
 	background-color: #1D3647;
 }
 -->
 </style>
-<table style="cellpadding:0px; cellspacing:0px; width:100%; border-collapse:collapse;">
+<table style="border:0px;width:100%;border-collapse:collapse; border-spacing:0px;">
    <tr>
-    <td valign="bottom">
-    <table style="cellpadding:0px; cellspacing:0px; width:100%; border-collapse:collapse; 
-    	background-image: url(./img/login-top-bg-small.png);background-repeat: repeat-x;" 
-    	class="login_top_bg">
-      <tr>
-        <td width="37%" height="28px">&nbsp;<a href="./"  style="color:#ABCAD3;font-weight:bold; font-size:12px">{$agentname} </a> </td>
-        <td width="63%" style="text-align:right;" class="login-buttom-txt"> {$welcomemsg} </td>
-      </tr>
-    </table>
-    </td>
-  </tr>
+      <td valign="top" style="padding:0px;">
+      <table class="login_top_bg" 
+      	style="border:0px;width:100%;background-image: url(./img/login-top-bg-small.png);background-repeat: repeat-x; 
+      	border-collapse:collapse; border-spacing:0px;"> <!-- cellpadding="0" cellspacing="0" width="100%" border="0px"  -->
+        <tr style="padding:0px; background-image:url({$rtvdir}/img/login-top-bg-small-updown.png); background-repeat:repeat-x;">
+          <td width="33%" style="padding:0px;height:27px;">
+          	<a href="./" style="color:#ABCAD3;font-weight:bold;font-size:16px;font-family:Tahoma,Geneva,sans-serif;"
+          		title="HomePage/首頁">
+          		&nbsp;{$agentname} </a>
+          </td>
+          <td width="5%" style="padding:0px;"> <div id="top_notice_div" style="postion:absolute; width:400px; top:20px; left:20px; text-align:center;z-index:99"></div> </td>
+          <td width="62%" style="text-align:right;padding:0px;" class="login-buttom-txt"> {$welcomemsg} </td>
+        </tr>
+      </table>
+      </td>
+    </tr>
 
   <tr>
-    <td valign="top">
-
-     <table style="cellpadding:0px; cellspacing:0px; width:100%; height:532px; border-collapse:collapse;" class="login_bg">
+    <td valign="top" style="padding:0px;">
+     <table 
+     	style="border:0px;width:100%;height:98%;border-collapse:collapse; border-spacing:0px;border-padding:0px;" 
+     	class="login_bg"> <!-- width="100%" height="98%" border="0px" cellpadding="0" cellspacing="0"  -->
       <tr>
-        <td width="98%" align="center" >
+        <td width="98%" height="{if $isheader == 0}390px%{else}699px{/if}" align="left" style="padding:0px;">
 
             {$content}
 			
@@ -152,7 +158,12 @@ body {
 			{if $mi==0 || ($mi) % 4 == 0}
 			<div class="wrapper">
 			{/if}
-				 <a href="./{$ido}&tbl={$module_list_order[$k]}"><div class="left{($k%4)+1}"><span style="size:14px; font-weight:bold;">{$mi+1}.{$module_list_name[$module_list_order[$k]]}</span><br/>({$module_list_order[$k]})</div></a>
+				 <a href="./{$ido}&tbl={$module_list_order[$k]}">
+				 <div class="left{($k%4)+1}">
+				 	<span style="size:14px; font-weight:bold;">{$mi+1}.{$module_list_name[$module_list_order[$k]]}</span>
+				 	<br/>({$module_list_order[$k]})
+				 </div>
+				 </a>
 			{if ($mi+1) % 4 == 0}
 			</div>
 			{/if}
