@@ -2,7 +2,7 @@
 $ido = "ido.php";
 
 $myNavi = new PageNavi();
-$pnscTodo = "state=? and (touser like ? or togroup like ?)";
+$pnscTodo = "state in (?) and (touser like '".$user->getId()."' or togroup like '".$user->getGroup()."')";
 $pnsckTodo = $myNavi->signPara($pnscTodo);
 $pnscTodo = base62x($pnscTodo);
 

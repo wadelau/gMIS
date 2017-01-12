@@ -7,13 +7,12 @@ if($_REQUEST['pnsktuanid'] != '' && $_REQUEST['otbl'] != ''){
     $colsPerRow = 2;
 }
 
-$out .= "<fieldset style=\"border-color:#5f8ac5;border: 1px solid #5f8ac5\"><legend><h4>详细内容</h4></legend><table align=\"center\" width=\"95%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0px\">";
-$out .= "<tr><td width=\"11%\">&nbsp;</td>
+$out .= "<fieldset style=\"border-color:#5f8ac5;border: 1px solid #5f8ac5\"><legend><h4>详细内容</h4></legend><table align=\"center\" width=\"95%\" border=\"0px\">";
+$out .= "<tr><td width=\"10%\">&nbsp;</td>
             <td width=\"22%\">&nbsp;</td>
-            <!-- <td width=\"2%\">&nbsp;</td> -->
-            <td width=\"11%\">&nbsp;</td>
+            <td width=\"10%\">&nbsp;</td>
             <td width=\"22%\">&nbsp;</td>
-            <td width=\"11%\">&nbsp;</td>
+            <td width=\"10%\">&nbsp;</td>
             <td width=\"22%\">&nbsp;</td>
             </tr>";
 $hmorig = array();
@@ -84,10 +83,10 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
 		if(strpos($hmorig[$field], "$shortDirName/") !== false){ $hmorig[$field] = str_replace("$shortDirName/", "", $hmorig[$field]); }
 		if($gtbl->getSingleRow($field)){ $out .= "</tr><tr>"; }
         if($isimg){
-            $out .= "<td >".$gtbl->getCHN($field).":&nbsp;</td><td> <a href=\"".$hmorig[$field]."\" target=\"_blank\" title=\"打开大图\"><img src=\"".$hmorig[$field]."\" alt=\"-x-\" style=\"width:118px\"/></a><br/>".($srcprefix==''?$rtvdir."/":'').$hmorig[$field]." </td>";
+            $out .= "<td >".$gtbl->getCHN($field).":&nbsp;</td><td class=\"tdiviewfixedwidth\"> <a href=\"".$hmorig[$field]."\" target=\"_blank\" title=\"打开大图\"><img src=\"".$hmorig[$field]."\" alt=\"-x-\" style=\"width:118px\"/></a><br/>".($srcprefix==''?$rtvdir."/":'').$hmorig[$field]." </td>";
         }
 		else{
-            $out .= "<td >".$gtbl->getCHN($field).":&nbsp;</td><td> <a href=\"".$hmorig[$field]."\" title=\"".$hmorig[$field]."\" target=\"_blank\">".$hmorig[$field]."</a> </td>";
+            $out .= "<td >".$gtbl->getCHN($field).":&nbsp;</td><td class=\"tdiviewfixedwidth\"> <a href=\"".$hmorig[$field]."\" title=\"".$hmorig[$field]."\" target=\"_blank\">".$hmorig[$field]."</a> </td>";
         }
     }
 	else if($gtbl->getExtraInput($field,$hmorig) != ''){
@@ -137,9 +136,10 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
 
         if($gtbl->getSingleRow($field) == 1){
             $out .= "</tr><tr> <td style=\"vertical-align:top\">".$gtbl->getCHN($field).":</td> ";
-            $out .= "<td colspan=\"".($form_cols-1)."\"> ".$tmpval."  </td></tr><tr>";
+            $out .= "<td colspan=\"".($form_cols-1)."\" class=\"tdiviewfixedwidth\"> ".$tmpval."  </td></tr><tr>";
         }else{
-            $out .= "<td >".$gtbl->getCHN($field).":&nbsp;</td><td> ".$tmpval." </td>";
+            $out .= "<td >".$gtbl->getCHN($field).":&nbsp;</td><td class=\"tdiviewfixedwidth\" style=\"word-wrap:break-word;white-space:normal;word-break:break-all;width:22%;\"> "
+                    .$tmpval." </td>";
         }
     }
 

@@ -13,6 +13,7 @@ else{
 }
 
 $data = array(); # 用于打印模板的数据集
+$srcprefix = $gtbl->getSrcPrefix();
 
 $out .= "<div align=\"center\"><h2>".$_CONFIG['agentname'].$gtbl->getTblCHN()."</h2>";
 $data['title'] = $_CONFIG['agentname'].$gtbl->getTblCHN();
@@ -54,7 +55,7 @@ if($printref != ''){
         $out .= "\n<span id=\"linkinfo_".$rdnum."\"></span><script type=\"text/javascript\"> doActionEx('./act/readfield.php?tbl=".$refdetail[0]."&pnsk".$linkinfo[0]."=".$hmorig[$linkinfo[1]]."&pnob".$linkinfo[0]."=1&fieldlist=".$refdetail[2]."&isheader=0&isoput=0','linkinfo_".$rdnum."');</script><br/>\n";
     }
 }
-$out .= "<table align=\"center\" width=\"800px\" cellspacing=\"0\" cellpadding=\"0\" border=\"0px\" class=\"printtbl\">";
+$out .= "<table align=\"center\" width=\"800px\" border=\"0px\" class=\"printtbl\">";
 $out .= "\n<tr height=\"30\" valign=\"middle\"  onmouseover=\"javascript:this.style.backgroundColor='".$hlcolor."';\" onmouseout=\"javascript:this.style.backgroundColor='';\">";
 
 $lastclosed = 0; $tdi = 0; $skiptag = $_CONFIG['skiptag'];
@@ -115,6 +116,12 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
 	else{
 
 		if($fieldinputtype == 'file'){
+		    
+		    $origValue = $hmorig[$field];
+		    if($origValue != '' && $srcprefix != '' && !startsWith($origValue, 'http')){
+		        $fieldv = $hmorig[$field] = $srcprefix.'/'.$hmorig[$field];
+		    }
+		    
 			$isimg = isImg($fieldv);
 			if(strpos($fieldv, "$shortDirName/") !== false){ $fieldv = str_replace("$shortDirName/", "", $fieldv); }
 			if($isimg){
@@ -130,13 +137,14 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
 			$needcloserow = 1;
         }
 		else{
-            $out .= "<td nowrap idata=\"$i\" fieldname=\"$field\">".$gtbl->getCHN($field).":&nbsp;</td><td> ".$fieldv." </td>";
+            $out .= "<td nowrap idata=\"$i\" fieldname=\"$field\">".$gtbl->getCHN($field).":&nbsp;</td>";
+            $out .= "<td class=\"tdprintfixedwidth\"> ".$fieldv." </td>";
 			$tdi++;
         }
 		if($needcloserow ==0 
 			&& ($nextfieldinputtype == 'file')){
-            $out .= "<td colspan=\"".($form_cols)."\"> <!-- $field --> </td>";
-			$tdi++;
+            #$out .= "<td colspan=\"".($form_cols)."\"> <!-- $field --> </td>";
+			#$tdi++;
 		}
     }
 

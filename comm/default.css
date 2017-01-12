@@ -188,3 +188,17 @@ select{
 }
 
 .f17px{ font-size:15px; font-weight:bold; }
+
+.tdiviewfixedwidth {
+    word-wrap:break-word;
+    white-space:normal;
+    word-break:break-all;
+    width:22%;
+}
+
+.tdprintfixedwidth {
+    word-wrap:break-word;
+    white-space:normal;
+    word-break:break-all;
+    width:32%;
+}
