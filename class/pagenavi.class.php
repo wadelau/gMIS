@@ -65,7 +65,7 @@ class PageNavi extends WebApp{
                if($i == $para['pnpn']){
                     $str .= " <span id=\"currentpage\" style=\"color:green;font-weight:bold;font-size:18px\">".$i."</span> "; 
                }else{
-                    $str .= " <a href=\"javascript:pnAction('".$para['url']."&pnpn=".$i."');\" style=\"font-size:14px\">".$i."</a> ";
+                    $str .= " <a href=\"javascript:pnAction('".$para['url']."&pnpn=".$i."');\" style=\"font-size:14px;padding:3px;\">".$i."</a> ";
                }
            }
 #print "$i: [$str] totalpage:[$totalpage]\n";

@@ -13,7 +13,12 @@ if($tbl == ''){
         $isgo = false;
     }
 }else{
-    $out .= "<script type=\"text/javascript\">currenttbl='".$tbl."';\ncurrentdb='".$mydb."';\n currentlistid= {};\n userinfo={'id':'".$userid."','email':'".$user->getEmail()."','group':'".$user->getGroup()."','branch':'".$user->get('branchoffice')."'};\n </script>\n";
+    $out .= "<script type=\"text/javascript\">currenttbl='".$tbl."';\ncurrentdb='"
+            .$mydb."';\n currentlistid= {};\n currentpath='".($url==''?'./':$url)."';\n userinfo={'id':'"
+                    .$userid."','email':'"
+                            .$user->getEmail()."','group':'"
+                                    .$user->getGroup()."','branch':'"
+                                            .$user->get('branchoffice')."'};\n </script>\n";
 }
 
 $out_header = $out;
