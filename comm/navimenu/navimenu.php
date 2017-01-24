@@ -2,9 +2,15 @@
 $ido = "ido.php";
 
 $myNavi = new PageNavi();
-$pnscTodo = "state in (?) and (touser like '".$user->getId()."' or togroup like '".$user->getGroup()."')";
+$pnscTodo = "state in (1,2) and (touser like '".$user->getId()."' or togroup like '".$user->getGroup()
+."' or triggerbyparentid like '".$user->getId()."' or triggerbyparent like '".$user->getGroup()."')";
 $pnsckTodo = $myNavi->signPara($pnscTodo);
 $pnscTodo = base62x($pnscTodo);
+
+$pnscDone = "state in (-2,-1,0) and (touser like '".$user->getId()."' or togroup like '".$user->getGroup()
+."' or triggerbyparentid like '".$user->getId()."' or triggerbyparent like '".$user->getGroup()."')";
+$pnsckDone = $myNavi->signPara($pnscDone);
+$pnscDone = base62x($pnscDone);
 
 $dynamicmenu = '';
 $hm = $myNavi->execBy("select levelcode,linkname,modulename,dynamicpara,disptitle,thedb from ".$_CONFIG['tblpre']."info_menulist where state=1 order by levelcode", null);
@@ -90,7 +96,7 @@ if($hm[0]){
         <a href="./" class="menulink"><img src="./img/my-desktop.png" alt="my desktop" height="10px" /> 我的桌面</a>
             <ul> 
                 <li><a href="./'.$ido.'?tbl=fin_todotbl&tit=待处理事项&db=&pnsktouser='.$userid.'&pnsm=1&pnskstate=1&pnsktogroup='.$user->getGroup().'&pnsc='.$pnscTodo.'&pnsck='.$pnsckTodo.'">待处理事项</a></li> 
-                <li><a href="./'.$ido.'?tbl=fin_todotbl&tit=已处理事项&db=&pnsktouser='.$userid.'&pnsm=1&pnskstate=0&pnsktogroup='.$user->getGroup().'&pnsc='.$pnscTodo.'&pnsck='.$pnsckTodo.'">已处理事项</a></li> 
+                <li><a href="./'.$ido.'?tbl=fin_todotbl&tit=已处理事项&db=&pnsktouser='.$userid.'&pnsm=1&pnskstate=0&pnsktogroup='.$user->getGroup().'&pnsc='.$pnscDone.'&pnsck='.$pnsckDone.'">已处理事项</a></li> 
                 <li><a href="./'.$ido.'?tbl=mynotetbl&tit=我的笔记&db=&pnskoperator='.$userid.'">我的笔记</a></li> 
                 <li><a href="./'.$ido.'?tbl=fin_operatelogtbl&tit=操作历史记录&db=&pnskuserid='.$userid.'">操作历史记录</a></li>
                 <li><a href="./'.$ido.'?tbl=info_toolsettbl&tit=常用工具">日常工具</a></li>

@@ -1260,10 +1260,10 @@ function doPivotSelect(sField, iId, sOp, isOn, sName){
 	}
 	fieldValue = fieldObj.value;
 	//console.log("span:["+spanObj.innerHTML+"] field:["+fieldValue+"]");
-	var tmps = sName+'('+sField+') '+sOp+'   <a href="javascript:doPivotSelect(\''
-				+sField+'\', \''+iId+'\', \''+sOp+'\', 0, \''+sName+'\');"> X(Rm) </a>'
-				+'   <a href="javascript:doPivotSelect(\''
-				+sField+'\', \''+iId+'\', \'addorderby\', 1, \''+sName+'\');"> ↿⇂(Od) </a><br>';
+	var tmps = sName+'('+sField+') '+sOp+'   <a href="javascript:void(0);" onclick="javascript:doPivotSelect(\''
+			+sField+'\', \''+iId+'\', \''+sOp+'\', 0, \''+sName+'\');" title="Remove"> X(Rm) </a>'
+			+'   <a href="javascript:void(0);" onclick="javascript:doPivotSelect(\''
+	+sField+'\', \''+iId+'\', \'addorderby\', 1, \''+sName+'\');" title="Order"> ↿⇂(Od) </a><br>';
 	if(isOn == 1){
 		if(fieldValue.indexOf(sField+sOp) == -1){
 			spanObj.innerHTML += tmps;

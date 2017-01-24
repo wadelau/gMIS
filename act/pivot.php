@@ -312,25 +312,25 @@ $out .= "</td></tr>";
 $firstFieldChn = $gtbl->getCHN($firstField);
 $secondFieldChn = $gtbl->getCHN($secondField);
 $out .= "<tr>"
-        ."<td width='34%'><fieldset><legend title='目標數據表分組項'>分組項列</legend>"
-        ."<span id='span_groupby'>"
-        .$firstFieldChn."($firstField) addgroupby   <a href=\"javascript:doPivotSelect('$firstField', "
-        ."'1', 'addgroupby', 0, '".$firstFieldChn."');\"> X(Rm) </a>   <a href=\"javascript:doPivotSelect('"
-        .$firstField."', '1', 'addorderby', 1, '".$firstFieldChn."');\"> ↿⇂(Od) </a><br>"
-        ."</span><input type='hidden' name='groupby' id='groupby' value=',".$firstField."::addgroupby'/>"
-        ."</fieldset></td>";
+    ."<td width='34%'><fieldset><legend title='目標數據表分組項'>分組項列</legend>"
+    ."<span id='span_groupby'>"
+    .$firstFieldChn."($firstField) addgroupby   <a href=\"javascript:void(0);\" onclick=\"javascript:doPivotSelect('$firstField', "
+    ."'1', 'addgroupby', 0, '".$firstFieldChn."');\" title=\"Remove\"> X(Rm) </a>   <a href=\"javascript:void(0);\" onclick=\"javascript:doPivotSelect('"
+    .$firstField."', '1', 'addorderby', 1, '".$firstFieldChn."');\" title=\"Order\"> ↿⇂(Od) </a><br>"
+    ."</span><input type='hidden' name='groupby' id='groupby' value=',".$firstField."::addgroupby'/>"
+    ."</fieldset></td>";
 $out .= "<td width='33%'><fieldset><legend title='目標數據表計算項'>求值項列</legend>"
         ."<span id='span_calculateby'>"
-        .$gtbl->getCHN($secondField)."($secondField) addvaluebycount   <a href=\"javascript:doPivotSelect('$secondField', "
-        ."'1', 'addvaluebycount', 0, '".$gtbl->getCHN($secondField)."');\"> X(Rm) </a>   <a href=\"javascript:doPivotSelect('"
-        .$secondField."', '1', 'addorderby', 1, '".$secondFieldChn."');\"> ↿⇂(Od) </a><br>"
+        .$gtbl->getCHN($secondField)."($secondField) addvaluebycount   <a href=\"javascript:void(0);\" onclick=\"javascript:doPivotSelect('$secondField', "
+        ."'1', 'addvaluebycount', 0, '".$gtbl->getCHN($secondField)."');\" title=\"Remove\"> X(Rm) </a>   <a href=\"javascript:void(0);\" onclick=\"javascript:doPivotSelect('"
+        .$secondField."', '1', 'addorderby', 1, '".$secondFieldChn."');\" title=\"Order\"> ↿⇂(Od) </a><br>"
         ."</span><input type='hidden' name='calculateby' id='calculateby' value=',".$secondField."::addvaluebycount'/>"
         ."</fieldset></td>";
 $out .= "<td><fieldset><legend title='目標數據表排序項'>排序項</legend>"
         ."<span id='span_orderby'>"
-        .$gtbl->getCHN($firstField)."($firstField) addorderby   <a href=\"javascript:doPivotSelect('$firstField', "
-        ."'1', 'addorderby', 0, '".$gtbl->getCHN($firstField)."');\"> X(Rm) </a>   <a href=\"javascript:doPivotSelect('"
-        .$firstField."', '1', 'addorderby', 1, '".$firstFieldChn."');\"> ↿⇂(Od) </a><br>"
+        .$gtbl->getCHN($firstField)."($firstField) addorderby   <a href=\"javascript:void(0);\" onclick=\"javascript:doPivotSelect('$firstField', "
+        ."'1', 'addorderby', 0, '".$gtbl->getCHN($firstField)."');\" title=\"Remove\"> X(Rm) </a>   <a href=\"javascript:void(0);\" onclick=\"javascript:doPivotSelect('"
+        .$firstField."', '1', 'addorderby', 1, '".$firstFieldChn."');\" title=\"Order\"> ↿⇂(Od) </a><br>"
         ."</span><input type='hidden' name='orderby' id='orderby' value=',".$firstField."::addorderby'/></fieldset></td>"
         ."</tr>";
 	
