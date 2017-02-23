@@ -7,6 +7,7 @@ if($tbl == ''){
     if(1){
         $tbl = $_CONFIG['welcometbl'];
         $_REQUEST['tbl'] = $tbl;
+        redirect($url='./', $time=10, $msg='');
     }else{
         $out .= __FILE__.": a table name should be given. [1201231050]\n";
         $out .= "<br/><a href=\"".$_CONFIG['rtvdir']."\">=Home</a>";

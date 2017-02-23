@@ -434,6 +434,7 @@ class Base62x {
 	//- Mon Nov 28 17:47:45 CST 2016
 	private static function _decodeByLength($tmpArr, $op, $m){
 	    $rtn = $op;
+	    $c0 = 0; $c1 = 0; $c2 = 0;
 	    if($tmpArr[3] !== null){
 	        $c0 = $tmpArr[0] << 2 | $tmpArr[1] >> 4;
 	        $c1 = (($tmpArr[1] << 4) & 0xf0) | ($tmpArr[2] >> 2);
@@ -453,11 +454,12 @@ class Base62x {
 	        $op[$m] = chr($c0);
 	    }
 	    else{
-	        $c0 = chr($tmpArr[0]);
+	        $c0 = $tmpArr[0];
 	        $op[$m] = chr($c0);
 	    }
 	    return array($rtn=$op, $m);
 	}
+	
 }
 
 ?>
