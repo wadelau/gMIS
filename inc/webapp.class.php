@@ -91,52 +91,49 @@ class WebApp implements WebAppInterface{
 	
 	//-
 	function get($field, $noExtra=null){
-
-		if(array_key_exists($field,$this->hmf)){
-			return $this->hmf[$field];
-		}
-		else {
-		    if($noExtra == null){
-		        if($field == $this->myId
-		                || $field == $this->GWA2_TBL
-		                || $field == self::GWA2_ERR){
-		            $noExtra = 1; 
-		            #! Otherwise, this will cause a dead loop with ._setAll,
-		            # or some query loop between getBy, get and _setAll,
-		            # noExtra means just retrieve runtime value, not for db, file...
-		            # Wed, 12 Oct 2016 09:39:54 +0800
-		        }
-		    }
-		    if($noExtra == null){
-    			if($this->get(self::GWA2_ERR) != 1){
-    				if($this->_setAll()){
-    					if(isset($this->hmf[$field])){
-    						return $this->hmf[$field];
-    					}
-
-    					else{
-    						return $this->hmf[$field]='';	
-    					}
-    				}
-
-
-    				else{
-    					return '';
-    				}
-    			}
-
-
-    			else {
-    				return '';
-    			}
-    		}
-
-
-    		else{
-    			return '';
-    		}
-	   }
-
+		$rtn = null;
+	    if(array_key_exists($field,$this->hmf)){
+	        $rtn = $this->hmf[$field];
+	    }
+	    else {
+	        if($field == self::GWA2_ERR){
+	            $rtn = $this->GWA2_Runtime_Env_List[$field];
+	        }
+	        else{
+	            if($noExtra == null || $noExtra == ''){
+	                if($field == $this->myId
+	                        || isset($this->GWA2_Runtime_Env_List[$field])){
+	                            $noExtra = 1;
+	                            #! Otherwise, this will cause a dead loop with ._setAll,
+	                            # or some query loop between getBy, get and _setAll,
+	                            # noExtra means just retrieve runtime value, not for db, file...
+	                            # Wed, 12 Oct 2016 09:39:54 +0800
+	                }
+	            }
+	            if($noExtra == null || $noExtra == ''){
+	                if($this->get(self::GWA2_ERR) != 1){
+	                    if($this->_setAll()){
+	                        if(isset($this->hmf[$field])){
+	                            $rtn = $this->hmf[$field];
+	                        }
+	                        else{
+	                            $rtn = $this->hmf[$field]='';
+	                        }
+	                    }
+	                    else{
+	                        $rtn = '';
+	                    }
+	                }
+	                else {
+	                    $rtn = '';
+	                }
+	            }
+	            else{
+	                $rtn = '';
+	            }
+	        }
+	    }
+	    return $rtn;
 	}
 	
 	//-
@@ -416,7 +413,8 @@ class WebApp implements WebAppInterface{
 	private function _setAll(){
 		$isinclude = 0;
 		if($this->getId() != ''){
-			$tmphm = $this->getBy('*',null);
+			$tmphm = $this->getBy('*', null,  
+				$withCache=array('key'=>$this->getTbl().'-id'.$this->getId().'-select'));
 			#debug(__FILE__.": _setAll: rtn: ");
 
 			#debug($tmphm);
@@ -510,7 +508,6 @@ class WebApp implements WebAppInterface{
 		    return 0;
 	    }
     }
-
 
     //- read an object of file or http post|get
     //- by wadelau, Fri May  6 18:57:17 CST 2016
@@ -621,9 +618,6 @@ class WebApp implements WebAppInterface{
     # $args, 'target', 'method', 'content'....
     public function writeObject($type, $args){
         $obj = null;
-
-
-
         if($type == 'cache:'){
 			//- cache service
 			if(is_null($args['value'])){
@@ -717,9 +711,6 @@ class WebApp implements WebAppInterface{
                             )
                     );
                 }
-
-
-
             }
             else{
                 //- http(s) get or not specified
@@ -756,9 +747,13 @@ class WebApp implements WebAppInterface{
 
 	//-
 	public function setMyId($myId){
-
 		$this->myId = $myId;
 		return false;
+	}
+	
+	//-  remedy by wadelau@ufqi.com, Wed Jun 15 19:56:17 CST 2016
+	public function getMyId(){
+		return $this->myId;
 	}
 
 	//-

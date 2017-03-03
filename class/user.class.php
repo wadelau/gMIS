@@ -26,50 +26,45 @@ class User extends WebApp
     var $specifyAcc = array(); # 记录针对当前用户或者当前组的特殊权限, Sun May 13 16:42:45 CST 2012
 
 	//-
-	function __construct(){
+	function __construct($args=null){
 		//-
-		$this->dba = new DBA();
+		#$this->dba = new DBA();
         #$this->setTbl($_CONFIG['usertbl']);
         #$this->setTbl("hss_info_usertbl");
+		# inherit parent's resrc
+		parent::__construct($args);
+		
 	}
 	//-
-	function setEmail($email)
-	{
+	function setEmail($email){
 		$this->set($this->eml,$email);
 	}
 
-	function getEmail()
-	{
+	function getEmail(){
 		return $this->get($this->eml);
 	}
 
-	function isLogin()
-	{
+	function isLogin(){
 		return $this->getId() != '';
 	}
 
-	function getUserName()
-	{
+	function getUserName(){
 		return $this->get('username');
 	}
 
-	function getLocation()
-	{
+	function getLocation(){
 		return $this->get('location');
 	} 
 	
-	function getIP()
-    {
+	function getIP(){
         return $this->get('ip');
     }
 
-	function getLat()
-	{
+	function getLat(){
 		return $this->get('lat');
 	}
 	
-	function getLng()
-	{
+	function getLng(){
 		return $this->get('lng');
 	}
 	
@@ -77,19 +72,17 @@ class User extends WebApp
         return $this->get('usergroup');
     }
 
-	function setPassword($pwd)
-	{
+	function setPassword($pwd){
 		$this->hmf['password'] = SHA1($pwd);
 	}
 
 	//- chk whethere the current ip has been used for regi in n days
-	function chkIpRegi()
-	{
+	function chkIpRegi(){
 		$days = 2; # same ip within n days will need validating reCAPTCHA
 		$hasexist = false;
-		$hm = $this->getBy("id","DATE_ADD(createtime, INTERVAL $days DAY) > NOW() and ip=?");
-		if($hm[0])
-		{
+		$hm = $this->getBy("id","DATE_ADD(createtime, INTERVAL $days DAY) > NOW() and ip=?", 
+			$withCache=array('key'=>'user-check-reg-ip-'.date("Y-m-d", time())));
+		if($hm[0]){
 			$hasexist = true;
 		}
 		return $hasexist;
@@ -100,12 +93,12 @@ class User extends WebApp
     }
 
     function chkAccess($req){
-
         #print "userid:[".$this->getId()."] usergroup:[".$this->getGroup()."]\n";
         $reason = '';
         $result = true;
         $tmptbl = GConf::get('tblpre').$req['tbl'];
-        $tmphm = $this->execBy('select id as objid, objgroup from '.GConf::get('tblpre').'info_objecttbl where tblname="'.$tmptbl.'"', '');
+        $tmphm = $this->execBy('select id as objid, objgroup from '.GConf::get('tblpre').'info_objecttbl where tblname="'.$tmptbl.'"', '',
+			$withCache=array('key'=>'info_object-'.$tmptbl));
         #print_r($tmphm);
         $objgrp = ''; $objid = '';
         if($tmphm[0]){
@@ -117,9 +110,13 @@ class User extends WebApp
         }
         #print "obj:[".$req['tbl']."] objgroup:[".$objgrp."] objid:[".$objid."]\n";
 
-        $sql = "select id,accesstype,objectfield,userid,usergroup from ".GConf::get('tblpre')."useraccesstbl where state=1 and (userid='".$this->getId()."' or userid=0) and (usergroup='".$this->getGroup()."' or usergroup=0) and (objectid='".$objid."' or objectid=0) and (objectgroup='".$objgrp."' or objectgroup=0) order by ".$this->getMyId()." desc, accesstype desc limit 100";
+        $sql = "select id,accesstype,objectfield,userid,usergroup from "
+			.GConf::get('tblpre')."useraccesstbl where state=1 and (userid='".$this->getId()
+			."' or userid=0) and (usergroup='".$this->getGroup()."' or usergroup=0) and (objectid='"
+			.$objid."' or objectid=0) and (objectgroup='".$objgrp."' or objectgroup=0) order by "
+			.$this->getMyId()." desc, accesstype desc limit 100";
         #print "sql:[".$sql."]";
-        $tmphm = $this->execBy($sql, null);
+        $tmphm = $this->execBy($sql, null, $withCache=array('key'=>'useraccess-'.$this->getId().'-'.$this->getGroup()));
         #print "chkAccess:";
         #print_r($tmphm);
         #print "\n";
@@ -162,7 +159,8 @@ class User extends WebApp
         }
         #print_r($this->specifyAcc);
         if(!$result){
-            error_log(__FILE__.": access [".$result."]. 201203132129. sql:[$sql] url:[".$_SERVER['REQUEST_URI']."?".$_SERVER['QUERY_STRING']."] reason:[$reason] rec:[".$this->toString($tmphm)."] maxlvl:[".$maxAccessType."]");
+            error_log(__FILE__.": access [".$result."]. 201203132129. sql:[$sql] url:[".$_SERVER['REQUEST_URI']."?"
+				.$_SERVER['QUERY_STRING']."] reason:[$reason] rec:[".$this->toString($tmphm)."] maxlvl:[".$maxAccessType."]");
         }
         return array('result'=>$result,'reason'=>$reason);
     }
@@ -179,7 +177,8 @@ class User extends WebApp
                     $accessInfo = array();
                 }
                 foreach($accessInfo as $k=>$v){
-                    if($v['accesstype'] < $this->accessLevel['read'] && $this->specifyAcc[$this->getId()] < 1 && $this->specifyAcc[$this->getGroup()] < 1 ){
+                    if($v['accesstype'] < $this->accessLevel['read'] && $this->specifyAcc[$this->getId()] < 1 
+						&& $this->specifyAcc[$this->getGroup()] < 1 ){
                         if(strpos(",".$v['objectfield'].",", ",".$field.",") !== false){
                             $rtn['result'] = false;
                             $rtn['reason'] = $v['id'].",1341";
@@ -190,7 +189,8 @@ class User extends WebApp
             }
         }
         if(!$rtn['result']){
-            error_log(__FILE__.": [$field] canRead [".$rtn['result']."]. 2012apr171939. sql:[$sql] url:[".$_SERVER['REQUEST_URI']."] reason:[".$rtn['reason']."] rec:[".$this->toString($tmphm)."]");
+            error_log(__FILE__.": [$field] canRead [".$rtn['result']."]. 2012apr171939. sql:[$sql] url:["
+				.$_SERVER['REQUEST_URI']."] reason:[".$rtn['reason']."] rec:[".$this->toString($tmphm)."]");
         }
         return $rtn['result'];
     }
@@ -240,7 +240,8 @@ class User extends WebApp
             }
         } 
         if(!$rtn['result']){
-            error_log(__FILE__.": [$field] canWrite [".$rtn['result']."]. 201203132129. sql:[$sql] url:[".$_SERVER['REQUEST_URI']."] reason:[".$rtn['reason']."] rec:[".$this->toString($tmphm)."]");
+            error_log(__FILE__.": [$field] canWrite [".$rtn['result']."]. 201203132129. sql:[$sql] url:["
+				.$_SERVER['REQUEST_URI']."] reason:[".$rtn['reason']."] rec:[".$this->toString($tmphm)."]");
         }
         return $rtn['result'];
     }
@@ -272,7 +273,8 @@ class User extends WebApp
             }
         }
         if(!$rtn['result']){
-            error_log(__FILE__.": $obj canDelete [".$rtn['result']."]. 201203132129. sql:[$sql] url:[".$_SERVER['REQUEST_URI']."] reason:[".$rtn['reason']."] rec:[".$this->toString($tmphm)."]");
+            error_log(__FILE__.": $obj canDelete [".$rtn['result']."]. 201203132129. sql:[$sql] url:["
+				.$_SERVER['REQUEST_URI']."] reason:[".$rtn['reason']."] rec:[".$this->toString($tmphm)."]");
         }
         return $rtn['result']; 
     }
@@ -292,7 +294,6 @@ class User extends WebApp
     function getOperateArea($field=''){
         $str = '';
         $str = $opArea = $this->get('operatearea');
-        
         /*
         $opAreaArr = explode(",", $opArea);
         foreach($opAreaArr as $k=>$v){
@@ -303,7 +304,6 @@ class User extends WebApp
             $str = "pnsk".$field."=".$str;
         }
         */
-
         return $str;
     }
 
@@ -311,7 +311,7 @@ class User extends WebApp
     //- Fri, 18 Nov 2016 19:13:07 +0800
     public function getUserList(){
         $list = array();
-        $hm = $this->getBy('*', '1=1');
+        $hm = $this->getBy('*', '1=1',  $withCache=array('key'=>'user-get-list'));
         if($hm[0]){
             $hm = $hm[1];
             foreach ($hm as $k=>$v){

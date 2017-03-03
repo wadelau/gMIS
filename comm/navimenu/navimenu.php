@@ -13,7 +13,9 @@ $pnsckDone = $myNavi->signPara($pnscDone);
 $pnscDone = base62x($pnscDone);
 
 $dynamicmenu = '';
-$hm = $myNavi->execBy("select levelcode,linkname,modulename,dynamicpara,disptitle,thedb from ".$_CONFIG['tblpre']."info_menulist where state=1 order by levelcode", null);
+$hm = $myNavi->execBy("select levelcode,linkname,modulename,dynamicpara,disptitle,thedb from "
+	.$_CONFIG['tblpre']."info_menulist where state=1 order by levelcode", null,
+	$withCache=array('key'=>'navimenu-select'));
 
 #print_r($hm);
 if($hm[0]){

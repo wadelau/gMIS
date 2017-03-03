@@ -8,6 +8,7 @@
 //-- 09:48 Wednesday, July 01, 2015
 //- with ido_proj.js , 10:37 Sunday, January 10, 2016
 //- wrap iId as string, 09:03 09 October 2016
+//- imprvs on searchbytime, Thu, 2 Mar 2017 16:32:06 +0800
 //-
 var currenttbl = '';
 var currentdb = '';
@@ -653,37 +654,42 @@ function getUrlByTime(baseUrl, timepara, timeop, timeTag){
     var toD = new Date(tod);
     var fromDStr = '';
     var toDStr = '';
-
-    if(timeTag == 'THIS_WEEK'){
+	if(timeTag == 'TODAY'){
+        today = myDate.getDate(); 
+        fromd = now; // + (-today)*86400*1000;
+        tod = now; // + (+today)*86400*1000;
+     }
+     else if(timeTag == 'YESTERDAY'){
+        //today = myDate.getDate(); 
+        //now = now - 86400*1000*30;
+        fromd = now + (-1)*86400*1000;
+        tod = now + (-1)*86400*1000;
+     }
+     else if(timeTag == 'THIS_WEEK'){
        fromd = now + (-today+1)*86400*1000;
        tod = now + (7-today)*86400*1000;
-    }else if(timeTag == 'LAST_WEEK'){
+     }
+     else if(timeTag == 'LAST_WEEK'){
        now = now - 86400*1000*7;
        fromd = now + (-today+1)*86400*1000;
        tod = now + (7-today)*86400*1000;
-    }else if(timeTag == 'THIS_MONTH'){
-       today = myDate.getDate(); 
-       fromd = now + (-today)*86400*1000;
-       tod = now + (30-today)*86400*1000;
-    }else if(timeTag == 'LAST_MONTH'){
-       today = myDate.getDate(); 
-       now = now - 86400*1000*30;
-       fromd = now + (-today)*86400*1000;
-       tod = now + (30-today)*86400*1000;
     }
-
     fromD = new Date(fromd);
     toD = new Date(tod);
     fromDStr = fromD.getFullYear()+'-'+(fromD.getMonth()+1)+'-'+fromD.getDate();
     toDStr = toD.getFullYear()+'-'+(toD.getMonth()+1)+'-'+toD.getDate();
-
+	if(timepara.indexOf('time') > -1){
+    	fromDStr += ' 00:00:00';
+    	toDStr += ' 23:59:59';
+    }
     if(timeop == 'inrange'){
-        url += '&pnsk'+timepara+'='+fromDStr+','+toDStr+'&oppnsk'+timepara+'='+timeop;
+        url += '&pnsk'+timepara+'='+fromDStr+','+toDStr+'&oppnsk'+timepara+'='+timeop+'&pnsm=1';
+    }
+    else{
+    	console.log('unknown timeop:['+timeop+'].1703021921.');
     }
     //window.alert('now:['+now+'] fromd:['+fromd+'] tod:['+tod+'] url:['+url+']');
-
     doAction(url);
-
 }
 //-- getUrlByTime, Sat Jun 23 11:15:09 CST 2012
 

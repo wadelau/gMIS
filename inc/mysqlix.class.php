@@ -37,11 +37,12 @@ class MYSQLIX {
 		if (!is_object($this->m_link)){
 			$real_host = $this->m_host.":".$this->m_port;
 			$this->m_link = new mysqli($this->m_host, $this->m_user, 
-				$this->m_password, $this->m_name, $this->m_port);
+					$this->m_password, $this->m_name, $this->m_port);           
 
-			if(GConf::get('db_enable_utf8_affirm')){
+			if(Gconf::get('db_enable_utf8_affirm')){
 				$this->query("SET NAMES 'utf8'", null, null);
 			}
+
 		}
 		return $this->m_link;
 		
@@ -56,7 +57,7 @@ class MYSQLIX {
 		}
 		$sql = $this->_enSafe($sql,$idxarr,$hmvars);
 		
-		#debug($sql);
+		#debug($sql, 2);
 		$result = $this->m_link->query($sql) or $this->sayErr("[$sql] 201605240944.");		
 		
 		if($result){
@@ -91,8 +92,9 @@ class MYSQLIX {
 		if( strpos($sql,"limit")===false && strpos($sql,"show tables")===false){
 			$sql .= " limit 1 ";
 		} 
-		#debug($sql);
         $result = $this->m_link->query($sql) or $this->sayErr('[$sql] query failed. 201605220716.');
+		#debug($sql);
+		#debug($result);
         		
 		if($result){
 			if($row = $result->fetch_array(MYSQLI_ASSOC) ){
@@ -109,6 +111,7 @@ class MYSQLIX {
 			$hm[0] = true;
 			$hm[1] = array('sayError'=>'No record. 200607050202.');
 		}
+        #debug($hm);
 		return $hm;
 		
 	}
@@ -170,8 +173,8 @@ class MYSQLIX {
 	function _enSafe($sql,$idxarr,$hmvars){
 		
 		$sql = $origSql = trim($sql);
-		if($hmvars[GConf::get('no_sql_check')]){
-			$hmvars[GConf::get('no_sql_check')] = false; # valid only once
+		if($hmvars[Gconf::get('no_sql_check')]){
+			$hmvars[Gconf::get('no_sql_check')] = false; # valid only once
 			return $origSql;
 		}
 		else{

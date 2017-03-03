@@ -101,7 +101,7 @@ body {
 		{if count($navidir_list)>0}
 		<tr>
 		<td>
-		<b title="浏览菜单导航">ND.{$navidir_list[0]['linkname']} Navigate Directory</b><br/>
+		<b title="浏览菜单导航">ND. {$navidir_list[0]['linkname']} Navigate Directory</b><br/>
 		{$mi=0}
 		{foreach $navidir_list as $k=>$v}
 			{if $k==0}
@@ -130,7 +130,7 @@ body {
 		
 		<tr>
 			<td colspan="10">
-			<b title="(工作、任务列表)">WT.工作表 Work-Todo</b><br/>
+			<b title="(工作、任务列表)">WT. 工作表 Work-Todo</b><br/>
 			<div id="tododiv" class="wrapperlog">
 			<table style="border:0px; background:transparent;">
 				<tr style="font-weight: bold;"><td>序号</td><td>事项/任务</td><td>状态</td><td>需求方</td><td>供应方</td><td>更新时间</td></tr>
@@ -152,7 +152,7 @@ body {
 
 		<tr>
 		<td>
-		<b title="(根据被调用频率自动排列、调整)">MU.常用 Most-Used</b><br/>
+		<b title="(根据被调用频率自动排列、调整)">MU. 常用 Most-Used</b><br/>
 		{$mi=0}
 		{foreach $module_list_order as $k=>$v}
 			{if $mi==0 || ($mi) % 4 == 0}
@@ -180,7 +180,7 @@ body {
 		</td>
 		</tr><tr>
 		<td>
-		<b title="（用户自定义的快捷列表，在“系统设置--单元模块”中选择某个模块，修改其中“添加到桌面”即可）">DT.桌面 Desktop</b><br/>
+		<b title="（用户自定义的快捷列表，在“系统设置--单元模块”中选择某个模块，修改其中“添加到桌面”即可）">DT. 桌面 Desktop</b><br/>
 		{$mi=0}
 		{foreach $module_list_byuser as $k=>$v}
 			{if $mi==0 || ($mi) % 4 == 0}
@@ -197,7 +197,7 @@ body {
 
 		<tr>
 			<td colspan="10">
-			<b title="(操作、管理日志)">OL.操作日志 Operation-Log</b><br/>
+			<b title="(操作、管理日志)">OL. 操作日志 Operation-Log</b><br/>
 			<div id="oplogdiv" class="wrapperlog">
 			<pre><b>时间					用户/Id						执行操作					作用对象/Id</b>
 <pre>{foreach $log_list as $k=>$v}
@@ -238,12 +238,21 @@ body {
 			return [dY, dD];  
 		}
 		</script>
-		<b><i>ii</i></b>.系统已上线 <a href="./"><script type="text/javascript">diff=diffInYearsAndDays('{$system_lastmodify}',(new Date()));document.write(''+diff[0]+' 年 '+diff[1]+' 天');</script></a> , 目前共 <b>{$user_count}</b> 位用户，管理着<b> {$module_count}  </b>个功能模块.  
+		<b><i>ii</i></b>. 系统已上线 <a href="./"><script type="text/javascript">
+			diff=diffInYearsAndDays('{$start_date}',(new Date())); document.write(''+diff[0]+' 年 '+diff[1]
+			+' 天');</script></a> , 目前共 <a href="./ido.php?tbl=info_usertbl"><b>{$user_count}</b></a> 位用户，
+			管理着<a href="./ido.php?tbl=info_objecttbl"><b> {$module_count}  </b></a>个功能模块.  
+			系统上次更新: <a href='#-gmis' target='_blank'>{$system_lastmodify}</a> . 
 		</td></tr>
 
-		<tr><td><b><i>HM</i></b>.<a href="{$front_page}" target="_blank">打开主站</a></td></tr>
+		<tr><td><b><i>HM</i></b>. <a href="{$front_page}" target="_blank">打开主站</a></td></tr>
 		</table>
-		<!-- <script type="text/javascript">window.setTimeout(location.href='{$todourl}', 10*60*1000);</script> -->
+		{literal}
+		<script type="text/javascript">var idxHomeWto=window.setTimeout(function(){
+				console.log('reload time:['+(new Date())+']');
+				window.location.href='./';}, 
+			10*60*1000);</script><!-- 10 minutes -->
+		{/literal}
 		<br/>
             </div>
 		<br/>

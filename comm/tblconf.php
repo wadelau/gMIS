@@ -13,7 +13,7 @@ $hmfield = $hmfieldsort = array();
 $hmfieldsortinxml = $hmconf[1];
 
 $sql = "desc $tbl";
-$hm = $gtbl->execBy($sql, null);
+$hm = $gtbl->execBy($sql, null, $withCache=array('key'=>$tbl."-desc"));
 
 $max_idx = $hmi = 99; # max number of fields count
 $min_idx = 0; $dispi = 0; $max_disp_cols = $gtbl->getListFieldCount(); # display field count

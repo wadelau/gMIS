@@ -28,7 +28,7 @@ class MEMCACHEDX {
 		$this->chost = $config->chost;
 		$this->expireTime = $config->expireTime;
 		
-		if(true){
+		if(class_exists('Memcached')){ # set true/false in production
 			//- use built-in memcached functions
 			$this->mcache = new Memcached($this->persistConnId);
 			$servers = $this->mcache->getServerList(); 
@@ -49,6 +49,7 @@ class MEMCACHEDX {
 		}
 		else{
 			//- open socket, ###todo
+			#$this->mcache 
 			
 		}
 		
@@ -61,8 +62,13 @@ class MEMCACHEDX {
 		
 	}
 	
+	//-
+	function __destruct(){
+		$this->close();
+	}
+	
 	//- init
-	function _init(){
+	private function _init(){
 		if(!is_object($this->mcache)){
 			$this->mcache = new Memcached($this->persistConnId);
 			$servers = $this->mcache->getServerList(); 
@@ -79,7 +85,7 @@ class MEMCACHEDX {
 		}
 		return $this->mcache;
 	}
-
+	
 	//- set
 	function set($k, $v, $expr){
 		$rtn = '';
@@ -110,6 +116,12 @@ class MEMCACHEDX {
 		
 	}
 	
+	//- close
+	function close(){
+	    if($this->mcache != null){
+		  $this->mcache->quit();
+	    }
+	}
 	
  }
 ?>

@@ -63,8 +63,8 @@ if(array_key_exists(UID,$_SESSION) && $_SESSION[UID] != ''){
 }
 if($userid != ''){
     $user->setId($userid);
-
-}else if(strpos($_SERVER['PHP_SELF'],'signupin.php') === false
+}
+else if(strpos($_SERVER['PHP_SELF'],'signupin.php') === false
 	&& strpos($_SERVER['PHP_SELF'],'readtblfield.php') === false){
 
     header("Location: ".$rtvdir."/extra/signupin.php?act=signin&bkl=".Base62x::encode($thisUrl));    
@@ -75,7 +75,8 @@ if($userid != ''){
 
 if(!isset($isoput)){
     $isoput = true;
-}else{
+}
+else{
 
 }
 
@@ -193,10 +194,13 @@ if(strpos($tbl,$_CONFIG['tblpre']) !== 0){
 
 if(true){ # used in mix mode to cover all kinds of table with or without tbl prefix
 	$oldtbl = $tbl;
-	$tbl = (new GTbl($tbl, null, ''))->setTbl($tbl);
+	#$tbl = (new GTbl($tbl, null, ''))->setTbl($tbl);
+	$tmpgtbl = new GTbl($tbl, null, '');
+	$tbl = $tmpgtbl->getTbl();
 	if($tbl != $oldtbl){
 		$_REQUEST['tbl'] = $tbl;
 	}
+	$tmpgtbl = null;
 }
 
 if(isset($_REQUEST['parent'])){

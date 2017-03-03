@@ -12,11 +12,15 @@ if(!defined('__ROOT__')){
 require_once(__ROOT__.'/inc/webapp.class.php'); 
 
 class PageNavi extends WebApp{
+	
+	//- variables
 
-   public function __construct(){
+   public function __construct($args=null){
 
-       $this->dba = new DBA(); # added by wadelau@ufqi.com, Wed Jul 11 14:31:52 CST 2012
+       #$this->dba = new DBA(); # added by wadelau@ufqi.com, Wed Jul 11 14:31:52 CST 2012
 
+	   parent::_construct($args);
+	   
        $file = $_SERVER['PHP_SELF'];
        $query = $_SERVER['QUERY_STRING'];
        if(strpos($query, "act=list-") !== false){
@@ -190,6 +194,9 @@ class PageNavi extends WebApp{
                         $fieldopv = "=";
                     }
 					else{
+						if(startswith($fieldopv, '%')){
+							$fieldopv = urldecode($fieldopv);
+						}
                         $fieldopv = str_replace('&lt;', '<', $fieldopv);
                     }
 					if($fieldopv == $skiptag){

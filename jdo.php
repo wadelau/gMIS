@@ -17,13 +17,11 @@ $list_disp_limit = 28;
 # act handler
 if(startsWith($act,'add') || startsWith($act, "modify")){
     include("./act/addmodi.php");
-
-}else if(startsWith($act, "list")){
-
+}
+else if(startsWith($act, "list")){
     if(startsWith($act, "list-addform")){
        include("./act/doaddmodi.php"); 
     }
-
     if(startsWith($act, "list-dodelete")){
 		$origId = $id;
        include("./act/dodelete.php"); 
@@ -33,7 +31,6 @@ if(startsWith($act,'add') || startsWith($act, "modify")){
 		   		'resulttrace'=>'1511242124', 'targetid'=>$origId); # unique trace id
 		   }
     }
-	
 	if(isset($data['respobj']['resultobj'])){
 		# json, xml, Tue Nov 24 21:31:23 CST 2015
 	}
@@ -156,11 +153,11 @@ if(startsWith($act,'add') || startsWith($act, "modify")){
            $out .= "<tr height=\"35px\" valign=\"middle\" bgcolor=\"".$bgcolor."\" id=\"list_tr_".(++$i)."\">"; # rec[$gtbl->getMyId()]
            if($hasid){
                $id = $rec[$gtbl->getMyId()]; $listid[] = $id;
-               $out .= "<td nowrap> <input name=\"checkboxid\" type=\"checkbox\" value=\"".$id."\"> &nbsp; <a onmouseover=\"javascript:showActList('".$i."', 1, '".str_replace("&".$gtbl->getMyId()."=","&oid=", $url)."&".$gtbl->getMyId()."=".$id."');\" onmouseout=\"javascript:showActList('".$id."', 0, '".str_replace("&".$gtbl->getMyId()."=","&oid=", $url)."&".$gtbl->getMyId()."=".$id."');\" href='javscript:void(0);' onclick=\"javascript:doActionEx('".$url."&act=view&".$gtbl->getMyId()."=".$id."','contentarea');;\" title=\"详细信息\">".($i + (intval($navi->get('pnpn'))-1) * (intval($navi->get('pnps'))))." / ".$id." &#x25BE;</a> <div id=\"divActList_$i\" style=\"display:none; position: absolute; margin-left:50px; margin-top:-11px; z-index:99; background-color:silver;\">actlist-$i</div> </td>";
+               $out .= "<td nowrap> <input name=\"checkboxid\" type=\"checkbox\" value=\"".$id."\"> &nbsp; <a onmouseover=\"javascript:showActList('".$i."', 1, '".str_replace("&".$gtbl->getMyId()."=","&oid=", $url)."&".$gtbl->getMyId()."=".$id."');\" onmouseout=\"javascript:showActList('".$id."', 0, '".str_replace("&".$gtbl->getMyId()."=","&oid=", $url)."&".$gtbl->getMyId()."=".$id."');\" href='javascript:void(0);' onclick=\"javascript:doActionEx('".$url."&act=view&".$gtbl->getMyId()."=".$id."','contentarea');;\" title=\"详细信息\">".($i + (intval($navi->get('pnpn'))-1) * (intval($navi->get('pnps'))))." / ".$id." &#x25BE;</a> <div id=\"divActList_$i\" style=\"display:none; position: absolute; margin-left:50px; margin-top:-11px; z-index:99; background-color:silver;\">actlist-$i</div> </td>";
 
            }else{
                $url_uni_extra = $gtbl->getUniquePara($rec);
-               $out .= "<td nowrap> <input name=\"checkboxid\" type=\"checkbox\" value=\"".$id."\"> &nbsp; <a onmouseover=\"javascript:showActList('".$i."', 1, '".$url."&".$url_uni_extra."');\" onmouseout=\"javascript:showActList('".$i."', 0, '".$url."&".$url_uni_extra."');\" href='javscript:void(0);' onclick=\"javascript:doActionEx('".$url."&act=view&".$url_uni_extra."','contentarea');;\" title=\"详细信息\">".($i + (intval($navi->get('pnpn'))-1) * (intval($navi->get('pnps'))))." / ".$id." &#x25BE;</a> <div id=\"divActList_$i\" style=\"display:none; position: absolute; margin-left:50px; margin-top:-11px; z-index:99; background-color:silver;\">actlist-$i</div> </td>";
+               $out .= "<td nowrap> <input name=\"checkboxid\" type=\"checkbox\" value=\"".$id."\"> &nbsp; <a onmouseover=\"javascript:showActList('".$i."', 1, '".$url."&".$url_uni_extra."');\" onmouseout=\"javascript:showActList('".$i."', 0, '".$url."&".$url_uni_extra."');\" href='javascript:void(0);' onclick=\"javascript:doActionEx('".$url."&act=view&".$url_uni_extra."','contentarea');;\" title=\"详细信息\">".($i + (intval($navi->get('pnpn'))-1) * (intval($navi->get('pnps'))))." / ".$id." &#x25BE;</a> <div id=\"divActList_$i\" style=\"display:none; position: absolute; margin-left:50px; margin-top:-11px; z-index:99; background-color:silver;\">actlist-$i</div> </td>";
            }
            for($hmi=$dispi=$min_idx; $hmi<=$max_idx; $hmi++){
                $field = $gtbl->getField($hmi);

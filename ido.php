@@ -15,11 +15,11 @@ if($tbl == ''){
     }
 }else{
     $out .= "<script type=\"text/javascript\">currenttbl='".$tbl."';\ncurrentdb='"
-            .$mydb."';\n currentlistid= {};\n currentpath='".($url==''?'./':$url)."';\n userinfo={'id':'"
-                    .$userid."','email':'"
-                            .$user->getEmail()."','group':'"
-                                    .$user->getGroup()."','branch':'"
-                                            .$user->get('branchoffice')."'};\n </script>\n";
+		.$mydb."';\n currentlistid= {};\n currentpath='".($url==''?'./':$url)."';\n userinfo={'id':'"
+		.$userid."','email':'"
+		.$user->getEmail()."','group':'"
+		.$user->getGroup()."','branch':'"
+		.$user->get('branchoffice')."'};\n </script>\n";
 }
 
 $out_header = $out;
@@ -38,12 +38,16 @@ if($_REQUEST['tit'] == ''){
 # get detail path
 $module_path = ''; $levelcode = ''; $codelist = '';
 #$hm = $gtbl->execBy("select levelcode, linkname, modulename from ".$_CONFIG['tblpre']."info_menulist where modulename='".str_replace($_CONFIG['tblpre'],"",$tbl)."'", null);
-$hm = $gtbl->execBy("select levelcode, linkname, modulename from ".$_CONFIG['tblpre']."info_menulist where modulename in ('".str_replace($_CONFIG['tblpre'],"",$tbl)."', '".$tbl."')", null);
+$hm = $gtbl->execBy("select levelcode, linkname, modulename from "
+	.$_CONFIG['tblpre']."info_menulist where modulename in ('".str_replace($_CONFIG['tblpre'],"",$tbl)."', '".$tbl."')", null,
+	$withCache=array('key'=>'info_menulist-select-'.$tbl));
 #debug($hm);
 if($hm[0]){
 	$levelcode = $hm[1][0]['levelcode'];
 	$codelist = substr($levelcode,0,2)."','".substr($levelcode,0,4)."','".substr($levelcode,0,6)."','".substr($levelcode,0,8); # max 4 levels allowed
-	$hm = $gtbl->execBy("select levelcode, linkname, modulename from ".$_CONFIG['tblpre']."info_menulist where levelcode in ('".$codelist."') order by levelcode", null);
+	$hm = $gtbl->execBy("select levelcode, linkname, modulename from ".$_CONFIG['tblpre']."info_menulist where levelcode in ('"
+		.$codelist."') order by levelcode", null,
+		$withCache=array('key'=>'info_menulist-select-level-'.$codelist));
 	if($hm[0]){
 		$hm = $hm[1]; $lastLinkName = ''; #print_r($hm); 
 		foreach($hm as $k=>$v){
@@ -89,7 +93,8 @@ if(count($refArr) > 0){
             }
         }
         if($isjs == 0){
-            $out .= "&nbsp; <button onclick=\"javascript:doActionEx('".$tmphref."','".($v['target']==''?'contentarea':$v['target'])."');\">".$v['name']."</button>";
+            $out .= "&nbsp; <button onclick=\"javascript:doActionEx('".$tmphref."','".($v['target']==''?'contentarea':$v['target'])
+				."');\">".$v['name']."</button>";
         }else{
             $out .= "&nbsp; <button onclick=\"javascript:".$tmphref."\">".$v['name']."</button>";
         }

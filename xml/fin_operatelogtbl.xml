@@ -1,0 +1,21 @@
+<?xml version="1.0" standalone="yes"?>
+<tablecfg>   
+    <table name="fin_operatelogtbl">
+        <chnname>操作历史记录</chnname>
+        <listfieldcount>9</listfieldcount> <!--max_disp_cols-->
+        <since>20160922</since>
+        <creator>Xenxin</creator>
+        <!-- <superaccess>inherit::id=USER_ID::rw</superaccess> --> 
+        <!--<myid>ou_id</myid>  in case that the table's id field name is not 'id' -->
+		<searchbytimefield>inserttime</searchbytimefield>
+    </table>
+		
+	<field name="actionstr">
+		<chnname>操作</chnname>
+	</field>
+	
+	<field name="inserttime">
+		<chnname>时间</chnname>
+	</field>
+	
+</tablecfg>

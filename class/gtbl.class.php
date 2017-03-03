@@ -58,6 +58,7 @@ class GTbl extends WebApp{
 			'rotatespan'=>'rotatespan', # table names contains variable datetime, e.g. _201412, _201501, Mon Jan  5 15:31:29 CST 2015
 			'myid'=>'myid', # get table's self-defined id, see inc/webapp.class, e.g. product_id, article_id, Wed Jun  8 13:26:07 CST 2016
 			'srcprefix'=>'srcprefix', # set for files and/or images
+			'searchbytimefield' => 'searchbytimefield' # provide timebased search buttons
 			);
 
 	private static $MAX_FIELD_LIST = 99;
@@ -203,7 +204,8 @@ class GTbl extends WebApp{
                     $wherestr .= " ".$trdArr[0]."='".$tmpfieldv."' and";
                 }
             }
-            $hm = $this->getBy("id,$dispfield", $wherestr." 1=1");
+            $hm = $this->getBy("id,$dispfield", $wherestr." 1=1",
+				$withCache=array('key'=>$tbl.'-select-'.$wherestr));
             if($hm[0]){
                 $hm = $hm[1];
                 $tmpstr = $hm[0][$dispfield]; 
@@ -257,6 +259,20 @@ class GTbl extends WebApp{
                 $refArr[] = array("name"=>$arr2[0], "href"=>$arr2[1],"target"=>$arr2[2]);
             }
         }
+		# check search by time field
+        if(true){
+            $timefield = $this->getSearchByTime();
+            if($timefield != ''){
+                $refArr[] = array('name'=>'今天', 'href'=>'JS',
+                        'target'=>'getUrlByTime(\''.$url.'\', \''.$timefield.'\', \'inrange\', \'TODAY\');');
+                $refArr[] = array('name'=>'昨天', 'href'=>'JS',
+                        'target'=>'getUrlByTime(\''.$url.'\', \''.$timefield.'\', \'inrange\', \'YESTERDAY\');');
+                $refArr[] = array('name'=>'本周', 'href'=>'JS',
+                        'target'=>'getUrlByTime(\''.$url.'\', \''.$timefield.'\', \'inrange\', \'THIS_WEEK\');');
+                $refArr[] = array('name'=>'上周', 'href'=>'JS',
+                        'target'=>'getUrlByTime(\''.$url.'\', \''.$timefield.'\', \'inrange\', \'LAST_WEEK\');');
+            }
+        }
 		# check rotatespan, Mon Jan  5 16:55:48 CST 2015
 		$rotatespan = $this->rotatetag;
 		#error_log(__FILE__.": rotatespan:$rotatespan");
@@ -265,7 +281,7 @@ class GTbl extends WebApp{
 			$tmpArr1 = array('M'=>'Ym', 'Y'=>'Y', 'D'=>'Ymd', 'W'=>'YW');
 			$tmpArr2 = array();
 			$tmptag = $tmpArr[$rotatespan];
-			for($tmpi=1; $tmpi<5; $tmpi++){
+			for($tmpi=1; $tmpi<4; $tmpi++){
 				$mytag = date($tmpArr1[$rotatespan], strtotime("-$tmpi $tmptag"));		
 				$refArr[] = array("name"=>$mytag, "href"=>'jdo.php?tbl='.$this->prttbl
 				        .'&amp;act=list&amp;tblrotate='.$mytag.'&amp;db='.$this->db, 'target'=>'actarea');
@@ -300,6 +316,14 @@ class GTbl extends WebApp{
         return $tmpstr=='' ? $default : $tmpstr;
 	}
 	
+	//-
+    public function getSearchByTime(){
+        $default = ''; #
+        $tmpstr = $this->hmconf[$this->taglist['table'].$this->sep.$this->prttbl
+                .$this->sep.$this->taglist['searchbytimefield']];
+        $tmpstr = $tmpstr==null?'':$tmpstr;
+        return $tmpstr=='' ? $default : $tmpstr;
+    }
 
     # functions based on $field, below
 
@@ -402,7 +426,8 @@ class GTbl extends WebApp{
 				$oldhmf = $this->hmf;
 				$this->hmf = array();
 				$this->setTbl($tbl);
-				$hm = $this->getBy("$optval,$dispfield", $arr[3]);  
+				$hm = $this->getBy("$optval,$dispfield", $arr[3], 
+					$withCache=array('key'=>$tbl.'-select-'.$arr[3]));  
 				if($hm[0]){
 					$hmoption = $hm[1]; # $this->hmconf['selectoption_'.$field] = $hmoption;
 				}
@@ -911,15 +936,14 @@ class GTbl extends WebApp{
 	//- @override, test a table with or without $_CONFIG['tblpre']
 	//- Xenxin, Thu Jun 16 17:03:49 CST 2016
 	public function setTbl($tbl=''){
-	
 		$realtbl = '';
 		if($tbl == null || $tbl == ''){
 			$tbl = parent::getTbl();	
 		}	
-
 		$tblpre = GConf::get('tblpre');
 		$hasTblpre = startsWith($tbl, $tblpre);
-		$hm = parent::execBy('show tables like "%'.$tbl.'" ');
+		$hm = parent::execBy('show tables like "%'.$tbl.'" ', null, 
+			$withCache=array('key'=>$tbl."-simillar")); # just prefix
 		if($hm[0]){
 			$tmpv = '';
 			foreach($hm[1] as $rk=>$rv){
@@ -945,14 +969,13 @@ class GTbl extends WebApp{
 			    debug(__FILE__.": unable to find real tbl for [$tbl].");
 			}
 			#debug(__FILE__.": get result: real tbl:[".$realtbl."]");
-			
 		}
 		else{
 			$tblpre = GConf::get('tblpre');
-			if(startsWith($tbl, $tblpre)){
+			if(startsWith($tbl, $tblpre)){ # remove prefix
 				$realtbl = str_replace($tblpre, "", $tbl);
 			}
-			else{
+			else{ # add prefix
 				$realtbl = $tblpre.$tbl;
 			}
 		}

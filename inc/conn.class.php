@@ -5,13 +5,6 @@
  * since Wed Jul 13 18:20:28 UTC 2011
  */
 
-if(!defined('__ROOT__')){
-  define('__ROOT__', dirname(dirname(__FILE__)));
-}
-
-require_once(__ROOT__."/inc/config.class.php");
-
-# db master
 class Config_Master{
 	var $mDbHost     = "";	
 	var $mDbUser     = "";
@@ -20,7 +13,7 @@ class Config_Master{
 	var $mDbDatabase = "";
 	
 	function __construct(){
-		$gconf = new GConf();
+		$gconf = new Gconf();
 		$this->mDbHost = $gconf->get('dbhost');
 		$this->mDbPort = $gconf->get('dbport');
 		$this->mDbUser = $gconf->get('dbuser');
@@ -30,8 +23,7 @@ class Config_Master{
 	} 
 }
 
-# db slave
-class Config_stat{
+class Config_Stats{
 	var $mDbHost     = "";	
 	var $mDbUser     = "";
 	var $mDbPassword = ""; 
@@ -39,37 +31,28 @@ class Config_stat{
 	var $mDbDatabase = "";
 	
 	function __construct(){
-		$gconf = new GConf();
-		$this->mDbHost = $gconf->get('dbhost_slave');
-		$this->mDbPort = $gconf->get('dbport_slave');
-		$this->mDbUser = $gconf->get('dbuser_slave');
-		$this->mDbPassword = $gconf->get('dbpassword_slave');
-		$this->mDbDatabase = $gconf->get('dbname_slave');
+		$gconf = new Gconf();
+		$this->mDbHost = $gconf->get('dbhost_stat');
+		$this->mDbPort = $gconf->get('dbport_stat');
+		$this->mDbUser = $gconf->get('dbuser_stat');
+		$this->mDbPassword = $gconf->get('dbpassword_stat');
+		$this->mDbDatabase = $gconf->get('dbname_stat');
 
 	} 
 }
 
-
 # cache master
 class Cache_Master{
-	
-	var $chost = '';
-	var $cport = '';
-	var $expireTime = 30 * 60; 
-	
-	function __construct(){
-		
-		$this->chost = GConf::get('cachehost');
-		$this->cport = GConf::get('cacheport');
-		$this->expireTime = GConf::get('cacheexpire');
-		
-	}
-	
+    var $chost = '';
+    var $cport = '';
+    var $expireTime = 1800; # 30 * 60;
+
+    function __construct(){
+        $this->chost = GConf::get('cachehost');
+        $this->cport = GConf::get('cacheport');
+        $this->expireTime = GConf::get('cacheexpire');
+
+    }
 }
-
-
-//-- Todo
-
-# connection pool ?
 
 ?>
