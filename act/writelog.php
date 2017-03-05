@@ -1,6 +1,6 @@
 <?php
 if(1){
-    $auditacts = array('list-addform','list-dodelete','updatefield');
+    $auditacts = array('list-addform','list-dodelete','updatefield','dosignin');
     if(in_array($act, $auditacts)){
        	if(!$gtbl){
 			$gtbl = new WebApp;	
@@ -12,16 +12,18 @@ if(1){
         $gtbl->set('parentid', $_REQUEST['id']==''?0:$_REQUEST['id']);
         $gtbl->set('parenttype', $tbl);
 
-        $gtbl->set('actionstr', "act:[".$act."] id:[".($_REQUEST['id']==''?$_REQUEST['id.old']:$_REQUEST['id'])."]"); # see act/dodelete.php
+        $actstr = "act:[".$act."] id:["
+			.($_REQUEST[$gtbl->getMyId()]==''
+				?$_REQUEST[$gtbl->getMyId().'.old']
+				:$_REQUEST[$gtbl->getMyId()])."]";
+        if($act == 'dosignin'){ $actstr .= " email:[".$_REQUET['email']."]"; }
+        $gtbl->set('actionstr', $actstr); # see act/dodelete.php
 
         $hm = $gtbl->setBy("userid,useremail,parentid,parenttype,actionstr,inserttime",null);
-
         error_log(__FILE__.": log succ. act:[$act]");
-
-    }else{
-
+    }
+	else{
         #error_log(__FILE__.": log fail. act:[$act]");
-
     }
 }
 ?>
