@@ -16,8 +16,9 @@ $inframe = $_REQUEST['inframe'];
 
 if($inframe == ''){
 	# re open in an iframe window
-	$url = $rtvdir."/extra/xdirectory.php?inframe=1&".$_SERVER['QUERY_STRING']; 		
-    $out .= "<iframe id=\"linktblframe\" name=\"linktblframe\" width=\"100%\" height=\"100%\" src=\"".$url."&isheader=0\" frameborder=\"0\"></iframe>";
+	$myurl = $rtvdir."/extra/xdirectory.php?inframe=1&".$_SERVER['QUERY_STRING'].'&'.SID.'='.$sid; 		
+    $out .= "<iframe id=\"linktblframe\" name=\"linktblframe\" width=\"100%\" height=\"100%\" src=\""
+            .$myurl."&isheader=0\" frameborder=\"0\"></iframe>";
 
 }
 else{
@@ -93,7 +94,8 @@ if(1){
 	$out .= $str;
 }
 
-$out .= " <script type=\"text/javascript\"> var current_link_field='".$_REQUEST['icode']."'; parent.sendLinkInfo('".$parentCode."','w', current_link_field); </script> ";
+$out .= " <script type=\"text/javascript\"> var current_link_field='".$_REQUEST['icode']
+    ."'; parent.sendLinkInfo('".$parentCode."','w', current_link_field); </script> ";
 
 $out .= '
 			<script type="text/javascript">

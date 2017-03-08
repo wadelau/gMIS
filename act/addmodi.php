@@ -9,7 +9,10 @@ if($_REQUEST['otbl'] != ''){
     $colsPerRow = 2;
 }
 
-$out .= "<fieldset style=\"border-color:#5f8ac5;border: 1px solid #5f8ac5;\"><legend><h4>增修记录</h4></legend><form id=\"".$formid."\" name=\"".$formid."\" method=\"post\" action=\"".$url."&act=list-addform\"  ".$gtbl->getJsActionTbl()."><table align=\"center\" width=\"98%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0px\">";
+$out .= "<fieldset style=\"border-color:#5f8ac5;border: 1px solid #5f8ac5;\"><legend><h4>增修记录</h4>"
+        ."</legend><form id=\"".$formid."\" name=\"".$formid."\" method=\"post\" action=\""
+        .$jdo."&act=list-addform\" ".$gtbl->getJsActionTbl()."><table align=\"center\" width=\"98%\" "
+        ."cellspacing=\"0\" cellpadding=\"0\" border=\"0px\">";
 $out .= "<tr><td width=\"11%\">&nbsp;</td>
             <td width=\"22%\">&nbsp;</td>
             <!-- <td width=\"2%\">&nbsp;</td> -->
@@ -92,30 +95,39 @@ for($hmi=$min_idx; $hmi<=$max_idx;$hmi++){
 		continue;
 	}
 	else if($fieldinputtype == 'hidden'){
-        $hiddenfields .= "<input type=\"hidden\" name=\"".$field."\" id=\"".$field."\" value=\"".$hmorig[$field]."\"/>\n";
+        $hiddenfields .= "<input type=\"hidden\" name=\"".$field."\" id=\"".$field."\" value=\""
+		.$hmorig[$field]."\"/>\n";
         continue;
     }
     else if($gtbl->filterHiddenField($field, $opfield,$timefield)){
         continue;
     }
     else if(!$user->canWrite($field)){
-        $out .= "<--NOWRITE--><input type=\"hidden\" id=\"".$field."\" name=\"".$field."\" value=\"".$hmorig[$field]."\" />";
+        $out .= "<--NOWRITE--><input type=\"hidden\" id=\"".$field."\" name=\"".$field."\" value=\""
+		.$hmorig[$field]."\" />";
         continue;
     }
     
     if($fieldinputtype == 'select'){
 
         if($gtbl->getSingleRow($field) == '1' && $opentr < 1){
-			$out .= "</tr><tr height=\"30px\" valign=\"middle\"  onmouseover=\"javascript:this.style.backgroundColor='".$hlcolor."';\" onmouseout=\"javascript:this.style.backgroundColor='';\">"; 
+			$out .= "</tr><tr height=\"30px\" valign=\"middle\"  onmouseover=\"javascript:"
+				."this.style.backgroundColor='".$hlcolor
+				."';\" onmouseout=\"javascript:this.style.backgroundColor='';\">"; 
 		}
 		if(true){
         	$out .= "<td nowrap><b>".$gtbl->getCHN($field)."</b>:&nbsp;</td>";
-        	$out .= "<td>".$gtbl->getSelectOption($field, $hmorig[$field],'',0,$gtbl->getSelectMultiple($field))." <br/> ".$gtbl->getMemo($field)." <input type=\"hidden\" id=\"".$field."_select_orig\" name=\"".$field."_select_orig\" value=\"".$hmorig[$field]."\" /></td>";
+        	$out .= "<td>".$gtbl->getSelectOption($field, $hmorig[$field],'',0,$gtbl->getSelectMultiple($field))
+			." <br/> ".$gtbl->getMemo($field)." <input type=\"hidden\" id=\"".$field
+			."_select_orig\" name=\"".$field."_select_orig\" value=\"".$hmorig[$field]."\" /></td>";
         	$opentr = 0;
 		}
 
         if($gtbl->getSingleRow($field) == '1'){
-			$out .= "</tr><tr height=\"30px\" valign=\"middle\"  onmouseover=\"javascript:this.style.backgroundColor='".$hlcolor."';\" onmouseout=\"javascript:this.style.backgroundColor='';\">"; $opentr = 1;
+			$out .= "</tr><tr height=\"30px\" valign=\"middle\"  "
+				."onmouseover=\"javascript:this.style.backgroundColor='".$hlcolor
+				."';\" onmouseout=\"javascript:this.style.backgroundColor='';\">"; 
+			$opentr = 1;
 		}
 
 
@@ -125,36 +137,52 @@ for($hmi=$min_idx; $hmi<=$max_idx;$hmi++){
 
         if($gtbl->getSingleRow($field) == '1'){
             if($tmpmemo == ''){
-                #$tmpmemo = '支持标准HTML: 加粗&lt;b&gt;, 超链&lt;a&gt;, 插入图片如&lt;img src="admin/upld/102913431493_-201210.jpg" /&gt;(图片路径在 综合数据--附件数据 里获取)';
+              #$tmpmemo = '支持标准HTML: 加粗&lt;b&gt;, 超链&lt;a&gt;, 
+		      #插入图片如&lt;img src="admin/upld/102913431493_-201210.jpg" /&gt;
+		      #(图片路径在 综合数据--附件数据 里获取)';
             }
             if($opentr < 1){
             	$out .= "</tr>\n<tr>";	
             }
-            $out .= "<td style=\"vertical-align:top\"><b>".$gtbl->getCHN($field)."</b>:</td><td colspan=\"".($form_cols)."\">
+            $out .= "<td style=\"vertical-align:top\"><b>".$gtbl->getCHN($field)."</b>:</td><td colspan=\""
+	    	.($form_cols)."\">
                 <div id='".$field."_myeditordiv' style='width:680px;height:450px;display:none'></div>
                 <div id='".$field."_mytextdiv' style='width:680px;height:450px;display:block'>
-                <textarea id=\"".$field."\" name=\"".$field."\" rows=\"5\" cols=\"65\"  class=\"search\" onclick=\"javascript:openEditor('".$rtvdir."/extra/htmleditor.php?field=".$field."', '".$field."'); parent.switchArea('".$field."_myeditordiv','on'); parent.switchArea('".$field."_mytextdiv','off');\">".$hmorig[$field]."</textarea> </div><br/> ".$tmpmemo." </td></tr><tr>";
+                <textarea id=\"".$field."\" name=\"".$field."\" rows=\"5\" cols=\"65\"  class=\"search\""
+		." onclick=\"javascript:openEditor('".$rtvdir."/extra/htmleditor.php?field=".$field."', '"
+		.$field."'); parent.switchArea('".$field."_myeditordiv','on'); parent.switchArea('"
+		.$field."_mytextdiv','off');\">".$hmorig[$field]."</textarea> </div><br/> "
+		.$tmpmemo." </td></tr><tr>";
             $out .= '';
             $opentr = 1;
 
         }else{
-            $out .= "<td><b>".$gtbl->getCHN($field)."</b>:</td><td><textarea id=\"".$field."\" name=\"".$field."\" rows=\"5\" cols=\"30\"  class=\"search\">".$hmorig[$field]."</textarea> <br/> ".$gtbl->getMemo($field)." </td>";
+            $out .= "<td><b>".$gtbl->getCHN($field)."</b>:</td><td><textarea id=\"".$field."\" name=\""
+	    	.$field."\" rows=\"5\" cols=\"30\"  class=\"search\">".$hmorig[$field]."</textarea> <br/> "
+		.$gtbl->getMemo($field)." </td>";
         }
 
     }else if($fieldinputtype == 'file'){
-		$origValue = $hmorig[$field];
+	$origValue = $hmorig[$field];
         if($origValue != '' && $srcprefix != '' && !startsWith($origValue, 'http')){
             $hmorig[$field] = $srcprefix.'/'.$hmorig[$field];
         }
         if($columni % 2 != 0 || $gtbl->getSingleRow($field)){
-            $out .= "</tr><tr height=\"30px\" valign=\"middle\"  onmouseover=\"javascript:this.style.backgroundColor='".$hlcolor."';\" onmouseout=\"javascript:this.style.backgroundColor='';\">";
-			$opentr = 1;
+		$out .= "</tr><tr height=\"30px\" valign=\"middle\"  onmouseover=\"javascript:"
+	    		."this.style.backgroundColor='".$hlcolor."';\" onmouseout=\"javascript:"
+			."this.style.backgroundColor='';\">";
+		$opentr = 1;
         }
         $fieldv = $hmorig[$field]; $fieldv = str_replace($shortDirName."/","", $fieldv);
         $isimg = isImg($fieldv);
-        $out .= "<td nowrap><b>".$gtbl->getCHN($field)."</b>:</td><td><input type=\"file\" id=\"".$field."\" name=\"".$field."\" size=\"20\" class=\"noneinput wideinput\" ".$gtbl->getJsAction($field)." /> <input type=\"hidden\" name=\"".$field."_orig\" value=\"".$fieldv."\" /> <br/> ".($fieldv==''?'':$fieldv)." ".$gtbl->getMemo($field)."</td>";
-        $out .="<td colspan='4'> ".($isimg==1?"<img src=\"".$fieldv."\" alt=\"-x-\" width=\"118px\" /><br/>".$fieldv:"")." <script>document.getElementById('".$formid."').enctype='multipart/form-data';</script>  </td></tr><tr>";
-		$opentr = 1;
+        $out .= "<td nowrap><b>".$gtbl->getCHN($field)."</b>:</td><td><input type=\"file\" id=\"".$field
+		."\" name=\"".$field."\" size=\"20\" class=\"noneinput wideinput\" ".$gtbl->getJsAction($field)
+		." /> <input type=\"hidden\" name=\"".$field."_orig\" value=\"".$fieldv."\" /> <br/> "
+		.($fieldv==''?'':$fieldv)." ".$gtbl->getMemo($field)."</td>";
+        $out .="<td colspan='4'> ".($isimg==1?"<img src=\"".$fieldv."\" alt=\"-x-\" width=\"118px\" /><br/>"
+		.$fieldv:"")." <script>document.getElementById('"
+		.$formid."').enctype='multipart/form-data';</script>  </td></tr><tr>";
+	$opentr = 1;
 
     }else if($gtbl->getExtraInput($field, $hmorig) != ''){
 
@@ -165,12 +193,27 @@ for($hmi=$min_idx; $hmi<=$max_idx;$hmi++){
 			$iconImage = 'minus.gif';
 		}
 
-		$out .= "</tr><tr><td><b>".$gtbl->getCHN($field)."</b>:</td><td colspan=\"".$form_cols."\"><span id=\"span_".$act."_".$field."\"><input id=\"".$field."\" name=\"".$field."\" class=\"search\" value=\"".$hmorig[$field]."\" /></span> <span id=\"span_".$act."_".$field."_v\"><a href=\"javascript:void(0);\" onclick=\"javascript:doActionEx('".$gtbl->getExtraInput($field, $hmorig)."&act=".$act."&field=".$field."&oldv=".$hmorig[$field]."&otbl=".$tbl."&oid=".$id."&isheader=0','extrainput_".$act."_".$field."_inside');document.getElementById('extrainput_".$act."_".$field."').style.display='block'; document.getElementById('extendicon_${id}_$field').src='./img/minus.gif';\"><img border=\"0\" id=\"extendicon_${id}_$field\" src=\"img/".$iconImage."\" width=\"15\" height=\"15\" /></a></span> <div id=\"extrainput_".$act."_".$field."\" class=\"extrainput\"> ";
-		
-		$out .= "<table width=\"100%\" ><tr><td width=\"100%\" style=\"text-align:right\"> <b> <a href=\"javascript:void(0);\" onclick=\"javascript: document.getElementById('extrainput_".$act."_".$field."').style.display='none';  document.getElementById('extendicon_${id}_$field').src='./img/plus.gif';\">X</a> </b> &nbsp; </td></tr><tr><td> <div id=\"extrainput_".$act."_".$field."_inside\"></div></td></tr></table> </div>";
+		$out .= "</tr><tr><td><b>".$gtbl->getCHN($field)."</b>:</td><td colspan=\"".$form_cols."\"><span id=\"span_"
+			.$act."_".$field."\"><input id=\"".$field."\" name=\"".$field."\" class=\"search\" value=\""
+			.$hmorig[$field]."\" /></span> <span id=\"span_".$act."_".$field."_v\"><a href=\"javascript:"
+			."void(0);\" onclick=\"javascript:doActionEx('".$gtbl->getExtraInput($field, $hmorig)."&act="
+			.$act."&field=".$field."&oldv=".$hmorig[$field]."&otbl=".$tbl."&oid=".$id."&isheader=0','extrainput_"
+			.$act."_".$field."_inside');document.getElementById('extrainput_".$act."_".$field
+			."').style.display='block'; document.getElementById('extendicon_${id}_$field').src='./img/minus.gif';"
+			."\"><img border=\"0\" id=\"extendicon_${id}_$field\" src=\"img/".$iconImage."\""
+			." width=\"15\" height=\"15\" /></a></span> <div id=\"extrainput_".$act."_".$field."\""
+			." class=\"extrainput\"> ";
+		$out .= "<table width=\"100%\" ><tr><td width=\"100%\" style=\"text-align:right\"> <b> "
+			."<a href=\"javascript:void(0);\" onclick=\"javascript: document.getElementById('extrainput_"
+			.$act."_".$field."').style.display='none';  document.getElementById('extendicon_${id}_$field').src="
+			."'./img/plus.gif';\">X</a> </b> &nbsp; </td></tr><tr><td> <div id=\"extrainput_".$act."_"
+			.$field."_inside\"></div></td></tr></table> </div>";
 		//$out .="  </div>   <br/>".$gtbl->getMemo($field)." </td>  </tr><tr>";
 		if($field != "operatelog" && $id != ''){
-			$out .= "<script type=\"text/javascript\"> parent.doActionEx('".$gtbl->getExtraInput($field, $hmorig)."&act=".$act."&otbl=".$tbl."&field=".$field."&oldv=".$hmorig[$field]."&oid=".$id."&isheader=0','extrainput_".$act."_".$field."_inside');document.getElementById('extrainput_".$act."_".$field."').style.display='block'; </script>";
+			$out .= "<script type=\"text/javascript\"> parent.doActionEx('".$gtbl->getExtraInput($field, $hmorig)
+				."&act=".$act."&otbl=".$tbl."&field=".$field."&oldv=".$hmorig[$field]."&oid=".$id
+				."&isheader=0','extrainput_".$act."_".$field."_inside');document.getElementById('extrainput_"
+				.$act."_".$field."').style.display='block'; </script>";
 		}
 		$out .= "   <br/>".$gtbl->getMemo($field)."</td></tr><tr>";
 		$opentr = 1;
@@ -178,11 +221,19 @@ for($hmi=$min_idx; $hmi<=$max_idx;$hmi++){
     }else{
 
 		if($gtbl->getSingleRow($field) == '1'){
-            $out .= "</tr>\n<tr height=\"30px\" valign=\"middle\"  onmouseover=\"javascript:this.style.backgroundColor='".$hlcolor."';\" onmouseout=\"javascript:this.style.backgroundColor='';\"><td style=\"vertical-align:top\" ".$gtbl->getCss($field)."><b>".$gtbl->getCHN($field)."</b>:</td><td colspan=\"".($form_cols)."\"><input type=\"text\" id=\"".$field."\" name=\"".$field."\" class=\"\" style=\"width:600px\" value=\"".$hmorig[$field]."\" ".$gtbl->getJsAction($field).$gtbl->getAccept($field)." ".$gtbl->getReadOnly($field)." /> <br/>   ".$gtbl->getMemo($field)." </td></tr><tr>";
+            $out .= "</tr>\n<tr height=\"30px\" valign=\"middle\"  onmouseover=\"javascript:this.style.backgroundColor='"
+                    .$hlcolor."';\" onmouseout=\"javascript:this.style.backgroundColor='';\"><td style=\"vertical-align:top\" "
+                    .$gtbl->getCss($field)."><b>".$gtbl->getCHN($field)."</b>:</td><td colspan=\"".($form_cols)
+                    ."\"><input type=\"text\" id=\"".$field."\" name=\"".$field."\" class=\"\" style=\"width:600px\" value=\""
+                    .$hmorig[$field]."\" ".$gtbl->getJsAction($field).$gtbl->getAccept($field)." "
+                    .$gtbl->getReadOnly($field)." /> <br/>   ".$gtbl->getMemo($field)." </td></tr><tr>";
             $opentr = 1;
 		}
 		else{
-        	$out .= "<td nowrap ".$gtbl->getCss($field)."><b>".$gtbl->getCHN($field)."</b>: </td><td><input type=\"text\" id=\"".$field."\" name=\"".$field."\" class=\"noneinput wideinput\" value=\"".$hmorig[$field]."\" ".$gtbl->getJsAction($field).$gtbl->getAccept($field)." ".$gtbl->getReadOnly($field)." /> <br/> ".$gtbl->getMemo($field)."</td>";
+        	$out .= "<td nowrap ".$gtbl->getCss($field)."><b>".$gtbl->getCHN($field)."</b>: </td><td><input type=\"text\" id=\""
+        	        .$field."\" name=\"".$field."\" class=\"noneinput wideinput\" value=\"".$hmorig[$field]."\" "
+        	        .$gtbl->getJsAction($field).$gtbl->getAccept($field)." ".$gtbl->getReadOnly($field)." /> <br/> "
+        	        .$gtbl->getMemo($field)."</td>";
         	$opentr = 0;
 		}
 
@@ -197,18 +248,26 @@ for($hmi=$min_idx; $hmi<=$max_idx;$hmi++){
 
     //print "i:[".$columni."]\n"; 
     if(++$rows % 6 == 0 && $closedtr == 1){
-        $out .= "<tr height=\"30px\" valign=\"middle\"  onmouseover=\"javascript:this.style.backgroundColor='".$hlcolor."';\" onmouseout=\"javascript:this.style.backgroundColor='';\" ><td style=\"border-top: 1px dotted #cccccc; vertical-align:middle;\" colspan=\"".$form_cols."\">  </td> </tr>";
+        $out .= "<tr height=\"30px\" valign=\"middle\"  onmouseover=\"javascript:this.style.backgroundColor='"
+                .$hlcolor."';\" onmouseout=\"javascript:this.style.backgroundColor='';\" >"
+                ."<td style=\"border-top: 1px dotted #cccccc; vertical-align:middle;\" colspan=\""
+                .$form_cols."\">  </td> </tr>";
     }
 
 }
 
-$out .= "<tr height=\"10px\"><td style=\"border-top: 1px dotted #cccccc; vertical-align:middle;\" colspan=\"".$form_cols."\">  </td></tr>";
-$out .= "<tr><td colspan=\"".$form_cols."\" align=\"center\"><input type=\"submit\" name=\"addsub\" id=\"addsub\" value=\"递交\" onclick=\"javascript:doActionEx(this.form.name,'actarea');\" /> \n";
+$out .= "<tr height=\"10px\"><td style=\"border-top: 1px dotted #cccccc; vertical-align:middle;\" colspan=\""
+        .$form_cols."\">  </td></tr>";
+$out .= "<tr><td colspan=\"".$form_cols."\" align=\"center\">"
+        ."<input type=\"submit\" name=\"addsub\" id=\"addsub\" value=\"递交\" "
+        ."onclick=\"javascript:doActionEx(this.form.name,'actarea');\" /> \n";
 $out .= "<input type=\"hidden\" id=\"id\" name=\"id\" value=\"".$id."\"/>\n ".$hiddenfields."\n";
 $out .= "&nbsp;&nbsp;&nbsp;<input type=\"reset\" name=\"resetbtn\" />";
-$out .= "&nbsp;&nbsp;&nbsp;<input type=\"button\" name=\"cancelbtn\" value=\"取消\" onclick=\"javascript:switchArea('contentarea_outer','off');\" /> </td></tr>";
+$out .= "&nbsp;&nbsp;&nbsp;<input type=\"button\" name=\"cancelbtn\" value=\"取消\" "
+        ."onclick=\"javascript:switchArea('contentarea_outer','off');\" /> </td></tr>";
 $out .= "</table> </form>  </fieldset>  <br/>";
 
-#$out .= "<script> parent.userinfo.targetId='".$id."'; parent.userinfo.act='".$act."'; </script>"; # relocated to comm/footer.inc
+#$out .= "<script> parent.userinfo.targetId='".$id."'; parent.userinfo.act='".$act."'; </script>"; 
+# relocated to comm/footer.inc
 
 ?>

@@ -18,11 +18,12 @@ body {
       	border-collapse:collapse; border-spacing:0px;"> <!-- cellpadding="0" cellspacing="0" width="100%" border="0px"  -->
         <tr style="padding:0px; background-image:url({$rtvdir}/img/login-top-bg-small-updown.png); background-repeat:repeat-x;">
           <td width="33%" style="padding:0px;height:27px;">
-          	<a href="./" style="color:#ABCAD3;font-weight:bold;font-size:16px;font-family:Tahoma,Geneva,sans-serif;"
+          	<a href="{$url}" style="color:#ABCAD3;font-weight:bold;font-size:16px;font-family:Tahoma,Geneva,sans-serif;"
           		title="HomePage/首頁">
           		&nbsp;{$agentname} </a>
           </td>
-          <td width="5%" style="padding:0px;"> <div id="top_notice_div" style="postion:absolute; width:400px; top:20px; left:20px; text-align:center;z-index:99"></div> </td>
+          <td width="5%" style="padding:0px;"> <div id="top_notice_div" 
+          	style="postion:absolute; width:400px; top:20px; left:20px; text-align:center;z-index:99"></div> </td>
           <td width="62%" style="text-align:right;padding:0px;" class="login-buttom-txt"> {$welcomemsg} </td>
         </tr>
       </table>
@@ -40,8 +41,9 @@ body {
             {$content}
 			
             <div id="welcomearea" style="float:left;margin-left:28px;text-align:left;">
-			<b> &Pi; <a href="./" style="font-size:17px" >首页</a> <span style="font-size:17px">&rarr;</span></b>
-			欢迎您回来！ 今天是 <a href="#-万年历" target="_blank"><script type="text/javascript" src="./comm/show_today.js"></script></a>
+			<b> &Pi; <a href="{$url}" style="font-size:17px" >首页</a> <span style="font-size:17px">&rarr;</span></b>
+			欢迎您回来！ 今天是 <a href="#-万年历" target="_blank">
+				<script type="text/javascript" src="./comm/show_today.js"></script></a>
             <br/> 
 
            <style type='text/css'>
@@ -111,9 +113,9 @@ body {
 				<div class="wrapper">
 				{/if}
 					 {if $navidir_list[$k]['modulename'] == ''}
-					 <a href="./?navidir={$navidir_list[$k]['levelcode']}">
+					 <a href="{$url}&navidir={$navidir_list[$k]['levelcode']}">
 					 {else}
-					 <a href="./{$ido}&tbl={$navidir_list[$k]['modulename']}">
+					 <a href="{$ido}&tbl={$navidir_list[$k]['modulename']}">
 					 {/if}
 					 <div class="left{(($k -1) % 4)+1}">
 					 	<span style="size:14px; font-weight:bold;">{$mi+1}.{$navidir_list[$k]['linkname']}</span>
@@ -137,14 +139,15 @@ body {
 				{foreach $todo_list as $k=>$v}
 				<tr>
 				<td>{$v['id']}.</td>
-				<td><a href="./ido.php?tbl=fin_todotbl&pnskstate={$v['state']}&tit=事项管理">{$v['taskname']}</a></td>
+				<td><a href="{$ido}&tbl=fin_todotbl&pnskstate={$v['state']}&tit=事项管理">{$v['taskname']}</a></td>
 				<td>{$todo_state[$v['state']]}</td>
 				<td>{$user_list[$v['triggerbyparentid']]['email']}</td>
 				<td>{$user_list[$v['touser']]['email']}</td>
 				<td>{$v['updatetime']}</td>
 				</tr>
 				{/foreach}
-				<tr><td style="white-space:nowrap;"><a href="./ido.php?tbl=fin_todotbl&pnobstate=1&tit=事项管理&pnsktouserid={$userid}">更多...</a></td></tr>
+				<tr><td style="white-space:nowrap;">
+					<a href="{$ido}&tbl=fin_todotbl&pnobstate=1&tit=事项管理&pnsktouserid={$userid}">更多...</a></td></tr>
 			</table>
 			</div>	
 			</td>
@@ -158,7 +161,7 @@ body {
 			{if $mi==0 || ($mi) % 4 == 0}
 			<div class="wrapper">
 			{/if}
-				 <a href="./{$ido}&tbl={$module_list_order[$k]}">
+				 <a href="{$ido}&tbl={$module_list_order[$k]}">
 				 <div class="left{($k%4)+1}">
 				 	<span style="size:14px; font-weight:bold;">{$mi+1}.{$module_list_name[$module_list_order[$k]]}</span>
 				 	<br/>({$module_list_order[$k]})
@@ -186,7 +189,8 @@ body {
 			{if $mi==0 || ($mi) % 4 == 0}
 			<div class="wrapper">
 			{/if}
-				 <a href="./{$ido}&tbl={$v['tblname']}"><div class="left{($k%4)+1}"><span style="size:14px; font-weight:bold;">{$mi+1}.{$v['objname']}</span><br/>({$v['tblname']})</div></a>
+				 <a href="{$ido}&tbl={$v['tblname']}"><div class="left{($k%4)+1}">
+				 	<span style="size:14px; font-weight:bold;">{$mi+1}.{$v['objname']}</span><br/>({$v['tblname']})</div></a>
 			{if ($mi+1) % 4 == 0}
 			</div>
 			{/if}
@@ -201,9 +205,9 @@ body {
 			<div id="oplogdiv" class="wrapperlog">
 			<pre><b>时间					用户/Id						执行操作					作用对象/Id</b>
 <pre>{foreach $log_list as $k=>$v}
-{$v['inserttime']}		{$v['useremail']}/{$v['userid']}		{$v['actionstr']}		{$v['parenttype']}/{$v['parentid']}
+{$v['inserttime']}		{$v['useremail']}/{$v['userid']}		{$v['actionstr']}		<a href="{$ido}&tbl={$v['parenttype']}">{$v['parenttype']}/{$v['parentid']}</a>
 {/foreach}</pre>
-			<a href="./ido.php?tbl=fin_operatelogtbl">更多...</a>
+			<a href="{$ido}&tbl=fin_operatelogtbl">更多...</a>
 			</div>	
 			</td>
 		</tr>
@@ -238,19 +242,20 @@ body {
 			return [dY, dD];  
 		}
 		</script>
-		<b><i>ii</i></b>. 系统已上线 <a href="./"><script type="text/javascript">
+		<b><i>ii</i></b>. 系统已上线 <a href="{$url}"><script type="text/javascript">
 			diff=diffInYearsAndDays('{$start_date}',(new Date())); document.write(''+diff[0]+' 年 '+diff[1]
-			+' 天');</script></a> , 目前共 <a href="./ido.php?tbl=info_usertbl"><b>{$user_count}</b></a> 位用户，
-			管理着<a href="./ido.php?tbl=info_objecttbl"><b> {$module_count}  </b></a>个功能模块.  
+			+' 天');</script></a> , 目前共 <a href="{$ido}&tbl=info_usertbl"><b>{$user_count}</b></a> 位用户，
+			管理着<a href="{$ido}&tbl=info_objecttbl"><b> {$module_count}  </b></a>个功能模块.  
 			系统上次更新: <a href='#-gmis' target='_blank'>{$system_lastmodify}</a> . 
 		</td></tr>
 
 		<tr><td><b><i>HM</i></b>. <a href="{$front_page}" target="_blank">打开主站</a></td></tr>
 		</table>
+		<input type='hidden' id='indexurl' value='{$url}'/>
 		{literal}
 		<script type="text/javascript">var idxHomeWto=window.setTimeout(function(){
 				console.log('reload time:['+(new Date())+']');
-				window.location.href='./';}, 
+				 window.location.href=document.getElementById('indexurl').value;},
 			10*60*1000);</script><!-- 10 minutes -->
 		{/literal}
 		<br/>

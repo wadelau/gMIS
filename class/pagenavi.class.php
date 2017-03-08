@@ -14,7 +14,9 @@ require_once(__ROOT__.'/inc/webapp.class.php');
 class PageNavi extends WebApp{
 	
 	//- variables
-
+    var $dummy = '';
+    const SID = 'sid';
+    
    public function __construct($args=null){
 
        #$this->dba = new DBA(); # added by wadelau@ufqi.com, Wed Jul 11 14:31:52 CST 2012
@@ -93,7 +95,7 @@ class PageNavi extends WebApp{
                 $query .= "&".$k."=".$v;
             }
         }
-        $query = "?".substr($query,1);
+        $query = "?".self::SID.'='.$_REQUEST[self::SID].'&'.substr($query,1);
         return $file.$query;
    }
 
@@ -169,8 +171,7 @@ class PageNavi extends WebApp{
 				if(isset($_REQUEST[$field]) && $_REQUEST[$field] != $v){
 					$v = $_REQUEST[$field];
 				}
-                if(strpos($v,"tbl:") === 0){
-					#http://ufqi.com:81/dev/gtbl/ido.php?tbl=hss_dijietbl&tit=%E5%AF%BC%E6%B8%B8%E8%A1%8C%E7%A8%8B&db=&pnsktuanid=tbl:hss_findaoyoutbl:id=2 
+                if(strpos($v, "tbl:") === 0){
                     $condition .= " ".$pnsm." ".$field." in (".$this->embedSql($linkfield,$v).")";
                 }
 				else if(strpos($v,"in::") === 0){ 

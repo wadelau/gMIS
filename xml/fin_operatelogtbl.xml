@@ -9,13 +9,23 @@
         <!--<myid>ou_id</myid>  in case that the table's id field name is not 'id' -->
 		<searchbytimefield>inserttime</searchbytimefield>
     </table>
-		
-	<field name="actionstr">
-		<chnname>操作</chnname>
-	</field>
 	
-	<field name="inserttime">
-		<chnname>时间</chnname>
-	</field>
+	<field name="userid">
+        <chnname>人</chnname>
+        <selectoption>fromtable::info_usertbl::email::state=1</selectoption>
+    </field>
+
+    <field name="actionstr">
+        <chnname>操作</chnname>
+    </field>
+
+    <field name="parenttype">
+        <chnname>對象</chnname>
+    </field>
+
+    <field name="inserttime">
+        <chnname>时间</chnname>
+        <listview>2</listview>
+    </field>
 	
 </tablecfg>

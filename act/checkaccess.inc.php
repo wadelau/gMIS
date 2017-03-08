@@ -3,10 +3,12 @@
 if(0){
     $chkAccess = $user->chkAccess($_REQUEST);
     $chkResult = true; 
-    $denymsg = "访问被拒绝, 请联系管理员或者上级申请权限. \\n\\nusername:[".$user->getEmail()."] userid:[".$userid."] objid:[".$user->getObjId()."]";
+    $denymsg = "访问被拒绝, 请联系管理员或者上级申请权限. \\n\\nusername:[".$user->getEmail()
+        ."] userid:[".$userid."] objid:[".$user->getObjId()."]";
     if(!$chkAccess['result']){
         $chkResult = false;
-        $denymsg .= "\n<br/><script type='text/javascript'>window.alert('".$denymsg.". \\n\\n".$chkAccess['reason'].".\\n201203132113.'); window.history.go(-1);</script>";
+        $denymsg .= "\n<br/><script type='text/javascript'>window.alert('".$denymsg.". \\n\\n"
+                .$chkAccess['reason'].".\\n201203132113.'); window.history.go(-1);</script>";
     }
     # 写权限判断
     $writeAct = array('add','modify','list-doaddform','updatefield');
@@ -23,7 +25,8 @@ if(0){
             $chkResult = false; 
             $nexturl = $_SERVER['REQUEST_URI']."?".$_SERVER['QUERY_STRING'];
             $nexturl = str_replace($_REQUEST['act'], 'list', $nexturl);
-            $denymsg .= "\n<br/><script type='text/javascript'>window.alert('".$denymsg.". \\n\\n".$chkAccess['reason'].".\\n201204172118.'); window.location.href='".$nexturl."';</script>";
+            $denymsg .= "\n<br/><script type='text/javascript'>window.alert('".$denymsg.". \\n\\n"
+                    .$chkAccess['reason'].".\\n201204172118.'); window.location.href='".$nexturl."';</script>";
         }
     }
     # 字段级内容权限判断

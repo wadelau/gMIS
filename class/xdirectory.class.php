@@ -12,7 +12,7 @@ class XDirectory extends WebApp{
         $this->dba = new DBA();
 
         if($tbl != ''){
-			if(false && $_SESSION['language'] && $_SESSION['language'] == "en_US"){
+			if($_CONFIG['language'] && $_CONFIG['language'] == "en_US"){
 				//$this->setTbl(GConf::get('tblpre').'en_'.$tbl);
 				$this->setTbl('en_'.$tbl);
 			}

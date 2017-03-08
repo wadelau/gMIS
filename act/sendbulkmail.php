@@ -10,19 +10,18 @@ $tbl = $_REQUEST['tbl'];
 $mydb = $_CONFIG['appname'].'db';
 $db = $_REQUEST['db']==''?$mydb:$_REQUEST['db'];
 $field = $_REQUEST['field'];
-$url = $_SERVER['PHP_SELF']."?bkl=".$_REQUEST['bkl'];
 
 $out = "";
 
 $emailsubject = "新品上架";
 $emailfrom = "lingshang";
 
-
 if($act == 'sendbulkmail'){
     
     $out .= "<fieldset style=\"border-color:#5f8ac5;border: 1px solid #5f8ac5\">
 			<legend><h4>群发邮件</h4></legend>
-			<form id=\"subscriber\" name=\"subscriber\" action=\"".$url."&act=sendbulkmail-do&isheader=0&tbl=".$tbl."\" method=\"post\">
+			<form id=\"subscriber\" name=\"subscriber\" action=\"".$jdo."&act=sendbulkmail-do&isheader=0&tbl="
+			        .$tbl."\" method=\"post\">
 			<table align=\"center\" width=\"95%\" cellspacing=\"0\" cellpadding=\"0\" border=\"0px\">";
     $out .= "<tr>输入发送内容</tr><tr><td><textarea style=\"overflow:visible\" name=\"mailcontent\" rows=\"10\" cols=\"100\"></textarea></td></tr>";
 
@@ -60,7 +59,6 @@ else if($act == 'sendbulkmail-do'){
    
 
 }
-
 
 require("../comm/footer.inc.php");
 

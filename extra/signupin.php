@@ -1,8 +1,10 @@
 <?php
-
+/*
+ * refined with non-storage image verification,
+ * Xenxin@ufqi.com, Tue, 7 Mar 2017 22:04:07 +0800
+ */
 
 require("../comm/header.inc.php");
-#require("../class/gtbl.class.php");
 
 $_REQUEST['tbl'] = $_CONFIG['tblpre'].'info_usertbl';
 
@@ -14,61 +16,69 @@ $db = $_REQUEST['db']==''?$mydb:str_replace('<', '&lt;', $_REQUEST['db']);
 $field = $_REQUEST['field'];
 $url = $_SERVER['PHP_SELF']."?bkl=".str_replace('<', '&lt;', $_REQUEST['bkl']);
 
-$smttpl = getSmtTpl(__FILE__,$act);
+$smttpl = getSmtTpl(__FILE__, $act);
+$islan = false;
+$myip = Wht::getIp();
+if(cidr_match($myip, '10.0.0.0/8') || cidr_match($myip, '172.16.0.0/12')
+        || cidr_match($myip, '192.168.0.0/16')){
+            $islan = true;
+}
 
-#print_r($_SERVER);
 if($act == 'signin'){
     $smt->assign('action',$url.'&act=dosignin');
     $smt->assign('title','用户登录');
 	$smt->assign('bkl', $_REQUEST['bkl']);
-
-}else if($act == 'dosignin'){
-    
+	$smt->assign('verifyid', $user->getVerifyId());
+	$smt->assign('islan', $islan);
+}
+else if($act == 'dosignin'){    
     $issucc = false;
     $nexturl = '';
-	$islan = false;
-    $myip = Wht::getIp();
-    if(cidr_match($myip, '10.0.0.0/8') || cidr_match($myip, '172.16.0.0/12') 
-            || cidr_match($myip, '192.168.0.0/16')){
-        $islan = true;
+    $verifycode = $verifycode2 = '';
+    if(!$islan){
+        $verifycode = strtolower(trim($_REQUEST['verifycode']));
+        $verifycode2 = substr($md5=md5(($i=$_REQUEST['verifyid'])
+                .$_CONFIG['sign_key']
+                .($d=substr(date('YmdHi', time()-date('Z')),0,11))
+                ), 1, 4); # same as comm/imagex
     }
-    #debug(__FILE__.": myip:$myip islan:$islan");
-    
-    $verifycode = strtoupper(trim($_REQUEST['verifycode']));
-    if($islan || ($verifycode != '' && $verifycode == $_SESSION['verifycode'])){
-         
+    if($islan || ($verifycode != '' && $verifycode == $_CONFIG['verifycode'])){
+         # verified bgn
     $user->set('email',$_REQUEST['email']);
     $user->set('password',$_REQUEST['password']);
     $hm = $user->getBy("*", "email=? and state=1");
     $result = '';
     if($hm[0]){
         $hm = $hm[1][0]; # refer to /inc/dba.class.php for the return data structure
-        //print_r($hm);
         if($hm['password'] == SHA1($user->get('password'))){
-
             $user->setId($hm['id']); 
-            $_SESSION[UID] = $user->getId();
-            $userid = $_SESSION[UID];
+            $_CONFIG[UID] = $user->getId();
+            $userid = $_CONFIG[UID];
+            $sid = $user->getSid($_REQUEST);
+            $ckirtn = setcookie($name=$user->get('sid_tag'), $value=$sid);
             $result .= '<br/><br/>很好! 登录成功！ 欢迎回来, '.$user->getEmail()." !";
-
 			$bkl = Base62x::decode($_REQUEST['bkl']);
             if($bkl != ''){ 
                 //- go to $thisurl
 				$nexturl = $bkl;
-            }else{
+            }
+            else{
                 //- 
                 $nexturl = $rtvdir."/";
             }
+            $nexturl .= inString('?', $nexturl) ? '&' : '?';
+            $nexturl .= SID."=".$sid;
             $issucc = true;
-
-        }else{
-            
-            $result .= "login failed. 1201302219. <!-- orig:[".$hm['password']."] new:[".SHA1($user->get('password'))."] -->";
         }
-
-    }else{
+        else{
+            $result .= "login failed. 1201302219. <!-- new:["
+                    .SHA1($user->get('password'))."] -->";
+        }
+    }
+    else{
         $result .= "login failed. 1201302217.";
     }
+        # verified end
     }
     else{
         $result .= "login failed [验证码错误]. 1309151658.";
@@ -80,49 +90,51 @@ if($act == 'signin'){
     $smt->assign('title','登录消息');
     $smt->assign('result', $result);
     $smt->assign('nexturl', $nexturl);
-
-}else if($act == 'signout'){
+}
+else if($act == 'signout'){
     $user->setId(''); 
-    $_SESSION[UID] = $user->getId();
-    $userid = $_SESSION[UID];
-    
+    $_CONFIG[UID] = $user->getId();
+    $userid = $_CONFIG[UID];    
     $smt->assign('result', $result = '成功退出系统, 欢迎下次再来.');
     $smt->assign('nexturl', $nexturl = $url.'&act=signin');
-
-}else if($act == 'resetpwd'){
-
-    if($userid == $_REQUEST['userid']){
-        $issubmit = $_REQUEST['issubmit'];
+}
+else if($act == 'resetpwd'){
+    if($userid == Wht::get($_REQUEST, 'userid')){
+        $issubmit = Wht::get($_REQUEST, 'issubmit');
         if($issubmit == 1){
-            $newpwd = sha1($_REQUEST['newpwd']);
-            $user->execBy("update ".$_CONFIG['tblpre']."info_usertbl set password='".$newpwd."' where id='".$userid."' limit 1", null);
-            $result = "成功！ 用户 [userid:".$userid."] 的密码已经重置为:[".$_REQUEST['newpwd']."].";
-            $nexturl = $rtvdir."/ido.php?tbl=".$_CONFIG['tblpre']."info_usertbl&tit=&db=";
-        }else{
-            $nexturl = $rtvdir."/ido.php?tbl=".$_CONFIG['tblpre']."info_usertbl&tit=&db=";
+            $newpwd = sha1($newpwdp=Wht::get($_REQUEST, 'newpwd'));
+            $user->execBy("update ".$_CONFIG['tblpre']."info_usertbl set password='".$newpwd."' where id='"
+                    .$userid."' limit 1", null);
+            $result = "成功！ 用户 [userid:".$userid."] 的密码已经重置为:[".$newpwdp."].";
+            $nexturl = $ido."&tbl=".$_CONFIG['tblpre']."info_usertbl&tit=&db=";
+        }
+        else{
+            $nexturl = $ido."&tbl=".$_CONFIG['tblpre']."info_usertbl&tit=&db=";
             $result = "";
-            $result .= " Loading.... <script type=\"text/javascript\">var newpwd=window.prompt('请输入新密码','');if(newpwd!=''&&newpwd!=null){window.top.location.href='".$rtvdir."/extra/signupin.php?act=resetpwd&userid=".$userid."&issubmit=1&newpwd='+newpwd;}else{document.location.href='".$nexturl."';}</script>";
+            $result .= " Loading.... <script type=\"text/javascript\">var newpwd=window.prompt('请输入新密码','');"
+                    ."if(newpwd!=''&&newpwd!=null){window.top.location.href='".$rtvdir."/extra/signupin.php?act=resetpwd&userid="
+                    .$userid."&issubmit=1&newpwd='+newpwd;}else{document.location.href='".$nexturl."';}</script>";
             $result .= "失败！ 重置密码失败，请重试. 201205092158."; 
         }
-    }else if($user->getGroup() == 1){ # admin group
-
+    }
+    else if($user->getGroup() == 1){ # admin group
         $newpwd = $newpwd_orig = rand(0,999).rand(0,999);
         $newpwd = SHA1($newpwd);
         $newuserid = $_REQUEST['userid'];
         if($newuserid != ''){
-            $user->execBy("update ".$_CONFIG['tblpre']."info_usertbl set password='".$newpwd."' where id='".$newuserid."' limit 1", null);
+            $user->execBy("update ".$_CONFIG['tblpre']."info_usertbl set password='".$newpwd."' where id='"
+                    .$newuserid."' limit 1", null);
             $result = "成功！ 用户 [userid:".$newuserid."] 的密码已经重置为:[".$newpwd_orig."].";
-            $nexturl = $rtvdir."/ido.php?tbl=".$_CONFIG['tblpre']."info_usertbl&tit=&db=";
+            $nexturl = $ido."&tbl=".$_CONFIG['tblpre']."info_usertbl&tit=&db=";
         }else{
             $result = "失败！ 重置密码失败，请重试. 201204291947."; 
-            $nexturl = $rtvdir."/ido.php?tbl=".$_CONFIG['tblpre']."info_usertbl&tit=&db=";
+            $nexturl = $ido."&tbl=".$_CONFIG['tblpre']."info_usertbl&tit=&db=";
         }
-
-    }else{
-        $result = "失败！ 重置密码失败，请重试. 201204292008."; 
-        $nexturl = $rtvdir."/ido.php?tbl=".$_CONFIG['tblpre']."info_usertbl&tit=&db=";
     }
-
+    else{
+        $result = "失败！ 重置密码失败，请重试. 201204292008."; 
+        $nexturl = $ido."&tbl=".$_CONFIG['tblpre']."info_usertbl&tit=&db=";
+    }
     $smt->assign('result', $result);
     $smt->assign('nexturl', $nexturl);
 }

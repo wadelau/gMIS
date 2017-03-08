@@ -27,14 +27,16 @@ function pnAction(url){
 	doAction(url);
 }
 
+//-
 function doAction(strUrl){
+	var rtn = true;
 	var sActive = "actarea";
 	var myAjax = new GTAjax();
 	myAjax.set('targetarea',sActive);
 	myAjax.set('forceframe',true);
 	myAjax.set('nobacktag','nobacktag');
-	var tmp = myAjax.get( appendTab(strUrl) );
-
+	var tmps = myAjax.get( appendTab(strUrl) );
+	return rtn;
 }
 
 function doActionEx(strUrl,sActive){  
@@ -55,39 +57,32 @@ function doActionEx(strUrl,sActive){
 	myAjax.set('targetarea',sActive);
 	myAjax.set('nobacktag','nobacktag');
 	myAjax.set('forceframe',true);
-
-	var tmp = myAjax.get( appendTab(strUrl) );
-
+	var tmps = myAjax.get( appendTab(strUrl) );
 }
 
 function _g( str ){
 	return document.getElementById( str );
 }
 
-
+//
 function appendTab(strUrl){
 	if(strUrl.indexOf(".php")>-1){
-		if(strUrl.indexOf("tbl")==-1)
-		{
+		if(strUrl.indexOf("tbl")==-1){
 			//window.alert('need to append acctab.');
-			if(strUrl.indexOf("?")==-1)
-			{
+			if(strUrl.indexOf("?")==-1){
 				strUrl+="?tbl="+currenttbl;
 			}
-			else
-			{
+			else{
 				strUrl+="&tbl="+currenttbl;
 			}
-			//window.alert('need to append acctab.done:['+strUrl+']');
 		}
-		if(strUrl.indexOf("db")==-1)
-		{
+		if(strUrl.indexOf("db")==-1){
 			//window.alert('need to append acctab.');
 			strUrl+="&db="+currentdb;
 			//window.alert('need to append acctab.done:['+strUrl+']');
 		}
 	}
-	return strUrl;
+	return appendSid(strUrl);
 }
 
 //- display an area or not
@@ -340,7 +335,7 @@ function fillSubSelect(parentId, childId, logicId, myUrl){
                         }
                     }
                 });
-        gta.get(myUrl+'?objectid='+fieldv+'&isoput=0&logicid='+logicId);
+        gta.get(appendSid(myUrl+'?objectid='+fieldv+'&isoput=0&logicid='+logicId));
 
     }else if(logicId == 'mingcheng'){
         var gta = new GTAjax();
@@ -359,7 +354,7 @@ function fillSubSelect(parentId, childId, logicId, myUrl){
                         }
                     }
                 });
-        gta.get(myUrl+'?objectid='+fieldv+'&isoput=0&logicid='+logicId); 
+        gta.get(appendSid(myUrl+'?objectid='+fieldv+'&isoput=0&logicid='+logicId)); 
 
     }else if(logicId == 'leibie'){
                     console.log("getinto leibie");
@@ -383,7 +378,8 @@ function fillSubSelect(parentId, childId, logicId, myUrl){
                         }
                     }
                 });
-        gta.get(myUrl+'?tbl=categorytbl&objectid='+fieldv+'&isoput=0&logicid='+logicId+'&parentid='+parentId+'&childid='+childId);
+        gta.get(appendSid(myUrl+'?tbl=categorytbl&objectid='+fieldv+'&isoput=0&logicid='+logicId+'&parentid='
+        		+parentId+'&childid='+childId));
     
     }else if(logicId == 'area'){
                     console.log("getinto area");
@@ -407,12 +403,11 @@ function fillSubSelect(parentId, childId, logicId, myUrl){
                         }
                     }
                 });
-        gta.get(myUrl+'?tbl=areatbl&objectid='+fieldv+'&isoput=0&logicid='+logicId);
+        gta.get(appendSid(myUrl+'?tbl=areatbl&objectid='+fieldv+'&isoput=0&logicid='+logicId));
     }
 
-
-
-    }else{
+    }
+    else{
         console.log("ido.js::fillSubSelect::fieldv:["+fieldv+"] is empty.");
     }
 }
@@ -516,7 +511,7 @@ function switchEditable(targetObj,fieldName,fieldType,fieldValue,myUrl,readOnly)
                            sendNotice(false,'Data updated Failed. Please Try again.');
                         }
                     });
-            gta.get(myUrl+'&'+fieldName+'='+encodeURIComponent(newv));
+            gta.get(appendSid(myUrl+'&'+fieldName+'='+encodeURIComponent(newv)));
         }
 		else{
             //window.alert('same content. unchanged.');
@@ -616,11 +611,14 @@ function doActSelect(sSel, sUrl, iId, fieldVal){
 							sendNotice(false, 'Data updated Failed. Please Try again/请重试.');
 						}
 					});
-				gta.get(targetUrl+'&async=1&fmt=json');
+				gta.get(appendSid(targetUrl+'&async=1&fmt=json'));
 	
 				}, deleteDelay * 1000);
             
-			actListDiv.innerHTML = '<span style="color:red"> &nbsp; ' + iId + ' will be deleted after '+deleteDelay+' seconds, [<a href="javascript:window.clearTimeout('+deleteTimerId+');switchArea(\'divActList_'+iId+'\',\'off\');console.log(\'delete is canceled.\'+(new Date())); ">Press here to cancel</a>]...</span>'; hideActListDiv = 0;	
+			actListDiv.innerHTML = '<span style="color:red"> &nbsp; ' + iId + ' will be deleted after '
+				+deleteDelay+' seconds, [<a href="javascript:window.clearTimeout('+deleteTimerId+');switchArea(\'divActList_'
+				+iId+'\',\'off\');console.log(\'delete is canceled.\'+(new Date())); ">Press here to cancel</a>]...</span>'; 
+			hideActListDiv = 0;	
 			//if(isconfirm){
             //}
         }
@@ -1055,10 +1053,15 @@ function input2Search(inputx, obj, div3rd, valueoption){
 				if(seleText.toLowerCase().indexOf(iInputX) > -1){
 					//--
 					if(valueoption == null || valueoption == ''){
-						dataarr[j++] = '<span onmouseover=parent.changeBGC(this,1); onmouseout=parent.changeBGC(this,0); onclick=parent.makeSelect(\''+destobj+'\',this.innerText,\''+selelistdiv+'\',\'pnsk_'+obj+'\');>'+seleText+'-('+seleVal+')</span>';
+						dataarr[j++] = '<span onmouseover=parent.changeBGC(this,1); onmouseout=parent.changeBGC(this,0);'+
+							+' onclick=parent.makeSelect(\''+destobj+'\',this.innerText,\''+selelistdiv+'\',\'pnsk_'
+							+obj+'\');>'+seleText+'-('+seleVal+')</span>';
 					}
 					else if(valueoption == 'NEED_OPTION_VALUE'){ //-- div3rd mode
-						dataarr[j++] = '<span onmouseover=parent.changeBGC(this,1);parent.makeSelect(\''+destobj+'\',\''+seleVal+'\',\''+selelistdiv+'\',\'pnsk_'+obj+'\',1); onmouseout=parent.changeBGC(this,0);userinfo.input2Select.makeSelect=0; onclick=parent.makeSelect(\''+destobj+'\',this.innerText,\''+selelistdiv+'\',\'pnsk_'+obj+'\',4);>'+seleText+'-('+seleVal+')</span>';
+						dataarr[j++] = '<span onmouseover=parent.changeBGC(this,1);parent.makeSelect(\''+destobj+'\',\''
+						+seleVal+'\',\''+selelistdiv+'\',\'pnsk_'+obj+'\',1); onmouseout=parent.changeBGC(this,0);'+
+						+'userinfo.input2Select.makeSelect=0; onclick=parent.makeSelect(\''+destobj+'\',this.innerText,\''
+						+selelistdiv+'\',\'pnsk_'+obj+'\',4);>'+seleText+'-('+seleVal+')</span>';
 					}
 					if(j>30){
 						dataarr[j++] = '更多.....';
@@ -1163,7 +1166,7 @@ function lazyLoad(myObj, myType, myUrl){
 				//console.log(JSON.stringify(myOptionList.value));
 				sendNotice(true, 'Lazy Load is done successfully..... myobj:['+myObj+']');
 			});
-        	gta.get(myUrl);
+        	gta.get(appendSid(myUrl));
 		}
 		else{
 			sendNotice(false, 'Lazy Loading is waiting.....');
@@ -1356,5 +1359,47 @@ function filterReplace(myField, myRegx){
 	return rtn;
 }
 
-
+//- append sid
+//- Tue, 7 Mar 2017 21:31:36 +0800
+function appendSid(urlx){
+	if(urlx.indexOf('.') == -1 && urlx.indexOf('?') == -1){
+		console.log('ido.js: invalid url:['+urlx+']');
+		return urlx;
+	}
+	var sidstr = 'sid='+userinfo.sid;
+	if(urlx.indexOf('?sid=') > -1 || urlx.indexOf('&sid=') > -1){
+		//- goood
+	}
+	else{
+		if(urlx.indexOf('http') == 0){
+			// outside
+		}
+		else{
+			var hasFilled = false;
+			var fileArr = ['ido.php', 'jdo.php', './', 'index.php'];
+			for(var i=0; i<fileArr.length; i++){
+				var f = fileArr[i];
+				if(urlx.indexOf(f+'?') > -1){
+					urlx = urlx.replace(f+'?', f+'?'+sidstr+'&');
+					hasFilled = true;
+					break;
+				}
+				else if(urlx.indexOf(f) > -1){
+					urlx = urlx.replace(f, f+'?'+sidstr);
+					hasFilled = true;
+					break;
+				}
+			}
+			if(!hasFilled){
+				if(urlx.indexOf('?') > -1){
+					urlx += '&'+sidstr;
+				}
+				else{
+					urlx += '?'+sidstr;
+				}
+			}
+		}
+	}
+	return urlx;
+}
 

@@ -8,22 +8,20 @@
 # Mon Nov  4 09:03:36 CST 2013
 # Mon Feb 17 08:40:23 CST 2014
 # Thu Feb 20 11:02:01 CST 2014
+# implemented by self session, Wed, 8 Mar 2017 21:47:40 +0800
 
-session_start();
+if(!defined('__ROOT__')){
+    define('__ROOT__', dirname(dirname(__FILE__)));
+}
+require_once(__ROOT__."/inc/config.class.php");
 
 //- default is output an img
 if(true){
-	
-	$letters = str_split('23456789ABCDEFGHJKLMNPRSTUVWXY');
-	$llen = count($letters) - 1;
-	$charc = 4;
-	$verifycode = '';
-	for($i=0; $i<$charc; $i++){
-			$verifycode .= $letters[rand(0, $llen)];
-			#error_log(__FILE__.":i:$i verifycode:".$verifycode);
-	}
-	$_SESSION['verifycode'] = $verifycode;
-	#error_log(__FILE__.": verifycode:".$verifycode);
+    $verifycode = substr($md5=md5(($i=$_REQUEST['i'])
+            .$_CONFIG['sign_key']
+            .($d=substr(date('YmdHi', time()-date('Z')),0,11))
+            ), 1, 4); # same as extra/signupin
+    $charc = strlen($verifycode);
 
 	$width = 90;
 	$height = 30;
@@ -34,8 +32,9 @@ if(true){
 	#imagecolortransparent($im, $bg);
 
 	$codeArr = str_split($verifycode);
-			$fontspace = rand(7,10);
-	$startPos = $startPos2 = rand(10, $width-($charc*$fontspace)) - 10;
+	$fontspace = rand(7,10);
+	$startPos = $startPos2 = rand(10, $width-($charc*$fontspace)) - 15;
+	if($startPos < $width/3){ $startPos = $width/3; }
 	$_x = array(1, 0, 1, 0, -1, -1, 1, 0, -1); # up to 8 chars 
 	$_y = array(0, -1, -1, 0, 0, -1, 1, 1, 1); 
 	$i = 0;
@@ -44,8 +43,8 @@ if(true){
 	$textcolor = imagecolorallocate($im, rand(0,200), rand(10,200), rand(5, 200));
 	foreach($codeArr as $k=>$v){
 		$y = rand(0,intval($height/2)) + 1;
-		$fontsize = rand(3,9);
-			$fontspace = rand(7,10);
+		$fontsize = rand(4, 10);
+		$fontspace = rand(7, 10);
 		imagestring($im, $fontsize, $startPos, $y, $v, $textcolor);
 		imagestring($im, $fontsize, $startPos+$_x[$i], $y+$_y[$i], $v, $textcolor);
 		#imagestring($im, (rand(2,7)), $startPos+$_x[$i], 1+rand(0,6)+$_y[$i], $v, $textcolor);
@@ -54,8 +53,8 @@ if(true){
 		$i++;
 	}
 
-	#for($j=0; $j<2; $j++){
-	for($j=0; $j<1; $j++){
+	$noisyline = 1;
+	for($j=0; $j<$noisyline; $j++){
 		#imageline($im, rand(1,$startPos2), rand(2, $height),  rand($startPos2, $width), rand(2, $height) , $textcolor);
 		imagearc($im, rand(4,$startPos2)+40, rand(10, $height),  rand($startPos2, $width), rand(5, $height), 50, 15 , $textcolor);
 		$textcolor = imagecolorallocate($im, rand(10,240), rand(0,240), rand(5, 240));

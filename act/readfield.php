@@ -1,8 +1,6 @@
 <?php
 
 require("../comm/header.inc.php");
-#require("../class/gtbl.class.php");
-#require("../class/pagenavi.class.php");
 
 # read table config, refer to /jdo.php
 require("../comm/tblconf.php");
@@ -27,8 +25,8 @@ if($_REQUEST['mode'] == 'intbl'){
 }
 
 # view mode
-//$out .= "<table align=\"center\" style=\"background:#fff\" width=\"".$tblwidth."\" cellspacing=\"0\" cellpadding=\"0\" border=\"".($intbl==1?"0":"1")."px\">";
-$out .= "<table align=\"center\" style=\"background:#fff\" width=\"".$tblwidth."\" cellspacing=\"0\" cellpadding=\"0\" class=\"printtbl\">";
+$out .= "<table align=\"center\" style=\"background:#fff\" width=\""
+        .$tblwidth."\" cellspacing=\"0\" cellpadding=\"0\" class=\"printtbl\">";
 if($hm[0]){
     $hm = $hm[1];
 }else{
@@ -37,7 +35,8 @@ if($hm[0]){
 }
 #print_r($hm);
 if(count($hm) < 2){
-    $out .= "<tr height=\"30\" valign=\"middle\"  onmouseover=\"javascript:this.style.backgroundColor='".$hlcolor."';\" onmouseout=\"javascript:this.style.backgroundColor='';\">";
+    $out .= "<tr height=\"30\" valign=\"middle\"  onmouseover=\"javascript:this.style.backgroundColor='"
+            .$hlcolor."';\" onmouseout=\"javascript:this.style.backgroundColor='';\">";
 
     foreach($hm as $k=>$hmorig){
 
@@ -51,10 +50,12 @@ if(count($hm) < 2){
             } 
 
             if($fieldinputtype == 'select'){
-                $out .= "<td width=\"10%\">".$gtbl->getCHN($field).":&nbsp;</td><td width=\"35%\"> ".$gtbl->getSelectOption($field, $hmorig[$field],'',1)."</td>";
+                $out .= "<td width=\"10%\">".$gtbl->getCHN($field).":&nbsp;</td><td width=\"35%\"> "
+                        .$gtbl->getSelectOption($field, $hmorig[$field],'',1)."</td>";
 
             }else if($fieldinputtype == 'file'){
-                   $out .= "<td class=\"downline\" valign=\"middle\" > <a href=\"javascript:window.open('".$hmorig[$field]."');\" title=\"点击大图或者下载 ".$hmorig[$field]."\">";
+                   $out .= "<td class=\"downline\" valign=\"middle\" > <a href=\"javascript:window.open('"
+                           .$hmorig[$field]."');\" title=\"点击大图或者下载 ".$hmorig[$field]."\">";
                    $tmparr = explode(".", $hmorig[$field]); $fileext = $tmparr[count($tmparr)-1];
                    if(in_array($fileext, array('gif','jpg','jpeg','png','bmp'))){
                        $out .= " <img src=\"".$hmorig[$field]."\" style=\"width:100%\" /> ";
@@ -66,22 +67,39 @@ if(count($hm) < 2){
 
             }else if($gtbl->getExtraInput($field) != ''){
                 if(true){
-                    $out .= "</tr><tr><td>".$gtbl->getCHN($field).":</td><td colspan=\"".($form_cols-1)."\"><span id=\"span_".$act."_".$field."_val_add\"><input id=\"".$field."\" name=\"".$field."\" class=\"search\" value=\"".$hmorig[$field]."\" /></span><br/> <span id=\"span_".$act."_".$field."\"><a href=\"javascript:void(0);\" onclick=\"javascript:doActionEx('".$gtbl->getExtraInput($field)."&act=".$act."&otbl=".$tbl."&field=".$field."&oldv=".$hmorig[$field]."&oid=".$id."','extrainput_".$act."_".$field."_inside');document.getElementById('extrainput_".$act."_".$field."').style.display='block';\">Disp</a></span> <div id=\"extrainput_".$act."_".$field."\" class=\"extrainput\"> ";
-                    $out .= "<table width=\"100%\"><tr><td width=\"100%\" style=\"text-align:right\"> <b> <a href=\"javascript:void(0);\" onclick=\"javascript:if('".$id."' != ''){ var linkobj=document.getElementById('".$field."'); if(linkobj != null){ document.getElementById('".$field."').value=document.getElementById('linktblframe').contentWindow.sendLinkInfo('','r','".$field."');} } document.getElementById('extrainput_".$act."_".$field."').style.display='none';\">X</a> </b> &nbsp; </td></tr><tr><td> <div id=\"extrainput_".$act."_".$field."_inside\"></div></td></tr></table>";
+                    $out .= "</tr><tr><td>".$gtbl->getCHN($field).":</td><td colspan=\"".($form_cols-1)."\"><span id=\"span_"
+                            .$act."_".$field."_val_add\"><input id=\"".$field."\" name=\"".$field."\" class=\"search\" value=\""
+                            .$hmorig[$field]."\" /></span><br/> <span id=\"span_".$act."_".$field
+                            ."\"><a href=\"javascript:void(0);\" onclick=\"javascript:doActionEx('".$gtbl->getExtraInput($field)
+                            ."&act=".$act."&otbl=".$tbl."&field=".$field."&oldv=".$hmorig[$field]."&oid=".$id."','extrainput_"
+                            .$act."_".$field."_inside');document.getElementById('extrainput_".$act."_".$field
+                            ."').style.display='block';\">Disp</a></span> <div id=\"extrainput_".$act."_"
+                            .$field."\" class=\"extrainput\"> ";
+                    $out .= "<table width=\"100%\"><tr><td width=\"100%\" style=\"text-align:right\"> <b> "
+                            ."<a href=\"javascript:void(0);\" onclick=\"javascript:if('"
+                            .$id."' != ''){ var linkobj=document.getElementById('"
+                            .$field."'); if(linkobj != null){ document.getElementById('"
+                            .$field."').value=document.getElementById('linktblframe').contentWindow.sendLinkInfo('','r','"
+                            .$field."');} } document.getElementById('extrainput_".$act."_"
+                            .$field."').style.display='none';\">X</a> </b> &nbsp; </td></tr><tr><td> <div id=\"extrainput_".$act."_"
+                            .$field."_inside\"></div></td></tr></table>";
                     $out .= "</div>  </td>  </tr><tr>";
 
                 }
 
             }else{
                 if($gtbl->getSingleRow($field) == '1'){
-                    $out .= "</tr><tr><td>".$gtbl->getCHN($field).":&nbsp;</td><td colspan=\"".($form_cols-1)."\"> ".$hmorig[$field]." </td> </tr><tr>";
+                    $out .= "</tr><tr><td>".$gtbl->getCHN($field).":&nbsp;</td><td colspan=\"".($form_cols-1)."\"> "
+                            .$hmorig[$field]." </td> </tr><tr>";
                 }else{
-                    $out .= "<td width=\"10%\" BORDERCOLOR=\"737995\" >".$gtbl->getCHN($field).":&nbsp;</td><td width=\"35%\"> ".$hmorig[$field]." </td>";
+                    $out .= "<td width=\"10%\" BORDERCOLOR=\"737995\" >".$gtbl->getCHN($field).":&nbsp;</td><td width=\"35%\"> "
+                            .$hmorig[$field]." </td>";
                 }
             }
             if(++$i % 2 == 0){ 
                 $out .= "</tr>";
-                $out .= "<tr height=\"30\" valign=\"middle\"  onmouseover=\"javascript:this.style.backgroundColor='".$hlcolor."';\" onmouseout=\"javascript:this.style.backgroundColor='';\">";
+                $out .= "<tr height=\"30\" valign=\"middle\"  onmouseover=\"javascript:this.style.backgroundColor='"
+                        .$hlcolor."';\" onmouseout=\"javascript:this.style.backgroundColor='';\">";
             }
         }
     }
@@ -90,7 +108,8 @@ if(count($hm) < 2){
 
 #print_r($hm);
 
-    $out .= "<tr height=\"30\" valign=\"middle\"  onmouseover=\"javascript:this.style.backgroundColor='".$hlcolor."';\" onmouseout=\"javascript:this.style.backgroundColor='';\"><td width=\"5%\">序号</td>";
+    $out .= "<tr height=\"30\" valign=\"middle\"  onmouseover=\"javascript:this.style.backgroundColor='"
+            .$hlcolor."';\" onmouseout=\"javascript:this.style.backgroundColor='';\"><td width=\"5%\">序号</td>";
     for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
         $field = $gtbl->getField($hmi);
         $fieldinputtype = $gtbl->getInputType($field);
@@ -104,7 +123,8 @@ if(count($hm) < 2){
     $out .= "</tr>";
     foreach($hm as $k=>$hmorig){
 
-        $out .= "<tr height=\"30\" valign=\"middle\"  onmouseover=\"javascript:this.style.backgroundColor='".$hlcolor."';\" onmouseout=\"javascript:this.style.backgroundColor='';\"><td>".++$i."</td>";
+        $out .= "<tr height=\"30\" valign=\"middle\"  onmouseover=\"javascript:this.style.backgroundColor='"
+                .$hlcolor."';\" onmouseout=\"javascript:this.style.backgroundColor='';\"><td>".++$i."</td>";
         for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
             $field = $gtbl->getField($hmi);
             $fieldinputtype = $gtbl->getInputType($field);
@@ -118,7 +138,8 @@ if(count($hm) < 2){
                 $out .= "<td width=\"35%\"> ".$gtbl->getSelectOption($field, $hmorig[$field],'',1)."</td>";
                 
             }else if($fieldinputtype == 'file'){
-                $out .= "<td class=\"downline\" valign=\"middle\" > <a href=\"javascript:window.open('".$hmorig[$field]."');\" title=\"点击大图或者下载 ".$hmorig[$field]."\">";
+                $out .= "<td class=\"downline\" valign=\"middle\" > <a href=\"javascript:window.open('"
+                        .$hmorig[$field]."');\" title=\"点击大图或者下载 ".$hmorig[$field]."\">";
                 $tmparr = explode(".", $hmorig[$field]); $fileext = $tmparr[count($tmparr)-1];
                 if(in_array($fileext, array('gif','jpg','jpeg','png','bmp'))){
                     $out .= " <img src=\"".$hmorig[$field]."\" style=\"width:100%\" /> ";
@@ -130,8 +151,21 @@ if(count($hm) < 2){
 
             }else if($gtbl->getExtraInput($field) != ''){
 
-                    $out .= "<td><span id=\"span_".$act."_".$field."_val_add\"><input id=\"".$field."\" name=\"".$field."\" class=\"search\" value=\"".$hmorig[$field]."\" /></span><br/> <span id=\"span_".$act."_".$field."\"><a href=\"javascript:void(0);\" onclick=\"javascript:doActionEx('".$gtbl->getExtraInput($field)."&act=".$act."&otbl=".$tbl."&field=".$field."&oldv=".$hmorig[$field]."&oid=".$id."','extrainput_".$act."_".$field."_inside');document.getElementById('extrainput_".$act."_".$field."').style.display='block';\">Disp</a></span> <div id=\"extrainput_".$act."_".$field."\" class=\"extrainput\"> ";
-                    $out .= "<table width=\"100%\"><tr><td width=\"100%\" style=\"text-align:right\"> <b> <a href=\"javascript:void(0);\" onclick=\"javascript:if('".$id."' != ''){ var linkobj=document.getElementById('".$field."'); if(linkobj != null){ document.getElementById('".$field."').value=document.getElementById('linktblframe').contentWindow.sendLinkInfo('','r','".$field."');} } document.getElementById('extrainput_".$act."_".$field."').style.display='none';\">X</a> </b> &nbsp; </td></tr><tr><td> <div id=\"extrainput_".$act."_".$field."_inside\"></div></td></tr></table>";
+                    $out .= "<td><span id=\"span_".$act."_".$field."_val_add\"><input id=\"".$field."\" name=\""
+                            .$field."\" class=\"search\" value=\"".$hmorig[$field]."\" /></span><br/> <span id=\"span_".$act."_"
+                            .$field."\"><a href=\"javascript:void(0);\" onclick=\"javascript:doActionEx('"
+                            .$gtbl->getExtraInput($field)."&act=".$act."&otbl=".$tbl."&field=".$field."&oldv=".$hmorig[$field]
+                            ."&oid=".$id."','extrainput_".$act."_".$field."_inside');document.getElementById('extrainput_".$act."_"
+                            .$field."').style.display='block';\">Disp</a></span> <div id=\"extrainput_".$act."_".$field
+                            ."\" class=\"extrainput\"> ";
+                    $out .= "<table width=\"100%\"><tr><td width=\"100%\" style=\"text-align:right\"> <b> "
+                            ."<a href=\"javascript:void(0);\" onclick=\"javascript:if('".$id
+                            ."' != ''){ var linkobj=document.getElementById('".$field
+                            ."'); if(linkobj != null){ document.getElementById('".$field
+                            ."').value=document.getElementById('linktblframe').contentWindow.sendLinkInfo('','r','"
+                            .$field."');} } document.getElementById('extrainput_".$act."_".$field
+                            ."').style.display='none';\">X</a> </b> &nbsp; </td></tr><tr><td> <div id=\"extrainput_".$act."_"
+                            .$field."_inside\"></div></td></tr></table>";
                     $out .= "</div>  </td>";
 
             }else{

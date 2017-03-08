@@ -25,7 +25,8 @@ if(1){
                 $ihm = $ihm[1][0];
                 if($ihm['id'] > 0){
                     # 
-                    error_log(__FILE__.": ERROR! act:$act, req_id:".$_REQUEST['id']."  targettbl:[$targettbl] is not empty.");
+                    debug(__FILE__.": ERROR! act:$act, req_id:".$_REQUEST['id']
+                            ."  targettbl:[$targettbl] is not empty.");
                 }else{
                 
                     $sql = "drop table $targettbl";
@@ -37,7 +38,8 @@ if(1){
 
         }else{
             $sql = "";
-            error_log(__FILE__.": act:$act, req_id:".$_REQUEST['id']."  sql:[".$sql."] targettbl:[$targettbl] does not exist.");
+            debug(__FILE__.": act:$act, req_id:".$_REQUEST['id']."  sql:["
+                    .$sql."] targettbl:[$targettbl] does not exist.");
         }
         if($sql != ""){
             $gtbl->execBy($sql, null);
@@ -47,7 +49,8 @@ if(1){
 
         $sql = "create table $targettbl(id int(11) not null auto_increment,primary key(id))";
         if($targettbl != $_REQUEST['tblname']){
-            $isql = "update $objecttbl set tblname='".$targettbl."' where tblname='".$_REQUEST['tblname']."' limit 1";
+            $isql = "update $objecttbl set tblname='".$targettbl
+                ."' where tblname='".$_REQUEST['tblname']."' limit 1";
             $gtbl->execBy($isql, null);
         }
         
@@ -67,7 +70,7 @@ if(1){
         # modify does not need action
     }
 
-    error_log(__FILE__.": act:$act, req_id:".$_REQUEST['id']."  sql:[".$sql."]");
+    debug(__FILE__.": act:$act, req_id:".$_REQUEST['id']."  sql:[".$sql."]");
 }
 
 ?>

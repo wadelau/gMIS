@@ -11,9 +11,9 @@ require("./comm/tblconf.php");
 # check tbl action
 require("./act/tblcheck.php");
 
-$url = mkUrl("jdo.php",$_REQUEST, $gtbl);
+$jdo = mkUrl($jdo, $_REQUEST, $gtbl);
 $list_disp_limit = 28;
-#print "url:[$url]\n";
+
 # act handler
 if(startsWith($act,'add') || startsWith($act, "modify")){
     include("./act/addmodi.php");
@@ -25,7 +25,7 @@ else if(startsWith($act, "list")){
     if(startsWith($act, "list-dodelete")){
 		$origId = $id;
        include("./act/dodelete.php"); 
-	   $url = str_replace('&'.$gtbl->getMyId().'=', '&xoid=', $url); 
+	   $jdo = str_replace('&'.$gtbl->getMyId().'=', '&xoid=', $jdo); 
 		if($fmt != ''){ 
 		   $data['respobj']['resultobj'] = array('resultcode'=>'0',  # 0 stands for success
 		   		'resulttrace'=>'1511242124', 'targetid'=>$origId); # unique trace id
@@ -74,17 +74,19 @@ else if(startsWith($act, "list")){
     $out .= "<button name=\"selectallbtn\" type=\"button\" onclick=\"checkAll();\" value=\"\">全选</button> &nbsp;";
     $out .= "<button name=\"reversebtn\" type=\"button\" onclick=\"uncheckAll();\" value=\"\">反选</button>";
     $out .= "&nbsp; ".$navi->getNavi()." &nbsp;&nbsp;&nbsp;<button name='deepsearch' onclick=\"javascript:doActionEx('"
-    	.$url."&act=deepsearch', 'contentarea');\" title=\"深度复合查询\">深  搜</button>"
+    	.$jdo."&act=deepsearch', 'contentarea');\" title=\"深度复合查询\">深  搜</button>"
     	."&nbsp;&nbsp;<button name='deepsearch' onclick=\"javascript:doActionEx('"
-    	.$url."&act=pivot&pntc=".$navi->get('totalcount')."', 'contentarea');\" title=\"数据透视分析\">透  视</button>";
+    	.$jdo."&act=pivot&pntc=".$navi->get('totalcount')."', 'contentarea');\" title=\"数据透视分析\">透  视</button>";
     $out .= "&nbsp;<div style=\"float:right;\"><button name=\"searchor\" onclick=\"javascript:searchBy('"
-    	.$url."&act=list&pnsm=or');\" title=\"满足其中一个条件即可\">或搜</button>&nbsp;&nbsp;&nbsp;<button name=\"searchand\" onclick=\"javascript:searchBy('"
-    	.$url."&act=list&pnsm=and');\" title=\"同时满足所有检索条件\">并搜</button>&nbsp;&nbsp;</div>"
+    	.$jdo."&act=list&pnsm=or');\" title=\"满足其中一个条件即可\">或搜</button>&nbsp;&nbsp;&nbsp;"
+    	."<button name=\"searchand\" onclick=\"javascript:searchBy('"
+    	.$jdo."&act=list&pnsm=and');\" title=\"同时满足所有检索条件\">并搜</button>&nbsp;&nbsp;</div>"
     	."</td></tr>";
     ## list-sort start
     $out .= "<tr style=\"font-weight:bold;\" height=\"28px\">";
     if($hasid){
-        $out .= "<td valign=\"middle\" nowrap>&nbsp;<a href=\"javascript:void(0);\" title=\"Sort by ID\" onclick=\"javascript:doAction('".str_replace("&pnob","&xxpnob",$url)."&act=list&pnobid=".($navi->getAsc($gtbl->getMyId())==0?1:0)."'); \">序/编号</a></td>";
+        $out .= "<td valign=\"middle\" nowrap>&nbsp;<a href=\"javascript:void(0);\" title=\"Sort by ID\" onclick=\"javascript:doAction('"
+                .str_replace("&pnob","&xxpnob",$jdo)."&act=list&pnobid=".($navi->getAsc($gtbl->getMyId())==0?1:0)."'); \">序/编号</a></td>";
     }
 	else{
         $out .= "<td valign=\"middle\">Nbr.</td>";
@@ -96,17 +98,25 @@ else if(startsWith($act, "list")){
             continue;
         }
         $dispi++;
-        $out .= "<td valign=\"middle\"><a href=\"javascript:void(0);\" title=\"Sort by ".$gtbl->getCHN($field)."\" onclick=\"doAction('".str_replace("&pnob","&xxpnob",$url)."&act=list&pnob".$field."=".($navi->getAsc($field)==0?1:0)."')\">".$gtbl->getCHN($field)."&#8639;&#8642;</a></td>";
+        $out .= "<td valign=\"middle\"><a href=\"javascript:void(0);\" title=\"Sort by ".$gtbl->getCHN($field)
+            ."\" onclick=\"doAction('".str_replace("&pnob","&xxpnob",$jdo)."&act=list&pnob".$field."="
+            .($navi->getAsc($field)==0?1:0)."')\">".$gtbl->getCHN($field)."&#8639;&#8642;</a></td>";
     }
     $out .= "</tr>";
     ## list-sort end
     ## list-search start
     $untouched = '~~~';
     $out .= "<tr style=\"font-weight:bold;\">";
-    $out .= "<td valign=\"middle\"><input type=\"hidden\" name=\"fieldlist\" id=\"fieldlist\" value=\"".implode(",",array_keys($hmfield))."\" /> <input type=\"hidden\" name=\"fieldlisttype\" id=\"fieldlisttype\" value=\"".$gtbl->getFieldType()."\"/>";
-    $out .= "<div style=\"display:none\" id=\"pnsk_id_op_div\"><select style=\"width:60px\" name=\"oppnsk_id\" id=\"oppnsk_id\">".$gtbl->getLogicOp($gtbl->getMyId())."</select></div>";
-    $out .= "<input value=\"".($id=='' ? $untouched : $id)."\" style=\"width:50px;".($id==''?"color:white;":"")."\" id=\"pnsk_id\" name=\"pnsk_id\" ";
-    $out .= "style=\"COLOR:#777;\" title=\"Search By ...\" onclick=\"this.select();this.style.color='black';\" onfocus=\"document.getElementById('pnsk_id_op_div').style.display='block';\" onkeydown=\"javascript:if(event.keyCode == 13){ searchBy('".$url."&act=list&pnsm=and');}\" /></td>";
+    $out .= "<td valign=\"middle\"><input type=\"hidden\" name=\"fieldlist\" id=\"fieldlist\" value=\""
+            .implode(",",array_keys($hmfield))."\" /> <input type=\"hidden\" name=\"fieldlisttype\" id=\"fieldlisttype\" value=\""
+            .$gtbl->getFieldType()."\"/>";
+    $out .= "<div style=\"display:none\" id=\"pnsk_id_op_div\"><select style=\"width:60px\" name=\"oppnsk_id\" id=\"oppnsk_id\">"
+            .$gtbl->getLogicOp($gtbl->getMyId())."</select></div>";
+    $out .= "<input value=\"".($id=='' ? $untouched : $id)."\" style=\"width:50px;"
+            .($id==''?"color:white;":"")."\" id=\"pnsk_id\" name=\"pnsk_id\" ";
+    $out .= "style=\"COLOR:#777;\" title=\"Search By ...\" onclick=\"this.select();this.style.color='black';\" "
+            ."onfocus=\"document.getElementById('pnsk_id_op_div').style.display='block';\" "
+            ."onkeydown=\"javascript:if(event.keyCode == 13){ searchBy('".$jdo."&act=list&pnsm=and');}\" /></td>";
     for($hmi=$dispi=$min_idx; $hmi<=$max_idx; $hmi++){
         $field = $gtbl->getField($hmi);
         if($gtbl->filterHiddenField($field,$opfield,$timefield) 
@@ -118,13 +128,21 @@ else if(startsWith($act, "list")){
         if($gtbl->getInputType($field) == 'select'){
 			if($gtbl->getInput2Select($field)==1){
 				if(!isset($tmpfieldv)){ $tmpfieldv = $untouched; }
-				$out .= "<div style=\"display:none\" id=\"pnsk_{$field}_op_div\"><select name=\"oppnsk_{$field}\" id=\"oppnsk_{$field}\" style=\"width:60px\">".$gtbl->getLogicOp($field)."</select></div>";
-				$out .= "<input value=\"".$_REQUEST["input2sele_$field"]."\" id=\"input2sele_".$field."\" name=\"input2sele_".$field."\" style=\"COLOR:#777;width:50px;".($tmpfieldv==$untouched?"color:white;":"")."\" title=\"Search By ...\" onclick=\"this.select();this.style.color='black';\" onfocus=\"document.getElementById('pnsk_".$field."_op_div').style.display='block';document.getElementById('pnsk_".$field."_sele_div').style.display='block';\" onkeydown=\"javascript:if(event.keyCode == 13){ searchBy('".$url."&act=list&pnsm=and');}\"";
+				$out .= "<div style=\"display:none\" id=\"pnsk_{$field}_op_div\"><select name=\"oppnsk_{$field}\" id=\"oppnsk_{$field}\" "
+				        ."style=\"width:60px\">".$gtbl->getLogicOp($field)."</select></div>";
+				$out .= "<input value=\"".$_REQUEST["input2sele_$field"]."\" id=\"input2sele_".$field."\" name=\"input2sele_".$field
+				    ."\" style=\"COLOR:#777;width:50px;".($tmpfieldv==$untouched?"color:white;":"")."\" title=\"Search By ...\" "
+				    ."onclick=\"this.select();this.style.color='black';\" onfocus=\"document.getElementById('pnsk_".$field
+				    ."_op_div').style.display='block';document.getElementById('pnsk_".$field
+				    ."_sele_div').style.display='block';\" onkeydown=\"javascript:if(event.keyCode == 13){ searchBy('"
+				    .$jdo."&act=list&pnsm=and');}\"";
 				$out .= " onkeyup=\"javascript: input2Search(this,'$field');\" />";
-				$out .= "<div style=\"display:none;position:absolute;background:#fff;border:#777 solid 1px;margin:-1px 0 0;padding: 5px;font-size:12px; overflow:auto;z-index:38;\" id=\"pnsk_{$field}_sele_div\"></div>";
+				$out .= "<div style=\"display:none;position:absolute;background:#fff;border:#777 solid 1px;margin:-1px 0 0;padding: 5px;"
+				        ."font-size:12px; overflow:auto;z-index:38;\" id=\"pnsk_{$field}_sele_div\"></div>";
 				# load select options
 				$out .= $gtbl->getSelectOption($field, (isset($_REQUEST['pnsk'.$field])?$_REQUEST['pnsk'.$field]:null),"pnsk_",0,0);
-				$out .= "<script type=\"text/javascript\">var hidesele_$field=document.getElementById('pnsk_".$field."'); hidesele_$field.style.display='none';</script>";
+				$out .= "<script type=\"text/javascript\">var hidesele_$field=document.getElementById('pnsk_"
+				        .$field."'); hidesele_$field.style.display='none';</script>";
 			}
 			else{
 				$out .= $gtbl->getSelectOption($field, (isset($_REQUEST['pnsk'.$field])?$_REQUEST['pnsk'.$field]:null),"pnsk_",0,0);
@@ -132,12 +150,18 @@ else if(startsWith($act, "list")){
         }else{
             $tmpfieldv = $_REQUEST['pnsk'.$field];
             if(!isset($tmpfieldv)){ $tmpfieldv = $untouched; }
-            $out .= "<div style=\"display:none\" id=\"pnsk_{$field}_op_div\"><select name=\"oppnsk_{$field}\" id=\"oppnsk_{$field}\" style=\"width:60px\">".$gtbl->getLogicOp($field)."</select></div>";
-            $out .= "<input value=\"".$tmpfieldv."\" id=\"pnsk_".$field."\" name=\"pnsk_".$field."\" style=\"COLOR:#777;width:50px;".($tmpfieldv==$untouched?"color:white;":"")."\" title=\"Search By ...\" onclick=\"this.select();this.style.color='black';\" onfocus=\"document.getElementById('pnsk_".$field."_op_div').style.display='block';\" onkeydown=\"javascript:if(event.keyCode == 13){ searchBy('".$url."&act=list&pnsm=and');}\" ".$gtbl->getJsAction($field)."/>";
+            $out .= "<div style=\"display:none\" id=\"pnsk_{$field}_op_div\"><select name=\"oppnsk_{$field}\" id=\"oppnsk_{$field}\" "
+                    ."style=\"width:60px\">".$gtbl->getLogicOp($field)."</select></div>";
+            $out .= "<input value=\"".$tmpfieldv."\" id=\"pnsk_".$field."\" name=\"pnsk_".$field."\" style=\"COLOR:#777;width:50px;"
+                    .($tmpfieldv==$untouched?"color:white;":"")."\" title=\"Search By ...\" "
+                    ."onclick=\"this.select();this.style.color='black';\" onfocus=\"document.getElementById('pnsk_"
+                    .$field."_op_div').style.display='block';\" onkeydown=\"javascript:if(event.keyCode == 13){ searchBy('"
+                    .$jdo."&act=list&pnsm=and');}\" ".$gtbl->getJsAction($field)."/>";
         }
         $out .= "</td>";
     }
-    $out .= "<!-- <td><a href=\"javascript:searchBy('".$url."&act=list&pnsm=or');\" title=\"满足其中一个条件即可\">或搜</a><br/><a href=\"javascript:searchBy('".$url."&act=list&pnsm=and');\" title=\"同时满足所有检索条件\">与搜</a></td> --> </tr>";
+    $out .= "<!-- <td><a href=\"javascript:searchBy('".$jdo."&act=list&pnsm=or');\" title=\"满足其中一个条件即可\">或搜</a><br/>"
+            ."<a href=\"javascript:searchBy('".$jdo."&act=list&pnsm=and');\" title=\"同时满足所有检索条件\">与搜</a></td> --> </tr>";
     ## list-search end
     ## main data loop
     $hm = $gtbl->getBy("*", $navi->getCondition($gtbl, $user));
@@ -150,14 +174,29 @@ else if(startsWith($act, "list")){
            if($i%2 == 0){
                 $bgcolor = "";
            }
-           $out .= "<tr height=\"35px\" valign=\"middle\" bgcolor=\"".$bgcolor."\" id=\"list_tr_".(++$i)."\">"; # rec[$gtbl->getMyId()]
+           $out .= "<tr height=\"35px\" valign=\"middle\" bgcolor=\""
+                   .$bgcolor."\" id=\"list_tr_".(++$i)."\">"; # rec[$gtbl->getMyId()]
            if($hasid){
                $id = $rec[$gtbl->getMyId()]; $listid[] = $id;
-               $out .= "<td nowrap> <input name=\"checkboxid\" type=\"checkbox\" value=\"".$id."\"> &nbsp; <a onmouseover=\"javascript:showActList('".$i."', 1, '".str_replace("&".$gtbl->getMyId()."=","&oid=", $url)."&".$gtbl->getMyId()."=".$id."');\" onmouseout=\"javascript:showActList('".$id."', 0, '".str_replace("&".$gtbl->getMyId()."=","&oid=", $url)."&".$gtbl->getMyId()."=".$id."');\" href='javascript:void(0);' onclick=\"javascript:doActionEx('".$url."&act=view&".$gtbl->getMyId()."=".$id."','contentarea');;\" title=\"详细信息\">".($i + (intval($navi->get('pnpn'))-1) * (intval($navi->get('pnps'))))." / ".$id." &#x25BE;</a> <div id=\"divActList_$i\" style=\"display:none; position: absolute; margin-left:50px; margin-top:-11px; z-index:99; background-color:silver;\">actlist-$i</div> </td>";
-
-           }else{
+               $out .= "<td nowrap> <input name=\"checkboxid\" type=\"checkbox\" value=\"".$id
+                ."\"> &nbsp; <a onmouseover=\"javascript:showActList('".$i."', 1, '"
+                .str_replace("&".$gtbl->getMyId()."=","&oid=", $jdo)."&".$gtbl->getMyId()."=".$id
+                ."');\" onmouseout=\"javascript:showActList('".$id."', 0, '".str_replace("&".$gtbl->getMyId()."=","&oid=", $jdo)
+                ."&".$gtbl->getMyId()."=".$id."');\" href='javascript:void(0);' onclick=\"javascript:doActionEx('".$jdo."&act=view&"
+                .$gtbl->getMyId()."=".$id."','contentarea');;\" title=\"详细信息\">"
+                .($i + (intval($navi->get('pnpn'))-1) * (intval($navi->get('pnps'))))." / ".$id
+                ." &#x25BE;</a> <div id=\"divActList_$i\" style=\"display:none; position: absolute; margin-left:50px; "
+                ."margin-top:-11px; z-index:99; background-color:silver;\">actlist-$i</div> </td>";
+           }
+           else{
                $url_uni_extra = $gtbl->getUniquePara($rec);
-               $out .= "<td nowrap> <input name=\"checkboxid\" type=\"checkbox\" value=\"".$id."\"> &nbsp; <a onmouseover=\"javascript:showActList('".$i."', 1, '".$url."&".$url_uni_extra."');\" onmouseout=\"javascript:showActList('".$i."', 0, '".$url."&".$url_uni_extra."');\" href='javascript:void(0);' onclick=\"javascript:doActionEx('".$url."&act=view&".$url_uni_extra."','contentarea');;\" title=\"详细信息\">".($i + (intval($navi->get('pnpn'))-1) * (intval($navi->get('pnps'))))." / ".$id." &#x25BE;</a> <div id=\"divActList_$i\" style=\"display:none; position: absolute; margin-left:50px; margin-top:-11px; z-index:99; background-color:silver;\">actlist-$i</div> </td>";
+               $out .= "<td nowrap> <input name=\"checkboxid\" type=\"checkbox\" value=\"".$id
+                ."\"> &nbsp; <a onmouseover=\"javascript:showActList('".$i."', 1, '".$jdo."&".$url_uni_extra
+                ."');\" onmouseout=\"javascript:showActList('".$i."', 0, '".$jdo."&".$url_uni_extra
+                ."');\" href='javascript:void(0);' onclick=\"javascript:doActionEx('".$jdo."&act=view&".$url_uni_extra
+                ."','contentarea');;\" title=\"详细信息\">".($i + (intval($navi->get('pnpn'))-1) * (intval($navi->get('pnps'))))
+                ." / ".$id." &#x25BE;</a> <div id=\"divActList_$i\" style=\"display:none; position: absolute; margin-left:50px; "
+                ."margin-top:-11px; z-index:99; background-color:silver;\">actlist-$i</div> </td>";
            }
            for($hmi=$dispi=$min_idx; $hmi<=$max_idx; $hmi++){
                $field = $gtbl->getField($hmi);
@@ -170,37 +209,42 @@ else if(startsWith($act, "list")){
 
                if(!$user->canRead($field,'','', $_REQUEST[$gtbl->getMyId()],$id)){
                     $out .= "<td> * </td>";
-
-               }else if($inputtype == 'select'){
-				
-					   $fhref = $gtbl->getHref($field, $rec);
-					   if(count($fhref) == 0){
-							$fhref = "";
-						}
-						else{
-							if(strpos($fhref[0],"javascript") !== false){
-							   $fhref_tmp = "<a href=\"javascript:void(0);\" onclick=\"".$fhref[0]."\" title=\"".$fhref[1]."\" target=\"".$fhref[2]."\">";
-							}else{
-							   $fhref_tmp = "<a href=\"".$fhref[0]."\" title=\"".$fhref[1]."\" target=\"".$fhref[2]."\">";
-							}			
-							$fhref = $fhref_tmp;
-						}
-						$fhref_end = ''; if($fhref != ''){ $href_end = "</a>"; }
-
+               }
+               else if($inputtype == 'select'){
+                   $fhref = $gtbl->getHref($field, $rec);
+                   if(count($fhref) == 0){
+                       $fhref = "";
+                   }
+                   else{
+                        if(strpos($fhref[0],"javascript") !== false){
+                    	   $fhref_tmp = "<a href=\"javascript:void(0);\" onclick=\"".$fhref[0]."\" title=\""
+                    	           .$fhref[1]."\" target=\"".$fhref[2]."\">";
+                    	}
+                    	else{
+                    	   $fhref_tmp = "<a href=\"".$fhref[0]."\" title=\"".$fhref[1]."\" target=\"".$fhref[2]."\">";
+                    	}			
+                    	$fhref = $fhref_tmp;
+                    }
+                    $fhref_end = ''; if($fhref != ''){ $href_end = "</a>"; }
 				   $myinputtype = $inputtype;
                    $readonly = $gtbl->getReadOnly($field);
                    if($gtbl->getJsAction($field) != '' || $gtbl->getSelectMultiple($field)==1){ $readonly = 'readonly'; }
 				   if($gtbl->getInput2Select($field)==1){ $myinputtype = "input2select";  }
                    $tmpv_orig = $tmpv=$gtbl->getSelectOption($field, $rec[$field],'',1, $gtbl->getSelectMultiple($field));
                    $tmpv = shortenStr($tmpv, $list_disp_limit);
-                   $out .= "<td ondblclick=\"javascript:switchEditable('othercont_div_".$id."_".$field."','".$field."','".$myinputtype."','".$rec[$field]."','".$url."&act=updatefield&field=".$field."&".$gtbl->getMyId()."=".$id."','".$readonly."');\" ".$gtbl->getCss($field, $rec[$field])." title=\"".$tmpv_orig."\"><div id=\"othercont_div_".$id."_".$field."\">".$fhref.$tmpv.$fhref_end."</div>";
+                   $out .= "<td ondblclick=\"javascript:switchEditable('othercont_div_".$id."_".$field."','".$field."','"
+                           .$myinputtype."','".$rec[$field]."','".$jdo."&act=updatefield&field=".$field."&".$gtbl->getMyId()."=".$id."','"
+                           .$readonly."');\" ".$gtbl->getCss($field, $rec[$field])." title=\"".$tmpv_orig."\"><div id=\"othercont_div_"
+                           .$id."_".$field."\">".$fhref.$tmpv.$fhref_end."</div>";
                    $out .= "</td>";
 
                    $listid[$dispi] = $tmpv_orig;
-
-               }else if($inputtype == 'file'){
+               }
+               else if($inputtype == 'file'){
 					   $fhref = $gtbl->getHref($field, $rec);
-					   if(strpos($rec[$field], "$shortDirName/") !== false){ $rec[$field] = str_replace("$shortDirName/", "", $rec[$field]); }
+					   if(strpos($rec[$field], "$shortDirName/") !== false){ 
+					       $rec[$field] = str_replace("$shortDirName/", "", $rec[$field]); 
+					   }
 					   $origValueF = $hmorig[$field];
 					   $srcprefix = $gtbl->getSrcPrefix();
 					   if($origValueF != '' && $srcprefix != '' && !startsWith($origValueF, 'http')){
@@ -211,48 +255,63 @@ else if(startsWith($act, "list")){
 						   if($rec[$field] != ''){ 
 								$fieldT = Base62x::decode(substr($rec[$field], strpos($rec[$field],'_')+1)).' -- '; 
 							}
-							$fhref = "<a href=\"javascript:void(0);\" onclick=\"window.open('".$rec[$field]."');\" title=\"".$fieldT."点击大图或者下载 ".$rec[$field]."\">"; 	   
+							$fhref = "<a href=\"javascript:void(0);\" onclick=\"window.open('".$rec[$field]."');\" title=\""
+							        .$fieldT."点击大图或者下载 ".$rec[$field]."\">"; 	   
 						}
 						else{
 							if(strpos($fhref[0],"javascript") !== false){
-							   $fhref_tmp = "<a href=\"javascript:void(0);\" onclick=\"".$fhref[0]."\" title=\"".$fhref[1]."\" target=\"".$fhref[2]."\">";
-							}else{
+							   $fhref_tmp = "<a href=\"javascript:void(0);\" onclick=\"".$fhref[0]."\" title=\""
+							           .$fhref[1]."\" target=\"".$fhref[2]."\">";
+							}
+							else{
 							   $fhref_tmp = "<a href=\"".$fhref[0]."\" title=\"".$fhref[1]."\" target=\"".$fhref[2]."\">";
 							}			
 							$fhref = $fhref_tmp;
 						}
                    $out .= "<td> ".$fhref;
-				   
 				   $isimg = isImg($rec[$field]);
                    if($isimg){
-                       $out .= "<img src=\"".$rec[$field]."\" style=\"max-width:99%; max-height:99%\" onload=\"javascript: var baseSize=118; if(this.width > baseSize){ this.style.width = baseSize+'px';}else if(this.height > baseSize){ this.style.height=baseSize+'px'; } \" id=\"img_".$rec[$field]."\" />";
+                       $out .= "<img src=\"".$rec[$field]."\" style=\"max-width:99%; max-height:99%\" onload=\"javascript: "
+                               ."var baseSize=118; if(this.width > baseSize){ this.style.width = baseSize+'px';}"
+                               ."else if(this.height > baseSize){ this.style.height=baseSize+'px'; } \" id=\"img_"
+                               .$rec[$field]."\" />";
 
                    }else{
                         $out .= "".shortenStr($rec[$field], $list_disp_limit)."";
                    }
                    $out .= "</a>"; # <br/>".$rec[$field]."</td>";
+               }
+               else if($gtbl->getExtraInput($field) != ''){
 
-               }else if($gtbl->getExtraInput($field) != ''){
-
-                   $out .= "<td ondblclick=\"javascript:show('span_disp_".$field."','".$gtbl->getExtraInput($field)."&act=".$act."&field=".$field."&otbl=".$tbl."&oldv=".$rec[$field]."&oid=".$id."',true,true);\" title=\"".addslashes($rec[$field])."\">".shortenStr($rec[$field], $list_disp_limit)." <span id=\"span_disp_".$field."\"> </span> <div id=\"extrainput_".$act."_".$field."\" class=\"extrainput\">  </div> </td>";
+                   $out .= "<td ondblclick=\"javascript:show('span_disp_".$field."','".$gtbl->getExtraInput($field)."&act=".$act
+                    ."&field=".$field."&otbl=".$tbl."&oldv=".$rec[$field]."&oid=".$id."',true,true);\" title=\"".addslashes($rec[$field])
+                    ."\">".shortenStr($rec[$field], $list_disp_limit)." <span id=\"span_disp_".$field."\"> </span> <div id=\"extrainput_"
+                    .$act."_".$field."\" class=\"extrainput\">  </div> </td>";
 
                    $listid[$dispi] = $rec[$field];
-
-               }else{
+               }
+               else{
                    $fv = str_replace('<', '&lt;', $rec[$field]);
                    $fv_short = $fv_orig = $fv;
                    $fv_short = shortenStr($fv, $list_disp_limit);
                    $fhref = $gtbl->getHref($field, $rec);
                    if(count($fhref)>0){
                        if(strpos($fhref[0],"javascript") !== false){
-                           $fv_short = "<a href=\"javascript:void(0);\" onclick=\"".$fhref[0]."\" title=\"".$fhref[1]."\" target=\"".$fhref[2]."\">".$fv_short."</a>";
+                           $fv_short = "<a href=\"javascript:void(0);\" onclick=\"".$fhref[0]."\" title=\""
+                                   .$fhref[1]."\" target=\"".$fhref[2]."\">".$fv_short."</a>";
                        }else{
-                           $fv_short = "<a href=\"".$fhref[0]."\" title=\"".$fhref[1]."\" target=\"".$fhref[2]."\">".$fv_short."</a>";
+                           $fv_short = "<a href=\"".$fhref[0]."\" title=\"".$fhref[1]."\" target=\""
+                                   .$fhref[2]."\">".$fv_short."</a>";
                        }
                    }
 				   $readonly = $gtbl->getReadOnly($field);
                    if($inputtype == 'textarea'){ $readonly = true; }
-                   $out .= "<td ondblclick=\"javascript:switchEditable('othercont_div_".$id."_".$field."','".$field."','".$inputtype."','','".$url."&act=updatefield&field=".$field."&".$gtbl->getMyId()."=".$id."','".$readonly."');\" title=\"".str_replace("\"","", $fv_orig)."\" ".$gtbl->getCss($field)." ".$gtbl->getJsAction($field, $rec)."><div id=\"othercont_div_".$id."_".$field."\">".$fv_short."</div></td>";
+                   $out .= "<td ondblclick=\"javascript:switchEditable('othercont_div_".$id."_"
+                           .$field."','".$field."','".$inputtype."','','".$jdo."&act=updatefield&field="
+                           .$field."&".$gtbl->getMyId()."=".$id."','".$readonly."');\" title=\""
+                           .str_replace("\"","", $fv_orig)."\" ".$gtbl->getCss($field)." "
+                            .$gtbl->getJsAction($field, $rec)."><div id=\"othercont_div_".$id."_".$field."\">"
+                            .$fv_short."</div></td>";
                    $out .= $gtbl->getDelayJsAction($field);
 				   $listid[$dispi] = $rec[$field];
                }
@@ -277,7 +336,8 @@ else if(startsWith($act, "list")){
                }
            }
            $out .= "</tr>\n"; 
-           if(!isset($_REQUEST['linkfieldcopy'])){ $fstfields .= $listid[1].","; }else{ $fstfields .= $listid[$_REQUEST['linkfieldcopy']].","; }
+           if(!isset($_REQUEST['linkfieldcopy'])){ $fstfields .= $listid[1].","; }
+           else{ $fstfields .= $listid[$_REQUEST['linkfieldcopy']].","; }
         } 
         # record end
         # sum bgn
@@ -321,7 +381,7 @@ else if(startsWith($act, "list")){
                     $queryFields .= $v; 
                 }
                 $queryFields .= " &nbsp;  &nbsp; <a href=\"javascript:pnAction('"
-                        .str_replace($k, 'old'.$k, $url)
+                        .str_replace($k, 'old'.$k, $jdo)
                         ."');\" title='Remove this filter/去掉此条件'>[X]</a><br/>";
             }
         }
@@ -356,7 +416,6 @@ else if($act == 'deepsearch'){
 
 }
 else{
-
     $out .= "Ooops! No such action:[$act].<br/>&nbsp;\n";
 }
 

@@ -22,8 +22,9 @@ if($hm[0]){
 $data['todo_state'] = array('0'=>'已完成', '1'=>'待做', '2'=>'进行中', '3'=>'擱置', '4'=>'取消');
 $data['user_list'] = $user->getUserList();
 
-$hm = $gtbl->execBy("select count(parenttype) as modulecount, parenttype from ".$_CONFIG['tblpre']."fin_operatelogtbl where inserttime > '"
-	.date("Y-m-d", time()-(86400*60))." 00:00:00' group by parenttype order by modulecount desc limit 8", null,
+$hm = $gtbl->execBy("select count(parenttype) as modulecount, parenttype from "
+        .$_CONFIG['tblpre']."fin_operatelogtbl where inserttime > '"
+        .date("Y-m-d", time()-(86400*60))." 00:00:00' group by parenttype order by modulecount desc limit 8", null,
 	$withCache=array('key'=>'fin_operatelog-select-'.$mycachedate));
 if($hm[0]){
 	$hm = $hm[1];
@@ -32,7 +33,8 @@ if($hm[0]){
 		$hm_module_order[$k] = $v['parenttype']; 
 	}
 	$module_list = substr($module_list, 0, strlen($module_list)-1);
-	$hm = $gtbl->execBY("select objname,tblname from ".$_CONFIG['tblpre']."info_objecttbl where tblname in ($module_list)", null,
+	$hm = $gtbl->execBY("select objname,tblname from "
+	        .$_CONFIG['tblpre']."info_objecttbl where tblname in ($module_list)", null,
 		$withCache=array('key'=>'info_object-select-'.$module_list));
 	if($hm[0]){
 		$hm = $hm[1];
@@ -42,7 +44,8 @@ if($hm[0]){
 	}
 }
 
-$hm = $gtbl->execBy("select objname,tblname from ".$_CONFIG['tblpre']."info_objecttbl where addtodesktop > 0 order by addtodesktop", null,
+$hm = $gtbl->execBy("select objname,tblname from "
+        .$_CONFIG['tblpre']."info_objecttbl where addtodesktop > 0 order by addtodesktop", null,
 	$withCache=array('key'=>'info_object-select-desktop'));
 if($hm[0]){
 	$hm = $hm[1];
@@ -95,7 +98,6 @@ if($fp){
 	fclose($fp);
 	$mtime = $fstat['mtime'];
 	$data['system_lastmodify'] = date("Y-m-d", $mtime);
-	#print __FILE__.": lastmodify: ".$data['system_lastmodify'].", mtime:$mtime\n";
 }
 
 $data['start_date'] = $_CONFIG['start_date'];
@@ -103,14 +105,16 @@ $data['module_list_order'] = $hm_module_order;
 $data['module_list_name'] = $hm_module_name;
 $data['todo_list'] = $hm_todo_list;
 
-$smttpl = getSmtTpl(__FILE__,$act);
+$smttpl = getSmtTpl(__FILE__, $act);
 
 $smt->assign('agentname', $_CONFIG['agentname']);
 $smt->assign('welcomemsg',$welcomemsg);
-$smt->assign('desktopurl','ido.php?sid='.rand(10000,999999));
-$smt->assign('ido','ido.php?sid='.rand(10000,999999));
-$smt->assign('today',date("Y-m-d"));
-$smt->assign('historyurl','ido.php?tbl=info_operatelogtbl&tit=操作历史记录&a1=0&pnsktogroup='
+$smt->assign('desktopurl', $url);
+$smt->assign('url', $url);
+$smt->assign('ido', $ido);
+$smt->assign('jdo', $jdo);
+$smt->assign('today', date("Y-m-d"));
+$smt->assign('historyurl', $ido.'&tbl=info_operatelogtbl&tit=操作历史记录&a1=0&pnsktogroup='
 	.$user->getGroup().'&pnskuserid='.$userid);
 
 $navi = new PageNavi(); 

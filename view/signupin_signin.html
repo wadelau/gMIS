@@ -36,7 +36,8 @@ if(true){
   <tr class="nobgcolortbl">
     <td style="height:560px;vertical-align:middle"  >
 
-            <table style="background:transparent;border:0px;width:100%;border-collapse:collapse; border-spacing:0px;"> <!-- width="100%" border="0px" cellpadding="0" cellspacing="0" -->
+            <table style="background:transparent;border:0px;width:100%;border-collapse:collapse; border-spacing:0px;">
+            	<!-- width="100%" border="0px" cellpadding="0" cellspacing="0" -->
                 <tr>
                   <td  style="text-align:center;" colspan="3" height="80" valign="top">
 				    <span class="login_txt_bt" 
@@ -73,7 +74,27 @@ if(true){
                         	</span>
                         </td>
                     </tr>
-
+				{if $islan==false}
+				<tr>
+                    <td width="13%" height="35" ></td>
+                    <td height="35" colspan="2" class="top_hui_text">
+                    	<img src="{$rtvdir}/comm/verifycode.php?i={$verifyid}" alt="-x-" 
+                    		ondblclick="javascript:window.location.reload();" 
+                    			id="verifycodeimg2" title="双击刷新" width="200px" /> &nbsp;
+                    	<a href="javascript:void(0);" 
+                    		onclick="javascript:window.location.reload();">
+                    		Unrecognized 看不清?
+                    	</a>
+                      </td>
+                  </tr>
+				<tr>
+                    <td width="13%" height="35" ><span class="login_txt">验证码Vfc：</span></td>
+                    <td height="35" colspan="2" class="top_hui_text">
+                    	<input class=wenbenkuang name="verifycode" id="verifycode" type=text maxLength=4 size=10>
+                    	
+                      </td>
+                  </tr>
+                  {/if}
                   <tr>
                     <td width="13%" height="38" class="top_hui_text" nowrap>
                     	<span class="login_txt">用户电子邮箱Uid：&nbsp;&nbsp; </span></td>
@@ -89,22 +110,10 @@ if(true){
                     	<input class="editbox4" type="password" size="20" name="password" id="password">
                       <img src="../img/luck.gif" width="19" height="18"> </td>
                   </tr>
-                  <tr>
-                    <td width="13%" height="35" ><span class="login_txt">验证码Vfc：</span></td>
-                    <td height="35" colspan="2" class="top_hui_text">
-                    	<input class=wenbenkuang name="verifycode" id="verifycode" type=text maxLength=4 size=10>
-                    	<img src="{$rtvdir}/comm/verifycode.php" alt="-x-" 
-                    		ondblclick="javascript:this.src='{$rtvdir}/comm/verifycode.php?i='+(Math.random()*9999999+99999);" 
-                    			id="verifycodeimg2" title="双击刷新" width="200px" /> &nbsp;
-                    	<a href="javascript:void(0);" 
-                    		onclick="javascript:document.getElementById('verifycodeimg2').src='{$rtvdir}/comm/verifycode.php?i='+(Math.random()*9999999+99999);">
-                    		Unrecognized/看不清?
-                    	</a>
-                      </td>
-                  </tr>
+                 
                   <tr>
                     <td height="35" >
-                    	<input name="Submit" type="submit" class="button" id="Submit"> </td>
+                    	<input type="submit" class="button" id="Submit"> </td>
                     <td width="37%" class="top_hui_text">
                     	<input name="cs" type="reset" class="button" id="resetbtn" />
                     	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -115,6 +124,7 @@ if(true){
 
                 </table>
                 <input type="hidden" name="bkl" id="bkl" value="{$bkl}"/>
+                <input type="hidden" name="verifyid" id="verifyid" value="{$verifyid}"/>
             </form>
 
        </td> 

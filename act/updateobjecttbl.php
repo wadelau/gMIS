@@ -11,9 +11,7 @@ $tbl = $_REQUEST['tbl'];
 $mydb = $_CONFIG['appname'].'db';
 $db = $_REQUEST['db']==''?$mydb:$_REQUEST['db'];
 $field = $_REQUEST['field'];
-$url = $_SERVER['PHP_SELF']."?bkl=".$_REQUEST['bkl'];
 
-#print_r($_REQUEST);
 $db =  $_CONFIG['maindb'] ; # 
 $objecttbl = $_CONFIG['tblpre']."info_objecttbl";
 

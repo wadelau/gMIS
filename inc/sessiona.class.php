@@ -1,8 +1,9 @@
 <?php
-/* Cache service connection, connecting app with cache data for high performance
+/* Session admin, handling users sessions in all apps
  * v0.1
  * wadelau@ufqi.com
  * Sat Jul 23 09:50:58 UTC 2011
+ * Mon, 6 Mar 2017 21:59:03 +0800, implementing
  */
 
 if(!defined('__ROOT__')){
@@ -11,20 +12,22 @@ if(!defined('__ROOT__')){
 
 require_once(__ROOT__."/inc/config.class.php");
 require_once(__ROOT__."/inc/socket.class.php");
-require_once(__ROOT__."/inc/memcached.class.php");
+require_once(__ROOT__."/inc/session.class.php");
 #require_once(__ROOT__."/inc/class.connectionpool.php");
 
-class CacheA {
+class SessionA {
 
 	var $conf = null; 
-	var $cacheconn = null;
+	var $sessionconn = null;
 	
  	//- construct
-	function __construct($cacheConf = null){
-		$cacheConf = ($cacheConf==null ? 'Cache_Master' : $cacheConf);
-		$this->conf = new $cacheConf;
-		$cacheDriver = GConf::get('cachedriver');
-		$this->cacheconn = new $cacheDriver($this->conf);
+	function __construct($sessionConf = null){
+		
+		$sessionConf = ($sessionConf==null ? 'Session_Master' : $sessionConf);
+		$this->conf = new $sessionConf;
+		$sessionDriver = GConf::get('sessiondriver');
+		$this->sessionconn = new $sessionDriver($this->conf);
+		
 	}
 	
 	//-
@@ -34,30 +37,26 @@ class CacheA {
 
 	# get
 	public function get($k){
-		
-		$k = $this->_md5k($k);
-		return $this->cacheconn->get($k);
+		# @todo
+	    $k = $this->_md5k($k);
+		return $this->sessionconn->get($k);
 				
 	}
 	
 	# set
-	public function set($k, $v, $expr=0){
-		
-		$k = $this->_md5k($k);
-		$rtn = $this->cacheconn->set($k, $v, $expr);
-		
+	public function set($k, $v){
+	    # @todo
+	    $k = $this->_md5k($k);
+		$rtn = $this->sessionconn->set($k, $v);
 		return $rtn;
 		
 	}
 	
 	# delete
 	public function rm($k){
-		
 		$k = $this->_md5k($k);
-		$rtn = $this->cacheconn->del($k);
-		
+		$rtn = $this->sessionconn->del($k);
 		return $rtn;
-		
 	}
 	
 	# shorten key
@@ -69,9 +68,9 @@ class CacheA {
 	function close(){
 	    # @todo, long conn?
 	    # need sub class to override with actual close handler
-	    $this->cacheconn->close();
+	    $this->sessionconn->close();
 	    return true;
 	}
- 
-}
+	
+ }
 ?>

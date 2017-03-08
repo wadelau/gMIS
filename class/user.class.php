@@ -9,10 +9,14 @@ if(!defined('__ROOT__')){
   define('__ROOT__', dirname(dirname(__FILE__)));
 }
 require_once(__ROOT__.'/inc/webapp.class.php'); 
+require_once(__ROOT__.'/inc/session.class.php');
 
-
-class User extends WebApp
-{
+class User extends WebApp{
+    
+    const Uid_Tag = 'ui';
+    const Data_Sep = ':::';
+    const gMIS_Sid = 'gMIS-Sid';
+    
 	var $sep = "|";
 	var $eml = "email";
     var $objgrp = "objgrp";
@@ -24,6 +28,7 @@ class User extends WebApp
     var $accessLevel = array('deny'=>0,'read'=>1,'write'=>2,'delete'=>3);
     var $rgtArr = array('supacc'=>false,'r'=>false,'w'=>false,'d'=>false);
     var $specifyAcc = array(); # 记录针对当前用户或者当前组的特殊权限, Sun May 13 16:42:45 CST 2012
+    var $session = null;
 
 	//-
 	function __construct($args=null){
@@ -33,12 +38,10 @@ class User extends WebApp
         #$this->setTbl("hss_info_usertbl");
 		# inherit parent's resrc
 		parent::__construct($args);
-		
+		$this->session = new SESSIONX($args);
+		$this->set('sid_tag', self::gMIS_Sid);
 	}
-	//-
-	function setEmail($email){
-		$this->set($this->eml,$email);
-	}
+
 
 	function getEmail(){
 		return $this->get($this->eml);
@@ -48,17 +51,6 @@ class User extends WebApp
 		return $this->getId() != '';
 	}
 
-	function getUserName(){
-		return $this->get('username');
-	}
-
-	function getLocation(){
-		return $this->get('location');
-	} 
-	
-	function getIP(){
-        return $this->get('ip');
-    }
 
 	function getLat(){
 		return $this->get('lat');
@@ -283,14 +275,8 @@ class User extends WebApp
         error_log(__FILE__.": setSupAcc is called. mod:[$mod] tf:[$tf] \n");
         return $this->rgtArr[$mod] = $tf;
     }
-
-    function getGuideId(){
-        $guideid = 'guideid';
-        $gudid = $this->get($guideid);
-     
-        return $gudid ;
-    }
-
+    
+    //-
     function getOperateArea($field=''){
         $str = '';
         $str = $opArea = $this->get('operatearea');
@@ -319,6 +305,36 @@ class User extends WebApp
             }
         }
         return $list;
+    }
+    
+    //- get user id from session
+    //- Mon, 6 Mar 2017 23:42:59 +0800
+    public function getUserBySession($reqt){
+        $sid = $this->session->getSid($reqt);
+        $uid = '';
+        $chk = $this->session->chkSid($this, $reqt);
+        if($chk){
+            $data = $this->session->getData();
+            $uid = $data;
+        }
+        else{
+            # no valid
+            debug(__FILE__.": unkn session:[".$sid."]");
+        }
+        #debug(__FILE__.": get uid:[$uid]");
+        return $uid;
+    }
+    
+    //-
+    public function getSid($reqt){
+        $sid = $this->session->generateSid($this, $reqt);
+        return $sid;
+    }
+    
+    //-
+    public function getVerifyId(){
+        $vid = $this->session->generateVerifyId();
+        return $vid;
     }
     
 }

@@ -15,10 +15,10 @@ if($_REQUEST['otbl'] != ''){
 }
 
 # reset old?
-$url = str_replace("&pnsk", "&oldpnsk", $url);
+$jdo = str_replace("&pnsk", "&oldpnsk", $jdo);
 
 $out .= "<fieldset style=\"border-color:#5f8ac5;border: 1px solid #5f8ac5;\"><legend><h4>深度复合搜索</h4></legend><form id=\""
-	.$formid."\" name=\"".$formid."\" method=\"post\" action=\"".$url."&act=list-dodeepsearch\" "
+	.$formid."\" name=\"".$formid."\" method=\"post\" action=\"".$jdo."&act=list-dodeepsearch\" "
 	.$gtbl->getJsActionTbl()."><table cellspacing=\"0\" cellpadding=\"0\" "
 	." style=\"border:0px solid black; width:86%; margin-left:auto; margin-right:auto;\">";
 $out .= "<tr><td width=\"11%\">&nbsp;</td>

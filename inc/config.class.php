@@ -51,6 +51,11 @@ if(true){
 	$conf['cacheport'] = '11211'; # empty or '0' for linux/unix socket
 	$conf['cachedriver'] = 'MEMCACHEDX'; # REDISX, XCACHEX
 	$conf['cacheexpire'] = 1800; # 30 * 60;
+	
+	# session service
+	$conf['enable_session'] = 1; # or true for 1, false for 0
+	$conf['sessiondriver'] = 'SESSIONX'; # SESSIONX, REDISX
+	$conf['sessionexpire'] = 1800; # 30 * 60;
 
 	# file system
 	$conf['enable_file'] = 1; # true for 1, false for 0 to init at entry stage
@@ -66,6 +71,7 @@ if(true){
 
 	$conf['adminmail'] = 'system@local';
 	$conf['start_date'] = '2016-06-08'; # first action date in fin_operatelogtbl
+	$conf['sign_key'] = 'my_sign_key_at_random-----';
 
 	# set them all
 	GConf::setConf($conf);

@@ -29,7 +29,7 @@ if($mode != ''){
     }else{
         if(strpos($mode, $modechar) === false){
             $out .= "act:[$act] is not allowed in mode:[$mode]. 201202282143\n";
-            $out .= "<br/><br/> <a href='./ido.php?tbl=hss_fin_managemodetbl&pnskparenttype="
+            $out .= "<br/><br/> <a href='".$ido."&tbl=hss_fin_managemodetbl&pnskparenttype="
 				.$tbl."&pnskparentid=".$id."&pnsm=1' target=\"_top\">申请变更</a> ";
             print $out;
             exit(0);

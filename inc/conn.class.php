@@ -55,4 +55,16 @@ class Cache_Master{
     }
 }
 
+# session service
+class Session_Master{
+    
+    var $expireTime = 1800; # 30 * 60;
+
+    function __construct(){
+        
+        $this->expireTime = GConf::get('sesssionexpire');
+
+    }
+}
+
 ?>

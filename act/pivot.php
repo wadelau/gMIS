@@ -218,12 +218,10 @@ if($act == 'pivot-do'){
 else{
 
     # form 
-# reset old?
-#$url = str_replace("&pnsk", "&oldpnsk", $url);
 
 $out .= "<fieldset style=\"border-color:#5f8ac5;border: 1px solid #5f8ac5;\"><legend><h4>數據透視當前數據集("
         .number_format($_REQUEST['pntc']).")</h4></legend>"
-       ."<form id=\"".$formid."\" name=\"".$formid."\" method=\"post\" action=\"".$url."&act=pivot-do\" "
+       ."<form id=\"".$formid."\" name=\"".$formid."\" method=\"post\" action=\"".$jdo."&act=pivot-do\" "
 	   .$gtbl->getJsActionTbl().">";
 $out .= "<table style='border:0px; width:96%; margin-left:auto; margin-right:auto;'>";
         

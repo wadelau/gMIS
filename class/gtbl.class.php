@@ -63,6 +63,7 @@ class GTbl extends WebApp{
 
 	private static $MAX_FIELD_LIST = 99;
 	const RESULTSET = 'resultset';
+	const SID = 'sid';
 	public $PRIUNI = 'primaryunique';
 	public $db = ''; # data db
 	public $mydb = ''; # the app, -gMIS runs on it, may differ with $db
@@ -636,7 +637,7 @@ class GTbl extends WebApp{
         $this->hmconf[$this->taglist['field'].$this->sep.$field.$this->sep.$this->taglist['trigger']] = $trigger;
     }
 
-    public function getHref($field,$result){
+    public function getHref($field, $result=null){
         $tmpstr = $this->hmconf[$this->taglist['field'].$this->sep.$field.$this->sep.$this->taglist['href']];
         $tmpstr = $tmpstr==null?'':$tmpstr;
         $tUrl = "";
@@ -649,67 +650,68 @@ class GTbl extends WebApp{
 				if(strpos($tUrl,"THIS") > -1){
 					$tUrl = str_replace('THIS',$result[$field], $tUrl);	
 				}
+				$tUrl = $this->appendSid($tUrl);
 			}
 			else{
-            $file = $vArr[0];
-            if($file == 'THIS'){
-                $file = $result[$field];
-            }
-			else if(strpos($file, 'THIS') !== false){
-				$file = str_replace('THIS',$result[$field], $file); # <href>http://THIS::a=1::跳转登录::blank=1</href>
+                $file = $vArr[0];
+                if($file == 'THIS'){
+                    $file = $result[$field];
+                }
+    			else if(strpos($file, 'THIS') !== false){
+    				$file = str_replace('THIS',$result[$field], $file); # <href>http://THIS::a=1::跳转登录::blank=1</href>
+    			}
+                $pArr = explode(",", $vArr[1]);
+                $title = $vArr[2];
+                if($title == 'THIS'){
+                    $title = $result[$field];
+                }
+    			else if(strpos($title, 'THIS') !== false){
+    				$title = str_replace('THIS',$result[$field], $title);
+    			}  
+                foreach($pArr as $k=>$v){
+                    $para = explode("=", $v);
+                    $tUrl .= $para[0].'=';
+                    if(count($para) > 2){
+                        $para[1] = $para[1]."=".$para[2];
+                        $para[1] = str_replace("THIS", $result[$field], $para[1]);
+                    }
+                    if($para[1] == 'THIS'){
+                        $tUrl .= $result[$field];
+                    }else if(strpos($para[1],"THIS_") !== false){
+                        $tUrl .= $result[substr($para[1],5)];
+                        
+                    }else if(strpos($para[1],"'") === 0){
+                        $tUrl .= substr($para[1],1,strlen($para[1])-2);
+                    }else{
+                        $tUrl .= $result[$para[1]];
+                    }
+                    $tUrl .= "&";
+                }
+                $tUrl = $file."?".substr($tUrl, 0, strlen($tUrl)-1);
+                $fourthPara = $vArr[3];
+                if($fourthPara != ''){
+                    if(strpos($fourthPara,"confirm=1") !== false){
+                        $needJsConfirm = 1;
+                    }
+                    if(strpos($fourthPara,"blank=1") !== false){
+                        $needBlank = 1;
+                    } 
+                    else if(strpos($fourthPara,"blank=2") !== false){
+                        $needBlank = 2;
+                    } 
+                }
+                if($needJsConfirm == 1){
+                    $tUrl = "javascript:if(window.confirm('确认要执行此操作吗?')){document.location.href='".$tUrl."';}";
+                }
 			}
-            $pArr = explode(",", $vArr[1]);
-            $title = $vArr[2];
-            if($title == 'THIS'){
-                $title = $result[$field];
-            }
-			else if(strpos($title, 'THIS') !== false){
-				$title = str_replace('THIS',$result[$field], $title);
-			}  
-            foreach($pArr as $k=>$v){
-                $para = explode("=", $v);
-                $tUrl .= $para[0].'=';
-                if(count($para) > 2){
-                    $para[1] = $para[1]."=".$para[2];
-                    $para[1] = str_replace("THIS", $result[$field], $para[1]);
-                }
-                if($para[1] == 'THIS'){
-                    $tUrl .= $result[$field];
-                }else if(strpos($para[1],"THIS_") !== false){
-                    $tUrl .= $result[substr($para[1],5)];
-                    
-                }else if(strpos($para[1],"'") === 0){
-                    $tUrl .= substr($para[1],1,strlen($para[1])-2);
-                }else{
-                    $tUrl .= $result[$para[1]];
-                }
-                $tUrl .= "&";
-            }
-            $tUrl = $file."?".substr($tUrl, 0, strlen($tUrl)-1);
-            $fourthPara = $vArr[3];
-            if($fourthPara != ''){
-                if(strpos($fourthPara,"confirm=1") !== false){
-                    $needJsConfirm = 1;
-                }
-                if(strpos($fourthPara,"blank=1") !== false){
-                    $needBlank = 1;
-                } 
-                else if(strpos($fourthPara,"blank=2") !== false){
-                    $needBlank = 2;
-                } 
-            }
-            if($needJsConfirm == 1){
-                $tUrl = "javascript:if(window.confirm('确认要执行此操作吗?')){document.location.href='".$tUrl."';}";
-            }
-            if($needBlank == 1){
-                $needBlank = "_blank";
-            }
+			if($needBlank == 1){
+			    $needBlank = "_blank";
+			}
 			else if($needBlank == 2){
-                $needBlank = "_top";
+			    $needBlank = "_top";
 			}
 			else{
-                $needBlank = "_self";
-            }
+			    $needBlank = "_self";
 			}
             return array($tUrl, $title, $needBlank);
         }
@@ -1029,6 +1031,46 @@ class GTbl extends WebApp{
 	        $rtn = substr($rtn, 0, strlen($rtn)-1);
 	    }
 	    return $rtn;
+	}
+	
+	//-
+	//- fill sid
+	public function appendSid($url){
+	    // return $url
+	    $sidstr = self::SID.'='.$_REQUEST[self::SID];
+	    if(inString('?sid=', $url) || inString('&sid=', $url)){
+	        # good
+	    }
+	    else{
+	        if(startsWith($url, 'http')){
+	            # outside
+	        }
+	        else{
+	            $hasFilled = false;
+	            $fileArr = array('ido.php', 'jdo.php', './', 'index.php');
+	            foreach($fileArr as $k=>$v){
+	                if(inString($v.'?', $url)){
+	                    $url = str_replace($v.'?', $v.'?'.$sidstr.'&', $url);
+	                    $hasFilled = true;
+	                    break;
+	                }
+	                else if(inString($v, $url)){
+	                    $url = str_replace($v, $v.'?'.$sidstr, $url);
+	                    $hasFilled = true;
+	                    break;
+	                }
+	            }
+	            if(!$hasFilled){
+	                if(inString('?', $url)){
+	                    $url .= '&'.$sidstr;
+	                }
+	                else{
+	                    $url .= '?'.$sidstr;
+	                }
+	            }
+	        }
+	    }
+	    return $url;
 	}
 	
 }

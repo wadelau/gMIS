@@ -21,7 +21,6 @@ require(__ROOT__."/inc/session.class.php");
 require(__ROOT__."/inc/cachea.class.php");
 require(__ROOT__."/inc/filesystem.class.php");
 
-
 class WebApp implements WebAppInterface{
 	
 	//- variables
@@ -442,7 +441,7 @@ class WebApp implements WebAppInterface{
 		}
 		else{
 			#error_log('/inc/webapp.class.php: _setAll: failed for empty id.');
-			$this->set('er', 1);
+			$this->set(self::GWA2_ERR, 1);
 			return false;
 		}
 		$this->set(self::GWA2_ERR, 1);

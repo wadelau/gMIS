@@ -2,7 +2,6 @@
 # embeded in xml/hss_info_objectfieldtbl, write stat data when modifying
 # wadelau@ufqi.com,  Mon Jul  2 21:58:25 CST 2012
 
-
 if(1){
    
     $targettbl = '';
@@ -26,7 +25,9 @@ if(1){
         }else if(($_REQUEST['fieldtype'] == 'datetime' || $_REQUEST['fieldtype'] == 'date') && 
                 ($_REQUEST['defaultvalue'] == '' || $_REQUEST['defaultvalue'] == '0') ){
             $_REQUEST['defaultvalue'] = '0000-00-00 00:00:00';
-            $tmpsql = "update ".$_CONFIG['tblpre']."info_objectfieldtbl set defaultvalue='0000-00-00 00:00:00' where fieldname='".$_REQUEST['fieldname']."' and parentid='".$_REQUEST['parentid']."' limit 1";
+            $tmpsql = "update ".$_CONFIG['tblpre']
+                ."info_objectfieldtbl set defaultvalue='0000-00-00 00:00:00' where fieldname='"
+                .$_REQUEST['fieldname']."' and parentid='".$_REQUEST['parentid']."' limit 1";
             $gtbl->execBy($tmpsql, null);
         }
         $sql .= " not null default '".$_REQUEST['defaultvalue']."' ".$_REQUEST['otherset'];
@@ -38,7 +39,9 @@ if(1){
         }else if($_REQUEST['fieldtype'] == 'datetime' && 
                 ($_REQUEST['defaultvalue'] == '' || $_REQUEST['defaultvalue'] == '0') ){
             $_REQUEST['defaultvalue'] = '0000-00-00 00:00:00';
-            $tmpsql = "update ".$_CONFIG['tblpre']."info_objectfieldtbl set defaultvalue='0000-00-00 00:00:00' where fieldname='".$_REQUEST['fieldname']."' and parentid='".$_REQUEST['parentid']."' limit 1";
+            $tmpsql = "update ".$_CONFIG['tblpre']
+                ."info_objectfieldtbl set defaultvalue='0000-00-00 00:00:00' where fieldname='"
+                .$_REQUEST['fieldname']."' and parentid='".$_REQUEST['parentid']."' limit 1";
             $gtbl->execBy($tmpsql, null);
         }
         $sql .= " not null default '".$_REQUEST['defaultvalue']."' ".$_REQUEST['otherset'];

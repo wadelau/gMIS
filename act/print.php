@@ -52,11 +52,14 @@ if($printref != ''){
     foreach($refarr as $k=>$ref){
         $refdetail = explode(":",$refarr[$k]);
         $linkinfo = explode("=", $refdetail[1]); $rdnum = rand(0,9999);
-        $out .= "\n<span id=\"linkinfo_".$rdnum."\"></span><script type=\"text/javascript\"> doActionEx('./act/readfield.php?tbl=".$refdetail[0]."&pnsk".$linkinfo[0]."=".$hmorig[$linkinfo[1]]."&pnob".$linkinfo[0]."=1&fieldlist=".$refdetail[2]."&isheader=0&isoput=0','linkinfo_".$rdnum."');</script><br/>\n";
+        $out .= "\n<span id=\"linkinfo_".$rdnum."\"></span><script type=\"text/javascript\"> doActionEx('./act/readfield.php?tbl="
+                .$refdetail[0]."&pnsk".$linkinfo[0]."=".$hmorig[$linkinfo[1]]."&pnob".$linkinfo[0]."=1&fieldlist=".$refdetail[2]
+                ."&isheader=0&isoput=0','linkinfo_".$rdnum."');</script><br/>\n";
     }
 }
 $out .= "<table align=\"center\" width=\"800px\" border=\"0px\" class=\"printtbl\">";
-$out .= "\n<tr height=\"30\" valign=\"middle\"  onmouseover=\"javascript:this.style.backgroundColor='".$hlcolor."';\" onmouseout=\"javascript:this.style.backgroundColor='';\">";
+$out .= "\n<tr height=\"30\" valign=\"middle\"  onmouseover=\"javascript:this.style.backgroundColor='"
+        .$hlcolor."';\" onmouseout=\"javascript:this.style.backgroundColor='';\">";
 
 $lastclosed = 0; $tdi = 0; $skiptag = $_CONFIG['skiptag'];
 
@@ -77,7 +80,9 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
         $fieldv = $hmorig[$field] = $skiptag;
     }
     if($lastclosed == 1){
-		$out .= "\n<tr height=\"30\" valign=\"middle\"  onmouseover=\"javascript:this.style.backgroundColor='".$hlcolor."';\" onmouseout=\"javascript:this.style.backgroundColor='';\" idata=\"$i-$lastclosed\" fieldname=\"$field\">";
+		$out .= "\n<tr height=\"30\" valign=\"middle\"  onmouseover=\"javascript:this.style.backgroundColor='"
+		        .$hlcolor."';\" onmouseout=\"javascript:this.style.backgroundColor='';\" idata=\"$i-$lastclosed\""
+		        ." fieldname=\"$field\">";
 		$tdi = 0;
     }
 
@@ -87,7 +92,8 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
 		$tdi++;
     }
 	else if($fieldinputtype == 'select'){
-        $out .= "<td idata=\"$i\" fieldname=\"$field\">".$gtbl->getCHN($field).":&nbsp;</td><td> ".$gtbl->getSelectOption($field, $hmorig[$field],'',1, $gtbl->getSelectMultiple($field) )."</td>";
+        $out .= "<td idata=\"$i\" fieldname=\"$field\">".$gtbl->getCHN($field).":&nbsp;</td><td> "
+                .$gtbl->getSelectOption($field, $hmorig[$field],'',1, $gtbl->getSelectMultiple($field) )."</td>";
 		$tdi++;
     }
 	else if($gtbl->getFieldPrint($field) != ''){
@@ -110,8 +116,11 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
         if($lastclosed == 0){
             $out .= "</tr>\n<tr>";
         }
-        $out .= "<td width=\"20%\" nowrap>".$gtbl->getCHN($field).":</td><td colspan=\"".($form_cols)."\"><span id=\"linkinfo_".$rdnum."\"></span><script type=\"text/javascript\"> doActionEx('./act/readfield.php?tbl=".$refdetail[0]."&".$urlpart."&fieldlist=".$refdetail[2]."&isheader=0&isoput=0&mode=intbl','linkinfo_".$rdnum."');</script></td>\n";
-			$tdi++; $needcloserow = 1;
+        $out .= "<td width=\"20%\" nowrap>".$gtbl->getCHN($field).":</td><td colspan=\"".($form_cols)
+            ."\"><span id=\"linkinfo_".$rdnum."\"></span><script type=\"text/javascript\"> doActionEx('./act/readfield.php?tbl="
+            .$refdetail[0]."&".$urlpart."&fieldlist=".$refdetail[2]."&isheader=0&isoput=0&mode=intbl','linkinfo_"
+            .$rdnum."');</script></td>\n";
+		$tdi++; $needcloserow = 1;
     }
 	else{
 
@@ -158,7 +167,9 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
 
     if($hasclosed == 0 && ++$i % 2 == 0){ 
         $out .= "</tr>";
-        $out .= "\n<tr height=\"30\" valign=\"middle\"  onmouseover=\"javascript:this.style.backgroundColor='".$hlcolor."';\" onmouseout=\"javascript:this.style.backgroundColor='';\" idata=\"$i\" fieldname=\"$nextfield\">";
+        $out .= "\n<tr height=\"30\" valign=\"middle\"  onmouseover=\"javascript:this.style.backgroundColor='"
+                .$hlcolor."';\" onmouseout=\"javascript:this.style.backgroundColor='';\" idata=\"$i\" "
+                ."fieldname=\"$nextfield\">";
         $lastclosed = 0; $tdi = 0;
     }
 	else if($hasclosed == 1){

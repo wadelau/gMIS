@@ -122,8 +122,7 @@ function inString($needle, $haystack){
 }
 
 function mkUrl($file, $_REQU, $gtbl=null){
-    $url = $file."?";
-   
+    $url = $file.(inString('?', $file) ? '&' : '?');
     $needdata = array('id','tbl','db','oid','otbl','oldv','field','linkfield',
 		'linkfield2','tit','tblrotate');
 	if(isset($gtbl)){
@@ -136,12 +135,11 @@ function mkUrl($file, $_REQU, $gtbl=null){
             }
             $url .= $k."=".$v."&";
             #error_log(__FILE__.": $k=$v is detected.");
-
-        }else{
+        }
+        else{
             #error_log(__FILE__.": $k=$v is abandoned.");
         }
     }
-
     $url = substr($url, 0, strlen($url)-1);
     #print __FILE__.": url:[$url]\n"; 
     return $url;
@@ -382,34 +380,7 @@ function debug($obj, $tag='', $output=null){
 //- Tue, 6 Dec 2016 11:12:05 +0800
 function getIp() {
 	
-	$ip = '';
-	
-	if (@$_SERVER["REMOTE_ADDR"]){ $ip = $_SERVER["REMOTE_ADDR"]; }
-	elseif (@$_SERVER["HTTP_X_FORWARDED_FOR"]){ $ip = $_SERVER["HTTP_X_FORWARDED_FOR"]; }
-	else if (@$_SERVER["HTTP_CLIENT_IP"]){ $ip = $_SERVER["HTTP_CLIENT_IP"]; }
-	else if (@getenv( "HTTP_X_FORWARDED_FOR" )){ $ip = getenv( "HTTP_X_FORWARDED_FOR" ); }
-	else if (@getenv( "HTTP_CLIENT_IP" )){ $ip = getenv( "HTTP_CLIENT_IP" ); }
-	else if (@getenv( "REMOTE_ADDR" )){ $ip = getenv( "REMOTE_ADDR" ); }
-	else{ $ip = "Unknown";}
-
-	if (($ip == "Unknown" or $ip == "127.0.0.1" 
-			or strpos( $ip, "172.31." ) === 0) 
-		and @$_SERVER["HTTP_X_REAL_IP"]){
-		
-		$ip = $_SERVER["HTTP_X_REAL_IP"];
-	}
-	if (($ip == "Unknown" or $ip == "127.0.0.1" or strpos( $ip, "172.31." ) === 0) 
-			and @$_SERVER["HTTP_X_FORWARDED_FOR"]) {
-		
-		$ip = $_SERVER["HTTP_X_FORWARDED_FOR"];
-		if (($tmppos=strrpos($ip," "))>0){
-			$ip=substr($ip,$tmppos+1);
-		}
-		if (($tmppos=strrpos($ip,","))>0){
-			$ip=substr($ip,$tmppos+1);
-		}
-	}
-	
+	$ip = Wht::getIp();
 	return $ip;
 	
  }
@@ -424,30 +395,25 @@ function getIp() {
  
      # get input from src
      public static function get($src, $k = null, $defaultValue = null) {
-         // src=$_RQUEST, $_SERVER, $_COOKIE, $_SESSION, php://input, ...
+         // src=$_REQUEST, $_SERVER, $_COOKIE, $_SESSION, php://input, ...
          $rtn = '';
- 
          if (! $src) {
              $src = $_REQUEST;
          }
          if (! $k) {
              $k = 'all';
          }
- 
          if ($k == 'all') {
              $rtn = serialize ( $src );
          }
          else {
              $rtn = trim($src[$k]);
          }
- 
          if (!$rtn && $defaultValue != null) {
              $rtn = $defaultValue;
          }
- 
          $rtn = str_replace ( '<', '&lt;', $rtn );
          $rtn = str_replace ( '"', '&quot;', $rtn );
- 
          return $rtn;
  
      }
@@ -483,10 +449,8 @@ function getIp() {
      }
  
      //- client ip read
-     public static function getIp() {
- 
+     public static function getIp(){
          $ip = '';
- 
          if (@$_SERVER["REMOTE_ADDR"]){ $ip = $_SERVER["REMOTE_ADDR"]; }
          else if (@$_SERVER["HTTP_X_FORWARDED_FOR"]){ $ip = $_SERVER["HTTP_X_FORWARDED_FOR"]; }
          else if (@$_SERVER["HTTP_CLIENT_IP"]){ $ip = $_SERVER["HTTP_CLIENT_IP"]; }
@@ -494,7 +458,6 @@ function getIp() {
          else if (@getenv( "HTTP_CLIENT_IP" )){ $ip = getenv( "HTTP_CLIENT_IP" ); }
          else if (@getenv( "REMOTE_ADDR" )){ $ip = getenv( "REMOTE_ADDR" ); }
          else{ $ip = "Unknown";}
- 
          if (($ip == "Unknown" or $ip == "127.0.0.1"
                  or strpos( $ip, "172.31." ) === 0)
                  and @$_SERVER["HTTP_X_REAL_IP"]){
@@ -502,19 +465,16 @@ function getIp() {
                      $ip = $_SERVER["HTTP_X_REAL_IP"];
          }
          if (($ip == "Unknown" or $ip == "127.0.0.1" or strpos( $ip, "172.31." ) === 0)
-                 and @$_SERVER["HTTP_X_FORWARDED_FOR"]) {
-                     	
-                     $ip = $_SERVER["HTTP_X_FORWARDED_FOR"];
-                     if (($tmppos=strrpos($ip," "))>0){
-                         $ip=substr($ip,$tmppos+1);
-                     }
-                     if (($tmppos=strrpos($ip,","))>0){
-                         $ip=substr($ip,$tmppos+1);
-                     }
-                 }
- 
-                 return $ip;
- 
+                 and @$_SERVER["HTTP_X_FORWARDED_FOR"]) {  	
+             $ip = $_SERVER["HTTP_X_FORWARDED_FOR"];
+             if (($tmppos=strrpos($ip," "))>0){
+                 $ip=substr($ip,$tmppos+1);
+             }
+             if (($tmppos=strrpos($ip,","))>0){
+                 $ip=substr($ip,$tmppos+1);
+             }
+         }
+         return $ip;
      }
  
  }
