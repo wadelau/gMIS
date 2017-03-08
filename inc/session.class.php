@@ -26,6 +26,7 @@ class SESSIONX {
     var $Session_Private_Key = '';
     const Sign_Length = 12;
     const Ibase_16 = 16;
+	const Id_Sep = '|';
     var $plaindata = '';
     
  	//- construct
@@ -95,7 +96,7 @@ class SESSIONX {
 	    $sidlen = strlen($sid);
 	    $ibase = self::Ibase_16;
 	    $sid = ZeeA::base62xNenc(substr($origsid, 0, floor($sidlen/2)), $ibase);
-	    $sid .= '.'.ZeeA::base62xNenc(substr($origsid, floor($sidlen/2)), $ibase);
+	    $sid .= self::Id_Sep.ZeeA::base62xNenc(substr($origsid, floor($sidlen/2)), $ibase);
 	    $this->sid = $sid;
 	    #debug(__FILE__.": origsid:$origsid genSid-aft:$sid");
 	    return $this->sid;
@@ -121,7 +122,7 @@ class SESSIONX {
 	       #$hm = ZeeA::unzip($sid);
 	       #if($hm[0]){ $sid = $hm[1]; }
 	       $ibase = self::Ibase_16;
-	       $sidArr = explode('.', $mySid);
+	       $sidArr = explode(self::Id_Sep, $mySid);
 	       $sid = ZeeA::base62xNdec($sidArr[0], $ibase)
 	           .ZeeA::base62xNdec($sidArr[1], $ibase);
 	       #debug(__FILE__.": read cki-aft-decode sid:[$sid] from [$mySid]");
