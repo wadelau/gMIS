@@ -24,8 +24,9 @@ class SESSIONX {
     const Data_Sep = '';
     const Uid_Tag = 'ui';
     var $Session_Private_Key = '';
-    const Sign_Length = 12;
+    const Sign_Length = 19;
     const Ibase_16 = 16;
+    const Zip_Type = 'compress';
     var $plaindata = '';
     
  	//- construct
@@ -88,14 +89,10 @@ class SESSIONX {
 	    $data = $this->_getSignData($params);
 	    $md5sum = md5($data);
 	    $origsid = $sid = $params.$sep.$this->_md5Remdy($md5sum);
-	    #$hm = ZeeA::zip($sid);
-	    #if($hm[0]){ $sid = $hm[1]; }
-	    #$hm = ZeeA::encode($sid);
-	    #if($hm[0]){ $sid = $hm[1]; }
-	    $sidlen = strlen($sid);
-	    $ibase = self::Ibase_16;
-	    $sid = ZeeA::base62xNenc(substr($origsid, 0, floor($sidlen/2)), $ibase);
-	    $sid .= '.'.ZeeA::base62xNenc(substr($origsid, floor($sidlen/2)), $ibase);
+	    $hm = ZeeA::zip($sid, $args=array('ziptype'=>self::Zip_Type));
+	    if($hm[0]){ $sid = $hm[1]; }
+	    $hm = ZeeA::encode($sid);
+	    if($hm[0]){ $sid = $hm[1]; }
 	    $this->sid = $sid;
 	    #debug(__FILE__.": origsid:$origsid genSid-aft:$sid");
 	    return $this->sid;
@@ -111,21 +108,17 @@ class SESSIONX {
 	    $key = $this->Session_Private_Key;
 	    $slen = self::Sign_Length;
 	    $mySid = $this->getSid($reqt);
-	    if($mySid == null || $mySid == null){
+	    if($mySid == null || $mySid == ''){
 	        $rtn = false;
 	        $this->sid = '';
 	    }
 	    else{
-	       #$hm = ZeeA::decode($mySid);
-	       #if($hm[0]){ $sid = $hm[1]; }
-	       #$hm = ZeeA::unzip($sid);
-	       #if($hm[0]){ $sid = $hm[1]; }
-	       $ibase = self::Ibase_16;
-	       $sidArr = explode('.', $mySid);
-	       $sid = ZeeA::base62xNdec($sidArr[0], $ibase)
-	           .ZeeA::base62xNdec($sidArr[1], $ibase);
-	       #debug(__FILE__.": read cki-aft-decode sid:[$sid] from [$mySid]");
+	       $hm = ZeeA::decode($mySid);
+	       if($hm[0]){ $sid = $hm[1]; }
+	       $hm = ZeeA::unzip($sid, $args=array('ziptype'=>self::Zip_Type));
+	       if($hm[0]){ $sid = $hm[1]; }
 	       $params = substr($sid, 0, strlen($sid)-$slen);
+	       #debug(__FILE__.": read cki-aft-decode sid:[$sid] param:[$params] from [$mySid]");
 	       $data = $this->_getSignData($params);
 	       $md5sum = substr($sid, strlen($sid)-$slen);
 	       $md5sum2 = $this->_md5Remdy(md5($data));
@@ -159,8 +152,9 @@ class SESSIONX {
 	private function _getSignData($params){
 	    $sep = self::Data_Sep;
 	    $key = $this->Session_Private_Key;
-	    return $data=$params.$sep.Wht::getIp().$sep.$_SERVER['HTTP_USER_AGENT']
+	    $data = $params.$sep.Wht::getIp().$sep.$_SERVER['HTTP_USER_AGENT']
 	       .$sep.$key.$sep.date("Y-m-d", time());
+	    return $data;
 	    
 	}
 	

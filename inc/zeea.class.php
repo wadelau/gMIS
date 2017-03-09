@@ -63,7 +63,7 @@ class ZeeA {
 			$ns = gzdeflate($str);
 		}
 		else if($ztype == self::Type_Compress){
-			$ns = gzuncompress($str);
+			$ns = gzcompress($str);
 		}
 		else{
 			$ns = false;
@@ -75,6 +75,7 @@ class ZeeA {
 		else{
 			$rtn = array(false, $str);
 		}
+        #debug(__FILE__.": zip: osize:[".strlen($str)."] nsize:[".strlen($ns)."]");
 		return $rtn;
 	}
 	
@@ -111,6 +112,9 @@ class ZeeA {
 	                }
 	            }
 	        }
+            if(isset($args['ziptype'])){
+				$ztype = strtolower($args['ziptype']);
+			}
 	    }
 	    $ztype = $ztype=='' ? self::Type_Gzip : $ztype;
 	    $ns = '';
@@ -166,6 +170,7 @@ class ZeeA {
 		else{
 			$rtn = array(false, $str);
 		}
+        #debug(__FILE__.": encode: osize:[".strlen($str)."] nsize:[".strlen($ns)."]");
 		return $rtn;
 	}
 	
@@ -225,6 +230,7 @@ class ZeeA {
 	    return $rtn;
 	}
 	
+	//-
 	//-
 	public static function base62xNdec($str, $base){
 	    $rtn = '';
