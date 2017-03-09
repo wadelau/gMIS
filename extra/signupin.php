@@ -42,7 +42,7 @@ else if($act == 'dosignin'){
                 .($d=substr(date('YmdHi', time()-date('Z')),0,11))
                 ), 1, 4); # same as comm/imagex
     }
-    if($islan || ($verifycode != '' && $verifycode == $_CONFIG['verifycode'])){
+    if($islan || ($verifycode != '' && $verifycode == $verifycode2)){
          # verified bgn
     $user->set('email',$_REQUEST['email']);
     $user->set('password',$_REQUEST['password']);
