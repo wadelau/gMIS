@@ -54,7 +54,9 @@ else if($act == 'dosignin'){
             $user->setId($hm['id']); 
             $_CONFIG[UID] = $user->getId();
             $userid = $_CONFIG[UID];
-            $sid = $user->getSid($_REQUEST);
+            $sid = $user->getSid($_REQUEST); 
+            # issue a valid ticket for this session
+            # based on user, time, ip, browser and so on.
             $ckirtn = setcookie($name=$user->get('sid_tag'), $value=$sid);
             $result .= '<br/><br/>很好! 登录成功！ 欢迎回来, '.$user->getEmail()." !";
 			$bkl = Base62x::decode($_REQUEST['bkl']);
