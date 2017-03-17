@@ -155,6 +155,4 @@ function cidr_match($ip, $range){
 
 require("../comm/footer.inc.php");
 
-#print $out; # disabled after Smarty since Tue Feb 14 22:52:20 CST 2012
-
 ?>

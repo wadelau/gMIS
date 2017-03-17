@@ -24,7 +24,7 @@ $is_debug = $_CONFIG['is_debug'];
 if($is_debug){
 	header("Cache-Control: no-store, no-cache, must-revalidate");
 	header("Expires: Thu, 01 Jan 1970 00:00:00 GMT");
-	error_reporting(E_ALL ^ E_NOTICE);
+	error_reporting(E_ALL & ~E_NOTICE & ~E_WARNING);
 	error_reporting(-1);
 	ini_set('error_reporting', E_ALL ^ E_NOTICE);
 	ini_set("display_errors", 1);

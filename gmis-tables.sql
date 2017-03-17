@@ -52,7 +52,7 @@ CREATE TABLE `gmis_fin_todotbl` (
   `inserttime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `operator` char(32) NOT NULL DEFAULT '',
   `state` tinyint(1) NOT NULL DEFAULT '1',
-  `taskmemo` char(255) NOT NULL DEFAULT '',
+  `taskmemo` varchar(2048) NOT NULL DEFAULT '',
   `taskfile` char(255) NOT NULL DEFAULT '',
   `updatetime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`)

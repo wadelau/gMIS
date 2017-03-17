@@ -141,7 +141,7 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
 
         }else{
             $out .= "<td>".$gtbl->getCHN($field).":</td><td><textarea id=\"".$field."\" name=\""
-                    .$field."\" rows=\"5\" cols=\"30\"  class=\"search\">".$hmorig[$field]."</textarea> <br/> "
+                    .$field."\" rows=\"11\" cols=\"35\"  class=\"search\">".$hmorig[$field]."</textarea> <br/> "
                     .$gtbl->getMemo($field)." </td>";
         }
 

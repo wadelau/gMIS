@@ -7,11 +7,19 @@ if($isoput){
 	$out .= "</body></html>";
 }
 
-$data['agentname'] = $_CONFIG['agentname'];
-$data['appchnname'] = $_CONFIG['appchnname'];
-$data['appname'] = $_CONFIG['appname'];
-$data['front_page'] = $_CONFIG['frontpage'];
-$data['adminmail'] = $_CONFIG['adminmail'];
+if($fmt == ''){# default html
+    $data['agentname'] = $_CONFIG['agentname'];
+    $data['appchnname'] = $_CONFIG['appchnname'];
+    $data['appname'] = $_CONFIG['appname'];
+    $data['front_page'] = $_CONFIG['frontpage'];
+    $data['adminmail'] = $_CONFIG['adminmail'];
+}
+
+# content output
+$isOB = 0; $enableZip = true;
+if($enableZip && ob_start('ob_gzhandler')){ $isOB = 1; }
+else if($enableZip && ob_start()){ $isOB = 1; }
+
 if($smttpl != ''){
 	$data['url'] = $url;
 	$data['isdebug'] = $is_debug;
@@ -34,14 +42,20 @@ else{
         print $out;
     }
     else if($fmt == 'json'){
-        print json_encode($data['respobj']);    
+        if(isset($data['respobj'])){
+            $out=json_encode($data['respobj']);
+        }
+        else{
+            $out=json_encode($data);
+        }
+        print $out;
     }
     else{
         debug($fmt, "unknown_fmt"); 
     }
 }
 
-#error_log(__FILE__.": out:[".$out."]");
+if($isOB){ ob_end_flush(); }
 
 # write log
 include($appdir."/act/writelog.php");

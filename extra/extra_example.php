@@ -12,14 +12,15 @@ include("../comm/tblconf.php");
 
 # main actions
 
+$out = 'my output content...';
 
+# or
 
-print $out;
+$data['respobj'] = array('output'=>'content');
 
-$out = "";
+# without html header and/or html footer
 $isoput = false;
 
 require("../comm/footer.inc.php");
-
 
 ?>

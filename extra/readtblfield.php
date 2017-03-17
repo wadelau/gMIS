@@ -3,13 +3,10 @@
 # Sun Mar 11 15:44:20 CST 2012
 
 require("../comm/header.inc.php");
-#require("../class/gtbl.class.php");
 
 $thefield = $_REQUEST['field'];
 $url = $_SERVER['PHP_SELF']."?bkl=".$_REQUEST['bkl'];
 $logicid = $_REQUEST['logicid'];
-
-#print_r($_REQUEST);
 
 $out = "";
 
@@ -78,22 +75,21 @@ else if($logicid == 'tblname'){ # info_objectfieldtbl, remedy Thu, 8 Dec 2016 19
     if($hm[0]){
         $hm = $hm[1];
     }
-    $out = json_encode(array('thefield'=>''.$thefield, 'result_list'=>$hm, 'dispfield'=>$logicid));
+    $data['respobj'] = json_encode(array('thefield'=>''.$thefield, 'result_list'=>$hm, 'dispfield'=>$logicid));
+    $fmt = $_REQUEST['fmt'] = 'json';
 }
 else if($logicid != ''){
     $hm = $gtbl->getBy("id,$logicid", "parentid='".$objectid."'");
 	if($hm[0]){
         $hm = $hm[1];
 	}
-	$out = json_encode(array('thefield'=>''.$thefield, 'result_list'=>$hm, 'dispfield'=>$logicid));
+	$data['respobj'] = json_encode(array('thefield'=>''.$thefield, 'result_list'=>$hm, 'dispfield'=>$logicid));
+	$fmt = $_REQUEST['fmt'] = 'json';
 }
 else{
 	$out .= "Unknown logicid:[$logicid]. [1512081131]";
 }
 
-print $out;
-
-$out = "";
 $isoput = false;
 
 require("../comm/footer.inc.php");

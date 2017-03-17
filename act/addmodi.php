@@ -87,7 +87,8 @@ for($hmi=$min_idx; $hmi<=$max_idx;$hmi++){
         $hmorig[$field] = '';
     }
     if($closedtr == 1){
-        $out .= "<tr height=\"30px\" valign=\"middle\"  onmouseover=\"javascript:this.style.backgroundColor='".$hlcolor."';\" onmouseout=\"javascript:this.style.backgroundColor='';\">";
+        $out .= "<tr height=\"30px\" valign=\"middle\"  onmouseover=\"javascript:this.style.backgroundColor='"
+             .$hlcolor."';\" onmouseout=\"javascript:this.style.backgroundColor='';\">";
         $closedtr = 0; $opentr = 1;
     }
     
@@ -145,20 +146,21 @@ for($hmi=$min_idx; $hmi<=$max_idx;$hmi++){
             	$out .= "</tr>\n<tr>";	
             }
             $out .= "<td style=\"vertical-align:top\"><b>".$gtbl->getCHN($field)."</b>:</td><td colspan=\""
-	    	.($form_cols)."\">
-                <div id='".$field."_myeditordiv' style='width:680px;height:450px;display:none'></div>
-                <div id='".$field."_mytextdiv' style='width:680px;height:450px;display:block'>
-                <textarea id=\"".$field."\" name=\"".$field."\" rows=\"5\" cols=\"65\"  class=\"search\""
-		." onclick=\"javascript:openEditor('".$rtvdir."/extra/htmleditor.php?field=".$field."', '"
-		.$field."'); parent.switchArea('".$field."_myeditordiv','on'); parent.switchArea('"
-		.$field."_mytextdiv','off');\">".$hmorig[$field]."</textarea> </div><br/> "
-		.$tmpmemo." </td></tr><tr>";
+	    	      .($form_cols)."\">
+                        <div id='".$field."_myeditordiv' style='width:680px;height:450px;display:none'></div>
+                        <div id='".$field."_mytextdiv' style='width:680px;height:450px;display:block'>
+                        <textarea id=\"".$field."\" name=\"".$field."\" rows=\"11\" cols=\"85\"  class=\"search\""
+            		." onclick=\"javascript:openEditor('".$rtvdir."/extra/htmleditor.php?field=".$field."', '"
+            		.$field."'); parent.switchArea('".$field."_myeditordiv','on'); parent.switchArea('"
+            		.$field."_mytextdiv','off');\">".$hmorig[$field]."</textarea> </div><br/> "
+            		.$tmpmemo." </td></tr><tr>";
             $out .= '';
             $opentr = 1;
 
         }else{
             $out .= "<td><b>".$gtbl->getCHN($field)."</b>:</td><td><textarea id=\"".$field."\" name=\""
-	    	.$field."\" rows=\"5\" cols=\"30\"  class=\"search\">".$hmorig[$field]."</textarea> <br/> "
+	    	.$field."\" rows=\"11\" cols=\"35\" ".$gtbl->getJsAction($field).$gtbl->getAccept($field)." "
+                .$gtbl->getReadOnly($field)." class=\"search\">".$hmorig[$field]."</textarea> <br/> "
 		.$gtbl->getMemo($field)." </td>";
         }
 

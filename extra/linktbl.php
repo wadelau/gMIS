@@ -55,9 +55,6 @@ $out .= "</td></tr>";
 
 $out .= "</table>";
 
-
 require("../comm/footer.inc.php");
-
-print $out;
 
 ?>
