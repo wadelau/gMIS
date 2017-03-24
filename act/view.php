@@ -140,7 +140,7 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
             $out .= '';
 
         }else{
-            $out .= "<td>".$gtbl->getCHN($field).":</td><td><textarea id=\"".$field."\" name=\""
+            $out .= "<td style=\"vertical-align:top\">".$gtbl->getCHN($field).":</td><td><textarea id=\"".$field."\" name=\""
                     .$field."\" rows=\"11\" cols=\"35\"  class=\"search\">".$hmorig[$field]."</textarea> <br/> "
                     .$gtbl->getMemo($field)." </td>";
         }
@@ -164,10 +164,10 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
         }
 
         if($gtbl->getSingleRow($field) == 1){
-            $out .= "</tr><tr> <td style=\"vertical-align:top\">".$gtbl->getCHN($field).":</td> ";
+            $out .= "</tr><tr> <td style=\"vertical-align:top\"><b>".$gtbl->getCHN($field)."<b>:</td> ";
             $out .= "<td colspan=\"".($form_cols-1)."\" class=\"tdiviewfixedwidth\"> ".$tmpval."  </td></tr><tr>";
         }else{
-            $out .= "<td >".$gtbl->getCHN($field).":&nbsp;</td><td class=\"tdiviewfixedwidth\" "
+            $out .= "<td><b>".$gtbl->getCHN($field)."</b>:&nbsp;</td><td class=\"tdiviewfixedwidth\" "
                     ."style=\"word-wrap:break-word;white-space:normal;word-break:break-all;width:22%;\"> "
                     .$tmpval." </td>";
         }

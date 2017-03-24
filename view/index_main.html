@@ -115,7 +115,7 @@ body {
 					 {if $navidir_list[$k]['modulename'] == ''}
 					 <a href="{$url}&navidir={$navidir_list[$k]['levelcode']}">
 					 {else}
-					 <a href="{$ido}&tbl={$navidir_list[$k]['modulename']}">
+					 <a href="{$ido}&tbl={$navidir_list[$k]['modulename']}&db={$navidir_list[$k]['thedb']}">
 					 {/if}
 					 <div class="left{(($k -1) % 4)+1}">
 					 	<span style="size:14px; font-weight:bold;">{$mi+1}.{$navidir_list[$k]['linkname']}</span>

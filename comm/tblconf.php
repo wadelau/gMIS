@@ -28,7 +28,7 @@ if($hm[0]){
             $field = strtolower($field);
         }
         else if(strtolower($field) == 'name' || strtolower($field) == 'type'){
-            print __FILE__.": field:[".$field."] in tbl:[".$tbl
+            $out .= __FILE__.": field:[".$field."] in tbl:[".$tbl
 				."]. It's bad idea to name a field as 'name' or 'type'. plz change it to xxxname or namexxx.\n";
         }
         $hmfield[$field] = $fieldv;

@@ -123,7 +123,7 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
             }
 
         }else{
-            $fieldv = trim($_REQUEST[$field]);
+            $fieldv = trim(Wht::get($_REQUEST, $field));
 			if($fieldv == ''){
 				$fieldv = $hmfield[$field."_default"];
 					if($fieldv == ''){

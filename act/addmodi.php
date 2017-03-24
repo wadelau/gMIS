@@ -158,7 +158,7 @@ for($hmi=$min_idx; $hmi<=$max_idx;$hmi++){
             $opentr = 1;
 
         }else{
-            $out .= "<td><b>".$gtbl->getCHN($field)."</b>:</td><td><textarea id=\"".$field."\" name=\""
+            $out .= "<td style=\"vertical-align:top\"><b>".$gtbl->getCHN($field)."</b>:</td><td><textarea id=\"".$field."\" name=\""
 	    	.$field."\" rows=\"11\" cols=\"35\" ".$gtbl->getJsAction($field).$gtbl->getAccept($field)." "
                 .$gtbl->getReadOnly($field)." class=\"search\">".$hmorig[$field]."</textarea> <br/> "
 		.$gtbl->getMemo($field)." </td>";
