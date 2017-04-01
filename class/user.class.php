@@ -300,8 +300,10 @@ class User extends WebApp{
         $hm = $this->getBy('*', '1=1',  $withCache=array('key'=>'user-get-list'));
         if($hm[0]){
             $hm = $hm[1];
+            if(is_array($hm)){
             foreach ($hm as $k=>$v){
                 $list[$v['id']] = $v;
+            }
             }
         }
         return $list;

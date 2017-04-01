@@ -398,11 +398,13 @@ class WebApp implements WebAppInterface{
 	        #debug($tmphm);
 	        if($tmphm[0]){
 	            $infoarr = $tmphm[1][0];
+	            if(is_array($infoarr)){
 	            foreach($infoarr as $k => $v){
 	                $this->hmf[$k] = $v;
 	                if($field == $k){
 	                    $isinclude = 1;
 	                }
+	            }
 	            }
 	            if($field != '' && $isinclude == 0){
 	                $hm->hmf[$field] = '';
@@ -485,7 +487,10 @@ class WebApp implements WebAppInterface{
         $obj = '';
         if($type == 'cache:'){
             //- cache service
-            $obj = $this->cachea->get($args['key']);
+            $obj = array(0=>true);
+            if($this->cachea != null){
+                $obj = $this->cachea->get($args['key']);
+            }
             if(!$obj[0]){
                 $obj = array(true, $obj[1]);
             }
@@ -643,6 +648,8 @@ class WebApp implements WebAppInterface{
         $obj = null;
         if($type == 'cache:'){
             //- cache service
+            $obj = array(0=>true);
+            if($this->cachea != null){
             if(is_null($args['value'])){
                 $obj = $this->cachea->rm($args['key']);
             }
@@ -656,6 +663,7 @@ class WebApp implements WebAppInterface{
                 }
                 #debug(__FILE__.": writeObject: type:[$type] args:[".$this->toString($args)."] cache result:");
                 #debug($obj);
+            }
             }
             if(!$obj[0]){
                 $obj = array(true, $obj[1]);

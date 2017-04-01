@@ -135,7 +135,7 @@ if($act == 'pivot-do'){
         foreach ($grpArrDisp as $gk=>$gv){
             $out .= "<td>".$gtbl->getCHN($gk)."</td>";
         }
-        foreach ($hm[1] as $vk=>$vv){
+        foreach ($hm[0] as $vk=>$vv){
             if($vk == '1'){ continue; }
             else if(isset($grpArrDisp[$vk])){ continue; }
             else{
@@ -179,7 +179,7 @@ if($act == 'pivot-do'){
         $grpArrLen = count($grpArrDisp);
         foreach ($dispSort as $dk=>$dv){ #
             $dv = $dispArr[$dk];
-            $out .= "<tr><td> &nbsp;".($rowi++)."</td>";
+            $out .= "<tr><td> &nbsp;".(++$rowi)."</td>";
             $dkArr = explode("\t", $dk);
             array_pop($dkArr);
             foreach ($dkArr as $dkk=>$dkv){

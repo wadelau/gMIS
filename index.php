@@ -11,7 +11,8 @@ $gtbl = new WebApp();
 $module_list = ""; $hm_module_order = array();  $hm_module_name = array(); $hm_todo_list = array();
 
 $hm = $gtbl->execBy($sql="select * from ".$_CONFIG['tblpre']."fin_todotbl where (togroup in (" # for multiple groups
-        .$user->getGroup().") or touser=".$user->getId().") and state in (1,2) order by state desc, id desc limit 6 ", null,
+        .$user->getGroup().") or touser=".$user->getId()." or triggerbyparent in (".$user->getGroup().") or triggerbyparentid="
+        .$user->getId().") and state in (1,2) order by state desc, id desc limit 6 ", null,
 		$withCache=array('key'=>'info_todo-select-'.$user->getId()));
 if($hm[0]){
     $hm = $hm[1];
@@ -28,9 +29,11 @@ $hm = $gtbl->execBy("select count(parenttype) as modulecount, parenttype from "
 	$withCache=array('key'=>'fin_operatelog-select-'.$mycachedate));
 if($hm[0]){
 	$hm = $hm[1];
+	if(is_array($hm)){
 	foreach($hm as $k=>$v){
 		$module_list .= "'".$v['parenttype']."',";
 		$hm_module_order[$k] = $v['parenttype']; 
+	}
 	}
 	$module_list = substr($module_list, 0, strlen($module_list)-1);
 	$hm = $gtbl->execBY("select objname,tblname from "
@@ -38,8 +41,10 @@ if($hm[0]){
 		$withCache=array('key'=>'info_object-select-'.$module_list));
 	if($hm[0]){
 		$hm = $hm[1];
+		if(is_array($hm)){
 		foreach($hm as $k=>$v){
 			$hm_module_name[$v['tblname']] = $v['objname'];
+		}
 		}
 	}
 }

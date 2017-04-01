@@ -143,7 +143,7 @@ if($isoput){
     }
 
     if($isheader){
-        if(array_key_exists(UID,$_SESSION) && $_SESSION[UID] != ''){
+        if($userid != ''){
             $welcomemsg .= "Welcome, ";
             $welcomemsg .= "<a href='".$rtvdir."/ido.php?tbl=info_usertbl&id=".$userid
                 ."&act=view' class='whitelink'>";

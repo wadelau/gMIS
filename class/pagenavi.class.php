@@ -21,7 +21,7 @@ class PageNavi extends WebApp{
 
        #$this->dba = new DBA(); # added by wadelau@ufqi.com, Wed Jul 11 14:31:52 CST 2012
 
-	   parent::_construct($args);
+	   parent::__construct($args);
 	   
        $file = $_SERVER['PHP_SELF'];
        $query = $_SERVER['QUERY_STRING'];

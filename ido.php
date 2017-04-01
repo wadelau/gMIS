@@ -43,9 +43,9 @@ if($hm[0]){
 	$levelcode = $hm[1][0]['levelcode'];
 	$codelist = substr($levelcode,0,2)."','".substr($levelcode,0,4)."','"
 	        .substr($levelcode,0,6)."','".substr($levelcode,0,8); # max 4 levels allowed
-	$hm = $gtbl->execBy("select levelcode, linkname, modulename,thedb from ".$_CONFIG['tblpre']."info_menulist where levelcode in ('"
-		.$codelist."') order by levelcode", null,
-		$withCache=array('key'=>'info_menulist-select-level-'.$codelist));
+	$hm = $gtbl->execBy("select levelcode, linkname, modulename,thedb from ".$_CONFIG['tblpre']
+	        ."info_menulist where levelcode in ('".$codelist."') order by levelcode", null,
+		  $withCache=array('key'=>'info_menulist-select-level-'.$codelist));
 	if($hm[0]){
 		$hm = $hm[1]; $lastLinkName = ''; #print_r($hm); 
 		foreach($hm as $k=>$v){
@@ -66,7 +66,7 @@ if($lastLinkName != $tit){ $module_path .= "&nbsp;|&nbsp;".$tit; }
 $jdo = mkUrl($jdo, $_REQUEST, $gtbl); # ".($isheader?"</h3>":"")." 
 
 $out .= "<table align=\"center\" width=\"98%\"  style=\"background:transparent\">";
-$out .= "<tr><td width=\"40%\" ".($isheader?"class=\"f17px\"":"").">  <b> &Pi; <a href=\"./\">首页</a> "
+$out .= "<tr><td width=\"40%\" ".($isheader?"class=\"f17px\"":"").">  <b> &Pi; <a href=\"".$url."\">首页</a> "
         ."<span class=\"f17px\">&rarr;</span> ".$module_path." </b> </td>";
 
 $out .= "<td style=\"text-align:left\" colspan=\"18\">

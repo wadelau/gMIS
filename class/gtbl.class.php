@@ -74,9 +74,9 @@ class GTbl extends WebApp{
 		//$this->dba = new DBA(); # see parent::__construct() below.
 		$mydb = $hmconf['mydb'];
 		$db = $hmconf['db'];
-	    $args = array('dbconf'=>$db);
+		$args = array('dbconf'=>($db==GConf::get('maindb')?'':$db));
 	    parent::__construct($args);
-	    $this->$mydb = $mydb;
+	    $this->mydb = $mydb==null?GConf::get('maindb'):$mydb;;
 	    # restore db after gMIS init.
 	    $reqdb = $_REQUEST['db'];
 	    if($reqdb != $mydb){
@@ -948,6 +948,7 @@ class GTbl extends WebApp{
 			$withCache=array('key'=>$tbl."-simillar")); # just prefix
 		if($hm[0]){
 			$tmpv = '';
+			if(is_array($hm[1])){
 			foreach($hm[1] as $rk=>$rv){
 				foreach($rv as $vk=> $vv){
 				    if(!$hasTblpre && startsWith($vv, $tblpre)){
@@ -963,6 +964,7 @@ class GTbl extends WebApp{
 				        break;
 				    }
 				}
+			}
 			}
 			if($tmpv != ''){
 			    $realtbl = $tmpv;

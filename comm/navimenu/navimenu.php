@@ -21,9 +21,11 @@ if($hm[0]){
     $hm = $hm[1];
     $hmkeys = array();
     $hmkeysbylen = array("2"=>array(),"4"=>array(),"6"=>array(),"8"=>array());
+    if(is_array($hm)){
     foreach($hm as $k=>$v){
         $hmkeys[$hm[$k]['levelcode']] = $hm[$k]; # use levelcode 作为key
         $hmkeysbylen[strlen($hm[$k]['levelcode'])][] = $hm[$k]['levelcode']; # 按levelcode的长度划分menu等级
+    }
     }
     #print_r($hmkeys);
     #print_r($hmkeysbylen);
