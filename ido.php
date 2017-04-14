@@ -74,6 +74,31 @@ $out .= "<td style=\"text-align:left\" colspan=\"18\">
 
 $refArr = $gtbl->getRelatedRef($jdo."&act=list"); # related ref, added on Thu Apr 12 18:54:43 CST 2012
 #print_r($refArr);
+$maxRelatedCount = 6;
+if(count($refArr) > 0){
+    # specified related modules
+    $maxRelatedCount = 3;
+}
+if(true){ # auto
+    $hm = $gtbl->execBy($sql="select linkname, modulename, levelcode, thedb from ".$_CONFIG['tblpre']."info_menulist "
+            ."where levelcode like '".substr($levelcode, 0, strlen($levelcode)-2)."__' "
+            ."and levelcode<>'$levelcode' order by levelcode limit ".$maxRelatedCount, null,
+            $withCache=array('key'=>'info_menulist-select-level-'.$levelcode));
+    #debug($sql);
+    if($hm[0]){
+        $hm = $hm[1]; $tmphref = '';
+        foreach($hm as $k=>$v){
+            if($v['modulename'] != ''){
+                $tmphref = $ido."&tbl=".$v['modulename']."&db=".$v['thedb'];
+            }
+            else{
+                $tmphref = $url."&navidir=".$v['levelcode'];
+            }
+            $refArr[] = array('target'=>"window.location.href='".$tmphref."';",
+                    'name'=>$v['linkname'], 'href'=>'JS');
+        }
+    }
+}
 if(count($refArr) > 0){
     foreach($refArr as $k=>$v){
         $tmphref = $v['href'];
@@ -137,7 +162,35 @@ $out .= "<!--bottom line-->";
 $out .= "<table align=\"center\" width=\"98%\"  style=\"background:transparent\"> <tr><td width=\"25%\" colspan=\"4\"> <b>"
         ."  &Pi; <a href=\"./\">首页</a> <span style=\"font-size:17px\">&rarr;</span> ".$module_path." </b> &nbsp; </td>";
 $out .= "<td style=\"text-align:left;margin-right:58px\" colspan=\"15\"> &nbsp;  <button onclick=\"javascript:doActionEx('"
-        .$jdo."&act=add','contentarea');\">新增</button>  &nbsp;&nbsp; <button id=\"refrehbtn2\" name=\"refreshbtn2\" "
+        .$jdo."&act=add','contentarea');\">新增</button>  ";
+# repeat related menu, Wed, 12 Apr 2017 21:34:24 +0800
+if(count($refArr) > 0){
+    foreach($refArr as $k=>$v){
+        $tmphref = $v['href'];
+        $isjs = 0;
+        if($tmphref == 'JS'){
+            $tmphref = $v['target'];
+            $isjs = 1;
+        }
+        if($isjs==0 && strpos($tmphref,"sid=") === false){
+            if(strpos($tmphref,"?") === false){
+                $tmphref .= "?";
+            }
+            else{
+                $tmphref .= "&";
+            }
+            $tmphref .= SID."=".$sid;
+        }
+        if($isjs == 0){
+            $out .= "&nbsp; <button onclick=\"javascript:doActionEx('".$tmphref."','".($v['target']==''?'contentarea':$v['target'])
+            ."');\">".$v['name']."</button>";
+        }else{
+            $out .= "&nbsp; <button onclick=\"javascript:".$tmphref."\">".$v['name']."</button>";
+        }
+    }
+}
+        
+$out .= "&nbsp;&nbsp; <button id=\"refrehbtn2\" name=\"refreshbtn2\" "
         ."onclick=\"javascript:window.location.reload();\" title=\"刷新\">刷新</button>  &nbsp;&nbsp;&nbsp; </td> </tr></table>\n";
 
 $out_footer = "<hr width=\"1\"/> &nbsp;&nbsp;&nbsp;<span id=\"noticediv\" style=\"color:green;\"> </span>";
