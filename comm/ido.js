@@ -1217,7 +1217,7 @@ function showPivotList(nId, isOn, sUrl, sName){
 	divObj.onmouseover = function(){ this.style.display='block'; };
 	divObj.onmouseout = function(){ this.style.display='none'; };
 
-	var sCont = '<p> &nbsp; <b>'+nId+'. '+sName+'</b>: ';
+	var sCont = '<p> &nbsp; <b style="color:red;">'+nId+'. '+sName+'</b>: ';
 	var opList = {'addgroupby':'組項列', 'addgroupbyymd':'組項列Ymd', 'addgroupbyother':'組項列Other(?)', 
 			'__SEPRTa':1,
 			'addvaluebysum':'值列Sum', 
