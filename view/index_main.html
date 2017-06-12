@@ -135,7 +135,8 @@ body {
 			<b title="(工作、任务列表)">WT. 工作表 Work-Todo</b><br/>
 			<div id="tododiv" class="wrapperlog">
 			<table style="border:0px; background:transparent;">
-				<tr style="font-weight: bold;"><td>序号</td><td>事项/任务</td><td>状态</td><td>需求方</td><td>供应方</td><td>更新时间</td></tr>
+				<tr style="font-weight: bold;"><td>序号</td><td>事项/任务</td><td>状态</td><td>需求方</td><td>供应方</td>
+					<td>更新时间</td></tr>
 				{foreach $todo_list as $k=>$v}
 				<tr>
 				<td>{$v['id']}.</td>
@@ -203,12 +204,20 @@ body {
 			<td colspan="10">
 			<b title="(操作、管理日志)">OL. 操作日志 Operation-Log</b><br/>
 			<div id="oplogdiv" class="wrapperlog">
-			<pre><b>时间					用户/Id						执行操作					作用对象/Id</b>
-<pre>{foreach $log_list as $k=>$v}
-{$v['inserttime']}		{$v['useremail']}/{$v['userid']}		{$v['actionstr']}		<a href="{$ido}&tbl={$v['parenttype']}">{$v['parenttype']}/{$v['parentid']}</a>
-{/foreach}</pre>
-			<a href="{$ido}&tbl=fin_operatelogtbl">更多...</a>
-			</div>	
+			<table style="border:0px; background:transparent;">
+				<tr style="font-weight: bold;"><td>时间</td><td>用户/Id</td><td>对象/Id</td><td>操作</td></tr>
+				{foreach $log_list as $k=>$v}
+				<tr>
+				<td>{$v['inserttime']}</td>
+				<td><a>{$v['useremail']}/{$v['userid']}</a></td>
+				<td><a href="{$ido}&tbl={$v['parenttype']}">{$v['parenttype']}/{$v['parentid']}</a></td>
+				<td>{$v['actionstr']}</td>
+				</tr>
+				{/foreach}
+				<tr><td style="white-space:nowrap;"><a href="{$ido}&tbl=fin_operatelogtbl">更多...
+					</a></td></tr>
+			</table>
+			</div>
 			</td>
 		</tr>
 
@@ -244,9 +253,10 @@ body {
 		</script>
 		<b><i>ii</i></b>. 系统已上线 <a href="{$url}"><script type="text/javascript">
 			diff=diffInYearsAndDays('{$start_date}',(new Date())); document.write(''+diff[0]+' 年 '+diff[1]
-			+' 天');</script></a> , 目前共 <a href="{$ido}&tbl=info_usertbl"><b>{$user_count}</b></a> 位用户，
+			+' 天');</script></a> , 系统共 <a href="{$ido}&tbl=info_usertbl"><b>{$user_count}</b></a> 位用户，
 			管理着<a href="{$ido}&tbl=info_objecttbl"><b> {$module_count}  </b></a>个功能模块.  
 			系统上次更新: <a href='#-gmis' target='_blank'>{$system_lastmodify}</a> . 
+			目前登录用户 <a>{$logged_user_count}</a> 位. 
 		</td></tr>
 
 		<tr><td><b><i>HM</i></b>. <a href="{$front_page}" target="_blank">打开主站</a></td></tr>

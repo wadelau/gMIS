@@ -23,9 +23,11 @@ if($hm[0]){
 $data['todo_state'] = array('0'=>'已完成', '1'=>'待做', '2'=>'进行中', '3'=>'擱置', '4'=>'取消');
 $data['user_list'] = $user->getUserList();
 
+$mycachedate=date("Y-m-d", time()-(86400*60));
 $hm = $gtbl->execBy("select count(parenttype) as modulecount, parenttype from "
         .$_CONFIG['tblpre']."fin_operatelogtbl where inserttime > '"
-        .date("Y-m-d", time()-(86400*60))." 00:00:00' group by parenttype order by modulecount desc limit 8", null,
+        .$mycachedate." 00:00:00' and parenttype not in ('gmis_info_usertbl', 'gmis_fin_todotbl')"
+        ." group by parenttype order by modulecount desc limit 8", null,
 	$withCache=array('key'=>'fin_operatelog-select-'.$mycachedate));
 if($hm[0]){
 	$hm = $hm[1];
@@ -104,8 +106,23 @@ if($fp){
 	$mtime = $fstat['mtime'];
 	$data['system_lastmodify'] = date("Y-m-d", $mtime);
 }
-
 $data['start_date'] = $_CONFIG['start_date'];
+
+# today's users count
+$logged_user_count = 1;
+$mycachedate=date("Y-m-d", time()-(86400*1));
+$hm = $gtbl->execBy("select count(userid) as usercount from "
+        .$_CONFIG['tblpre']."fin_operatelogtbl where inserttime >= '"
+        .$mycachedate." 00:00:00'" #
+        ." group by userid limit 1", null,
+        $withCache=array('key'=>'fin_operatelog-select-usercount-'.$mycachedate));
+if($hm[0]){
+    debug($hm);
+    $hm = $hm[1][0];
+    $logged_user_count = $hm['usercount'];
+}
+$data['logged_user_count'] = $logged_user_count;
+
 $data['module_list_order'] = $hm_module_order;
 $data['module_list_name'] = $hm_module_name;
 $data['todo_list'] = $hm_todo_list;
