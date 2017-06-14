@@ -59,8 +59,8 @@ if($hm[0]){
 	$data['module_list_byuser'] = $hm; #Todo add2desktop by user 
 }
 else{
-    $hm = $gtbl->execBy("select objname,tblname from ".$_CONFIG['tblpre']."info_objecttbl order by rand() limit 4", null,
-		$withCache=array('key'=>'info_object-select-desktop-rand'));
+    $hm = $gtbl->execBy("select objname,tblname from ".$_CONFIG['tblpre']."info_objecttbl order by rand() limit 4", 
+            null, $withCache=array('key'=>'info_object-select-desktop-rand'));
     if($hm[0]){
         $hm = $hm[1];
         $data['module_list_byuser'] = $hm;
@@ -80,8 +80,8 @@ if($hm[0]){
 	$data['user_count'] = $hm[0]['usercount'];
 }
 
-$hm = $gtbl->execBy("select * from ".$_CONFIG['tblpre']."fin_operatelogtbl order by ".$gtbl->getMyId()." desc limit 6", null,
-	$withCache=array('key'=>'info_user-select-count'));
+$hm = $gtbl->execBy("select * from ".$_CONFIG['tblpre']."fin_operatelogtbl order by ".$gtbl->getMyId()." desc limit 6", 
+        null, $withCache=array('key'=>'info_user-select-count'));
 if($hm[0]){
 	$hm = $hm[1];
 	$data['log_list'] = $hm;
@@ -90,8 +90,9 @@ if($hm[0]){
 # dir list, added by wadelau@ufqi.com, Sat Mar 12 12:45:24 CST 2016
 $navidir = $_REQUEST['navidir'];
 if($navidir != ''){
-	$hm = $gtbl->execBy("select * from ".$_CONFIG['tblpre']."info_menulist where levelcode='".$navidir."' or levelcode like '"
-		.$navidir."__'  order by levelcode", null, $withCache=array('key'=>'info_menulist-select-by-level-'.$navidir));
+	$hm = $gtbl->execBy("select * from ".$_CONFIG['tblpre']."info_menulist where levelcode='".$navidir
+	        ."' or levelcode like '".$navidir."__'  order by levelcode", null, 
+	        $withCache=array('key'=>'info_menulist-select-by-level-'.$navidir));
 	if($hm[0]){
 		$hm = $hm[1];
 		$data['navidir_list'] = $hm;
@@ -111,15 +112,15 @@ $data['start_date'] = $_CONFIG['start_date'];
 # today's users count
 $logged_user_count = 1;
 $mycachedate=date("Y-m-d", time()-(86400*1));
-$hm = $gtbl->execBy("select count(userid) as usercount from "
+$hm = $gtbl->execBy("select userid from "
         .$_CONFIG['tblpre']."fin_operatelogtbl where inserttime >= '"
         .$mycachedate." 00:00:00'" #
-        ." group by userid limit 1", null,
-        $withCache=array('key'=>'fin_operatelog-select-usercount-'.$mycachedate));
+        ." group by userid", null,
+        $withCache=array('key'=>'fin_operatelog-select-usercount-'.$user->getId().'-'.$mycachedate));
 if($hm[0]){
-    debug($hm);
-    $hm = $hm[1][0];
-    $logged_user_count = $hm['usercount'];
+    #debug($hm);
+    $hm = $hm[1];
+    $logged_user_count = cunt($hm);
 }
 $data['logged_user_count'] = $logged_user_count;
 
