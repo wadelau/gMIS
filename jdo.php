@@ -12,7 +12,7 @@ require("./comm/tblconf.php");
 require("./act/tblcheck.php");
 
 $jdo = mkUrl($jdo, $_REQUEST, $gtbl);
-$list_disp_limit = 28;
+$list_disp_limit = 38;
 
 # act handler
 if(startsWith($act,'add') || startsWith($act, "modify")){

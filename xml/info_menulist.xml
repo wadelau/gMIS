@@ -18,6 +18,7 @@
 
         <field name="modulename" type="text">
             <chnname>模块名字</chnname>
+			<memo>扩展功能模块 不填写此项</memo>
         </field>
         
 		<field name="dynamicpara">
@@ -32,14 +33,6 @@
 			<chnname>数据</chnname>
         </field>
 		
-		<field name="zhaopin" type="text">
-			<chnname>人才招聘</chnname>
-        </field>
-		
-		<field name="xiazai" type="text">
-			<chnname>下载专区</chnname>
-        </field>
-
 		<field name="inserttime" type="text">
             <chnname>创建时间</chnname>
 		</field>

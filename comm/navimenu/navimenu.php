@@ -42,9 +42,15 @@ if($hm[0]){
                 if(strpos($v1,$li) === 0){
                     $linfo = $hmkeys[$v1];
                     #$dynamicmenu .= 'level2- v1:'.$v1.", \n";
-                    if($linfo['modulename'] == ''){
-                        $dynamicmenu .= '<li><a href="'.$url.'&navidir='.$linfo['levelcode'].'" class="sub">'.$linfo['linkname'].'</a>'
-                                ."<ul>\n<!--LEVEL-3--></ul>\n</li>\n";
+                    if($linfo['modulename'] == '' && $linfo['dynamicpara'] == ''){
+                        $dynamicmenu .= '<li><a href="'.$url.'&navidir='.$linfo['levelcode'].'" class="sub">'
+                                   .$linfo['linkname'].'</a>'."<ul>\n<!--LEVEL-3--></ul>\n</li>\n";
+                    }
+                    else if($linfo['modulename'] == '' && $linfo['dynamicpara'] != ''){
+                        if($linfo['disptitle'] == ''){ $linfo['disptitle'] = $linfo['linkname'];}
+                        $dynamicmenu .= '<li><a href="'.$rtvdir.'/'.$linfo['dynamicpara'].'&tbl='.$tbl.'&tit='.$linfo['disptitle']
+                            .'&db='.$linfo['thedb'].'&sid='.$sid.'&isheader=1&levelcode='.$linfo['levelcode'].'">'
+                                    .$linfo['linkname'].'</a></li>'."\n";
                     }
 					else{
 						if($linfo['disptitle'] == ''){ $linfo['disptitle'] = $linfo['linkname'];}
@@ -58,9 +64,15 @@ if($hm[0]){
                         if(strpos($v2, $v1) === 0){
                             $linfo = $hmkeys[$v2];
                             #$lv3 .= "\tlevel3-v2:".$v2.", v1:$v1, \n";
-                            if($linfo['modulename'] == ''){
-                                $lv3 .= '<li><a href="javascript:void(0);" class="sub">'.$linfo['linkname']
-                                    .'</a>'."<ul>\n<!--LEVEL-4--></ul>\n</li>\n";
+                            if($linfo['modulename'] == '' && $linfo['dynamicpara'] == ''){
+                                $lv3 .= '<li><a href="javascript:void(0);" class="sub">'.$linfo['linkname'].'</a>'
+                                        ."<ul>\n<!--LEVEL-4--></ul>\n</li>\n";
+                            }
+                            else if($linfo['modulename'] == '' && $linfo['dynamicpara'] != ''){
+                                if($linfo['disptitle'] == ''){ $linfo['disptitle'] = $linfo['linkname'];}
+                                $lv3 .= '<li><a href="'.$rtvdir.'/'.$linfo['dynamicpara'].'&tbl='.$tbl.'&tit='.$linfo['disptitle']
+                                    .'&db='.$linfo['thedb'].'&sid='.$sid.'&isheader=1&levelcode='.$linfo['levelcode'].'">'
+                                            .$linfo['linkname'].'</a></li>'."\n";
                             }
 							else{
 								if($linfo['disptitle'] == ''){ $linfo['disptitle'] = $linfo['linkname'];}
@@ -99,7 +111,7 @@ if($hm[0]){
      <ul class="menu" id="menu"> 
      <li> 
 	 
-        <a href="'.$url.'" class="menulink"><img src="./img/my-desktop.png" alt="my desktop"  style="vertical-align:middle;height:12px" /> 我的桌面</a>
+        <a href="'.$url.'" class="menulink"><img src="$rtvdir/img/my-desktop.png" alt="my desktop"  style="vertical-align:middle;height:12px" /> 我的桌面</a>
             <ul> 
                 <li><a href="'.$ido.'&tbl=fin_todotbl&tit=待处理事项&db=&pnsktouser='.$userid.'&pnsm=1&pnskstate=1&pnsktogroup='
                         .$user->getGroup().'&pnsc='.$pnscTodo.'&pnsck='.$pnsckTodo.'">待处理事项</a></li> 
@@ -115,7 +127,7 @@ if($hm[0]){
 	'.$dynamicmenu.'
 	    
      <li><a href="'.$url.'&navidir=99" orighref="javascript:void(0);" class="menulink">'
-        .'<img src="./img/my-setting.png" style="vertical-align:middle;height:16px" alt="Settings" /> 系统设置</a> 
+        .'<img src="$rtvdir/img/my-setting.png" style="vertical-align:middle;height:16px" alt="Settings" /> 系统设置</a> 
      <ul> 
         <li><a href="'.$ido.'&tbl=info_usertbl&tit=&db=">用户信息</a></li> 
         <li><a href="'.$ido.'&tbl=info_grouptbl&tit=&db=">用户组设置</a></li> 
