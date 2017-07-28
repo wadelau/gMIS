@@ -18,6 +18,10 @@ $out = 'my output content...';
 
 $data['respobj'] = array('output'=>'content');
 
+# module path
+$module_path = '';
+include_once($appdir."/comm/modulepath.inc.php");
+
 # without html header and/or html footer
 $isoput = false;
 
