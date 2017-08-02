@@ -9,6 +9,7 @@
 //- with ido_proj.js , 10:37 Sunday, January 10, 2016
 //- wrap iId as string, 09:03 09 October 2016
 //- imprvs on searchbytime, Thu, 2 Mar 2017 16:32:06 +0800
+//- bugfix on firefox with event, 23:34 02 August 2017
 //-
 var currenttbl = '';
 var currentdb = '';
@@ -263,7 +264,7 @@ function isNumber(n){
 	return !isNaN(parseFloat(n)) && isFinite(n);
 }
 //- added Wed Apr  4 19:57:23 CST 2012
-function x_calcuTbl(theform, targetx,f){
+function x_calcuTbl(theform, targetx, f){
     var id = theform.id;
     if(typeof id != 'string'){
         id = theform.name;
@@ -711,23 +712,19 @@ function updateTag(tagtype,tagid,str){
 }
 
 
-function checkAll()
-{
+function checkAll(){
 	var boxValue="";
-	for(var i=0;i<document.all.checkboxid.length;i++)
-	{
+	for(var i=0;i<document.all.checkboxid.length;i++){
 	    document.all.checkboxid[i].checked   =   true;
-		  boxValue= boxValue +document.all.checkboxid[i].value+",";
+		boxValue= boxValue +document.all.checkboxid[i].value+",";
 	}
 	window.clipboardData.setData('text',boxValue);
 	window.alert("something wrong. 03061743.");
 }
 
-function uncheckAll()
-{
+function uncheckAll(){
 	var box1="";
-	for(var i=0;i<document.all.checkboxid.length;i++)
-	{
+	for(var i=0;i<document.all.checkboxid.length;i++){
 		if(document.all.checkboxid[i].checked == false)
 		{
 			 document.all.checkboxid[i].checked   =   true;
@@ -743,41 +740,30 @@ function uncheckAll()
 }
 
 
-function batchDelete(url,checkboxid)
-{
+function batchDelete(url,checkboxid){
 	var box="";
-	for(var i=0;i<document.all.checkboxid.length;i++)
-	{
-		if(document.all.checkboxid[i].checked == true)
-		{
+	for(var i=0;i<document.all.checkboxid.length;i++){
+		if(document.all.checkboxid[i].checked == true){
 	    	box = box+document.all.checkboxid[i].value+",";
 		}
 	}
 	var url1 = url+"&checkboxid="+box;
-	if(box=="")
-	{
-		if(document.all.copyid.value=="??")
-		{
+	if(box==""){
+		if(document.all.copyid.value=="??"){
 		    alert("something wrong. 03061745.");
 		}
-		else
-		{
+		else{
 		    alert("something wrong. 03061746.");
 		}
 	}
-	else
-	{
-		if(document.all.copyid.value=="??")
-		{
-			if(confirm("are you sure:"+box))
-			{
+	else{
+		if(document.all.copyid.value=="??"){
+			if(confirm("are you sure:"+box)){
 			    doAction(url1);
 			}
 		}
-		else if(document.all.copyid.value=="??")
-		{
-			if(confirm("are you sure:"+box))
-			{
+		else if(document.all.copyid.value=="??"){
+			if(confirm("are you sure:"+box)){
 				doAction(url1);
 			}
 		}
@@ -785,11 +771,22 @@ function batchDelete(url,checkboxid)
 }
 
 function WdatePicker(){
-    
-    var obj = getElementByEvent(event);
+    var evt;
+    if(navigator.userAgent.toLowerCase().indexOf('firefox/') > -1){ // firefox
+            var evtarg = arguments[0];
+            if(!evtarg){
+                console.log('firefox has no global event, please invoke as \"WdatePicker(event);\" .201708022320.'); 
+            }
+            evt = window.event ? window.event : evtarg;
+    }
+    else{
+        evt = window.event ? window.event : event;
+    }
+    //var obj = getElementByEvent(event);
+	var obj = getElementByEvent(evt);
     obj = document.getElementById(obj); 
     //window.alert('obj.id:['+obj.id+'] this.name:['+obj.name+']');
-    if(obj.id != null){
+    if(obj && obj.id != null){
         var newId = (obj.id).replace(new RegExp('-','gm'), '_');
         var myDatePicker = new DatePicker('_tmp'+newId,{
             inputId: obj.id,
@@ -891,22 +888,29 @@ var DatePicker = function () {
     return init;
 }();
 
-function getElementByEvent(e)
-{
+//-  getElementByEvent works well with MS Edge && Google Chrome, but uncertain with Mozilla Firefox
+//- remedy by Xenxin@Ufqi on 23:42 02 August 2017
+function getElementByEvent(e){
     var targ;
-    if (!e){ var e = window.event; }
-    if (e.target){ targ = e.target;}
-    else if (e.srcElement){ targ = e.srcElement };
+	var evt = e;
+    if (!evt){ evt = window.event; }
+    if (evt && evt.target){ targ = evt.target;}
+    else if (evt && evt.srcElement){ targ = evt.srcElement };
     
-    if (targ.nodeType == 3){ // defeat Safari bug
+    if (targ && targ.nodeType == 3){ // defeat Safari bug
         targ = targ.parentNode
     }
     //window.alert('targ:['+targ+']');
     var tId;
-    tId=targ.id;
-    if(tId == null || tId == '' || tId == undefined){
-        tId = targ.name;
-    }
+	if(targ){
+		tId=targ.id;
+		if(tId == null || tId == '' || tId == undefined){
+			tId = targ.name;
+		}
+	}
+	else{
+		console.log('getElementByEvent failed. ev:['+ev+'] e:['+e+'] targ:['+targ+']');
+	}
     //window.alert('targ:['+targ+'] id:['+tId+']');
     return tId;
 }
