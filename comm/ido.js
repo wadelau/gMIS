@@ -559,7 +559,17 @@ function registerAct(tObj){
         //window.alert('delaytime:['+tObj.delaytime+']');
 		var actx = unescape(tObj.action);
 		actx = actx.replace('+', ' '); //- need to be replaced with -Base62x, 09:14 24 September 2016
-        window.setTimeout(actx, tObj.delaytime*1000);
+         var actxId = 0; 
+        if(!userinfo.registerAct){
+        	userinfo.registerAct = {};
+        }
+        actxId = userinfo.registerAct[tObj.action];
+        if(actxId){
+        	window.clearTimeout(actxId);
+        }
+        actxId = window.setTimeout(actx, tObj.delaytime*1000);
+        userinfo.registerActId[tObj.action] = actxId;
+        console.log('register.action:['+unescape(tObj.action)+'] actx:['+actx+'] axtxId:['+actxId+']');
     }
 }
 //-- register an action to be run in a few seconds, end
@@ -1407,3 +1417,28 @@ function appendSid(urlx){
 	return urlx;
 }
 
+//- user agent detection
+//- 19:00 03 August 2017
+//- @todo
+userinfo.userAgent = {};
+(function(container){
+	var env = container==null ? window : container;
+	var ua = navigator.userAgent.toLowerCase();
+	env.isChrome = false; env.isIE = false; env.isEdge = false; 
+	env.isFirefox = false; env.isOpera = false;
+	if(ua.indexOf('chrome/') > -1 || ua.indexOf('chromium/') > -1){ env.isChrome = true; }
+	else if(ua.indexOf('firefox/') > -1){ env.isFirefox = true; }
+	else if(ua.indexOf('edge/') > -1){ env.isEdge = true; }
+	else if(ua.indexOf('msie ') > -1){ env.isIE = true; }
+	else if(ua.indexOf('opr/') > -1 || ua.indexOf('opera/') > -1){ env.isOpera = true; }
+	else{
+		console.log('Unknown ua:['+ua+']');
+	}
+	var isLog = true;
+	if(isLog){
+    	Object.keys(env).forEach(function(k){
+    		console.log('ua k:'+k+', v:'+env[k]);
+    	});
+	}
+	return container = env;
+})(userinfo.userAgent);

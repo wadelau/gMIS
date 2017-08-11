@@ -1,4 +1,13 @@
 
+
+####
+
+-gMIS updated @ 18:47 04 August 2017
+
+gmis/act/pivot.php         | 69 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++----------
+gmis/comm/gMISPivotDraw.js | 45 +++++++++++++++++++++++++++++++++++++++++++++
+gmis/comm/skin.css         |  2 +-
+
 ####
 
 -gMIS updated @ 16:48 17 June 2016

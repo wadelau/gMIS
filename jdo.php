@@ -77,6 +77,25 @@ else if(startsWith($act, "list")){
     	.$jdo."&act=deepsearch', 'contentarea');\" title=\"深度复合查询\">深  搜</button>"
     	."&nbsp;&nbsp;<button name='deepsearch' onclick=\"javascript:doActionEx('"
     	.$jdo."&act=pivot&pntc=".$navi->get('totalcount')."', 'contentarea');\" title=\"数据透视分析\">透  视</button>";
+	if(true){
+        $iswatch = Wht::get($_REQUEST, 'pnwatch');
+        $watchInterval = 60; #  seconds
+        $watchAct = "doActionEx(\'".$jdo."&act=list&pnwatch=1\', \'actarea\')";
+        $out .= "&nbsp;&nbsp;&nbsp;<button name='watchbtn' title='觀察模式' onclick=\"javascript:parent.doActionEx('"
+                .$jdo."&act=list&pnwatch=".($iswatch==1?'0':'1')."', 'actarea');\">"
+                .($iswatch==1?'觀察中...':'觀  察')."</button>";
+        if($iswatch == 1){
+            # parent.doActionEx('".$jdo."&act=list&pnwatch=1', 'actarea');
+            $out .= "<script type=\"text/javascript\">parent.registerAct({'status':'onload', "
+                    ."'action':escape('$watchAct'),"
+                    ." 'delaytime':$watchInterval});</script>";
+        }
+        else if(isset($_REQUEST['pnwatch'])){
+            $out .= "<script type=\"text/javascript\">"
+                    ."var timerId=parent.window.setTimeout(function(){}, 1);timerId--;"
+                    ."while(timerId--){console.log('timerId:'+timerId);parent.window.clearTimeout(timerId);}</script>";
+        }
+    }
     $out .= "&nbsp;<div style=\"float:right;\"><button name=\"searchor\" onclick=\"javascript:searchBy('"
     	.$jdo."&act=list&pnsm=or');\" title=\"满足其中一个条件即可\">或搜</button>&nbsp;&nbsp;&nbsp;"
     	."<button name=\"searchand\" onclick=\"javascript:searchBy('"

@@ -128,10 +128,14 @@ function mkUrl($file, $_REQU, $gtbl=null){
 	if(isset($gtbl)){
         $needdata[] = $gtbl->getMyId();
     }
+	$ki = 0;
     foreach($_REQU as $k=>$v){
         if(in_array($k, $needdata) || startsWith($k,'pn') || startsWith($k, "oppn")){
             if($k == 'oldv'){
                 $v = substr($v,0,32); # why? Sun Mar 18 20:40:59 CST 2012
+            }
+			else if(inString('&'.$k, $url)){
+                $url = str_replace('&'.$k, '&o'.$k.$ki, $url);
             }
             $url .= $k."=".$v."&";
             #error_log(__FILE__.": $k=$v is detected.");
@@ -139,6 +143,7 @@ function mkUrl($file, $_REQU, $gtbl=null){
         else{
             #error_log(__FILE__.": $k=$v is abandoned.");
         }
+		$ki++;
     }
     $url = substr($url, 0, strlen($url)-1);
     #print __FILE__.": url:[$url]\n"; 
@@ -459,12 +464,17 @@ function getIp() {
          else if (@getenv( "REMOTE_ADDR" )){ $ip = getenv( "REMOTE_ADDR" ); }
          else{ $ip = "Unknown";}
          if (($ip == "Unknown" or $ip == "127.0.0.1"
-                 or strpos( $ip, "172.31." ) === 0)
+                 or strpos( $ip, "192.168." ) === 0
+                 or strpos( $ip, "172.31." ) === 0
+                 or strpos( $ip, "10." ) === 0)
                  and @$_SERVER["HTTP_X_REAL_IP"]){
                      	
                      $ip = $_SERVER["HTTP_X_REAL_IP"];
          }
-         if (($ip == "Unknown" or $ip == "127.0.0.1" or strpos( $ip, "172.31." ) === 0)
+         if (($ip == "Unknown" or $ip == "127.0.0.1" 
+                 or strpos( $ip, "192.168." ) === 0
+                 or strpos( $ip, "172.31." ) === 0
+                 or strpos( $ip, "10." ) === 0)
                  and @$_SERVER["HTTP_X_FORWARDED_FOR"]) {  	
              $ip = $_SERVER["HTTP_X_FORWARDED_FOR"];
              if (($tmppos=strrpos($ip," "))>0){

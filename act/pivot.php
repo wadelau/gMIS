@@ -123,26 +123,34 @@ if($act == 'pivot-do'){
         $hm = $hm[1];
         # table headers
         $out .= "<b>透視數據繪圖</b><br/>";
-        $out .= "<table id=\"pivot_resultset_g\" style=\"border:1px solid black; width:96%; margin-left:auto; margin-right:auto;\">";
+        $out .= "<div id=\"pivot_resultset_g\">"
+                ."<table id=\"pivot_resultset_gtbl\" style=\"border:1px solid black; width:96%; margin-left:auto; margin-right:auto;\">"
+                ."";
         $out .= "<tr><td colspan=\"3\"></td></tr>";
         $out .= "<tr><td colspan=\"30\" style=\"text-align:center\">...Graphic...</td></tr>";
-        $out .= "</table>";
+        $out .= "<tr><td colspan=\"30\" style=\"text-align:center\">"
+                ."</td></tr>";
+        $out .= "</table></div>";
         $out .= "<br/><b>透視數據列表</b>";
         $out .= "<table id=\"pivot_resultset\" style=\"border:1px solid black; width:96%; margin-left:auto; margin-right:auto;\""
-                ." class=\"pivot_resultset\">";
+                ." class=\"pivot_resultset_cls\" name=\"pivot_resultset\">";
         $out .= "<tr><td colspan=\"3\"></td></tr>";
         $out .= "<tr style=\"font-weight:bold;\"><td> &nbsp;No.</td>";
+        $colsCount = 1;
         foreach ($grpArrDisp as $gk=>$gv){
             $out .= "<td>".$gtbl->getCHN($gk)."</td>";
+            $colsCount++;
         }
         foreach ($hm[0] as $vk=>$vv){
             if($vk == '1'){ continue; }
             else if(isset($grpArrDisp[$vk])){ continue; }
             else{
                 $out .= "<td>".$gtbl->getCHN($vk)."</td>";
+                $colsCount++;
             }
         }
-        $out .= "</tr>";
+        $colsPerRow = $colsCount;
+        $out .= "</tr><tr><td colspan='".$colsPerRow."'><hr/></td></tr>";
         # resort data
         $dispArr = array();
         $dispSort = array();
@@ -173,8 +181,8 @@ if($act == 'pivot-do'){
         #print_r($dispArr);
         #debug(__FILE__.": dispSort:".$gtbl->toString($dispSort));
         # display
-        $colsum = array(); $colsumuniq = array();
-        $rowi = 0;
+        $colsum = array(); $colsumuniq = array(); $colStat = array();
+        $rowi = 0; $fullki = 0;
         asort($dispSort, SORT_STRING); # sort by string and keep hash index
         $grpArrLen = count($grpArrDisp);
         foreach ($dispSort as $dk=>$dv){ #
@@ -187,29 +195,88 @@ if($act == 'pivot-do'){
                 if(!isset($colsumuniq[$dkk][$dkv])){
                     $colsum[$dkk]++;
                     $colsumuniq[$dkk][$dkv] = 1;
+                    $colStat[$dkk]['max'] = '-';
+                    $colStat[$dkk]['min'] = '-';
                 }
             }
             $isFullKey = true;
             $arrLenBala = $grpArrLen - count($dkArr);
             for($dki=0; $dki<$arrLenBala; $dki++){
-                $out .= "<td style='background-color:silver;'>ALL</td>";
+                $out .= "<td style='background-color:silver;' id='allcol'>ALL</td>";
                 $isFullKey = false;
             }
             foreach ($calArrDisp as $ck=>$cv){
-                $out .= "<td>".sprintf("%.3f", $dispArr[$dk][$ck])."</td>";
+                $tmpv = $dispArr[$dk][$ck];
+                $out .= "<td>".sprintf("%.3f", $tmpv)."</td>";
                 if($isFullKey){
-                    $colsum[$ck] += $dispArr[$dk][$ck];
+                    $colsum[$ck] += $tmpv;
+                    $hasMin = true;
+                    if(!isset($colStat[$ck]['min'])){
+                        $colStat[$ck]['min'] = $tmpv;
+                        $hasMin = false;
+                    }
+                    if($tmpv > $colStat[$ck]['max']){ $colStat[$ck]['max'] = $tmpv; }
+                    else if($hasMin && $tmpv < $colStat[$ck]['min']){ $colStat[$ck]['min'] = $tmpv;}
                 }
             }
+            if($isFullKey){ $fullki++; }
             $out .= "</tr>";
         }
-        $out .= "<tr style=\"font-weight:bold;\"><td>GrandTotal</td>";
+        $out .= "<tr><td colspan='".$colsPerRow."'><hr/></td></tr>";
+        $out .= "<tr style=\"font-weight:bold;\" id=\"totalrow\"><td>GrandTotal</td>";
         foreach ($colsum as $sk=>$sv){
             $out .= "<td>".sprintf("%.3f", $sv)."</td>";
         }
         $out .= "</tr>";
+        $out .= "<tr style=\"font-weight:bold;\" id=\"avgrow\"><td>Average.of</td>";
+        foreach ($colsum as $sk=>$sv){
+            if(isset($calArrDisp[$sk])){
+                $out .= "<td>".sprintf("%.3f", $sv/$fullki)."</td>";
+            }
+            else{
+                $out .= "<td> - </td>";
+            }
+        }
+        $out .= "</tr>";
+        $out .= "<tr style=\"font-weight:bold;\" id=\"maxrow\"><td>Max.of</td>";
+        foreach ($colStat as $sk=>$sv){
+            if(isset($calArrDisp[$sk])){
+                $out .= "<td>".sprintf("%.3f", $sv['max'])."</td>";
+            }
+            else{
+                $out .= "<td> - </td>";
+            }
+        }
+        $out .= "</tr>";
+        $out .= "<tr style=\"font-weight:bold;\" id=\"minrow\"><td>Min.of</td>";
+        foreach ($colStat as $sk=>$sv){
+            if(isset($calArrDisp[$sk])){
+                $out .= "<td>".sprintf("%.3f", $sv['min'])."</td>";
+            }
+            else{
+                $out .= "<td> - </td>";
+            }
+        }
         $out .= "<tr><td colspan=\"3\"></td></tr>";
         $out .= "</table>";
+        $out .= "<script type=\"text/javascript\" src=\"$rtvdir/comm/gMISPivotDraw.js\"></script>"
+            ."<script type=\"text/javascript\">window.setTimeout(gMISPivotDraw('pivot_resultset', '"
+                    .json_encode($calArrDisp)."', '".json_encode($grpArrDisp)."','"
+                    .json_encode($colsum)."', '".json_encode($colStat)."', 'pivot_resultset_g'), 3*1000);</script>";
+        $out .= "<style>
+                .gmis_pivot_draw_tbl tr:hover{
+	               background-color: #afc4e2; }
+                .spanbar{
+                    background-color:#0FF;
+                    border-width:1px;
+                    overflow:hidden;
+                    display:inline-block;
+                    border-color:#0f0;
+                    border-style:solid;
+                    align:justify; }
+                .pivot_resultset_cls tr:hover{
+	               background-color: #afc4e2; }
+                </style>";
     }
     else{
         $out .= "No Data for query:[$sql]. 1612061412.";
@@ -217,7 +284,8 @@ if($act == 'pivot-do'){
 }
 else{
 
-    # form 
+# form 
+# reset old?
 
 $out .= "<fieldset style=\"border-color:#5f8ac5;border: 1px solid #5f8ac5;\"><legend><h4>數據透視當前數據集("
         .number_format($_REQUEST['pntc']).")</h4></legend>"
@@ -310,13 +378,13 @@ $out .= "</td></tr>";
 $firstFieldChn = $gtbl->getCHN($firstField);
 $secondFieldChn = $gtbl->getCHN($secondField);
 $out .= "<tr>"
-    ."<td width='34%'><fieldset><legend title='目標數據表分組項'>分組項列</legend>"
-    ."<span id='span_groupby'>"
-    .$firstFieldChn."($firstField) addgroupby   <a href=\"javascript:void(0);\" onclick=\"javascript:doPivotSelect('$firstField', "
-    ."'1', 'addgroupby', 0, '".$firstFieldChn."');\" title=\"Remove\"> X(Rm) </a>   <a href=\"javascript:void(0);\" onclick=\"javascript:doPivotSelect('"
-    .$firstField."', '1', 'addorderby', 1, '".$firstFieldChn."');\" title=\"Order\"> ↿⇂(Od) </a><br>"
-    ."</span><input type='hidden' name='groupby' id='groupby' value=',".$firstField."::addgroupby'/>"
-    ."</fieldset></td>";
+        ."<td width='34%'><fieldset><legend title='目標數據表分組項'>分組項列</legend>"
+        ."<span id='span_groupby'>"
+        .$firstFieldChn."($firstField) addgroupby   <a href=\"javascript:void(0);\" onclick=\"javascript:doPivotSelect('$firstField', "
+        ."'1', 'addgroupby', 0, '".$firstFieldChn."');\" title=\"Remove\"> X(Rm) </a>   <a href=\"javascript:void(0);\" onclick=\"javascript:doPivotSelect('"
+        .$firstField."', '1', 'addorderby', 1, '".$firstFieldChn."');\" title=\"Order\"> ↿⇂(Od) </a><br>"
+        ."</span><input type='hidden' name='groupby' id='groupby' value=',".$firstField."::addgroupby'/>"
+        ."</fieldset></td>";
 $out .= "<td width='33%'><fieldset><legend title='目標數據表計算項'>求值項列</legend>"
         ."<span id='span_calculateby'>"
         .$gtbl->getCHN($secondField)."($secondField) addvaluebycount   <a href=\"javascript:void(0);\" onclick=\"javascript:doPivotSelect('$secondField', "
@@ -338,7 +406,8 @@ $out .= "<tr><td colspan='$tblspan'> <input type=\"submit\" name=\"addsub\" id=\
         $out .= "&nbsp;&nbsp;&nbsp;&nbsp;<input type=\"button\" name=\"cancelbtn\" value=\"取   消\" "
                 ."onclick=\"javascript:switchArea('contentarea_outer','off');\" /> </td></tr></table>";
 
-$out .= "</form> <br/> <div id='pivotarea'>Data Processing....</div> </fieldset>";
+$out .= "</form> <br/> <div id='pivotarea'>Data Processing....</div> </fieldset>"
+        ."";
 
 }
 
