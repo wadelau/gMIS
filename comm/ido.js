@@ -568,7 +568,7 @@ function registerAct(tObj){
         	window.clearTimeout(actxId);
         }
         actxId = window.setTimeout(actx, tObj.delaytime*1000);
-        userinfo.registerActId[tObj.action] = actxId;
+        userinfo.registerAct[tObj.action] = actxId;
         console.log('register.action:['+unescape(tObj.action)+'] actx:['+actx+'] axtxId:['+actxId+']');
     }
 }
