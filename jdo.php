@@ -70,7 +70,7 @@ else if(startsWith($act, "list")){
     # list start
     $listid = array();
     $out .= "<table width=\"98%\" cellspacing=\"0\" cellpadding=\"0\" style=\"\" class=\"mainlist\">"
-            ."<tr height=\"35px\"><td colspan=\"".($hmsize+2)."\">";
+            ."<tr height=\"35px\"><td colspan=\"".($max_disp_cols+2)."\">";
     $out .= "<button name=\"selectallbtn\" type=\"button\" onclick=\"checkAll();\" value=\"\">全选</button> &nbsp;";
     $out .= "<button name=\"reversebtn\" type=\"button\" onclick=\"uncheckAll();\" value=\"\">反选</button>";
     $out .= "&nbsp; ".$navi->getNavi()." &nbsp;&nbsp;&nbsp;<button name='deepsearch' onclick=\"javascript:doActionEx('"
@@ -79,7 +79,7 @@ else if(startsWith($act, "list")){
     	.$jdo."&act=pivot&pntc=".$navi->get('totalcount')."', 'contentarea');\" title=\"数据透视分析\">透  视</button>";
 	if(true){
         $iswatch = Wht::get($_REQUEST, 'pnwatch');
-        $watchInterval = 60; #  seconds
+        $watchInterval = $_CONFIG['watch_interval']; # seconds
         $watchAct = "doActionEx(\'".$jdo."&act=list&pnwatch=1\', \'actarea\')";
         $out .= "&nbsp;&nbsp;&nbsp;<button name='watchbtn' title='觀察模式' onclick=\"javascript:parent.doActionEx('"
                 .$jdo."&act=list&pnwatch=".($iswatch==1?'0':'1')."', 'actarea');\">"
@@ -374,7 +374,7 @@ else if(startsWith($act, "list")){
         }
         $out .= "<td></td></tr>\n";
         # sum end
-        $out .= "<tr height=\"35px\"><td style=\"border-bottom:0px\" colspan=\"".($hmsize+2)."\">";
+        $out .= "<tr height=\"35px\"><td style=\"border-bottom:0px\" colspan=\"".($max_disp_cols+2)."\">";
         $out .= "<button name=\"selectallbtn\" type=\"button\" onclick=\"checkAll();\" value=\"\">全选</button> &nbsp;";
         $out .= "<button name=\"reversebtn\" type=\"button\" onclick=\"uncheckAll();\" value=\"\">反选</button>";
         $out .= $navi->getNavi();

@@ -149,6 +149,7 @@ $smt->assign('todourl','ido.php?tbl=fin_todotbl&tit=待处理任务&a1=1&pnsksta
 $smt->assign('content',$out);
 $smt->assign('rtvdir', $rtvdir);
 $smt->assign('isheader', $isheader);
+$smt->assign('watch_interval', $_CONFIG['watch_interval']);
 
 require("./comm/footer.inc.php");
 

@@ -262,11 +262,12 @@ body {
 		<tr><td><b><i>HM</i></b>. <a href="{$front_page}" target="_blank">打开主站</a></td></tr>
 		</table>
 		<input type='hidden' id='indexurl' value='{$url}'/>
+		<input type='hidden' id='watch_interval' value='{$watch_interval}'/>
 		{literal}
 		<script type="text/javascript">var idxHomeWto=window.setTimeout(function(){
 				console.log('reload time:['+(new Date())+']');
 				 window.location.href=document.getElementById('indexurl').value;},
-			10*60*1000);</script>
+			parseInt(document.getElementById('watch_interval').value)*1000);</script>
 		{/literal}
 		<br/>
             </div>

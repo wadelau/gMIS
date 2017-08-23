@@ -72,6 +72,7 @@ if(true){
 	$conf['adminmail'] = 'system@local';
 	$conf['start_date'] = '2016-06-08'; # first action date in fin_operatelogtbl
 	$conf['sign_key'] = 'my_sign_key_at_random-----';
+	$conf['watch_interval'] = 5 * 60; # seconds
 
 	# set them all
 	GConf::setConf($conf);
