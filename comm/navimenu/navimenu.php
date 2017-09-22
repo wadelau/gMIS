@@ -87,7 +87,8 @@ if($hm[0]){
 									#$lv4 .= "\t\tlevel4-v3:".$v3.", v2:$v2, v1:$v1,\n";
 									if($linfo['disptitle'] == ''){ $linfo['disptitle'] = $linfo['linkname'];}
 										$lv4 .= '<li><a href="'.$ido.'&tbl='.$linfo['modulename'].'&tit='
-										        .$linfo['disptitle'].'&db='.$linfo['thedb'].'&'.$linfo['dynamicpara'].'">'
+										        .$linfo['disptitle'].'&db='.$linfo['thedb']
+										        .'&'.$linfo['dynamicpara'].'&levelcode='.$linfo['levelcode'].'">'
 										        .$linfo['linkname'].'</a></li>';    
 
 								}
