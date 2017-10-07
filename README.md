@@ -42,4 +42,8 @@ and it has been created from top to down and the polishing work are continuing a
 
 -gMIS更新兼容Strict SQL Mode
 
+### Install
+
+Please put all files under a sub directory and init from the script ./install.php
+
 
