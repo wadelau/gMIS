@@ -288,7 +288,7 @@ else if($step == 'getsrc'){
 
 	if(is_file($f)){
 		$out .= "<br/>Source retrieved.";
-		print "d:$d f:$f testf:$testf\n";
+		#print "d:$d f:$f testf:$testf\n";
 		if(1 || $istep != 'waitdir'){
 			$cmd = "unzip -o $f";
 			execInBackground($cmd);
