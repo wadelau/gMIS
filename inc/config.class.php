@@ -23,17 +23,17 @@ if(true){
 	$conf['septag']		= '_J_A_Z_';
 	$conf['skiptag']    = '----';
 
-	$conf['maindb']		= '';
+	$conf['maindb']		= 'DB_NAME';
 	$conf['maintbl']	= $tblpre.'customertbl';
 	$conf['usertbl']	= $tblpre.'info_usertbl';
 	$conf['welcometbl']	= $tblpre.'info_welcometbl';
 	$conf['operatelogtbl']	= $tblpre.'fin_operatelogtbl';
 
 	# db info
-	$conf['dbhost'] 	= '';
-	$conf['dbport'] 	= '3306';
-	$conf['dbuser'] 	= '';
-	$conf['dbpassword'] 	= '';
+	$conf['dbhost'] 	= 'DB_HOST';
+	$conf['dbport'] 	= 'DB_PORT';
+	$conf['dbuser'] 	= 'DB_USER';
+	$conf['dbpassword'] 	= 'DB_PASSWORD';
 	$conf['dbname'] 	= $conf['maindb'];
 	$conf['dbdriver']	= 'MYSQLIX'; # 'MYSQL', 'MYSQLIX', 'PDOX', 'SQLSERVER', 'ORACLE' in support, UPCASE only
 	$conf['db_enable_utf8_affirm'] = false; # append utf-8 affirm after db connection established, should be false in a all-utf-8 env.
