@@ -6,7 +6,7 @@
 ini_set("memory_limit","512M"); # memory limit avoding crush
 
 if(true){
-	$tblpre = "gmis_";
+	$tblpre = "TABLE_PRE";
 	$conf = array();
 
 	$conf['tblpre'] 	= $tblpre;
