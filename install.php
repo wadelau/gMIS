@@ -279,7 +279,7 @@ else if($step == 'getsrc'){
 	if(is_file($f)){
 		$out .= "<br/>Source retrieved.";
 		if(1 || $istep != 'waitdir'){
-			$cmd = "unzip '$f'";
+			$cmd = "unzip -o '$f'";
 			execInBackground($cmd);
 		}
 		if(!is_dir($d) || !is_file($testf)){
