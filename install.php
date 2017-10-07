@@ -231,7 +231,7 @@ if($step == ''){
 		$out .= xForm($file.'&step=dolicense', array('hasagree'=>array('type'=>'checkbox', 'dispname'=>'我已阅读使用协议并同意')));
 	}
 	else{
-		$out .= "<br/>感谢选择 -gMIS ! 在 ".$rtvdir."  已经安装有 -gMIS . 重新安装将覆盖之前所有的程序和数据. 请先备份或者切换目 请先备份或者切换目录.";
+		$out .= "<br/>感谢选择 -gMIS ! 在 ".$rtvdir."  已经安装有 -gMIS . 重新安装将覆盖之前所有的程序和数据. 请先备份或者切换目录.";
 		$out .= xForm($file.'&step=dolicense', array('hasagree'=>array('type'=>'checkbox', 'dispname'=>'我已备份数据, 确认重新安装.')));
 	}
 }
