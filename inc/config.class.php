@@ -46,7 +46,7 @@ if(true){
 	$conf['dbname_slave'] 	= ''; #$conf['maindb'];
 	
 	# cache server
-	$conf['enable_cache'] = 1; # or true for 1, false for 0
+	$conf['enable_cache'] = 0; # or true for 1, false for 0
 	$conf['cachehost'] = '/www/bin/memcached/memcached.sock'; # '127.0.0.1'; #  ip, domain or .sock
 	$conf['cacheport'] = '11211'; # empty or '0' for linux/unix socket
 	$conf['cachedriver'] = 'MEMCACHEDX'; # REDISX, XCACHEX
