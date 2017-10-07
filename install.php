@@ -290,7 +290,7 @@ else if($step == 'getsrc'){
 		$out .= "<br/>Source retrieved.";
 		#print "d:$d f:$f testf:$testf\n";
 		if(1 || $istep != 'waitdir'){
-			$cmd = "unzip -o $f";
+			$cmd = "unzip -u -o $f";
 			execInBackground($cmd);
 		}
 		if(!is_dir($extractDir) || !is_file($testf)){
@@ -346,7 +346,9 @@ else if($step == 'db'){
 			$dbhost=$_REQUEST['db_host']; $dbport=$_REQUEST['db_port']; $dbname=$_REQUEST['db_name']; 
 			$dbuser=$_REQUEST['db_user']; $dbpwd=$_REQUEST['db_pwd'];
 			$mysqlmode = function_exists('mysql_connect') ? 'mysql' : 'mysqli';
-			$link = ($mysqlmode == 'mysql') ? @mysql_connect($dbhost.":".$dbport, $dbuser, $dbpwd) : new mysqli($dbhost.":".$dbport, $dbuser, $dbpwd);
+			$link = ($mysqlmode == 'mysql') 
+				? @mysql_connect($dbhost.":".$dbport, $dbuser, $dbpwd) 
+				: new mysqli($dbhost.":".$dbport, $dbuser, $dbpwd);
 			$err = '';
 			if(!$link) {
 				$errno = ($mysqlmode == 'mysql') ? mysql_errno() : mysqli_errno();
@@ -362,7 +364,9 @@ else if($step == 'db'){
 				}
 			}
 			else{
-				if($query = (($mysqlmode == 'mysql') ? @mysql_query("SHOW TABLES FROM $dbname") : $link->query("SHOW TABLES FROM $dbname"))) {
+				if($query = (($mysqlmode == 'mysql') 
+					? @mysql_query("SHOW TABLES FROM $dbname") 
+					: $link->query("SHOW TABLES FROM $dbname"))) {
 					if(!$query){
 						$err = 'database_query_fail';
 					}
@@ -406,7 +410,9 @@ else if($step == 'db'){
  
  		$sql = 'use '.$_CONFIG['dbname'].''; #source '.$appdir.'/gmis-tables.sql;';
 		$mysqlmode = function_exists('mysql_connect') ? 'mysql' : 'mysqli';
-		$link = ($mysqlmode == 'mysql') ? @mysql_connect($_CONFIG['dbhost'].":".$_CONFIG['dbport'], $_CONFIG['dbuser'], $_CONFIG['dbpassword']) : new mysqli($_CONFIG['dbhost'].":".$_CONFIG['dbport'], $_CONFIG['dbuser'], $_CONFIG['dbpassword']);
+		$link = ($mysqlmode == 'mysql') 
+			? @mysql_connect($_CONFIG['dbhost'].":".$_CONFIG['dbport'], $_CONFIG['dbuser'], $_CONFIG['dbpassword']) 
+			: new mysqli($_CONFIG['dbhost'].":".$_CONFIG['dbport'], $_CONFIG['dbuser'], $_CONFIG['dbpassword']);
 		$query = (($mysqlmode == 'mysql') ? @mysql_query($sql) : $link->query($sql));
 		
 		$sqlstr = file_get_contents("./gmis-tables.sql");;
@@ -415,7 +421,9 @@ else if($step == 'db'){
 		foreach($sqlarr as $k=>$v){
 			#print "<br/>sql-".($i++).": ".$v;	
 			$sql = $v;
-			$query = (($mysqlmode == 'mysql') ? @mysql_query($sql) : $link->query($sql));
+			if($sql != ''){
+				$query = (($mysqlmode == 'mysql') ? @mysql_query($sql) : $link->query($sql));
+			}
 		}
 		
 		$sql = 'show tables'; # from '.$_CONFIG['dbname'];
@@ -452,13 +460,16 @@ else if($step == 'init'){
  		$sql = 'use '.$_CONFIG['dbname'].''; #source '.$appdir.'/gmis-tables.sql;';
 		$mysqlmode = function_exists('mysql_connect') ? 'mysql' : 'mysqli';
 		#print "<br/>mysqlmode:[$mysqlmode]";
-		$link = ($mysqlmode == 'mysql') ? @mysql_connect($_CONFIG['dbhost'].":".$_CONFIG['dbport'], $_CONFIG['dbuser'], $_CONFIG['dbpassword']) : new mysqli($_CONFIG['dbhost'].":".$_CONFIG['dbport'], $_CONFIG['dbuser'], $_CONFIG['dbpassword']);
+		$link = ($mysqlmode == 'mysql') 
+			? @mysql_connect($_CONFIG['dbhost'].":".$_CONFIG['dbport'], $_CONFIG['dbuser'], $_CONFIG['dbpassword']) 
+			: new mysqli($_CONFIG['dbhost'].":".$_CONFIG['dbport'], $_CONFIG['dbuser'], $_CONFIG['dbpassword']);
 		$query = (($mysqlmode == 'mysql') ? @mysql_query($sql) : $link->query($sql));
-
-		$sql = "insert into ".$_CONFIG['usertbl']." set email='".trim($_REQUEST['rootemail'])."', password='".sha1(trim($_REQUEST['rootpwd']))."', inserttime=NOW(), branchoffice=''";
-		#print $sql;
-		$query = (($mysqlmode == 'mysql') ? @mysql_query($sql) : $link->query($sql));
-		
+		if(true){
+			$sql = "insert into ".$_CONFIG['usertbl']." set email='".trim($_REQUEST['rootemail'])."', password='"
+				.sha1(trim($_REQUEST['rootpwd']))."', inserttime=NOW(), branchoffice=''";
+			#print $sql;
+			$query = (($mysqlmode == 'mysql') ? @mysql_query($sql) : $link->query($sql));
+		}
 		$out .= "<br/>Settings have been saved. ";
 
 		$out .= xForm($file."&step=finalize", null);
