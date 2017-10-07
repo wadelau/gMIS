@@ -144,7 +144,7 @@ function dirWriteable($dir) {
 # exec in bg
 function execInBackground($cmd) { 
 	
-	print "cmd:[$cmd]";
+	#print "cmd:[$cmd]";
 
 	if (substr(php_uname(), 0, 7) == "Windows"){ 
 		pclose(popen("start /B ". $cmd, "r"));  
@@ -176,7 +176,7 @@ function replaceInFile($myFile, $oldStr, $newStr){
 $out = '';
 $sid = $_REQUEST['sid'] == '' ? rand(100, 999999) :  $_REQUEST['sid'] ;
 $reqProto = $_SERVER['HTTPS'] == '' ? "http" : "https";
-$srvName = ((strlen($_SERVER['SERVER_NAME']) > 3 && $_SERVER['SERVER_NAME'] != 'localhost') ? $_SERVER['SERVER_NAME'] : $_SERVER['SERVER_ADDR']); # shortest domain, a.bc, localhost => 1.2.3.4
+$srvName = ((strlen($_SERVER['SERVER_NAME']) > 3 && $_SERVER['SERVER_NAME'] != '127.0.0.1') ? $_SERVER['SERVER_NAME'] : $_SERVER['SERVER_ADDR']); # shortest domain, a.bc, localhost => 1.2.3.4
 $file = $reqProto."://".$srvName.":".$_SERVER['SERVER_PORT'].$_SERVER['PHP_SELF']."?sid=".$sid;
 
 
@@ -293,7 +293,7 @@ else if($step == 'getsrc'){
 			$cmd = "unzip -o $f";
 			execInBackground($cmd);
 		}
-		if(!is_dir($d) || !is_file($testf)){
+		if(!is_dir($extractDir) || !is_file($testf)){
 			$out .= "<br/><br/>Srcfile not ready..., waiting ".date("H:i:s", time());
 			redirect($file."&step=getsrc&istep=waitdir", 6 , $header.$out.$footer);
 		}
@@ -331,7 +331,7 @@ else if($step == 'getsrc'){
 else if($step == 'db'){
 	if($istep == ''){
 		# connect db
-		$out .= xForm($file."&step=db&istep=testdb", array('db_host'=>array('dispname'=>'数据库主机', 'type'=>'text', 'value'=>'localhost'),
+		$out .= xForm($file."&step=db&istep=testdb", array('db_host'=>array('dispname'=>'数据库主机', 'type'=>'text', 'value'=>'127.0.0.1'),
 			'db_port'=>array('dispname'=>'数据库端口', 'value'=>'3306'),
 			'db_name'=>array('dispname'=>'数据库名称'),
 			'db_user'=>array('dispname'=>'数据库访问用户名'),
