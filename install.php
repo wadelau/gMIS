@@ -249,7 +249,10 @@ else if($step == 'env'){
 	$dir_w = dirWriteable($appdir);
 	$out .= "安装目录[$rtvdir]: ";
 	if($dir_w){
-		$out .= "可写";	
+		$out .= "可写";
+		# rm inc/config
+		$cmd = "rm -f ./inc/config.inc.php";
+		execInBackground($cmd);
 	}
 	else{
 		$out .= "不可写";		
