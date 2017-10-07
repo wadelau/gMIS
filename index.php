@@ -120,7 +120,7 @@ $hm = $gtbl->execBy("select userid from "
 if($hm[0]){
     #debug($hm);
     $hm = $hm[1];
-    $logged_user_count = cunt($hm);
+    $logged_user_count = count($hm);
 }
 $data['logged_user_count'] = $logged_user_count;
 

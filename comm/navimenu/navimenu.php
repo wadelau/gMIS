@@ -112,7 +112,7 @@ if($hm[0]){
      <ul class="menu" id="menu"> 
      <li> 
 	 
-        <a href="'.$url.'" class="menulink"><img src="$rtvdir/img/my-desktop.png" alt="my desktop"  style="vertical-align:middle;height:12px" /> 我的桌面</a>
+        <a href="'.$url.'" class="menulink"><img src="'.$rtvdir.'/img/my-desktop.png" alt="my desktop"  style="vertical-align:middle;height:12px" /> 我的桌面</a>
             <ul> 
                 <li><a href="'.$ido.'&tbl=fin_todotbl&tit=待处理事项&db=&pnsktouser='.$userid.'&pnsm=1&pnskstate=1&pnsktogroup='
                         .$user->getGroup().'&pnsc='.$pnscTodo.'&pnsck='.$pnsckTodo.'">待处理事项</a></li> 
@@ -128,7 +128,7 @@ if($hm[0]){
 	'.$dynamicmenu.'
 	    
      <li><a href="'.$url.'&navidir=99" orighref="javascript:void(0);" class="menulink">'
-        .'<img src="$rtvdir/img/my-setting.png" style="vertical-align:middle;height:16px" alt="Settings" /> 系统设置</a> 
+        .'<img src="'.$rtvdir.'/img/my-setting.png" style="vertical-align:middle;height:16px" alt="Settings" /> 系统设置</a> 
      <ul> 
         <li><a href="'.$ido.'&tbl=info_usertbl&tit=&db=">用户信息</a></li> 
         <li><a href="'.$ido.'&tbl=info_grouptbl&tit=&db=">用户组设置</a></li> 

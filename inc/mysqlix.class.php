@@ -34,7 +34,7 @@ class MYSQLIX {
 	//-
 	function _initConnection(){
 		
-		if (!is_object($this->m_link)){
+		if(!is_object($this->m_link)){
 			$real_host = $this->m_host.":".$this->m_port;
 			$this->m_link = new mysqli($this->m_host, $this->m_user, 
 					$this->m_password, $this->m_name, $this->m_port);           
@@ -42,7 +42,11 @@ class MYSQLIX {
 			if(Gconf::get('db_enable_utf8_affirm')){
 				$this->query("SET NAMES 'utf8'", null, null);
 			}
-
+		}
+		if($this->m_link->connect_errno > 0){
+				print "Database connection error. 201710071225.";
+				debug($this->m_link);
+				exit(0);
 		}
 		return $this->m_link;
 		
@@ -58,7 +62,7 @@ class MYSQLIX {
 		$sql = $this->_enSafe($sql,$idxarr,$hmvars);
 		
 		#debug($sql, 2);
-		$result = $this->m_link->query($sql) or $this->sayErr("[$sql] 201605240944.");		
+		$result = $this->m_link->query($sql); # or $this->sayErr("[$sql] 201605240944.");		
 		
 		if($result){
 			$hm[0] = true;
@@ -92,7 +96,7 @@ class MYSQLIX {
 		if( strpos($sql,"limit")===false && strpos($sql,"show tables")===false){
 			$sql .= " limit 1 ";
 		} 
-        $result = $this->m_link->query($sql) or $this->sayErr('[$sql] query failed. 201605220716.');
+        $result = $this->m_link->query($sql); # or $this->sayErr('[$sql] query failed. 201605220716.');
 		#debug($sql);
 		#debug($result);
         		
@@ -132,7 +136,7 @@ class MYSQLIX {
 		
 		#debug($sql);
 		$rtnarr = array();	
-		$result = $this->m_link->query($sql) or $this->sayErr("[$sql] query failed. 201605220717.");
+		$result = $this->m_link->query($sql); # or $this->sayErr("[$sql] query failed. 201605220717.");
 		
    		if($result && !is_bool($result)){
 			$i = 0;

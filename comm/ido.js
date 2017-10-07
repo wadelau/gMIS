@@ -1434,7 +1434,7 @@ userinfo.userAgent = {};
 	else{
 		console.log('Unknown ua:['+ua+']');
 	}
-	var isLog = true;
+	var isLog = false;
 	if(isLog){
     	Object.keys(env).forEach(function(k){
     		console.log('ua k:'+k+', v:'+env[k]);

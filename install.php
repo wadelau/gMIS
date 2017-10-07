@@ -144,7 +144,7 @@ function dirWriteable($dir) {
 # exec in bg
 function execInBackground($cmd) { 
 	
-	#print "cmd:[$cmd]";
+	print "cmd:[$cmd]";
 
 	if (substr(php_uname(), 0, 7) == "Windows"){ 
 		pclose(popen("start /B ". $cmd, "r"));  
@@ -152,6 +152,8 @@ function execInBackground($cmd) {
 	else { 
 		exec($cmd . " > /dev/null &");   
 	} 
+
+	sleep(1);
 
 	return 0;
 
@@ -201,7 +203,11 @@ $footer_html = "<p>&nbsp;</p><p>&nbsp;</p></body></html>";
 $config_file = './inc/config.class.php';
 $has_installed = 0;
 $f = "gMIS-master.zip";
-$d = substr($f, 0, strlen($f)-4);
+$d = dirname(__FILE__); # substr($f, 0, strlen($f)-4);
+if(true){
+	$dArr = explode('/', $d);
+	$d = $dArr[count($dArr)-1];
+}
 
 if(!in_array($step, $steps)){ $step = ''; }
 
@@ -232,7 +238,7 @@ if($step == ''){
 	}
 	else{
 		$out .= "<br/>感谢选择 -gMIS ! 在 ".$rtvdir."  已经安装有 -gMIS . 重新安装将覆盖之前所有的程序和数据. 请先备份或者切换目录.";
-		$out .= xForm($file.'&step=dolicense', array('hasagree'=>array('type'=>'checkbox', 'dispname'=>'我已备份数据, 确认重新安装.')));
+		$out .= xForm($file.'&step=dolicense', array('hasagree'=>array('type'=>'checkbox', 'dispname'=>'我已备份数据, 确认重新安装')));
 	}
 }
 else if($step == 'dolicense'){
@@ -249,9 +255,9 @@ else if($step == 'env'){
 	$dir_w = dirWriteable($appdir);
 	$out .= "安装目录[$rtvdir]: ";
 	if($dir_w){
-		$out .= "可写";
+		$out .= "可写";	
 		# rm inc/config
-		$cmd = "rm -f ./inc/config.inc.php";
+		$cmd = "rm -f ./inc/config.class.php";
 		execInBackground($cmd);
 	}
 	else{
@@ -270,7 +276,8 @@ else if($step == 'getsrc'){
 	# retrieve source
 	#$f = "gMIS-master.zip";
 	#$d = substr($f, 0, strlen($f)-4);
-	$testf = "$d/xml/info_usertbl.xml";
+	$extractDir = str_replace('.zip', '', $f);
+	$testf = "$extractDir/xml/info_usertbl.xml";
 
 	if($istep == ''){
 		$cmd = "rm -f ./$f; rm -rf ./$d";
@@ -281,8 +288,9 @@ else if($step == 'getsrc'){
 
 	if(is_file($f)){
 		$out .= "<br/>Source retrieved.";
+		print "d:$d f:$f testf:$testf\n";
 		if(1 || $istep != 'waitdir'){
-			$cmd = "unzip -o '$f'";
+			$cmd = "unzip -o $f";
 			execInBackground($cmd);
 		}
 		if(!is_dir($d) || !is_file($testf)){
@@ -290,16 +298,17 @@ else if($step == 'getsrc'){
 			redirect($file."&step=getsrc&istep=waitdir", 6 , $header.$out.$footer);
 		}
 		else{
-			$cmd = "mv -fu $d/* ./";
+			$cmd = "mv -fu $extractDir/* ./";
+			execInBackground($cmd);
+			$cmd = "rsync -a -v --remove-source-files $extractDir/* ./";
 			execInBackground($cmd);
 
 			if(is_file($testf)){
-				$cmd = "rm -rf $d";
+				$cmd = "rm -rf $extractDir";
 				execInBackground($cmd);
 				$cmd = "rm -f $f";
 				execInBackground($cmd);
-				$out .= "<br/>Source extracted successfully.";	
-
+				$out .= "<br/>Source extracted successfully.";
 			}
 			else{
 				$out .= "<br/>Source extracted failed.";	
@@ -465,14 +474,15 @@ else if($step == 'init'){
 # part-5, finilized and enter
 else if($step == 'finalize'){
 	# clearance
+	$extractDir = str_replace('.zip', '', $f);
 	if($istep == ''){
 		$cmd = "rm -f ./$f";
 		execInBackground($cmd);
-		$cmd = "rm -rf ./$d";
+		$cmd = "rm -rf ./$extractDir";
 		execInBackground($cmd);
 		
 		$rd = rand(1000, 9999999);
-		$cmd = "mv ./".$_SERVER['PHP_SELF']." ./".$_SERVER['PHP_SELF'].".$rd.php";
+		$cmd = "mv ./install.php ./install.$rd.php";
 		#print $cmd;
 		execInBackground($cmd);
 		
