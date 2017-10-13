@@ -9,7 +9,7 @@ if($_REQUEST['otbl'] != ''){
     $colsPerRow = 2;
 }
 
-$out .= "<fieldset style=\"border-color:#5f8ac5;border: 1px solid #5f8ac5;\"><legend><h4>增修记录</h4>"
+$out .= "<fieldset style=\"border-color:#5f8ac5;border: 1px solid #5f8ac5;\"><legend><h4>新增/修改</h4>"
         ."</legend><form id=\"".$formid."\" name=\"".$formid."\" method=\"post\" action=\""
         .$jdo."&act=list-addform\" ".$gtbl->getJsActionTbl()."><table align=\"center\" width=\"98%\" "
         ."cellspacing=\"0\" cellpadding=\"0\" border=\"0px\">";
@@ -110,15 +110,14 @@ for($hmi=$min_idx; $hmi<=$max_idx;$hmi++){
     }
     
     if($fieldinputtype == 'select'){
-
         if($gtbl->getSingleRow($field) == '1' && $opentr < 1){
-			$out .= "</tr><tr height=\"30px\" valign=\"middle\"  onmouseover=\"javascript:"
+			$out .= "</tr><tr height=\"30px\" valign=\"top\"  onmouseover=\"javascript:"
 				."this.style.backgroundColor='".$hlcolor
 				."';\" onmouseout=\"javascript:this.style.backgroundColor='';\">"; 
 		}
 		if(true){
-        	$out .= "<td nowrap><b>".$gtbl->getCHN($field)."</b>:&nbsp;</td>";
-        	$out .= "<td>".$gtbl->getSelectOption($field, $hmorig[$field],'',0,$gtbl->getSelectMultiple($field))
+        	$out .= "<td nowrap style=\"vertical-align:top\"><b>".$gtbl->getCHN($field)."</b>:&nbsp;</td>";
+        	$out .= "<td style=\"vertical-align:top\">".$gtbl->getSelectOption($field, $hmorig[$field],'',0,$gtbl->getSelectMultiple($field))
 			." <br/> ".$gtbl->getMemo($field)." <input type=\"hidden\" id=\"".$field
 			."_select_orig\" name=\"".$field."_select_orig\" value=\"".$hmorig[$field]."\" /></td>";
         	$opentr = 0;
@@ -158,14 +157,15 @@ for($hmi=$min_idx; $hmi<=$max_idx;$hmi++){
             $opentr = 1;
 
         }else{
-            $out .= "<td style=\"vertical-align:top\"><b>".$gtbl->getCHN($field)."</b>:</td><td><textarea id=\"".$field."\" name=\""
-	    	.$field."\" rows=\"11\" cols=\"35\" ".$gtbl->getJsAction($field).$gtbl->getAccept($field)." "
-                .$gtbl->getReadOnly($field)." class=\"search\">".$hmorig[$field]."</textarea> <br/> "
-		.$gtbl->getMemo($field)." </td>";
+            $out .= "<td style=\"vertical-align:top\"><b>".$gtbl->getCHN($field)."</b>:</td>"
+                    ."<td><textarea id=\"".$field."\" name=\""
+                    .$field."\" rows=\"11\" cols=\"35\" ".$gtbl->getJsAction($field).$gtbl->getAccept($field)." "
+                    .$gtbl->getReadOnly($field)." class=\"search\">".$hmorig[$field]."</textarea> <br/> "
+		            .$gtbl->getMemo($field)." </td>";
         }
 
     }else if($fieldinputtype == 'file'){
-	$origValue = $hmorig[$field];
+	    $origValue = $hmorig[$field];
         if($origValue != '' && $srcprefix != '' && !startsWith($origValue, 'http')){
             $hmorig[$field] = $srcprefix.'/'.$hmorig[$field];
         }
@@ -184,7 +184,7 @@ for($hmi=$min_idx; $hmi<=$max_idx;$hmi++){
         $out .="<td colspan='4'> ".($isimg==1?"<img src=\"".$fieldv."\" alt=\"-x-\" width=\"118px\" /><br/>"
 		.$fieldv:"")." <script>document.getElementById('"
 		.$formid."').enctype='multipart/form-data';</script>  </td></tr><tr>";
-	$opentr = 1;
+	    $opentr = 1;
 
     }else if($gtbl->getExtraInput($field, $hmorig) != ''){
 
@@ -226,13 +226,15 @@ for($hmi=$min_idx; $hmi<=$max_idx;$hmi++){
             $out .= "</tr>\n<tr height=\"30px\" valign=\"middle\"  onmouseover=\"javascript:this.style.backgroundColor='"
                     .$hlcolor."';\" onmouseout=\"javascript:this.style.backgroundColor='';\"><td style=\"vertical-align:top\" "
                     .$gtbl->getCss($field)."><b>".$gtbl->getCHN($field)."</b>:</td><td colspan=\"".($form_cols)
-                    ."\"><input type=\"text\" id=\"".$field."\" name=\"".$field."\" class=\"\" style=\"width:600px\" value=\""
+                    ."\"  style=\"vertical-align:top\"><input type=\"text\" id=\"".$field."\" name=\""
+                     .$field."\" class=\"\" style=\"width:600px\" value=\""
                     .$hmorig[$field]."\" ".$gtbl->getJsAction($field).$gtbl->getAccept($field)." "
                     .$gtbl->getReadOnly($field)." /> <br/>   ".$gtbl->getMemo($field)." </td></tr><tr>";
             $opentr = 1;
 		}
 		else{
-        	$out .= "<td nowrap ".$gtbl->getCss($field)."><b>".$gtbl->getCHN($field)."</b>: </td><td><input type=\"text\" id=\""
+        	$out .= "<td nowrap ".$gtbl->getCss($field)." style=\"vertical-align:top\"><b>".$gtbl->getCHN($field)."</b>: "
+        	        ."</td><td style=\"vertical-align:top\"><input type=\"text\" id=\""
         	        .$field."\" name=\"".$field."\" class=\"noneinput wideinput\" value=\"".$hmorig[$field]."\" "
         	        .$gtbl->getJsAction($field).$gtbl->getAccept($field)." ".$gtbl->getReadOnly($field)." /> <br/> "
         	        .$gtbl->getMemo($field)."</td>";

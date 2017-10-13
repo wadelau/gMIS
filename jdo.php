@@ -196,7 +196,7 @@ else if(startsWith($act, "list")){
            $out .= "<tr height=\"35px\" valign=\"middle\" bgcolor=\""
                    .$bgcolor."\" id=\"list_tr_".(++$i)."\">"; # rec[$gtbl->getMyId()]
            if($hasid){
-               $id = $rec[$gtbl->getMyId()]; $listid[] = $id;
+               $id = $rec[$gtbl->getMyId()]; $listid[0] = $id; # id/myid as the very first
                $out .= "<td nowrap> <input name=\"checkboxid\" type=\"checkbox\" value=\"".$id
                 ."\"> &nbsp; <a onmouseover=\"javascript:showActList('".$i."', 1, '"
                 .str_replace("&".$gtbl->getMyId()."=","&oid=", $jdo)."&".$gtbl->getMyId()."=".$id
@@ -264,7 +264,7 @@ else if(startsWith($act, "list")){
 					   if(strpos($rec[$field], "$shortDirName/") !== false){ 
 					       $rec[$field] = str_replace("$shortDirName/", "", $rec[$field]); 
 					   }
-					   $origValueF = $hmorig[$field];
+					   $origValueF = $rec[$field];
 					   $srcprefix = $gtbl->getSrcPrefix();
 					   if($origValueF != '' && $srcprefix != '' && !startsWith($origValueF, 'http')){
 						   $rec[$field] = $srcprefix.'/'.$rec[$field];
@@ -355,7 +355,10 @@ else if(startsWith($act, "list")){
                }
            }
            $out .= "</tr>\n"; 
-           if(!isset($_REQUEST['linkfieldcopy'])){ $fstfields .= $listid[1].","; }
+           if(!isset($_REQUEST['linkfieldcopy'])){
+               $listi = $hasid ? 0 : 1;
+               $fstfields .= $listid[1].",";
+           }
            else{ $fstfields .= $listid[$_REQUEST['linkfieldcopy']].","; }
         } 
         # record end

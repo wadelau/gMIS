@@ -7,7 +7,8 @@ if($_REQUEST['pnsktuanid'] != '' && $_REQUEST['otbl'] != ''){
     $colsPerRow = 2;
 }
 
-$out .= "<fieldset style=\"border-color:#5f8ac5;border: 1px solid #5f8ac5\"><legend><h4>详细内容</h4></legend><table align=\"center\" width=\"95%\" border=\"0px\">";
+$out .= "<fieldset style=\"border-color:#5f8ac5;border: 1px solid #5f8ac5\">"
+        ."<legend><h4>详细内容</h4></legend><table align=\"center\" width=\"95%\" border=\"0px\">";
 $out .= "<tr><td width=\"10%\">&nbsp;</td>
             <td width=\"22%\">&nbsp;</td>
             <td width=\"10%\">&nbsp;</td>
@@ -55,8 +56,7 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
     $field = $gtbl->getField($hmi);
     $fieldinputtype = $gtbl->getInputType($field);
     if($field == null || $field == ''
-            ){ 
-
+            ){
         continue;
     } 
     if($closedtr == 1){
@@ -73,7 +73,8 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
         $out .= "<--NOREAD-->";
 
     }else if($fieldinputtype == 'select'){
-		$out .= "<td>".$gtbl->getCHN($field).":&nbsp;</td><td> "
+		$out .= "<td style=\"vertical-align:top\">".$gtbl->getCHN($field).":&nbsp;</td>"
+		        ."<td style=\"vertical-align:top\"> "
 		        .$gtbl->getSelectOption($field, $hmorig[$field],'', $gtbl->getSelectMultiple($field))."</td>";
         
     }else if($fieldinputtype == 'file'){
@@ -101,7 +102,8 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
         $out .= "</tr><tr><td>".$gtbl->getCHN($field).":</td><td colspan=\"".$form_cols."\"><span id=\"span_".$act."_"
                 .$field."_val_add\"><input id=\"".$field."\" name=\"".$field."\" class=\"search\" value=\""
                 .$hmorig[$field]."\" /></span> <span id=\"span_".$act."_".$field
-                ."\"><a href=\"javascript:void(0);\" onclick=\"javascript:doActionEx('".$gtbl->getExtraInput($field,$hmorig)."&act="
+                ."\"><a href=\"javascript:void(0);\" onclick=\"javascript:doActionEx('"
+                .$gtbl->getExtraInput($field,$hmorig)."&act="
                 .$act."&otbl=".$tbl."&field=".$field."&oldv=".$hmorig[$field]."&oid=".$id."','extrainput_".$act."_"
                 .$field."_inside');document.getElementById('extrainput_".$act."_".$field
                 ."').style.display='block';\">Disp</a></span> <div id=\"extrainput_".$act."_".$field."\" class=\"extrainput\"> ";
@@ -155,7 +157,7 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
 
         $fhref = $gtbl->getHref($field, $hmorig);
         if(count($fhref)>0){
-						if(strpos($fhref[0],"javascript") !== false){
+			if(strpos($fhref[0],"javascript") !== false){
               $tmpval = "<a href=\"javascript:void(0);\" onclick=\"".$fhref[0]."\" title=\"".$fhref[1]."\" target=\""
                       .$fhref[2]."\">".$tmpval."</a>";    
             }else{
@@ -165,10 +167,12 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
 
         if($gtbl->getSingleRow($field) == 1){
             $out .= "</tr><tr> <td style=\"vertical-align:top\"><b>".$gtbl->getCHN($field)."<b>:</td> ";
-            $out .= "<td colspan=\"".($form_cols-1)."\" class=\"tdiviewfixedwidth\"> ".$tmpval."  </td></tr><tr>";
+            $out .= "<td colspan=\"".($form_cols-1)."\" class=\"tdiviewfixedwidth\" style=\"vertical-align:top\"> "
+                    .$tmpval."  </td></tr><tr>";
         }else{
-            $out .= "<td><b>".$gtbl->getCHN($field)."</b>:&nbsp;</td><td class=\"tdiviewfixedwidth\" "
-                    ."style=\"word-wrap:break-word;white-space:normal;word-break:break-all;width:22%;\"> "
+            $out .= "<td style=\"vertical-align:top\"><b>".$gtbl->getCHN($field)."</b>:&nbsp;</td>"
+                    ."<td class=\"tdiviewfixedwidth\" "
+                    ."style=\"word-wrap:break-word;white-space:normal;word-break:break-all;width:22%;vertical-align:top;\"> "
                     .$tmpval." </td>";
         }
     }
