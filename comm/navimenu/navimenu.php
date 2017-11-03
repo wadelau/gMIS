@@ -55,7 +55,8 @@ if($hm[0]){
 					else{
 						if($linfo['disptitle'] == ''){ $linfo['disptitle'] = $linfo['linkname'];}
                         $dynamicmenu .= '<li><a href="'.$ido.'&tbl='.$linfo['modulename'].'&tit='.$linfo['disptitle']
-                            .'&db='.$linfo['thedb'].'&'.$linfo['dynamicpara'].'">'.$linfo['linkname'].'</a></li>'."\n";    
+                            .'&db='.$linfo['thedb'].'&'.$linfo['dynamicpara'].'&levelcode='.$linfo['levelcode'].'">'
+							.$linfo['linkname'].'</a></li>'."\n";    
                     }
                     
 					$lv3 = '';
@@ -77,7 +78,8 @@ if($hm[0]){
 							else{
 								if($linfo['disptitle'] == ''){ $linfo['disptitle'] = $linfo['linkname'];}
                                 $lv3 .= '<li><a href="'.$ido.'&tbl='.$linfo['modulename'].'&tit='.$linfo['disptitle']
-                                    .'&db='.$linfo['thedb'].'&'.$linfo['dynamicpara'].'">'.$linfo['linkname'].'</a></li>'."\n";    
+                                    .'&db='.$linfo['thedb'].'&'.$linfo['dynamicpara'].'&levelcode='.$linfo['levelcode'].'">'
+									.$linfo['linkname'].'</a></li>'."\n";    
                             }    
 
 							$lv4 = '';
