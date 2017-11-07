@@ -146,6 +146,7 @@ $pnsc = "state=? and (touser like '".$user->getId()."' or togroup like '".$user-
 $smt->assign('todourl','ido.php?tbl=fin_todotbl&tit=待处理任务&a1=1&pnskstate=0&pnsm=1&pnsktouser='.$userid
 	.'&pnsc='.$pnsc.'&pnsck='.$navi->signPara($pnsc).'&pnsktogroup='.$user->getGroup());
 
+$smt->assign('sid', $sid);
 $smt->assign('content',$out);
 $smt->assign('rtvdir', $rtvdir);
 $smt->assign('isheader', $isheader);

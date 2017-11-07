@@ -112,10 +112,14 @@ body {
 				{if $mi==0 || ($mi) % 4 == 0}
 				<div class="wrapper">
 				{/if}
-					 {if $navidir_list[$k]['modulename'] == ''}
-					 <a href="{$url}&navidir={$navidir_list[$k]['levelcode']}">
+					 {if $navidir_list[$k]['modulename'] != ''}
+					 <a href="{$ido}&tbl={$navidir_list[$k]['modulename']}&db={$navidir_list[$k]['thedb']}&{$navidir_list[$k]['dynamicpara']}">
 					 {else}
-					 <a href="{$ido}&tbl={$navidir_list[$k]['modulename']}&db={$navidir_list[$k]['thedb']}">
+					 	{if $navidir_list[$k]['dynamicpara'] != ''} <!-- extra modules -->
+					 	<a href="{$rtvdir}/{$navidir_list[$k]['dynamicpara']}&sid={$sid}&db={$navidir_list[$k]['thedb']}">
+					 	{else}
+					 	<a href="{$url}&navidir={$navidir_list[$k]['levelcode']}">
+					 	{/if}
 					 {/if}
 					 <div class="left{(($k -1) % 4)+1}">
 					 	<span style="size:14px; font-weight:bold;">{$mi+1}.{$navidir_list[$k]['linkname']}</span>
