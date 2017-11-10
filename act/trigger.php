@@ -8,7 +8,7 @@ if(!isset($fieldlist)){
 	$fieldlist = array();
 }
 #if($act == 'list-dodelete'){
-if(1){
+if(true){
     if($id != ''){
         $tblTrigger = $gtbl->getTrigger('');
         #error_log(__FILE__.": act:[$act] id:[$id] tbl triggers:[".$triggers=$gtbl->getTrigger()."]");
@@ -119,7 +119,9 @@ foreach($fieldlist as $i=>$field){
                     $tmphm = $gtbl->execBy($sql,null);
 #print_r($tmphm);
 
-                }else if($tArr[1] == 'extraact'){ # see xml/hss_tuandui_shouzhitbl.xml
+                }else if($tArr[1] == 'extraact'){ 
+                    # see xml/hss_tuandui_shouzhitbl.xml
+                    # e.g. <trigger>ALL::extraact::extra/sendmail.php::Offer入口调整修改id=THIS_ID</trigger>
                     $extraact = $tArr[2];
 					$args = $tArr[3];
                     include($appdir."/".$extraact);
