@@ -51,7 +51,7 @@ CREATE TABLE `gmis_fin_todotbl` (
   `touser` char(32) NOT NULL DEFAULT '',
   `inserttime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `operator` char(32) NOT NULL DEFAULT '',
-  `state` tinyint(1) NOT NULL DEFAULT '1',
+  `istate` tinyint(1) NOT NULL DEFAULT '1',
   `taskmemo` varchar(2048) NOT NULL DEFAULT '',
   `taskfile` char(255) NOT NULL DEFAULT '',
   `updatetime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
@@ -75,7 +75,7 @@ CREATE TABLE `gmis_info_attachefiletbl` (
   `filetype` char(16) NOT NULL DEFAULT '',
   `filesize` int(11) NOT NULL DEFAULT '0',
   `filepath` char(64) NOT NULL DEFAULT '',
-  `state` tinyint(4) NOT NULL DEFAULT '1',
+  `istate` tinyint(4) NOT NULL DEFAULT '1',
   `updatetime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `operator` char(32) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
@@ -96,7 +96,7 @@ CREATE TABLE `gmis_info_grouptbl` (
   `grouplevel` tinyint(1) NOT NULL DEFAULT '0',
   `inserttime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `operator` char(32) NOT NULL DEFAULT '',
-  `state` tinyint(1) NOT NULL DEFAULT '1',
+  `istate` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   UNIQUE KEY `key2` (`groupname`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -137,7 +137,7 @@ CREATE TABLE `gmis_info_menulist` (
   `levelcode` char(12) NOT NULL DEFAULT '',
   `modulename` char(48) NOT NULL DEFAULT '',
   `dynamicpara` char(128) NOT NULL DEFAULT '',
-  `state` tinyint(1) NOT NULL DEFAULT '1',
+  `istate` tinyint(1) NOT NULL DEFAULT '1',
   `operator` char(24) NOT NULL DEFAULT '',
   `updatetime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `disptitle` char(24) NOT NULL DEFAULT '',
@@ -184,7 +184,7 @@ CREATE TABLE `gmis_info_objectgrouptbl` (
   `grouplevel` tinyint(1) NOT NULL DEFAULT '0',
   `inserttime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `operator` char(32) NOT NULL DEFAULT '',
-  `state` tinyint(4) NOT NULL DEFAULT '0',
+  `istate` tinyint(4) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `key2` (`groupname`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -222,7 +222,7 @@ CREATE TABLE `gmis_info_objecttbl` (
   `objgroup` tinyint(1) NOT NULL DEFAULT '0',
   `tblfield` char(254) NOT NULL,
   `tblindex` char(254) NOT NULL DEFAULT '',
-  `state` tinyint(1) NOT NULL DEFAULT '1',
+  `istate` tinyint(1) NOT NULL DEFAULT '1',
   `addtodesktop` tinyint(1) NOT NULL DEFAULT '0',
   `operator` char(32) NOT NULL DEFAULT '',
   `updatetime` datetime NOT NULL,
@@ -245,7 +245,7 @@ CREATE TABLE `gmis_info_operateareatbl` (
   `areaname` char(32) NOT NULL DEFAULT '',
   `inserttime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `operator` char(32) NOT NULL DEFAULT '',
-  `state` tinyint(1) NOT NULL DEFAULT '1',
+  `istate` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
   UNIQUE KEY `key2` (`areacode`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -281,7 +281,7 @@ CREATE TABLE `gmis_info_siteusertbl` (
   `ip` char(64) NOT NULL DEFAULT '',
   `updatetime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `inserttime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `state` int(2) NOT NULL,
+  `istate` int(2) NOT NULL,
   UNIQUE KEY `email` (`email`),
   KEY `id` (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
@@ -304,7 +304,7 @@ CREATE TABLE `gmis_info_usertbl` (
   `operatearea` char(255) NOT NULL DEFAULT '',
   `inserttime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `updatetime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  `state` tinyint(1) NOT NULL DEFAULT '1',
+  `istate` tinyint(1) NOT NULL DEFAULT '1',
   `operator` char(32) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   UNIQUE KEY `uniemail` (`email`)
@@ -337,7 +337,7 @@ CREATE TABLE `gmis_mynotetbl` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `starttime` datetime NOT NULL,
   `neirong` char(64) NOT NULL,
-  `state` char(10) NOT NULL,
+  `istate` char(10) NOT NULL,
   `people` char(10) NOT NULL,
   `operator` varchar(10) NOT NULL,
   `datatime` datetime NOT NULL,
@@ -345,6 +345,29 @@ CREATE TABLE `gmis_mynotetbl` (
   KEY `id` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+
+--
+-- Table structure for table `gmis_info_toolsettbl`
+--
+
+DROP TABLE IF EXISTS `gmis_info_toolsettbl`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `gmis_info_toolsettbl` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `iname` char(64) NOT NULL default '',
+  `iurl` char(255) NOT NULL default '',
+  `istate` tinyint(1) NOT NULL DEFAULT '1',
+  `inserttime` datetime not NULL default '0001-01-01 00:00:01',
+  `updatetime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `ioperator` char(32) NOT NULL default '',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk1` (`iname`),
+  KEY `ik1` (`istate`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
 
 --
 -- Table structure for table `gmis_useraccesstbl`
@@ -362,7 +385,7 @@ CREATE TABLE `gmis_useraccesstbl` (
   `objectgroup` tinyint(1) NOT NULL DEFAULT '0',
   `accesstype` tinyint(1) NOT NULL DEFAULT '0',
   `operatelog` char(64) NOT NULL,
-  `state` tinyint(1) NOT NULL DEFAULT '1',
+  `istate` tinyint(1) NOT NULL DEFAULT '1',
   `inserttime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `memo` char(15) NOT NULL,
   `operator` char(6) NOT NULL,
