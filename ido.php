@@ -134,7 +134,7 @@ else{
 $out .= "<!--bottom line-->";
 
 $out .= "<table align=\"center\" width=\"98%\"  style=\"background:transparent\"> <tr><td width=\"25%\" colspan=\"4\"> <b>"
-        ."  &Pi; <a href=\"./\">首页</a> <span style=\"font-size:17px\">&rarr;</span> ".$module_path." </b> &nbsp; </td>";
+        ." ".$module_path." </b> &nbsp; </td>";
 $out .= "<td style=\"text-align:left;margin-right:58px\" colspan=\"15\"> &nbsp;  <button onclick=\"javascript:doActionEx('"
         .$jdo."&act=add','contentarea');\">新增</button>  ";
 # repeat related menu, Wed, 12 Apr 2017 21:34:24 +0800
