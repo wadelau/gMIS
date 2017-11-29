@@ -316,8 +316,8 @@ class PageNavi extends WebApp{
             $tmpval = $varr2[2];
             $tmpval = "(".$this->addQuote($tmpval).")";
        }
-       # remedy for tablename.fieldname, Tue Nov 28 10:25:17 CST 2017
-       # e.g. pnskou_state=1&pnskou_union=in::tbl:un_unioninfo.unionname:allowexport=1&pnsm=1&oppnskou_union=in
+       # remedy for tablename.fieldname, Tue Nov 28 22:25:17 CST 2017
+       # e.g. pnskistate=1&pnskiunion=in::tbl:unioninfo.unionname:allowex=1&pnsm=1&oppnskiunion=in
        if(inString('.', $varr[1])){
            $varr3 = explode('.', $varr[1]);
            $varr[1] = $varr3[0];
