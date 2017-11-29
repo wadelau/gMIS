@@ -11,7 +11,7 @@ if(true){
 
 	$conf['tblpre'] 	= $tblpre;
 	$conf['appname'] 	= '-gMIS';
-	$conf['appchnname'] 	= '-gMIS';
+	$conf['appchnname'] 	= '-吉密斯';
 	$conf['appdir']		= $appdir;
 
 	$conf['rtvdir'] 	= $rtvdir;

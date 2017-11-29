@@ -37,10 +37,11 @@ else if($act == 'dosignin'){
     $verifycode = $verifycode2 = '';
     if(!$islan){
         $verifycode = strtolower(trim($_REQUEST['verifycode']));
-        $verifycode2 = substr($md5=md5(($i=$_REQUEST['verifyid'])
+        $verifycode2 = substr($md5=Base62x::encode(md5(($i=$_REQUEST['verifyid'])
                 .$_CONFIG['sign_key']
                 .($d=substr(date('YmdHi', time()-date('Z')),0,11))
-                ), 1, 4); # same as comm/imagex
+                ).$_CONFIG['appchnname']), 1, 4); # same as comm/imagex
+        $verifycode2 = strtolower($verifycode2);
     }
     if($islan || ($verifycode != '' && $verifycode == $verifycode2)){
          # verified bgn

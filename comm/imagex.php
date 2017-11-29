@@ -14,13 +14,14 @@ if(!defined('__ROOT__')){
     define('__ROOT__', dirname(dirname(__FILE__)));
 }
 require_once(__ROOT__."/inc/config.class.php");
+require_once(__ROOT__."/class/base62x.class.php");
 
 //- default is output an img
 if(true){
-    $verifycode = substr($md5=md5(($i=$_REQUEST['i'])
+    $verifycode = substr($md5=Base62x::encode(md5(($i=$_REQUEST['i'])
             .$_CONFIG['sign_key']
             .($d=substr(date('YmdHi', time()-date('Z')),0,11))
-            ), 1, 4); # same as extra/signupin
+            ).$_CONFIG['appchnname']), 1, 4); # same as extra/signupin
     $charc = strlen($verifycode);
 
 	$width = 90;
