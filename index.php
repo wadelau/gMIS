@@ -122,11 +122,16 @@ if($hm[0]){
     $hm = $hm[1];
     $logged_user_count = count($hm);
 }
-$data['logged_user_count'] = $logged_user_count;
 
+# module path
+$module_path = ''; $levelcode = ''; $codelist = '';
+include_once($appdir."/comm/modulepath.inc.php");
+
+$data['logged_user_count'] = $logged_user_count;
 $data['module_list_order'] = $hm_module_order;
 $data['module_list_name'] = $hm_module_name;
 $data['todo_list'] = $hm_todo_list;
+$data['module_path'] = $module_path;
 
 $smttpl = getSmtTpl(__FILE__, $act);
 
