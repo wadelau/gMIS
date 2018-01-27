@@ -103,7 +103,7 @@ body {
 		{if count($navidir_list)>0}
 		<tr>
 		<td>
-		<b title="浏览菜单导航">ND. {$navidir_list[0]['linkname']} Navigate Directory</b><br/>
+		<b title="浏览菜单导航">ND.导航 Navigate Directory</b> | {$module_path} <br/>
 		{$mi=0}
 		{foreach $navidir_list as $k=>$v}
 			{if $k==0}
@@ -123,7 +123,13 @@ body {
 					 {/if}
 					 <div class="left{(($k -1) % 4)+1}">
 					 	<span style="size:14px; font-weight:bold;">{$mi+1}.{$navidir_list[$k]['linkname']}</span>
-					 	<br/>({$navidir_list[$k]['modulename']})</div></a>
+					 	<br/>(
+						 {if $navidir_list[$k]['modulename'] != ''}
+                                			{$navidir_list[$k]['modulename']}
+                            			 {else}
+                                			子目录/Subdir
+                            			 {/if}
+						 )</div></a>
 				{if ($mi+1) % 4 == 0}
 				</div>
 				{/if}
