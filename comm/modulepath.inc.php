@@ -4,6 +4,7 @@
 # Xenxin@Ufqi, Thu, 20 Jul 2017 22:18:30 +0800
 
 $levelcode = Wht::get($_REQUEST, 'levelcode');
+if($levelcode == ''){ $levelcode = Wht::get($_REQUEST, 'navidir'); } # by Wadelau, Jan 27, 2018
 if($levelcode == ''){
     $hm = $gtbl->execBy("select levelcode, linkname, modulename from ".$_CONFIG['tblpre']
             ."info_menulist where modulename in ('".str_replace($_CONFIG['tblpre'],"",$tbl)."', '".$tbl."')", null,
