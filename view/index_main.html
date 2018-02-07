@@ -174,7 +174,13 @@ body {
 			{/if}
 				 <a href="{$ido}&tbl={$module_list_order[$k]}">
 				 <div class="left{($k%4)+1}">
-				 	<span style="size:14px; font-weight:bold;">{$mi+1}.{$module_list_name[$module_list_order[$k]]}</span>
+				 	<span style="size:14px; font-weight:bold;">{$mi+1}.
+				 	{if $module_list_name[$module_list_order[$k]] != ''}
+                            {$module_list_name[$module_list_order[$k]]}
+                    {else}
+                            {$module_list_order[$k]}
+                    {/if}
+				 	</span>
 				 	<br/>({$module_list_order[$k]})
 				 </div>
 				 </a>
