@@ -10,7 +10,7 @@ $tbl = $_REQUEST['tbl'];
 $mydb = $_CONFIG['appname'].'db';
 $db = $_REQUEST['db']==''?$mydb:$_REQUEST['db'];
 $field = $_REQUEST['field'];
-$url = $rtvdir."/ido.php";
+$url = $rtvdir."/ido.php?sid=".$sid;
 
 $url = mkUrl($url, $_REQUEST);
 $maintbl_sanke = "hss_sanke_tuanduitbl";

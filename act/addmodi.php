@@ -199,7 +199,7 @@ for($hmi=$min_idx; $hmi<=$max_idx;$hmi++){
 			.$act."_".$field."\"><input id=\"".$field."\" name=\"".$field."\" class=\"search\" value=\""
 			.$hmorig[$field]."\" /></span> <span id=\"span_".$act."_".$field."_v\"><a href=\"javascript:"
 			."void(0);\" onclick=\"javascript:doActionEx('".$gtbl->getExtraInput($field, $hmorig)."&act="
-			.$act."&field=".$field."&oldv=".$hmorig[$field]."&otbl=".$tbl."&oid=".$id."&isheader=0','extrainput_"
+			.$act."&field=".$field."&oldv=".$hmorig[$field]."&otbl=".$tbl."&oid=".$id."&isheader=0&sid=".$sid."','extrainput_"
 			.$act."_".$field."_inside');document.getElementById('extrainput_".$act."_".$field
 			."').style.display='block'; document.getElementById('extendicon_${id}_$field').src='./img/minus.gif';"
 			."\"><img border=\"0\" id=\"extendicon_${id}_$field\" src=\"img/".$iconImage."\""
@@ -214,7 +214,7 @@ for($hmi=$min_idx; $hmi<=$max_idx;$hmi++){
 		if($field != "operatelog" && $id != ''){
 			$out .= "<script type=\"text/javascript\"> parent.doActionEx('".$gtbl->getExtraInput($field, $hmorig)
 				."&act=".$act."&otbl=".$tbl."&field=".$field."&oldv=".$hmorig[$field]."&oid=".$id
-				."&isheader=0','extrainput_".$act."_".$field."_inside');document.getElementById('extrainput_"
+				."&isheader=0&sid=".$sid."','extrainput_".$act."_".$field."_inside');document.getElementById('extrainput_"
 				.$act."_".$field."').style.display='block'; </script>";
 		}
 		$out .= "   <br/>".$gtbl->getMemo($field)."</td></tr><tr>";

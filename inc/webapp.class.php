@@ -650,20 +650,20 @@ class WebApp implements WebAppInterface{
             //- cache service
             $obj = array(0=>true);
             if($this->cachea != null){
-            if(is_null($args['value'])){
-                $obj = $this->cachea->rm($args['key']);
-            }
-            else{
-                #print_r($args);
-                if($args['expire']){
-                    $obj = $this->cachea->set($args['key'], $args['value'], $args['expire']);
-                }
-                else {
-                    $obj = $this->cachea->set($args['key'], $args['value']);
-                }
-                #debug(__FILE__.": writeObject: type:[$type] args:[".$this->toString($args)."] cache result:");
-                #debug($obj);
-            }
+		    if(is_null($args['value'])){
+			$obj = $this->cachea->rm($args['key']);
+		    }
+		    else{
+			#print_r($args);
+			if($args['expire']){
+			    $obj = $this->cachea->set($args['key'], $args['value'], $args['expire']);
+			}
+			else {
+			    $obj = $this->cachea->set($args['key'], $args['value']);
+			}
+			#debug(__FILE__.": writeObject: type:[$type] args:[".$this->toString($args)."] cache result:");
+			#debug($obj);
+		    }
             }
             if(!$obj[0]){
                 $obj = array(true, $obj[1]);
