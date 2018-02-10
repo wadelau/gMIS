@@ -152,7 +152,7 @@ if($hm[0]){
      ';
 
 $menulistjs = '
-     <script type="text/javascript"> 
+     <script async type="text/javascript"> 
         var menu=new parent.NaviMenu.dd("menu"); 
         menu.init("menu","menuhover"); 
      </script> 

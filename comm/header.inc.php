@@ -129,13 +129,13 @@ if($isoput){
             <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
             <title>TITLE - '.$_CONFIG['appname'].' -'.$_CONFIG['agentname'].'</title>
             <link rel="stylesheet" type="text/css" href="'.$rtvdir.'/comm/default.css" />
-            <script type="text/javascript" src="'.$rtvdir.'/comm/GTAjax-5.4.js" charset=\"utf-8\"></script>
+            <script type="text/javascript" src="'.$rtvdir.'/comm/GTAjax-5.4.js" charset=\"utf-8\" async></script>
             <script type="text/javascript" src="'.$rtvdir.'/comm/ido.js?i='
-                    .($is_debug==1?rand(0,9999):'').'" charset=\"utf-8\"></script>
+                    .($is_debug==1?rand(0,9999):'').'" charset=\"utf-8\" async></script>
             <script type="text/javascript" src="'.$rtvdir.'/comm/ido_pro.js?i='
-                    .($is_debug==1?rand(0,9999):'').'" charset=\"utf-8\"></script>
-            <script type="text/javascript" src="'.$rtvdir.'/comm/popdiv.js" charset=\"utf-8\"></script>
-            <script type="text/javascript" src="'.$rtvdir.'/comm/navimenu/navimenu.js" charset=\"utf-8\"></script>
+                    .($is_debug==1?rand(0,9999):'').'" charset=\"utf-8\" async></script>
+            <script type="text/javascript" src="'.$rtvdir.'/comm/popdiv.js" charset=\"utf-8\" async></script>
+            <script type="text/javascript" src="'.$rtvdir.'/comm/navimenu/navimenu.js" charset=\"utf-8\" async></script>
 
             <link rel="stylesheet" type="text/css" href="'.$rtvdir.'/comm/navimenu/navimenu.css" />
             </head>

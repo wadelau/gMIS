@@ -125,10 +125,10 @@ $out .= "<table style=\"color:white;font-weight:bold;\" id=\"addareaextratab\"><
         ."<span id=\"addareaextra\"></span> </div>\n";
 
 if($act == ''){
-    $out .= "<script type=\"text/javascript\">doAction('".$jdo."&act=list');</script>\n";
+    $out .= "<script async type=\"text/javascript\">doAction('".$jdo."&act=list');</script>\n";
 }
 else{
-    $out .= "<script type=\"text/javascript\">doActionEx('".$jdo."&act=".$act."','contentarea');</script>\n";
+    $out .= "<script async type=\"text/javascript\">doActionEx('".$jdo."&act=".$act."','contentarea');</script>\n";
 }
 
 $out .= "<!--bottom line-->";
