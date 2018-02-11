@@ -9,6 +9,9 @@
 //- e.g.
 //- <delayjsaction>onload::3::fillDefault('apikey','string',16);</delayjsaction>
 //- 
+
+if(typeof userinfo == 'undefined'){ userinfo = {}; } 
+
 function fillDefault(fieldId, randType, randLen){
     var f = document.getElementById(fieldId);
     if(f){

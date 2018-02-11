@@ -8,7 +8,7 @@ if($tbl == ''){
         $tbl = $_CONFIG['welcometbl'];
         $_REQUEST['tbl'] = $tbl;
         debug(__FILE__.": empty tbl detection. 1703082103.");
-        redirect($url, $time=10, $msg='');
+        redirect($url, $time=3000, $msg='');
     }
 }
 else{
@@ -125,10 +125,10 @@ $out .= "<table style=\"color:white;font-weight:bold;\" id=\"addareaextratab\"><
         ."<span id=\"addareaextra\"></span> </div>\n";
 
 if($act == ''){
-    $out .= "<script async type=\"text/javascript\">doAction('".$jdo."&act=list');</script>\n";
+    $out .= "<script async type=\"text/javascript\">if(typeof doAction == 'undefined'){ var doActionTimer=window.setTimeout(function(){ doAction('".$jdo."&act=list'); }, 2*1000); }else{ doAction('".$jdo."&act=list');}</script>\n";
 }
 else{
-    $out .= "<script async type=\"text/javascript\">doActionEx('".$jdo."&act=".$act."','contentarea');</script>\n";
+    $out .= "<script async type=\"text/javascript\">if(typeof doAction == 'undefined'){ var doActionTimer=window.setTimeout(function(){ doActionEx('".$jdo."&act=".$act."','contentarea'); }, 2*1000); }else{ doActionEx('".$jdo."&act=".$act."','contentarea');}</script>\n";
 }
 
 $out .= "<!--bottom line-->";

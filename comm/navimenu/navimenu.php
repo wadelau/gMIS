@@ -152,9 +152,18 @@ if($hm[0]){
      ';
 
 $menulistjs = '
-     <script async type="text/javascript"> 
-        var menu=new parent.NaviMenu.dd("menu"); 
-        menu.init("menu","menuhover"); 
+     <script async type="text/javascript">
+		var menu = {};
+		function initNaviMenu(){ //- will be exec in async mode
+			menu = new parent.NaviMenu.dd("menu"); 
+			menu.init("menu","menuhover");
+		}
+		if(typeof parent.NaviMenu == "undefined"){
+			var menuDelayT=window.setTimeout(function(){ initNaviMenu();}, 2*1000);}
+		}
+		else{
+			initNaviMenu();
+		}
      </script> 
  ';
 
