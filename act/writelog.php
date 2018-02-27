@@ -2,9 +2,9 @@
 if(1){
     $auditacts = array('list-addform','list-dodelete','updatefield','dosignin');
     if(in_array($act, $auditacts)){
-       	if(!$gtbl){
-			$gtbl = new WebApp;	
-		} 
+		if(!$gtbl || ($db != '' && $db != $mydb)){
+		    $gtbl = new GTbl($_CONFIG['operatelogtbl'], $hmconf=array('db'=>$mydb), null, null);
+		}
         $gtbl->setTbl($_CONFIG['operatelogtbl']); 
         $gtbl->set('userid', $userid);
         $gtbl->set('useremail', $user->getEmail());
