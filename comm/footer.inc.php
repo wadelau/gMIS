@@ -7,7 +7,7 @@ if($isoput){
 	$out .= "</body></html>";
 }
 
-if($fmt == ''){# default html
+if($fmt == ''){ # default html
     $data['agentname'] = $_CONFIG['agentname'];
     $data['appchnname'] = $_CONFIG['appchnname'];
     $data['appname'] = $_CONFIG['appname'];

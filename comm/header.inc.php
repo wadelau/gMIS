@@ -163,9 +163,8 @@ if($isoput){
                     ."<!-- height:15px;margin-top:8px;clear:both;text-align:center;z-index:99 -->";
 
         }
-
-    }else{
-
+    }
+    else{
         $out .= "<style>html{background:white;}</style>";
     } 
 }

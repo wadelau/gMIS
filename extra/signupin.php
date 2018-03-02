@@ -11,7 +11,7 @@ $_REQUEST['tbl'] = $_CONFIG['tblpre'].'info_usertbl';
 $act = $_REQUEST['act'];
 $id = $_REQUEST['id'];
 $tbl = $_REQUEST['tbl'];
-$mydb = $_CONFIG['appname'].'db';
+#$mydb = $_CONFIG['appname'].'db'; # defined in comm/header
 $db = $_REQUEST['db']==''?$mydb:str_replace('<', '&lt;', $_REQUEST['db']);
 $field = $_REQUEST['field'];
 $url = $_SERVER['PHP_SELF']."?bkl=".str_replace('<', '&lt;', $_REQUEST['bkl']);
