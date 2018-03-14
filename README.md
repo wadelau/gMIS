@@ -12,6 +12,8 @@ Those shared some common functions and most of them just needed to achieve basic
 
 -NatureDNS: -gMIS , -吉密斯 , -鸡觅食
 
+![gMIS Architecture](http://ufqi.com/dev/gmis/page-relation.201303.v1.png)
+
 ### History
 
 This project has been started and pondered during the study in [Univ. of Derby](http://www.derby.ac.uk), 2011, 
