@@ -6,6 +6,7 @@
  * note: general table config transactions, created on 20090304, wadelau@hotmail.com, updated....
  * v0.2, Sat Apr  7 09:53:53 CST 2012
  * Mon Jul 28 15:39:14 CST 2014
+ * javascript async, 19:12 Thursday, 15 March, 2018
  */
 
 if(!defined('__ROOT__')){
@@ -461,7 +462,7 @@ class GTbl extends WebApp{
             //$this->setTbl($oldtbl);
 			
 			if($hasExist == 0 && $optioni > $maxInitSelectCount){
-				print "<script type='text/javascript'>parent.lazyLoad('".$field."','select','extra/readtblfield.php?objectid=0&logicid=".$dispfield."&tbl=".$theTbl."&field=".$field."');</script><input name='pnsk_".$field."_optionlist' id='pnsk_".$field."_optionlist' value='' type='hidden' />";		
+				print "<script type='text/javascript' async>parent.lazyLoad('".$field."','select','extra/readtblfield.php?objectid=0&logicid=".$dispfield."&tbl=".$theTbl."&field=".$field."');</script><input name='pnsk_".$field."_optionlist' id='pnsk_".$field."_optionlist' value='' type='hidden' />";		
 				#error_log(__FILE__.": field:$field set lazy load...... optioni:$optioni");
 			}
 			if($defaultval != null && $selectval == ''){
@@ -766,7 +767,7 @@ class GTbl extends WebApp{
                 $jsact .= "parent.registerAct({'status':'".$arr2[0]."','delaytime':".$arr2[1].",'action':'".urlencode($arr2[2])."'});";
             }
         }
-        return $jsact==''?'':"<script type=\"text/javascript\">".$jsact."</script>";
+        return $jsact==''?'':"<script type=\"text/javascript\" async>".$jsact."</script>";
     }
 
     public function getSuperAccess($field=''){

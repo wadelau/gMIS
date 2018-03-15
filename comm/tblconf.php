@@ -83,9 +83,10 @@ if($gtbl->getMyId() == 'id' && !isset($hmfield['id'])){
     $gtbl->setMyId(''); $hasid = false;
 }
 else if($hasid){
-    $hmfieldsortN = array(0=>'id'); # put id as the first if available
+	$myId = $gtbl->getMyId();
+    $hmfieldsortN = array(0=>$myId); # put id as the first if available
     foreach ($hmfieldsort as $k=>$v){
-        if($v == 'id'){ continue; }
+        if($v == $myId){ continue; }
         $hmfieldsortN[$k+1] = $v;
     }
     $hmfieldsort = $hmfieldsortN;
