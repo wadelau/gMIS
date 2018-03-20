@@ -5,8 +5,8 @@ if(1){
 		if(!$gtbl || ($db != '' && $db != $mydb)){
 		    $gtbl = new GTbl($_CONFIG['operatelogtbl'], $hmconf=array('db'=>$mydb), null, null);
 		}
-        $gtbl->setTbl($_CONFIG['operatelogtbl']); 
-        $gtbl->set('userid', $userid);
+        $gtbl->setTbl($_CONFIG['operatelogtbl']);
+        $gtbl->set('userid', ($userid=='' ? '0' : $userid));
         $gtbl->set('useremail', $user->getEmail());
         $gtbl->set('parentid', $_REQUEST['id']==''?0:$_REQUEST['id']);
         $gtbl->set('parenttype', $tbl);
@@ -14,8 +14,8 @@ if(1){
 			.($_REQUEST[$gtbl->getMyId()]==''
 				?$_REQUEST[$gtbl->getMyId().'.old']
 				:$_REQUEST[$gtbl->getMyId()])."]";
-		if($act == 'dosignin'){ 
-		    $actstr .= " email:[".$_REQUEST['email']."] ip:[".$_CONFIG['client_ip']."]"; 
+		if($act == 'dosignin'){
+		    $actstr .= " email:[".$_REQUEST['email']."] ip:[".$_CONFIG['client_ip']."]";
 		}
         $gtbl->set('actionstr', $actstr); # see act/dodelete.php
         $hm = $gtbl->setBy("userid,useremail,parentid,parenttype,actionstr,inserttime",null);

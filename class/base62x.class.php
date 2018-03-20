@@ -2,7 +2,7 @@
 /*
  * -Base62x in -PHP
  * Wadelau@ufqi.com
- * Refers to 
+ * Refers to
  	http://ieeexplore.ieee.org/xpl/freeabs_all.jsp?arnumber=6020065
  	-GitHub-Wadelau , base62x.c
  	https://github.com/wadelau/Base62x
@@ -23,7 +23,7 @@ class Base62x {
 	var $isdebug = false;
 	var $i = 0;
 	var $codetype = 0; # 0:encode, 1:decode
-	const XTAG = 'x'; 
+	const XTAG = 'x';
 	const ENCD = "-enc";
 	const DECD = "-dec";
 	const DEBG = "-v";
@@ -41,7 +41,7 @@ class Base62x {
 		'A','B','C','D','E','F','G','H','I','J','K','L','M','N',
 		'O','P','Q','R','S','T','U','V','W','X','Y','Z','a','b',
 		'c','d','e','f','g','h','i','j','k','l','m','n','o','p',
-		'q','r','s','t','u','v','w','y','z'); # 58 
+		'q','r','s','t','u','v','w','y','z'); # 58
 	
 	var $ascidx = array();
 	var $ascrlist = array();
@@ -70,7 +70,7 @@ class Base62x {
 		if($ibase > 0){ $isNum = true; }
 		if($isNum){
 			$output = 0;
-			$num_input = self::xx2dec($input, $ibase, $max_safe_base, $rb62x); 	
+			$num_input = self::xx2dec($input, $ibase, $max_safe_base, $rb62x);
 			$obase = $xpos;
 			$output = self::dec2xx($num_input, $obase, $b62x);
 			# why a mediate number format is needed?
@@ -78,6 +78,8 @@ class Base62x {
 		else{
 			# string
 			$inputArr = str_split($input); $inputlen = count($inputArr);
+			if(!isset($ascidx)){ $ascidx = array(); }
+			if(!isset($ascrlist)){ $ascrlist = array(); }
 			$setResult = self::setAscii($codetype, $inputArr, $ascidx, $ascmax, $asclist, $ascrlist);
 			$asctype = $setResult['asctype'];
 			$ascidx = $setResult['ascidx'];
@@ -91,15 +93,15 @@ class Base62x {
 					$inputArr[$i] = ord($inputArr[$i]);
 					if($ascidx[$inputArr[$i]] > -1){
 						$op[$m] = $xtag;
-						$op[++$m] = $ascidx[$inputArr[$i]];	
+						$op[++$m] = $ascidx[$inputArr[$i]];
 					}
 					else if($inputArr[$i] == $ixtag){
-						$op[$m] = $xtag; 
+						$op[$m] = $xtag;
 						$op[++$m] = $xtag;
 					}
 					else{
-						$op[$m] = chr($inputArr[$i]);	
-					}	
+						$op[$m] = chr($inputArr[$i]);
+					}
 					$m++;
 				}
 				while(++$i < $inputlen);
@@ -114,8 +116,8 @@ class Base62x {
 						case 1:
 							$c0 = $inputArr[$i] >> 2;
 							$c1 = (($inputArr[$i] << 6) & 0xff) >> 6;
-							if($c0 > $bpos){ $op[$m] = $xtag; $op[++$m] = $b62x[$c0]; }else{ $op[$m] = $b62x[$c0]; } 
-							if($c1 > $bpos){ $op[++$m] = $xtag; $op[++$m] = $b62x[$c1]; }else{ $op[++$m] = $b62x[$c1]; } 
+							if($c0 > $bpos){ $op[$m] = $xtag; $op[++$m] = $b62x[$c0]; }else{ $op[$m] = $b62x[$c0]; }
+							if($c1 > $bpos){ $op[++$m] = $xtag; $op[++$m] = $b62x[$c1]; }else{ $op[++$m] = $b62x[$c1]; }
 							break;
 
 						case 2:
@@ -123,9 +125,9 @@ class Base62x {
 							$c0 = $inputArr[$i] >> 2;
 							$c1 = ((($inputArr[$i] << 6) & 0xff) >> 2) | ($inputArr[$i+1] >> 4);
 							$c2 = (($inputArr[$i+1] << 4) & 0xff) >> 4;
-							if($c0 > $bpos){ $op[$m] = $xtag; $op[++$m] = $b62x[$c0]; }else{ $op[$m] = $b62x[$c0]; } 
-							if($c1 > $bpos){ $op[++$m] = $xtag; $op[++$m] = $b62x[$c1]; }else{ $op[++$m] = $b62x[$c1]; } 
-							if($c2 > $bpos){ $op[++$m] = $xtag; $op[++$m] = $b62x[$c2]; }else{ $op[++$m] = $b62x[$c2]; } 
+							if($c0 > $bpos){ $op[$m] = $xtag; $op[++$m] = $b62x[$c0]; }else{ $op[$m] = $b62x[$c0]; }
+							if($c1 > $bpos){ $op[++$m] = $xtag; $op[++$m] = $b62x[$c1]; }else{ $op[++$m] = $b62x[$c1]; }
+							if($c2 > $bpos){ $op[++$m] = $xtag; $op[++$m] = $b62x[$c2]; }else{ $op[++$m] = $b62x[$c2]; }
 							$i += 1;
 							break;
 
@@ -136,11 +138,11 @@ class Base62x {
 							$c1 = ((($inputArr[$i] << 6) & 0xff) >> 2) | ($inputArr[$i+1] >> 4);
 							$c2 = ((($inputArr[$i+1] << 4) & 0xff) >> 2) | ($inputArr[$i+2] >> 6);
 							$c3 = (($inputArr[$i+2] << 2) & 0xff) >> 2;
-							if($c0 > $bpos){ $op[$m] = $xtag; $op[++$m] = $b62x[$c0]; }else{ $op[$m] = $b62x[$c0]; } 
-							if($c1 > $bpos){ $op[++$m] = $xtag; $op[++$m] = $b62x[$c1]; }else{ $op[++$m] = $b62x[$c1]; } 
-							if($c2 > $bpos){ $op[++$m] = $xtag; $op[++$m] = $b62x[$c2]; }else{ $op[++$m] = $b62x[$c2]; } 
-							if($c3 > $bpos){ $op[++$m] = $xtag; $op[++$m] = $b62x[$c3]; }else{ $op[++$m] = $b62x[$c3]; } 
-							$i += 2;	
+							if($c0 > $bpos){ $op[$m] = $xtag; $op[++$m] = $b62x[$c0]; }else{ $op[$m] = $b62x[$c0]; }
+							if($c1 > $bpos){ $op[++$m] = $xtag; $op[++$m] = $b62x[$c1]; }else{ $op[++$m] = $b62x[$c1]; }
+							if($c2 > $bpos){ $op[++$m] = $xtag; $op[++$m] = $b62x[$c2]; }else{ $op[++$m] = $b62x[$c2]; }
+							if($c3 > $bpos){ $op[++$m] = $xtag; $op[++$m] = $b62x[$c3]; }else{ $op[++$m] = $b62x[$c3]; }
+							$i += 2;
 					}
 					$m++;
 				}
@@ -173,7 +175,7 @@ class Base62x {
 		if($isNum){
 			$output = 0;
 			$ibase = $xpos;
-			$num_input = self::xx2dec($input, $ibase, $max_safe_base, $rb62x); 	
+			$num_input = self::xx2dec($input, $ibase, $max_safe_base, $rb62x);
 			$output = self::dec2xx($num_input, $obase, $b62x);
 			# why a mediate number format is needed?
 		}
@@ -196,11 +198,11 @@ class Base62x {
 							$i++;
 						}
 						else{
-							$op[$m] = chr($ascrlist[$inputArr[++$i]]);	
+							$op[$m] = chr($ascrlist[$inputArr[++$i]]);
 						}
 					}
 					else{
-						$op[$m] = $inputArr[$i];	
+						$op[$m] = $inputArr[$i];
 					}
 					$m++;
 				}
@@ -232,7 +234,7 @@ class Base62x {
 							$arr = self::_decodeByLength($tmpArr, $op, $m);
 							$op = $arr[0];
 							$m = $arr[1];
-							break;	
+							break;
 
 						case 3:
 							if($inputArr[$i] == $xtag){ $tmpArr[0] = $bpos + $bint[$inputArr[++$i]]; }
@@ -305,9 +307,9 @@ class Base62x {
 					$i++;
 				}
 				else{
-					$tmpi = $ridx[$iArr[$i]];	
+					$tmpi = $ridx[$iArr[$i]];
 				}
-				$onum = $onum + $tmpi * pow($ibase, ($i - $xnum));	
+				$onum = $onum + $tmpi * pow($ibase, ($i - $xnum));
 				#error_log(__FILE__.": xx2dec i:$i c:".$iArr[$i]." onum:$onum");
 			}
 			#$onum = sprintf("%u", $onum);
@@ -315,7 +317,7 @@ class Base62x {
 			#$onum = (int)$onum;
 			if(strpos($onum, 'E') !== false){
 				error_log(__FILE__.": Base62x::xx2dec: lost precision due to too large number:[$onum]. consider using bc math. 1610072145.");
-				$onum = number_format($onum);	
+				$onum = number_format($onum);
 			}
 			#error_log(__FILE__.": xx2dec  after remedy i:$i c:".$iArr[$i]." onum:$onum");
 		}
@@ -373,10 +375,10 @@ class Base62x {
 		$rb62x = array();
 		for($i=0; $i<=$xpos; $i++){
 			if($i > $bpos && $i< $xpos){
-				# omit x1, x2, x3	
+				# omit x1, x2, x3
 			}
 			else{
-				$rb62x[$b62x[$i]] = $i;	
+				$rb62x[$b62x[$i]] = $i;
 			}
 		}
 
@@ -405,18 +407,18 @@ class Base62x {
 			}
 		}
 		else if($codetype == 1 && $inputArr[$inputlen-1] == $xtag){
-			$asctype = 1;	
+			$asctype = 1;
 		}
 		$ret['asctype'] = $asctype;
 
 		if($asctype == 1){
-			for($i=0; $i<=$ascmax; $i++){ $ascidx[$i] = -1; }		
+			for($i=0; $i<=$ascmax; $i++){ $ascidx[$i] = -1; }
 			$idxi = 0;
 			$bgnArr = array(0, 21, 32, 58, 91, 123);
 			$endArr = array(17, 28, 48, 65, 97, $ascmax+1);
 			foreach($bgnArr as $k=>$v){
 				for($i=$v; $i<$endArr[$k]; $i++){
-					$ascidx[$i] = $asclist[$idxi]; 
+					$ascidx[$i] = $asclist[$idxi];
 					$ascrlist[$asclist[$idxi]] = $i;
 					$idxi++;
 				}

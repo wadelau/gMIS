@@ -12,7 +12,7 @@ $module_list = ""; $hm_module_order = array();  $hm_module_name = array(); $hm_t
 
 $hm = $gtbl->execBy($sql="select * from ".$_CONFIG['tblpre']."fin_todotbl where (togroup in (" # for multiple groups
         .$user->getGroup().") or touser=".$user->getId()." or triggerbyparent in (".$user->getGroup().") or triggerbyparentid="
-        .$user->getId().") and state in (1,2) order by state desc, id desc limit 6 ", null,
+        .$user->getId().") and istate in (1,2) order by istate desc, id desc limit 6 ", null,
 		$withCache=array('key'=>'info_todo-select-'.$user->getId()));
 if($hm[0]){
     $hm = $hm[1];
@@ -34,7 +34,7 @@ if($hm[0]){
 	if(is_array($hm)){
 	foreach($hm as $k=>$v){
 		$module_list .= "'".$v['parenttype']."',";
-		$hm_module_order[$k] = $v['parenttype']; 
+		$hm_module_order[$k] = $v['parenttype'];
 	}
 	}
 	$module_list = substr($module_list, 0, strlen($module_list)-1);
@@ -56,10 +56,10 @@ $hm = $gtbl->execBy("select objname,tblname from "
 	$withCache=array('key'=>'info_object-select-desktop'));
 if($hm[0]){
 	$hm = $hm[1];
-	$data['module_list_byuser'] = $hm; #Todo add2desktop by user 
+	$data['module_list_byuser'] = $hm; #Todo add2desktop by user
 }
 else{
-    $hm = $gtbl->execBy("select objname,tblname from ".$_CONFIG['tblpre']."info_objecttbl order by rand() limit 4", 
+    $hm = $gtbl->execBy("select objname,tblname from ".$_CONFIG['tblpre']."info_objecttbl order by rand() limit 4",
             null, $withCache=array('key'=>'info_object-select-desktop-rand'));
     if($hm[0]){
         $hm = $hm[1];
@@ -67,20 +67,20 @@ else{
     }
 }
 
-$hm = $gtbl->execBy("select count(*) as modulecount from ".$_CONFIG['tblpre']."info_objecttbl where state=1", null,
+$hm = $gtbl->execBy("select count(*) as modulecount from ".$_CONFIG['tblpre']."info_objecttbl where istate=1", null,
 	$withCache=array('key'=>'info_object-select-count'));
 if($hm[0]){
 	$hm = $hm[1];
 	$data['module_count'] = $hm[0]['modulecount'];
 }
 
-$hm = $gtbl->execBy("select count(*) as usercount from ".$_CONFIG['tblpre']."info_usertbl where state=1");
+$hm = $gtbl->execBy("select count(*) as usercount from ".$_CONFIG['tblpre']."info_usertbl where istate=1");
 if($hm[0]){
 	$hm = $hm[1];
 	$data['user_count'] = $hm[0]['usercount'];
 }
 
-$hm = $gtbl->execBy("select * from ".$_CONFIG['tblpre']."fin_operatelogtbl order by ".$gtbl->getMyId()." desc limit 6", 
+$hm = $gtbl->execBy("select * from ".$_CONFIG['tblpre']."fin_operatelogtbl order by ".$gtbl->getMyId()." desc limit 6",
         null, $withCache=array('key'=>'info_user-select-count'));
 if($hm[0]){
 	$hm = $hm[1];
@@ -91,12 +91,12 @@ if($hm[0]){
 $navidir = $_REQUEST['navidir'];
 if($navidir != ''){
 	$hm = $gtbl->execBy("select * from ".$_CONFIG['tblpre']."info_menulist where levelcode='".$navidir
-	        ."' or levelcode like '".$navidir."__'  order by levelcode", null, 
+	        ."' or levelcode like '".$navidir."__'  order by levelcode", null,
 	        $withCache=array('key'=>'info_menulist-select-by-level-'.$navidir));
 	if($hm[0]){
 		$hm = $hm[1];
 		$data['navidir_list'] = $hm;
-	}	
+	}
 	#debug($hm, '', 1);
 }
 
@@ -145,7 +145,7 @@ $smt->assign('today', date("Y-m-d"));
 $smt->assign('historyurl', $ido.'&tbl=info_operatelogtbl&tit=操作历史记录&a1=0&pnsktogroup='
 	.$user->getGroup().'&pnskuserid='.$userid);
 
-$navi = new PageNavi(); 
+$navi = new PageNavi();
 
 $pnsc = "state=? and (touser like '".$user->getId()."' or togroup like '".$user->getGroup()."')";
 $smt->assign('todourl','ido.php?tbl=fin_todotbl&tit=待处理任务&a1=1&pnskstate=0&pnsm=1&pnsktouser='.$userid

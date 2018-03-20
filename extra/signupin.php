@@ -31,7 +31,7 @@ if($act == 'signin'){
 	$smt->assign('verifyid', $user->getVerifyId());
 	$smt->assign('islan', $islan);
 }
-else if($act == 'dosignin'){    
+else if($act == 'dosignin'){
     $issucc = false;
     $nexturl = '';
     $verifycode = $verifycode2 = '';
@@ -47,26 +47,26 @@ else if($act == 'dosignin'){
          # verified bgn
     $user->set('email',$_REQUEST['email']);
     $user->set('password',$_REQUEST['password']);
-    $hm = $user->getBy("*", "email=? and state=1");
+    $hm = $user->getBy("*", "email=? and istate=1");
     $result = '';
     if($hm[0]){
         $hm = $hm[1][0]; # refer to /inc/dba.class.php for the return data structure
         if($hm['password'] == SHA1($user->get('password'))){
-            $user->setId($hm['id']); 
+            $user->setId($hm['id']);
             $_CONFIG[UID] = $user->getId();
             $userid = $_CONFIG[UID];
-            $sid = $user->getSid($_REQUEST); 
+            $sid = $user->getSid($_REQUEST);
             # issue a valid ticket for this session
             # based on user, time, ip, browser and so on.
             $ckirtn = setcookie($name=$user->get('sid_tag'), $value=$sid);
             $result .= '<br/><br/>很好! 登录成功！ 欢迎回来, '.$user->getEmail()." !";
 			$bkl = Base62x::decode($_REQUEST['bkl']);
-            if($bkl != ''){ 
+            if($bkl != ''){
                 //- go to $thisurl
 				$nexturl = $bkl;
             }
             else{
-                //- 
+                //-
                 $nexturl = $rtvdir."/";
             }
             $nexturl .= inString('?', $nexturl) ? '&' : '?';
@@ -95,9 +95,9 @@ else if($act == 'dosignin'){
     $smt->assign('nexturl', $nexturl);
 }
 else if($act == 'signout'){
-    $user->setId(''); 
+    $user->setId('');
     $_CONFIG[UID] = $user->getId();
-    $userid = $_CONFIG[UID];    
+    $userid = $_CONFIG[UID];
     $smt->assign('result', $result = '成功退出系统, 欢迎下次再来.');
     $smt->assign('nexturl', $nexturl = $url.'&act=signin');
 }
@@ -117,7 +117,7 @@ else if($act == 'resetpwd'){
             $result .= " Loading.... <script type=\"text/javascript\">var newpwd=window.prompt('请输入新密码','');"
                     ."if(newpwd!=''&&newpwd!=null){window.top.location.href='".$rtvdir."/extra/signupin.php?act=resetpwd&userid="
                     .$userid."&issubmit=1&newpwd='+newpwd;}else{document.location.href='".$nexturl."';}</script>";
-            $result .= "失败！ 重置密码失败，请重试. 201205092158."; 
+            $result .= "失败！ 重置密码失败，请重试. 201205092158.";
         }
     }
     else if($user->getGroup() == 1){ # admin group
@@ -130,12 +130,12 @@ else if($act == 'resetpwd'){
             $result = "成功！ 用户 [userid:".$newuserid."] 的密码已经重置为:[".$newpwd_orig."].";
             $nexturl = $ido."&tbl=".$_CONFIG['tblpre']."info_usertbl&tit=&db=";
         }else{
-            $result = "失败！ 重置密码失败，请重试. 201204291947."; 
+            $result = "失败！ 重置密码失败，请重试. 201204291947.";
             $nexturl = $ido."&tbl=".$_CONFIG['tblpre']."info_usertbl&tit=&db=";
         }
     }
     else{
-        $result = "失败！ 重置密码失败，请重试. 201204292008."; 
+        $result = "失败！ 重置密码失败，请重试. 201204292008.";
         $nexturl = $ido."&tbl=".$_CONFIG['tblpre']."info_usertbl&tit=&db=";
     }
     $smt->assign('result', $result);

@@ -13,7 +13,7 @@ if(!defined('__ROOT__')){
   define('__ROOT__', dirname(dirname(__FILE__)));
 }
 
-require_once(__ROOT__.'/inc/webapp.class.php'); 
+require_once(__ROOT__.'/inc/webapp.class.php');
 
 class GTbl extends WebApp{
 	public $sep = '';
@@ -135,33 +135,33 @@ class GTbl extends WebApp{
 	public function getTblRotateName($tblrotate=null){ # Mon Jan  5 15:34:26 CST 2015
         $tmpstr = $this->hmconf[$this->taglist['table'].$this->sep.$this->prttbl.$this->sep.$this->taglist['rotatespan']];
         $tmpstr = $tmpstr==null?'':$tmpstr;
-		$spantbl = ''; 
+		$spantbl = '';
 		if($tmpstr != ''){
 		$spantag = strtoupper(substr($tmpstr, -1));
 		if($spantag != ''){
 			$this->rotatetag = $spantag;
 			if($tblrotate != ''){
 				$this->tblrotate = $tblrotate;
-				$spantbl .= '_'.$tblrotate;	
+				$spantbl .= '_'.$tblrotate;
 			}
 			else if($spantag == "M"){ #month
-				$spantbl .= "_".date("Ym");	
+				$spantbl .= "_".date("Ym");
 			}
 			else if($spantag == "Y"){
-				$spantbl .= "_".date("Y");	
+				$spantbl .= "_".date("Y");
 			}
 			else if($spantag == "D"){
-				$spantbl .= "_".date("Ymd");	
+				$spantbl .= "_".date("Ymd");
 			}
 			else if($spantag == "W"){
-				$spantbl .= "_".date("YW");	
+				$spantbl .= "_".date("YW");
 			}
 			else{
-				error_log(__FILE__.": found rotatespan:[$rotatespan] match failed.");	
+				error_log(__FILE__.": found rotatespan:[$rotatespan] match failed.");
 			}
 		}
 		}
-		#error_log(__FILE__.": chn:[".$this->getTblCHN()."] prttbl:[".$this->prttbl."] tmpstr:[$tmpstr]"); 
+		#error_log(__FILE__.": chn:[".$this->getTblCHN()."] prttbl:[".$this->prttbl."] tmpstr:[$tmpstr]");
 		return $spantbl;
 				
     }
@@ -198,11 +198,11 @@ class GTbl extends WebApp{
                     $trdArr = explode("=",$v);
                     $tmpfieldv = $trdArr[1];
                     if($trdArr[1] == 'THIS_TABLE'){
-                       $tmpfieldv = $oldhmf['tbl']; 
+                       $tmpfieldv = $oldhmf['tbl'];
                     }else if($trdArr[1] == 'THIS_ID'){
                         $tmpfieldv = $tmpId;
                     }
-                    $this->set($trdArr[0],$tmpfieldv); 
+                    $this->set($trdArr[0],$tmpfieldv);
                     $wherestr .= " ".$trdArr[0]."='".$tmpfieldv."' and";
                 }
             }
@@ -210,7 +210,7 @@ class GTbl extends WebApp{
 				$withCache=array('key'=>$tbl.'-select-'.$wherestr));
             if($hm[0]){
                 $hm = $hm[1];
-                $tmpstr = $hm[0][$dispfield]; 
+                $tmpstr = $hm[0][$dispfield];
             }else{
                 $tmpstr = '';
             }
@@ -284,7 +284,7 @@ class GTbl extends WebApp{
 			$tmpArr2 = array();
 			$tmptag = $tmpArr[$rotatespan];
 			for($tmpi=1; $tmpi<4; $tmpi++){
-				$mytag = date($tmpArr1[$rotatespan], strtotime("-$tmpi $tmptag"));		
+				$mytag = date($tmpArr1[$rotatespan], strtotime("-$tmpi $tmptag"));
 				$refArr[] = array("name"=>$mytag, "href"=>'jdo.php?tbl='.$this->prttbl
 				        .'&amp;act=list&amp;tblrotate='.$mytag.'&amp;db='.$this->db, 'target'=>'actarea');
 			}
@@ -311,7 +311,7 @@ class GTbl extends WebApp{
 	# get src prefix for files and images
 	# 17:59 09 November 2016
 	public function getSrcPrefix(){
-		$default = ''; # 
+		$default = ''; #
         $tmpstr = $this->hmconf[$this->taglist['table'].$this->sep.$this->prttbl.$this->sep.$this->taglist['srcprefix']];
         $tmpstr = $tmpstr==null?'':$tmpstr;
 		#debug(__FILE__.": get srcprefix:[$tmpstr]");
@@ -408,7 +408,7 @@ class GTbl extends WebApp{
         $selectval = '';
         $selectval_mul = '';
         if($tmpstr == ''){
-            # ?    
+            # ?
         }else if(strpos($tmpstr,"fromtable") === 0){
             $arr = explode("::",$tmpstr);
             $tbl = $arr[1]; $theTbl = $tbl;
@@ -421,15 +421,15 @@ class GTbl extends WebApp{
 			if(isset($arr[4])){ $optval = $arr[4]; }  # alternative 'id', # see xml/fwn_sitetbl, sitetype, Fri Dec 12 13:43:36 CST 2014
 			$hasExist = 0; $maxInitSelectCount = 512; $optioni = 0;
 			if(isset($this->hmconf['selectoption_'.$field])){
-				$optionlist = $this->hmconf['selectoption_'.$field]; $hasExist = 1;	
-				$hmoption = $this->hmconf['selectoption_hm_'.$field]; 	
+				$optionlist = $this->hmconf['selectoption_'.$field]; $hasExist = 1;
+				$hmoption = $this->hmconf['selectoption_hm_'.$field];
 			}
 			else{
 				$oldhmf = $this->hmf;
 				$this->hmf = array();
 				$this->setTbl($tbl);
-				$hm = $this->getBy("$optval,$dispfield", $arr[3], 
-					$withCache=array('key'=>$tbl.'-select-'.$arr[3]));  
+				$hm = $this->getBy("$optval,$dispfield", $arr[3],
+					$withCache=array('key'=>$tbl.'-select-'.$arr[3]));
 				if($hm[0]){
 					$hmoption = $hm[1]; # $this->hmconf['selectoption_'.$field] = $hmoption;
 				}
@@ -441,20 +441,20 @@ class GTbl extends WebApp{
 				if(strpos($dispfield, ",") !== false){ #! Sat Nov 29 07:35:39 CST 2014
 					$tmparr = explode(",", $dispfield);
 					foreach($tmparr as $k2=>$v2){
-						$dispname .= "-".$rec[$v2];	
+						$dispname .= "-".$rec[$v2];
 					}
 				}
 				$optionlist .= "<option value=\"".$rec[$optval]."\"";
 				if($defaultval != null){
 					if($rec[$optval] == $defaultval || strpos(",".$defaultval.",", ",".$rec[$optval].",") !== false){
-						$optionlist .= " selected";   
+						$optionlist .= " selected";
 						$selectval = $dispname.(isset($arr[3])?"-".$rec[$arr[3]]:"")." (".$rec[$optval].")";
 						if($needv == 1){
 							$selectval_mul .= $dispname.(isset($arr[3])?"-".$rec[$arr[3]]:"")." (".$rec[$optval]."),";
-						} 
+						}
 					}
 				}
-			   $optionlist .=">".$dispname.(isset($arr[3])?"-".$rec[$arr[3]]:"")." (".$rec[$optval].")</option>\n"; 
+			   $optionlist .=">".$dispname.(isset($arr[3])?"-".$rec[$arr[3]]:"")." (".$rec[$optval].")</option>\n";
 			   if($optioni++ > $maxInitSelectCount){ break; }
 			}
 			$this->hmconf['selectoption_'.$field] = $optionlist;
@@ -462,7 +462,7 @@ class GTbl extends WebApp{
             //$this->setTbl($oldtbl);
 			
 			if($hasExist == 0 && $optioni > $maxInitSelectCount){
-				print "<script type='text/javascript' async>parent.lazyLoad('".$field."','select','extra/readtblfield.php?objectid=0&logicid=".$dispfield."&tbl=".$theTbl."&field=".$field."');</script><input name='pnsk_".$field."_optionlist' id='pnsk_".$field."_optionlist' value='' type='hidden' />";		
+				print "<script type='text/javascript' async>parent.lazyLoad('".$field."','select','extra/readtblfield.php?objectid=0&logicid=".$dispfield."&tbl=".$theTbl."&field=".$field."');</script><input name='pnsk_".$field."_optionlist' id='pnsk_".$field."_optionlist' value='' type='hidden' />";
 				#error_log(__FILE__.": field:$field set lazy load...... optioni:$optioni");
 			}
 			if($defaultval != null && $selectval == ''){
@@ -476,24 +476,24 @@ class GTbl extends WebApp{
 						if(strpos($dispfield, ",") !== false){ #! Sat Nov 29 07:35:39 CST 2014
 							$tmparr = explode(",", $dispfield);
 							foreach($tmparr as $k2=>$v2){
-								$dispname .= "-".$rec[$v2];	
+								$dispname .= "-".$rec[$v2];
 							}
 						}
 						if($rec[$optval] == $defaultval || strpos(",".$defaultval.",", ",".$rec[$optval].",") !== false){
 							$selectval = $dispname.(isset($arr[3])?"-".$rec[$arr[3]]:"")." (".$rec[$optval].")";
 							if($needv == 1){
 								$selectval_mul .= $dispname.(isset($arr[3])?"-".$rec[$arr[3]]:"")." (".$rec[$optval]."),";
-							} 
+							}
 						}
 						$hmSelect[$rec[$optval]] = $selectval==''?($dispname."-(".$rec[$optval].")"):$selectval; # multiple support?
 					}
-					$this->hmconf['selectoption_sel_'.$field] = $hmSelect; 
+					$this->hmconf['selectoption_sel_'.$field] = $hmSelect;
 				}
 				if($selectval == ''){ $selectval = $hmSelect[$defaultval]; }
 				#error_log(__FILE__.": defval:[".$defaultval."] selectval:[".$selectval."]");
 			}
         }
-		else if(strpos($tmpstr,"|") > 0){ 
+		else if(strpos($tmpstr,"|") > 0){
             $varlist = explode("|", $tmpstr);
             $tmpstr = "";
 			$hmoption = $varlist;
@@ -502,11 +502,11 @@ class GTbl extends WebApp{
                 $optionlist .= "<option value=\"".$arr[0]."\"";
                 if($defaultval != null){
                     if($arr[0] != '' && ($arr[0] == $defaultval || strpos($defaultval, $arr[0]) !== false)){
-                        $optionlist .= " selected";   
+                        $optionlist .= " selected";
                         $selectval = $arr[1];
                         if($needv == 1){
                             $selectval_mul .= $arr[1].",";
-                        } 
+                        }
                     }
                 }
                 $optionlist .=">".$arr[1]."(".$arr[0].")</option>\n";
@@ -527,12 +527,12 @@ class GTbl extends WebApp{
                 #print_r($hmoption);
                 $hmTmp = array();
                 foreach($hmoption as $kh=>$vh){
-                	$hmTmp[$vh[$optval]] = $vh;	
+                	$hmTmp[$vh[$optval]] = $vh;
                 }
                 sort($hmTmp);
                 foreach($hmTmp as $ko=>$vo){
                 	$tmpstr .= ($oi++).".<input type='checkbox' name='".$tagpre.$field."[]' value='".$vo[$optval]."'"
-                		.(inList($vo[$optval], $defaultval) ? " checked" : "")."/> ".$vo[$arr[2]]."(".$vo[$optval].")&nbsp;&nbsp;&nbsp;";	
+                		.(inList($vo[$optval], $defaultval) ? " checked" : "")."/> ".$vo[$arr[2]]."(".$vo[$optval].")&nbsp;&nbsp;&nbsp;";
                 	if(($oi-1) % 5 == 0){
                 		$tmpstr .= "<br/>";
                 	}
@@ -561,7 +561,7 @@ class GTbl extends WebApp{
         if($tmpstr != ''){
         	if(strpos($tmpstr, "THIS_") !== false){
 				if($tmpcount=preg_match_all("/THIS_([^&]+)/", $tmpstr, $matches)){
-					#print_r($matches);		
+					#print_r($matches);
 					foreach($matches[1] as $k=>$v){
 						#print_r($v);
 						#print __FILE__.": matched:[".$v."],,,\n";
@@ -572,8 +572,8 @@ class GTbl extends WebApp{
 							$tmpstr = str_replace("THIS_$v", $result[$v], $tmpstr);
 						}
 					}
-				}	
-			}	
+				}
+			}
 		}
         return $tmpstr ;
     }
@@ -601,7 +601,7 @@ class GTbl extends WebApp{
         $tmpstr = $this->hmconf[$this->taglist['field'].$this->sep.$field.$this->sep.$this->taglist['css']];
         $tmpstr = $tmpstr==null?'':$tmpstr;
         if($tmpstr != ''){
-            $arr = explode("|", $tmpstr); # need to fiter by state, see xml/hss_tuanduitbl.xml
+            $arr = explode("|", $tmpstr); # need to fiter by state
             foreach($arr as $k=>$v){
                 $arr2 = explode("::", $v);
                 if($fieldv != ''){
@@ -630,7 +630,7 @@ class GTbl extends WebApp{
             $tmpstr = $this->hmconf[$this->taglist['field'].$this->sep.$field.$this->sep.$this->taglist['trigger']];
     	}
 		$tmpstr = $tmpstr==null ? '' : $tmpstr;
-		$tmpstr = $this->fillThis($tmpstr, $field);		
+		$tmpstr = $this->fillThis($tmpstr, $field);
         return $tmpstr;
     }
 
@@ -649,7 +649,7 @@ class GTbl extends WebApp{
 				$tUrl = $vArr[0];
 				$title = $vArr[1];
 				if(strpos($tUrl,"THIS") > -1){
-					$tUrl = str_replace('THIS',$result[$field], $tUrl);	
+					$tUrl = str_replace('THIS',$result[$field], $tUrl);
 				}
 				$tUrl = $this->appendSid($tUrl);
 			}
@@ -668,7 +668,7 @@ class GTbl extends WebApp{
                 }
     			else if(strpos($title, 'THIS') !== false){
     				$title = str_replace('THIS',$result[$field], $title);
-    			}  
+    			}
                 foreach($pArr as $k=>$v){
                     $para = explode("=", $v);
                     $tUrl .= $para[0].'=';
@@ -696,10 +696,10 @@ class GTbl extends WebApp{
                     }
                     if(strpos($fourthPara,"blank=1") !== false){
                         $needBlank = 1;
-                    } 
+                    }
                     else if(strpos($fourthPara,"blank=2") !== false){
                         $needBlank = 2;
-                    } 
+                    }
                 }
                 if($needJsConfirm == 1){
                     $tUrl = "javascript:if(window.confirm('确认要执行此操作吗?')){document.location.href='".$tUrl."';}";
@@ -782,7 +782,7 @@ class GTbl extends WebApp{
 
     public function getLogicOp($field){
 		$skiptag = Gconf::get('skiptag');
-        $intop = array('='=>'等于', $skiptag=>'忽略,不使用此條件', 
+        $intop = array('='=>'等于', $skiptag=>'忽略,不使用此條件',
                 '!='=>'不等于',
                 '>'=>'大于',
                 '>='=>'大于等于',
@@ -864,7 +864,7 @@ class GTbl extends WebApp{
 					if(!array_key_exists($tmpkey1,$hm)){
 						$hm[$tmpkey1] = (String)$value1;
 					}else{
-						$hm[$tmpkey1] = $hm[$tmpkey1]."|".(String)$value1; 
+						$hm[$tmpkey1] = $hm[$tmpkey1]."|".(String)$value1;
 					}
 
 					foreach($value1 as $key2=>$value2){
@@ -873,7 +873,7 @@ class GTbl extends WebApp{
 						if(!array_key_exists($tmpkey2,$hm)){
 							$hm[$tmpkey2] = (String)$value2;
 						}else{
-							$hm[$tmpkey2] = $hm[$tmpkey2]."|".(String)$value2; 
+							$hm[$tmpkey2] = $hm[$tmpkey2]."|".(String)$value2;
 						}
 
 						foreach($value2 as $key3=>$value3){
@@ -882,11 +882,11 @@ class GTbl extends WebApp{
 							if(!array_key_exists($tmpkey3,$hm)){
 								$hm[$tmpkey3] = (String)$value3;
 							}else{
-								$hm[$tmpkey3] = $hm[$tmpkey3]."|".(String)$value3; 
+								$hm[$tmpkey3] = $hm[$tmpkey3]."|".(String)$value3;
 							}
 						}
 					}
-				} 
+				}
 			}
         }else{
             error_log(__FILE__.": ".$xmlpath."/".$tblconf.".xml was not found.");
@@ -904,12 +904,12 @@ class GTbl extends WebApp{
             || in_array($field, array_merge($opfield, $timefield))){
             
            if($field != '' && $this->getListView($field) == 2){
-                # force to disp 
+                # force to disp
            }else{
                 $ishidden = true;
                 #print "field:[".$field."] is hidden!\n";
            }
-       }     
+       }
        return $ishidden;
     }
 
@@ -941,11 +941,11 @@ class GTbl extends WebApp{
 	public function setTbl($tbl=''){
 		$realtbl = '';
 		if($tbl == null || $tbl == ''){
-			$tbl = parent::getTbl();	
-		}	
+			$tbl = parent::getTbl();
+		}
 		$tblpre = GConf::get('tblpre');
 		$hasTblpre = startsWith($tbl, $tblpre);
-		$hm = parent::execBy('show tables like "%'.$tbl.'" ', null, 
+		$hm = parent::execBy('show tables like "%'.$tbl.'" ', null,
 			$withCache=array('key'=>$tbl."-simillar")); # just prefix
 		if($hm[0]){
 			$tmpv = '';
@@ -996,7 +996,7 @@ class GTbl extends WebApp{
 	public function fillThis($tmpstr, $field=null){
 		if($tmpstr != '' && strpos($tmpstr, 'THIS') > 0){
 			if($result == null){
-				$result = $this->get($this->resultset);	
+				$result = $this->get($this->resultset);
 			}
 			#debug(__FILE__.": tmpstr:[$tmpstr] resultset:");
 			#debug($result);

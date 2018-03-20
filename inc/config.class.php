@@ -8,7 +8,9 @@ ini_set("memory_limit","512M"); # memory limit avoding crush
 if(true){
 	$tblpre = "TABLE_PRE";
 	$conf = array();
-
+	$appdir = isset($appdir) ? $appdir : '';
+	$rtvdir = isset($rtvdir) ? $rtvdir : '';
+	
 	$conf['tblpre'] 	= $tblpre;
 	$conf['appname'] 	= '-gMIS';
 	$conf['appchnname'] 	= '-吉密斯';
@@ -28,6 +30,7 @@ if(true){
 	$conf['usertbl']	= $tblpre.'info_usertbl';
 	$conf['welcometbl']	= $tblpre.'info_welcometbl';
 	$conf['operatelogtbl']	= $tblpre.'fin_operatelogtbl';
+	$conf['ostype'] = 0; # 0 for *nix, 1 for windows, Mar 2018
 
 	# db info
 	$conf['dbhost'] 	= 'DB_HOST'; # use 127.0.0.1 instead of localhost
@@ -62,7 +65,7 @@ if(true){
 	$conf['filedriver'] = 'FileSystem'; # files operations, since 2016-11-05
 	$conf['enable_filehandle_share'] = 1; # 17:31 10 November 2016
 
-	# misc 
+	# misc
 	$conf['frontpage'] = '#-XXXX';  # put # before -naturedns as #-naturedns
 	$conf['is_debug'] = 0;
 	$conf['html_resp'] = '<!DOCTYPE html><html><head><title>RESP_TITLE</title></head><body>RESP_BODY</body></html>';
@@ -92,7 +95,7 @@ class GConf{
 	}
 
 	public static function set($key, $value){
-		self::$conf[$key] = $value;	
+		self::$conf[$key] = $value;
 	}
 
 	public static function getConf(){
@@ -102,7 +105,7 @@ class GConf{
 	public static function setConf($conf){
 		foreach($conf as $k=>$v){
 			self::set($k, $v);
-		}	
+		}
 	}
 }
 
