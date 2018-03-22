@@ -416,7 +416,7 @@ function getIp() {
              $rtn = serialize ( $src );
          }
          else {
-             $rtn = trim($src[$k]);
+             $rtn = trim(isset($src[$k])?$src[$k]:'');
          }
          if (!$rtn && $defaultValue != null) {
              $rtn = $defaultValue;

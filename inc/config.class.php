@@ -91,7 +91,12 @@ class GConf{
 	private static $conf = array();
 
 	public static function get($key){
-		return self::$conf[$key];
+		if(isset(self::$conf[$key])){
+		    return self::$conf[$key];
+		}
+		else{
+		    return '';
+		}
 	}
 
 	public static function set($key, $value){
