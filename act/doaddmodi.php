@@ -47,6 +47,8 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
         }
         else{
             debug(__FILE__.": unclassified timefield:[$field]. 1611101112.");
+		$fieldv = date("Y-m-d H:i:s", time()); # 'NOW()';
+                $fieldlist[] = $field;
         }
         continue;
 		

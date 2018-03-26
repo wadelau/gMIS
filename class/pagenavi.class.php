@@ -265,7 +265,7 @@ class PageNavi extends WebApp{
                 $condition = $pnsc;
             }
        }
-       error_log(__FILE__.":getCondition -2 : condition: $condition");
+       #error_log(__FILE__.":getCondition -2 : condition: $condition");
        return $condition; 
    }
 

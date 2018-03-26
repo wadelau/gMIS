@@ -39,18 +39,18 @@ else if(startsWith($act, "list")){
     $navi = new PageNavi();
     $orderfield = $navi->getOrder();
     if($orderfield == ''){
-        $orderfield = $orderfield=='' ? '1' : $orderfield;
-        if(strpos($orderfield, ' ') !== false){
-            $tmpArr = explode(' ', $orderfield);
-            $orderfield = $tmpArr[0];
-            $navi->set('isasc', ($tmpArr[1]=='desc' ? 1 : 0));
-        }
-        else{
-            # @todo
-        }
-        if($orderfield == $gtbl->getMyId()){
-            $navi->set('isasc', 1);
-        }
+    	$orderfield = '1';
+	if($hasid){
+	   $orderfield = $gtbl->getMyId();
+	}
+	$navi->set('isasc', 1);
+    }
+    else{
+    	if(strpos($orderfield, ' ') !== false){
+	    $tmpArr = explode(' ', $orderfield);
+	    $orderfield = $tmpArr[0];
+	    $navi->set('isasc', ($tmpArr[1]=='desc' ? 1 : 0));
+	} 
     }
     $gtbl->set("pagesize", $navi->get('pnps'));
     $gtbl->set("pagenum", $navi->get('pnpn'));
@@ -407,7 +407,7 @@ else if(startsWith($act, "list")){
                         ."');\" title='Remove this filter/去掉此条件'>[X]</a><br/>";
             }
         }
-        $out .= "<tr><td colspan='".$max_disp_cols."' style='text-align:center'><br/>No Data for These Criterions. "
+        $out .= "<tr><td colspan='".($max_disp_cols+2)."' style='text-align:center'><br/>No Data for These Criterions. "
                 ."/ 没有符合条件的数据. 請嘗試去掉一些條件再試試<br/><br/>".$queryFields."<br/>1609240951.<br/><br/></td></tr>";
     }
     $out .= "</table>";
@@ -435,6 +435,11 @@ else if(startsWith($act, "list")){
 else if($act == 'deepsearch'){
 
     include("./act/deepsearch.php");
+
+}
+else if(startsWith($act, 'pivot')){
+
+	include("./act/pivot.php");
 
 }
 else{
