@@ -22,7 +22,7 @@
             <chnname>头像</chnname>
 			<inputtype>file</inputtype>
         </field>
-        <field name="state" type="text">
+        <field name="istate" type="text">
             <chnname>状态</chnname>
             <inputtype>select</inputtype>
             <selectoption>0:停用|1:正常|2:冻结</selectoption>

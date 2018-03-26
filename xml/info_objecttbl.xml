@@ -39,7 +39,7 @@
         <inputtype>select</inputtype>
         <selectoption>1:显示|0:不显示</selectoption>
     </field>
-    <field name="state">
+    <field name="istate">
         <chnname>状态</chnname>
     </field>
 

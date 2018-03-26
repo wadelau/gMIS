@@ -398,7 +398,7 @@ class GTbl extends WebApp{
         $tmpstr = $this->hmconf[$this->taglist['field'].$this->sep.$field.$this->sep.$this->taglist['selectoption']];
         $tmpstr = $tmpstr==null?'':$tmpstr;
         if($tmpstr == ''){
-            if($field == 'state'){
+            if(inList($field 'istate,state,status,istatus')){
                 $tmpstr = "1:正常|0:停用";
             }else{
                 return $tmpstr;

@@ -69,7 +69,7 @@
 			<listview>2</listview>
         </field>
 
-        <field name="state">
+        <field name="istate">
             <chnname>状态</chnname>
             <inputtype>select</inputtype>
             <selectoption>1:待用|2:已选荐|3:已刊发|0:已选未发</selectoption>

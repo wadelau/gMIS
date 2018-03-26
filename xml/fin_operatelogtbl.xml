@@ -12,7 +12,7 @@
 	
 	<field name="userid">
         <chnname>人</chnname>
-        <selectoption>fromtable::info_usertbl::email::state=1</selectoption>
+        <selectoption>fromtable::info_usertbl::email::istate=1</selectoption>
     </field>
 
     <field name="actionstr">

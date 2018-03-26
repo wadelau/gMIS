@@ -42,7 +42,7 @@
             <selectoption>0:不许访问|1:只读|2:读写|3:读写删</selectoption>
         </field>
 
-        <field name="state">
+        <field name="istate">
             <chnname>状态</chnname>
             <selectoption>0:停用|1:正常</selectoption>
         </field>
