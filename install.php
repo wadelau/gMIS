@@ -402,8 +402,8 @@ else if($step == 'db'){
 		$tblpre = $_REQUEST['tablepre'];
 		if(substr($tblpre, -1) != '_'){ $tblpre .= "_"; }
 		#print $tblpre;
+		replaceInFile($config_file, 'TABLE_PRE', $tblpre);
 		if($tblpre != '' && $tblpre != 'gmis_'){
-			replaceInFile($config_file, 'TABLE_PRE', $tblpre);
 			replaceInFile('./gmis-tables.sql', 'gmis_', $tblpre);
 			sleep(2);
 		}
