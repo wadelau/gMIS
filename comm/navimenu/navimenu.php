@@ -159,7 +159,7 @@ $menulistjs = '
 			menu.init("menu","menuhover");
 		}
 		if(typeof parent.NaviMenu == "undefined"){
-			var menuDelayT=window.setTimeout(function(){ initNaviMenu();}, 2*1000);}
+			var menuDelayT=window.setTimeout(function(){ initNaviMenu();}, 2*1000);
 		}
 		else{
 			initNaviMenu();
