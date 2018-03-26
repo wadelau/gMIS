@@ -17,7 +17,7 @@ if(true){
 	$conf['appdir']		= $appdir;
 
 	$conf['rtvdir'] 	= $rtvdir;
-	$conf['agentname'] 	= '-XXXX-MIS';
+	$conf['agentname'] 	= 'AGENT_NAME';
 	$conf['agentalias']	= 'gMIS-Admin';
 	$conf['smarty']		= $appdir.'/class/Smarty';
 
@@ -66,7 +66,7 @@ if(true){
 	$conf['enable_filehandle_share'] = 1; # 17:31 10 November 2016
 
 	# misc
-	$conf['frontpage'] = '#-XXXX';  # put # before -naturedns as #-naturedns
+	$conf['frontpage'] = 'FRONT_PAGE';  # put # before -naturedns as #-naturedns
 	$conf['is_debug'] = 0;
 	$conf['html_resp'] = '<!DOCTYPE html><html><head><title>RESP_TITLE</title></head><body>RESP_BODY</body></html>';
 	$conf['auto_save_interval'] = 20; # ref extra/htmleditor
