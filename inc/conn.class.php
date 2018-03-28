@@ -32,11 +32,12 @@ class Config_Stats{
 	
 	function __construct(){
 		$gconf = new Gconf();
-		$this->mDbHost = $gconf->get('dbhost_stat');
-		$this->mDbPort = $gconf->get('dbport_stat');
-		$this->mDbUser = $gconf->get('dbuser_stat');
-		$this->mDbPassword = $gconf->get('dbpassword_stat');
-		$this->mDbDatabase = $gconf->get('dbname_stat');
+		$db_suffix = '_stat';
+		$this->mDbHost = $gconf->get('dbhost'.$db_suffix);
+		$this->mDbPort = $gconf->get('dbport'.$db_suffix);
+		$this->mDbUser = $gconf->get('dbuser'.$db_suffix);
+		$this->mDbPassword = $gconf->get('dbpassword'.$db_suffix);
+		$this->mDbDatabase = $gconf->get('dbname'.$db_suffix);
 
 	} 
 }
