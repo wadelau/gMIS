@@ -42,7 +42,7 @@ if(true){
 	$conf['db_enable_utf8_affirm'] = false; # append utf-8 affirm after db connection established, should be false in a all-utf-8 env.
 
 	# db slave info
-	$conf['dbhost_slave'] 	= 'SLAVE_DB'; #  -hadstatsdb -uadstats -padstatsaccess adstats
+	$conf['dbhost_slave'] 	= 'SLAVE_DB';
 	$conf['dbport_slave'] 	= '3306';
 	$conf['dbuser_slave'] 	= '';
 	$conf['dbpassword_slave'] 	= '';
