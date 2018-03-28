@@ -9,7 +9,7 @@ if(!defined('__ROOT__')){
   define('__ROOT__', dirname(dirname(__FILE__)));
 }
 
-require_once(__ROOT__.'/inc/webapp.class.php'); 
+require_once(__ROOT__.'/inc/webapp.class.php');
 
 class PageNavi extends WebApp{
 	
@@ -57,9 +57,18 @@ class PageNavi extends WebApp{
             $para['url'] = $this->hmf['url'];
        }
 	   else{
-			#error_log(__FILE__.": pntc is null.");   
-		}
-
+			#error_log(__FILE__.": pntc is null.");
+	   }
+	   # in case of POST parameters in dodeepsearch, Mar 28, 2018
+	   if(inString('dodeepsearch', $_REQUEST['act'])){
+	       foreach($_REQUEST as $k=>$v){
+	           if(startsWith($k, 'op') && $v != self::Omit_String){
+	               $para['url'] .= "&$k=$v";
+	               $kp = str_replace('op', '', $k);
+	               $para['url'] .= "&$kp=".$_REQUEST[$kp];
+	           }
+	       }
+	   }
        #print_r($this->hmf);
 
        $totalpage = $para['pntc'] % $para['pnps'] == 0 ? ($para['pntc']/$para['pnps']) : ceil($para['pntc']/$para['pnps']);
@@ -69,7 +78,7 @@ class PageNavi extends WebApp{
        for($i=$para['pnpn']-$navilen; $i<$para['pnpn'] + $navilen && $i<=$totalpage; $i++){
            if($i>0){
                if($i == $para['pnpn']){
-                    $str .= " <span id=\"currentpage\" style=\"color:green;font-weight:bold;font-size:18px\">".$i."</span> "; 
+                    $str .= " <span id=\"currentpage\" style=\"color:green;font-weight:bold;font-size:18px\">".$i."</span> ";
                }else{
                     $str .= " <a href=\"javascript:pnAction('".$para['url']."&pnpn=".$i."');\" style=\"font-size:14px;padding:3px;\">".$i."</a> ";
                }
@@ -103,7 +112,7 @@ class PageNavi extends WebApp{
        $order = "";
         foreach($_REQUEST as $k=>$v){
             if(strpos($k,"pnob") === 0){
-                $order = substr($k,4); 
+                $order = substr($k,4);
                 break;
             }
         }
@@ -115,25 +124,25 @@ class PageNavi extends WebApp{
        $isasc = 0; # 0: 0->1, asc; 1: 1->0, desc
        if(array_key_exists('isasc',$this->hmf)){
             if($field == '' || ($field != '' && $this->getOrder() == $field)){
-                $isasc = $this->hmf['isasc']; 
+                $isasc = $this->hmf['isasc'];
             }
        }else{
            foreach($_REQUEST as $k=>$v){
                if(($field == '' || $field == substr($k,4)) && strpos($k,"pnob") === 0){
                    if($v == 1){
-                       $isasc = 1; 
+                       $isasc = 1;
                        $this->hmf['isasc'] = $isasc;
                        break;
                    }
                }
            }
        }
-       return $isasc; 
+       return $isasc;
    }
 
    function getCondition($gtbl, $user){
        $condition = "";
-       $pnsm = $_REQUEST['pnsm']; 
+       $pnsm = $_REQUEST['pnsm'];
        $pnsm = $pnsm=='' ? "or" : $pnsm;
        $pnsm = $pnsm=='1'? "and" : $pnsm;
        $hmfield = $gtbl->getFieldList();
@@ -174,7 +183,7 @@ class PageNavi extends WebApp{
                 if(strpos($v, "tbl:") === 0){
                     $condition .= " ".$pnsm." ".$field." in (".$this->embedSql($linkfield,$v).")";
                 }
-				else if(strpos($v,"in::") === 0){ 
+				else if(strpos($v,"in::") === 0){
 					# <hidesk>tuanid=id::in::tbl:hss_tuanduitbl:operatearea=IN=USER_OPERATEAREA</hidesk>
                     #error_log(__FILE__.": k:$k, v:$v");
                     $tmparr = explode("::", $v);
@@ -201,7 +210,7 @@ class PageNavi extends WebApp{
                         $fieldopv = str_replace('&lt;', '<', $fieldopv);
                     }
 					if($fieldopv == $skiptag){
-						# omit...	
+						# omit...
 						continue;
 					}
                     if($hasId && $field == $myId){
@@ -247,7 +256,7 @@ class PageNavi extends WebApp{
                         $condition .= " ".$pnsm." "."$field not regexp ?";
                         $gtbl->set($field, $v);
                     }
-					else{ 
+					else{
                         $condition .= " ".$pnsm." $field $fieldopv ?"; # this should be numeric only.
                         $gtbl->set($field, $v);
                     }
@@ -255,7 +264,7 @@ class PageNavi extends WebApp{
                 }
             }
        }
-       $condition = substr($condition, 4); # first pnsm seg 
+       $condition = substr($condition, 4); # first pnsm seg
        #error_log(__FILE__.":getCondition: condition: $condition");
        $pnsc = $_REQUEST['pnsc'];
        if($pnsc != ''){
@@ -266,21 +275,21 @@ class PageNavi extends WebApp{
             }
        }
        #error_log(__FILE__.":getCondition -2 : condition: $condition");
-       return $condition; 
+       return $condition;
    }
 
-   //- sign a preset condition para, if given a $myk, validate it 
+   //- sign a preset condition para, if given a $myk, validate it
    //- added on Sat May 12 17:46:10 CST 2012
    function signPara($para,$myk=''){
         $sharekey = 'Wadelau_20120512_*(&^&****)';
         $mydate = date("Y-m-d");
         $myk2 = substr(sha1($para.$sharekey.$mydate),0,8);
-        if(!isset($myk) || $myk == ''){ 
+        if(!isset($myk) || $myk == ''){
             $myk = $myk2;
 
         }else{
             if($myk == $myk2){
-                $myk = true;   
+                $myk = true;
 
             }else{
                 $myk = false;
@@ -325,6 +334,6 @@ class PageNavi extends WebApp{
        }
        $condition .= "select $field from ".$varr[1]." where ".$varr2[0]." ".$tmpop." ".$tmpval." order by ".$this->getMyId()." desc";
        return $condition;
-   }  
+   }
 }
 

@@ -8,7 +8,8 @@ if($_REQUEST['pnsktuanid'] != '' && $_REQUEST['otbl'] != ''){
 }
 
 $out .= "<fieldset style=\"border-color:#5f8ac5;border: 1px solid #5f8ac5\">"
-        ."<legend><h4>详细内容</h4></legend><table align=\"center\" width=\"95%\" border=\"0px\">";
+        ."<legend><h4>详细内容</h4></legend><table align=\"center\" width=\"98%\" "
+	." cellspacing=\"0\" cellpadding=\"6px\" border=\"0px\">";
 $out .= "<tr><td width=\"10%\">&nbsp;</td>
             <td width=\"22%\">&nbsp;</td>
             <td width=\"10%\">&nbsp;</td>
