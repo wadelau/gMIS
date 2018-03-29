@@ -59,13 +59,16 @@ class PageNavi extends WebApp{
 	   else{
 			#error_log(__FILE__.": pntc is null.");
 	   }
-	   # in case of POST parameters in dodeepsearch, Mar 28, 2018
-	   if(inString('dodeepsearch', $_REQUEST['act'])){
+	   # in case of POST parameters in request, Mar 28, 2018
+	   if(true){
+	       $tmpUrl = $para['url'];
 	       foreach($_REQUEST as $k=>$v){
-	           if(startsWith($k, 'op') && $v != self::Omit_String){
-	               $para['url'] .= "&$k=$v";
-	               $kp = str_replace('op', '', $k);
-	               $para['url'] .= "&$kp=".$_REQUEST[$kp];
+	           if(startsWith($k, 'op')
+	                   && $v != self::Omit_String
+	                   && !inString('&'.$k, $tmpUrl)){
+	                       $para['url'] .= "&$k=$v";
+	                       $kp = str_replace('op', '', $k);
+	                       $para['url'] .= "&$kp=".$_REQUEST[$kp];
 	           }
 	       }
 	   }
