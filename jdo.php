@@ -200,7 +200,7 @@ else if(startsWith($act, "list")){
                $out .= "<td nowrap> <input name=\"checkboxid\" type=\"checkbox\" value=\"".$id
                 ."\"> &nbsp; <a onmouseover=\"javascript:showActList('".$i."', 1, '"
                 .str_replace("&".$gtbl->getMyId()."=","&oid=", $jdo)."&".$gtbl->getMyId()."=".$id
-                ."');\" onmouseout=\"javascript:showActList('".$id."', 0, '".str_replace("&".$gtbl->getMyId()."=","&oid=", $jdo)
+                ."');\" onmouseout=\"javascript:showActList('".$i."', 0, '".str_replace("&".$gtbl->getMyId()."=","&oid=", $jdo)
                 ."&".$gtbl->getMyId()."=".$id."');\" href='javascript:void(0);' onclick=\"javascript:doActionEx('".$jdo."&act=view&"
                 .$gtbl->getMyId()."=".$id."','contentarea');;\" title=\"详细信息\">"
                 .($i + (intval($navi->get('pnpn'))-1) * (intval($navi->get('pnps'))))." / ".$id
