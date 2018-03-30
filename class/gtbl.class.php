@@ -76,10 +76,11 @@ class GTbl extends WebApp{
 		$mydb = $hmconf['mydb'];
 		$db = $hmconf['db'];
 		$args = array('dbconf'=>($db==GConf::get('maindb')?'':$db));
+		
 	    parent::__construct($args);
 	    $this->mydb = $mydb==null?GConf::get('maindb'):$mydb;;
 	    # restore db after gMIS init.
-	    $reqdb = $_REQUEST['db'];
+	    $reqdb = trim($_REQUEST['db']);
 	    if($reqdb != $mydb){
 	        $this->db = $db = $hmconf['db'] = $reqdb;
 	    
