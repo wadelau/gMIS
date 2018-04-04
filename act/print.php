@@ -88,11 +88,11 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
 
     if(!$user->canRead($field, '', '', $_REQUEST['id'], $id)){
 		$fieldv = $skiptag;
-        $out .= "<td idata=\"$i\" fieldname=\"$field\">".$gtbl->getCHN($field).":&nbsp;</td><td> ".$fieldv."</td>";
+        $out .= "<td idata=\"$i\" fieldname=\"$field\"><b>".$gtbl->getCHN($field)."</b>:&nbsp;</td><td> ".$fieldv."</td>";
 		$tdi++;
     }
 	else if($fieldinputtype == 'select'){
-        $out .= "<td idata=\"$i\" fieldname=\"$field\">".$gtbl->getCHN($field).":&nbsp;</td><td> "
+        $out .= "<td idata=\"$i\" fieldname=\"$field\"><b>".$gtbl->getCHN($field)."</b>:&nbsp;</td><td> "
                 .$gtbl->getSelectOption($field, $hmorig[$field],'',1, $gtbl->getSelectMultiple($field) )."</td>";
 		$tdi++;
     }
@@ -116,7 +116,7 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
         if($lastclosed == 0){
             $out .= "</tr>\n<tr>";
         }
-        $out .= "<td width=\"20%\" nowrap>".$gtbl->getCHN($field).":</td><td colspan=\"".($form_cols)
+        $out .= "<td width=\"20%\" nowrap><b>".$gtbl->getCHN($field)."</b>:</td><td colspan=\"".($form_cols)
             ."\"><span id=\"linkinfo_".$rdnum."\"></span><script type=\"text/javascript\"> doActionEx('./act/readfield.php?tbl="
             .$refdetail[0]."&".$urlpart."&fieldlist=".$refdetail[2]."&isheader=0&isoput=0&mode=intbl','linkinfo_"
             .$rdnum."');</script></td>\n";
@@ -142,11 +142,11 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
 			if($tdi > 0){
 				$out .= "</tr>\n<tr idata=\"$i-$lastclosed\">";
 			}
-            $out .= "<td>".$gtbl->getCHN($field).":&nbsp;</td><td colspan=\"".($form_cols)."\"> ".$fieldv." </td>";
+            $out .= "<td><b>".$gtbl->getCHN($field)."</b>:&nbsp;</td><td colspan=\"".($form_cols)."\"> ".$fieldv." </td>";
 			$needcloserow = 1;
         }
 		else{
-            $out .= "<td nowrap idata=\"$i\" fieldname=\"$field\">".$gtbl->getCHN($field).":&nbsp;</td>";
+            $out .= "<td nowrap idata=\"$i\" fieldname=\"$field\"><b>".$gtbl->getCHN($field)."</b>:&nbsp;</td>";
             $out .= "<td class=\"tdprintfixedwidth\"> ".$fieldv." </td>";
 			$tdi++;
         }

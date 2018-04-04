@@ -181,7 +181,8 @@ class PageNavi extends WebApp{
                     $field = $arr[0];
                     $linkfield = $arr[1];
                 }
-				if(isset($_REQUEST[$field]) && $_REQUEST[$field] != $v){
+				if(isset($_REQUEST[$field]) && $_REQUEST[$field] != '' 
+					&& $_REQUEST[$field] != $v){
 					$v = $_REQUEST[$field];
 				}
                 if(strpos($v, "tbl:") === 0){
