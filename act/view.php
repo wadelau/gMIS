@@ -27,7 +27,7 @@ if($hasid){
     $fieldargv = "";
     for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
         $field = $gtbl->getField($hmi);
-        if($field == null | $field == '' 
+        if($field == null || $field == ''
                 || $field == $gtbl->getMyId()){
             continue;
         }
@@ -35,7 +35,7 @@ if($hasid){
             $gtbl->set($field, $_REQUEST[$field]);
             $fieldargv[] = $field."=?";
         }
-    } 
+    }
     $hmorig = $gtbl->getBy("*", implode(" and ", $fieldargv));
 }
 foreach($_REQUEST as $k=>$v){
@@ -44,11 +44,11 @@ foreach($_REQUEST as $k=>$v){
 	}
 	else if(startsWith($k, 'parent')){
 		$k2 = $v;
-		$hmorig[$k2] = $_REQUEST[$k2];	
+		$hmorig[$k2] = $_REQUEST[$k2];
 	}
 }
 if($hmorig[0]){
-    $hmorig = $hmorig[1][0]; 
+    $hmorig = $hmorig[1][0];
 }
 
 $closedtr = 1;
@@ -59,7 +59,7 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
     if($field == null || $field == ''
             ){
         continue;
-    } 
+    }
     if($closedtr == 1){
         $out .= "<tr height=\"30\" valign=\"middle\"  onmouseover=\"javascript:this.style.backgroundColor='"
                 .$hlcolor."';\" onmouseout=\"javascript:this.style.backgroundColor='';\">";
@@ -74,7 +74,7 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
         $out .= "<--NOREAD-->";
 
     }else if($fieldinputtype == 'select'){
-		$out .= "<td style=\"vertical-align:top\">".$gtbl->getCHN($field).":&nbsp;</td>"
+		$out .= "<td style=\"vertical-align:top\"><b>".$gtbl->getCHN($field)."</b>:&nbsp;</td>"
 		        ."<td style=\"vertical-align:top\"> "
 		        .$gtbl->getSelectOption($field, $hmorig[$field],'', $gtbl->getSelectMultiple($field))."</td>";
         
@@ -84,8 +84,8 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
             $hmorig[$field] = $srcprefix.'/'.$hmorig[$field];
         }
         $isimg = isImg($hmorig[$field]);
-		if(strpos($hmorig[$field], "$shortDirName/") !== false){ 
-		    $hmorig[$field] = str_replace("$shortDirName/", "", $hmorig[$field]); 
+		if(strpos($hmorig[$field], "$shortDirName/") !== false){
+		    $hmorig[$field] = str_replace("$shortDirName/", "", $hmorig[$field]);
 		}
 		if($gtbl->getSingleRow($field)){ $out .= "</tr><tr>"; }
         if($isimg){
@@ -125,12 +125,12 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
     }
 	else if($fieldinputtype == 'textarea'){
 
-        $hmorig[$field] = str_replace("<br/>", "\n", $hmorig[$field]); 
+        $hmorig[$field] = str_replace("<br/>", "\n", $hmorig[$field]);
 
         if($gtbl->getSingleRow($field) == '1'){
 			$tmpmemo = $gtbl->getMemo($field);
             if($tmpmemo == ''){
-                #$tmpmemo = '支持标准HTML: 加粗&lt;b&gt;, 超链&lt;a&gt;, 
+                #$tmpmemo = '支持标准HTML: 加粗&lt;b&gt;, 超链&lt;a&gt;,
                 #插入图片如&lt;img src="admin/upld/102913431493_-201210.jpg" /&gt;(图片路径在 综合数据--附件数据 里获取)';
             }
             $out .= "</tr>\n<tr><td style=\"vertical-align:top\">".$gtbl->getCHN($field).":</td><td colspan=\"".($form_cols)."\">
@@ -160,9 +160,9 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
         if(count($fhref)>0){
 			if(strpos($fhref[0],"javascript") !== false){
               $tmpval = "<a href=\"javascript:void(0);\" onclick=\"".$fhref[0]."\" title=\"".$fhref[1]."\" target=\""
-                      .$fhref[2]."\">".$tmpval."</a>";    
+                      .$fhref[2]."\">".$tmpval."</a>";
             }else{
-              $tmpval = "<a href=\"".$fhref[0]."\" title=\"".$fhref[1]."\" target=\"".$fhref[2]."\">".$tmpval."</a>";   
+              $tmpval = "<a href=\"".$fhref[0]."\" title=\"".$fhref[1]."\" target=\"".$fhref[2]."\">".$tmpval."</a>";
             }
         }
 
@@ -193,17 +193,17 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
 $out .= "<tr ><td style=\"border-top: 1px dotted #cccccc; vertical-align:middle;\" colspan=\""
         .$form_cols."\">  </td></tr>";
 $out .= "<tr><td colspan=\"".$form_cols."\" align=\"center\">
-	<input type=\"button\" name=\"viewbtn\" id=\"viewbtn\" value=\"编辑\" 
+	<input type=\"button\" name=\"viewbtn\" id=\"viewbtn\" value=\"编辑\"
 		onclick=\"javascript:doActionEx('"
-		.$jdo."&act=modify','contentarea');\"/> 
-	<input type=\"button\" name=\"printbtn\" id=\"printbtn\" value=\"打印预览\" 
+		.$jdo."&act=modify','contentarea');\"/>
+	<input type=\"button\" name=\"printbtn\" id=\"printbtn\" value=\"打印预览\"
 		onclick=\"javascript:window.open('"
-		.$jdo."&act=print&isoput=1&isheader=0','PrintWindow','scrollbars,toolbar,location=0');\"/>   
-	<input type=\"button\" name=\"deletebtn\" id=\"deletebtn\" value=\"删除\" 
+		.$jdo."&act=print&isoput=1&isheader=0','PrintWindow','scrollbars,toolbar,location=0');\"/>
+	<input type=\"button\" name=\"deletebtn\" id=\"deletebtn\" value=\"删除\"
 		onclick=\"javascript:if(window.confirm('Are you sure to delete? / 您确定要删除 id:".$id
-		." 吗?')){doAction('".$jdo."&act=list-dodelete');}\"/> 
-	<input type=\"button\" name=\"cancelbtn\" value=\"关闭\" 
-		onclick=\"javascript:parent.switchArea('contentarea_outer','off');\" /> 
+		." 吗?')){doAction('".$jdo."&act=list-dodelete');}\"/>
+	<input type=\"button\" name=\"cancelbtn\" value=\"关闭\"
+		onclick=\"javascript:parent.switchArea('contentarea_outer','off');\" />
 	
 	</td></tr>";
 
