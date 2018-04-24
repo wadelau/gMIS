@@ -116,10 +116,17 @@ class PageNavi extends WebApp{
        $order = "";
         foreach($_REQUEST as $k=>$v){
             if(strpos($k,"pnob") === 0){
-                $order = substr($k,4);
-                break;
+                $order .= substr($k,4);
+                if($v == 1){
+                    $order .= " desc";
+                }
+                $order .= ",";
+                #break; # allow multiple order fields
             }
         }
+        if($order != ''{
+            $order .= "1 "; # + "order by 1 ", compatible with this->get('isasc');
+        })
         #debug(__FILE__.":getOrder:$order");
         return $order;
    }
@@ -181,7 +188,7 @@ class PageNavi extends WebApp{
                     $field = $arr[0];
                     $linkfield = $arr[1];
                 }
-				if(isset($_REQUEST[$field]) && $_REQUEST[$field] != '' 
+				if(isset($_REQUEST[$field]) && $_REQUEST[$field] != ''
 					&& $_REQUEST[$field] != $v){
 					$v = $_REQUEST[$field];
 				}
