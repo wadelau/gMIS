@@ -1,5 +1,5 @@
 <?php
-# directory management module 
+# directory management module
 # wadelau@ufqi.com on Sun Jan 31 10:22:15 CST 2016
 
 #$isoput = false;
@@ -16,7 +16,7 @@ $inframe = $_REQUEST['inframe'];
 
 if($inframe == ''){
 	# re open in an iframe window
-	$myurl = $rtvdir."/extra/xdirectory.php?inframe=1&".$_SERVER['QUERY_STRING'].'&'.SID.'='.$sid; 		
+	$myurl = $rtvdir."/extra/xdirectory.php?inframe=1&".$_SERVER['QUERY_STRING'].'&'.SID.'='.$sid;
     $out .= "<iframe id=\"linktblframe\" name=\"linktblframe\" width=\"100%\" height=\"100%\" src=\""
             .$myurl."&isheader=0\" frameborder=\"0\"></iframe>";
 
@@ -28,30 +28,30 @@ $dirLevelLength = 2;
 # main actions
 
 $out .= '
-		<script type="text/javascript" src="'.$rtvdir.'/comm/jquery-1.12.1.min.js" charset="utf-8"></script>			
-		<style type="text/css">
-			.node ul{
-			margin-left:-25px;
-			}
-			.node ul li{
-			list-style-type:none;
-			}
-			.node .node{
-			display:none;
-			}
-			.node .tree{
-			height:24px;
-			line-height:24px;
-			}
-			.ce_ceng_close{
-			background:url(../img/cd_zd1.png) left center no-repeat;
-			padding-left: 15px;
-			}
-			.ce_ceng_open{
-			background:url(../img/cd_zd.png) left center no-repeat;
-			}					
-		</style>
-		';
+	<script type="text/javascript" src="'.$rtvdir.'/comm/jquery-1.12.1.min.js" charset="utf-8"></script>
+	<style type="text/css">
+		.node ul{
+		margin-left:-25px;
+		}
+		.node ul li{
+		list-style-type:none;
+		}
+		.node .node{
+		display:none;
+		}
+		.node .tree{
+		height:24px;
+		line-height:24px;
+		}
+		.ce_ceng_close{
+		background:url(../img/cd_zd1.png) left center no-repeat;
+		padding-left: 15px;
+		}
+		.ce_ceng_open{
+		background:url(../img/cd_zd.png) left center no-repeat;
+		}
+	</style>
+	';
 		
 $out .= "";
 $icode = $_REQUEST['icode'];
@@ -62,10 +62,10 @@ $expandList = array();
 if(strlen($parentCode) > $dirLevelLength){
 	$codeV = '';
 	$codeArr = str_split(substr($parentCode,0,strlen($parentCode)-$dirLevelLength), $dirLevelLength);
-	foreach($codeArr as $k=>$v){	
-		$codeV .= $v;		
-		$expandList[$codeV] = $codeV;				
-	}	
+	foreach($codeArr as $k=>$v){
+		$codeV .= $v;
+		$expandList[$codeV] = $codeV;
+	}
 }
 
 $list = array();
@@ -75,21 +75,21 @@ if($hm[0]){
 	$hm = $hm[1];
 }
 else{
-	$hm = array(0=>array("$icode"=>'00', "$iname"=>'所有/All'));	
+	$hm = array(0=>array("$icode"=>'00', "$iname"=>'所有/All'));
 }
 #debug($hm);
 if(1){
 	foreach($hm as $k=>$v){
-		if($v[$icode] == ''){ 
+		if($v[$icode] == ''){
 			$v[$icode] = '00'; # init hierarchy
 		}
-		$list[$v[$icode]] = $v[$iname];	
+		$list[$v[$icode]] = $v[$iname];
 	}
 	$out .= '<style type="text/css">';
-	foreach($list as $k=>$v){		
+	foreach($list as $k=>$v){
 		$out .= '#nodelink'.$k.'{ width:168px; height:20px; display:none; }';
-	}		
-	$out .= '</style>';		
+	}
+	$out .= '</style>';
 	$str = $xdirectory->getList($list, $dirLevelLength);
 	$out .= $str;
 }
@@ -98,52 +98,52 @@ $out .= " <script type=\"text/javascript\"> var current_link_field='".$_REQUEST[
     ."'; parent.sendLinkInfo('".$parentCode."','w', current_link_field); </script> ";
 
 $out .= '
-			<script type="text/javascript">
-				$(".tree").each(function(index, element) {
-					if($(this).next(".node").length>0){
-						$(this).addClass("ce_ceng_close");
-					}
-					else{
-						$(this).css("padding-left","15px");
-					}
-				});
-		';		
-		
-foreach($expandList as $k=>$v){		
-	$out .= '
-				var ull = $("#'.$v.'").next(".node");
-				ull.slideDown();
-				$("#'.$v.'").addClass("ce_ceng_open");
-				ull.find(".ce_ceng_close").removeClass("ce_ceng_open");
+		<script type="text/javascript">
+			$(".tree").each(function(index, element) {
+				if($(this).next(".node").length>0){
+					$(this).addClass("ce_ceng_close");
+				}
+				else{
+					$(this).css("padding-left","15px");
+				}
+			});
 		';
-}				
+		
+foreach($expandList as $k=>$v){
+	$out .= '
+		var ull = $("#'.$v.'").next(".node");
+		ull.slideDown();
+		$("#'.$v.'").addClass("ce_ceng_open");
+		ull.find(".ce_ceng_close").removeClass("ce_ceng_open");
+		';
+}
 								
-$out .= '				
-				$(".tree").click(function(e){
-					var ul = $(this).next(".node");
-					if(ul.css("display")=="none"){
-						ul.slideDown();
-						$(this).addClass("ce_ceng_open");
-						ul.find(".ce_ceng_close").removeClass("ce_ceng_open");
-					}else{
-						ul.slideUp();
-						$(this).removeClass("ce_ceng_open");
-						ul.find(".node").slideUp();
-						ul.find(".ce_ceng_close").removeClass("ce_ceng_open");
-					}
-				});				
+$out .= '
+		$(".tree").click(function(e){
+			var ul = $(this).next(".node");
+			if(ul.css("display")=="none"){
+				ul.slideDown();
+				$(this).addClass("ce_ceng_open");
+				ul.find(".ce_ceng_close").removeClass("ce_ceng_open");
+			}else{
+				ul.slideUp();
+				$(this).removeClass("ce_ceng_open");
+				ul.find(".node").slideUp();
+				ul.find(".ce_ceng_close").removeClass("ce_ceng_open");
+			}
+		});
 		';
 
 foreach($list as $k=>$v){
 	$out .='
-				function xianshi'.$k.'() {
-					document.getElementById("nodelink'.$k.'").style.display="inline";
-				}
-				function yincang'.$k.'() {
-					document.getElementById("nodelink'.$k.'").style.display="none";
-				}	
-	   ';	
-}		
+		function xianshi'.$k.'() {
+			document.getElementById("nodelink'.$k.'").style.display="inline";
+		}
+		function yincang'.$k.'() {
+			document.getElementById("nodelink'.$k.'").style.display="none";
+		}
+	   ';
+}
 
 $out .='</script>';
 

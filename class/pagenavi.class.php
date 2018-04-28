@@ -124,9 +124,9 @@ class PageNavi extends WebApp{
                 #break; # allow multiple order fields
             }
         }
-        if($order != ''{
+        if($order != ''){
             $order .= "1 "; # + "order by 1 ", compatible with this->get('isasc');
-        })
+        }
         #debug(__FILE__.":getOrder:$order");
         return $order;
    }
