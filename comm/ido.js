@@ -10,11 +10,13 @@
 //- wrap iId as string, 09:03 09 October 2016
 //- imprvs on searchbytime, Thu, 2 Mar 2017 16:32:06 +0800
 //- bugfix on firefox with event, 23:34 02 August 2017
-//-
-var currenttbl = '';
-var currentdb = '';
-var currentlistid = {}; //-- associative array
-var userinfo = {};
+//- bugfix for async, 19:14 Thursday, 15 March, 2018
+
+var currenttbl = currenttbl ? currenttbl : '';
+var currentdb =  currentdb ? currentdb : '';
+var currentpath = currentpath ?  currentpath : '';
+var currentlistid = currentlistid ? currentlistid : {}; //-- associative array
+var userinfo =  userinfo ? userinfo : {};
 
 if(!window.console){
 	console = { log:function(){}};

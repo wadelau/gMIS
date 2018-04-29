@@ -1,7 +1,7 @@
 <?php
 require("./comm/header.inc.php");
 
-$out = str_replace('TITLE','欢迎', $out); 
+$out = str_replace('TITLE','欢迎', $out);
 $isgo = true;
 if($tbl == ''){
     if(1){
@@ -37,11 +37,11 @@ if(Wht::get($_REQUEST, 'tit') == ''){
 $module_path = ''; $levelcode = ''; $codelist = '';
 include_once($appdir."/comm/modulepath.inc.php");
 
-$jdo = mkUrl($jdo, $_REQUEST, $gtbl); # ".($isheader?"</h3>":"")." 
+$jdo = mkUrl($jdo, $_REQUEST, $gtbl); # ".($isheader?"</h3>":"")."
 
 $out .= "<table align=\"center\" width=\"98%\"  style=\"background:transparent\">";
-$out .= "<tr><td width=\"40%\" ".($isheader?"class=\"f17px\"":"").">  <b> &Pi; <a href=\"".$url."\">首页</a> "
-        ."<span class=\"f17px\">&rarr;</span> ".$module_path." </b> </td>";
+$out .= "<tr><td width=\"40%\" ".($isheader?"class=\"f17px\"":"")."> <!-- <b> &Pi; <a href=\"".$url."\">首页</a> "
+        ."<span class=\"f17px\">&rarr;</span> --> ".$module_path." </b> </td>";
 
 $out .= "<td style=\"text-align:left\" colspan=\"18\">
     &nbsp;&nbsp; <button onclick=\"javascript:doActionEx('".$jdo."&act=add','contentarea');\">新增</button>";

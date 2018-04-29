@@ -34,7 +34,7 @@ if($hm[0]){
         $hmfield[$field] = $fieldv;
         $hmfield[$field."_default"] = $v['Default'];
         $tmpsort = $hmfieldsortinxml[$field];
-        if($tmpsort == null || $tmpsort == ''){ 
+        if($tmpsort == null || $tmpsort == ''){
             $tmpsort = $hmj++; # $hmi; # remedy on Wed Jul 11 18:57:32 CST 2012
             $hmi--;
         }
@@ -81,6 +81,15 @@ else{
 }
 if($gtbl->getMyId() == 'id' && !isset($hmfield['id'])){
     $gtbl->setMyId(''); $hasid = false;
+}
+else if($hasid){
+	$myId = $gtbl->getMyId();
+    $hmfieldsortN = array(0=>$myId); # put id as the first if available
+    foreach ($hmfieldsort as $k=>$v){
+        if($v == $myId){ continue; }
+        $hmfieldsortN[$k+1] = $v;
+    }
+    $hmfieldsort = $hmfieldsortN;
 }
 $gtbl->set($gtbl->PRIUNI, $priuni);
 $gtbl->set('hasid', $hasid);

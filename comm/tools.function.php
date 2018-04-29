@@ -9,42 +9,46 @@
    wadelau, Wed Feb 15 09:18:27 CST 2012
    */
 function getSmtTpl($file, $act){
-    $scriptname = explode("/",$file);
+    $pathTag = '/';
+    if($_CONFIG['ostype'] == 1 && inString("\\", $file)){ # windows, Mar 2018
+        $pathTag = "\\";
+    }
+    $scriptname = explode($pathTag, $file);
     $scriptname = $scriptname[count($scriptname)-1];
     $scriptname = explode(".",$scriptname);
     $scriptname = $scriptname[0];
     return $smttpl = $scriptname.'_'.($act==''?'main':$act).'.html';
 }
 
-/** 
- * Send a POST requst using cURL, refer to http://www.php.net/manual/en/function.curl-exec.php 
- * @param string $url to request 
- * @param array $post values to send 
- * @param array $options for cURL 
- * @return string 
+/**
+ * Send a POST requst using cURL, refer to http://www.php.net/manual/en/function.curl-exec.php
+ * @param string $url to request
+ * @param array $post values to send
+ * @param array $options for cURL
+ * @return string
  ***** WILL BE REPLACED WITH WebApp::setBy(':url', ARGS);
- */ 
-function curlPost($url, array $post = NULL, array $options = array()){ 
-    $defaults = array( 
-            CURLOPT_POST => 1, 
-            CURLOPT_HEADER => 0, 
-            CURLOPT_URL => $url, 
-            CURLOPT_FRESH_CONNECT => 1, 
-            CURLOPT_RETURNTRANSFER => 1, 
-            CURLOPT_FORBID_REUSE => 1, 
-            CURLOPT_TIMEOUT => 4, 
-            CURLOPT_POSTFIELDS => http_build_query($post) 
-            ); 
+ */
+function curlPost($url, array $post = NULL, array $options = array()){
+    $defaults = array(
+            CURLOPT_POST => 1,
+            CURLOPT_HEADER => 0,
+            CURLOPT_URL => $url,
+            CURLOPT_FRESH_CONNECT => 1,
+            CURLOPT_RETURNTRANSFER => 1,
+            CURLOPT_FORBID_REUSE => 1,
+            CURLOPT_TIMEOUT => 4,
+            CURLOPT_POSTFIELDS => http_build_query($post)
+            );
 
-    $ch = curl_init(); 
-    curl_setopt_array($ch, ($options + $defaults)); 
-    if( ! $result = curl_exec($ch)) 
+    $ch = curl_init();
+    curl_setopt_array($ch, ($options + $defaults));
+    if( ! $result = curl_exec($ch))
     {
-        trigger_error(curl_error($ch)); 
-    } 
-    curl_close($ch); 
-    return $result; 
-} 
+        trigger_error(curl_error($ch));
+    }
+    curl_close($ch);
+    return $result;
+}
 
 /**
  * send mail by system built-in sendmail commands
@@ -66,8 +70,8 @@ function sendMail($to,$subject,$body, $from='', $local=0){
 		$mailstr .= $body.'\n';
 
 		$tmpfile = "/tmp/".GConf::get('agentalias').".user.reg.mail.tmp";
-		system('/bin/echo -e "'.$mailstr.'" > '.$tmpfile);  
-		system('/bin/cat '.$tmpfile.' | /usr/sbin/sendmail -t &');  
+		system('/bin/echo -e "'.$mailstr.'" > '.$tmpfile);
+		system('/bin/cat '.$tmpfile.' | /usr/sbin/sendmail -t &');
 
 		$rtnarr[0] = true;
     
@@ -93,7 +97,7 @@ function sendMail($to,$subject,$body, $from='', $local=0){
         
         $rtnarr[0] = $mail->sendMail($to, $from, $subject, $body, 'HTML');
 
-    } 
+    }
 
     return $rtnarr;
 }
@@ -146,7 +150,7 @@ function mkUrl($file, $_REQU, $gtbl=null){
 		$ki++;
     }
     $url = substr($url, 0, strlen($url)-1);
-    #print __FILE__.": url:[$url]\n"; 
+    #print __FILE__.": url:[$url]\n";
     return $url;
 
 }
@@ -241,7 +245,7 @@ function alert($str,$type="back",$topWindow="",$timeout=100){
 	exit();
 }
 
-/** 
+/**
  * URL redirect, remedy by wadelau@ufqi.com 09:52 Tuesday, November 24, 2015
  */
 function redirect($url, $time=0, $msg='') {
@@ -270,12 +274,12 @@ function redirect($url, $time=0, $msg='') {
         if (0 === $time) {
             header("Location: " . $url);
 			print $hideMsg;
-        } 
+        }
         else{
             print $hideMsg;
         }
         exit();
-    } 
+    }
     else{
         print $hideMsg;
         exit();
@@ -288,12 +292,12 @@ function isImg($file){
 	if($file != ''){
 		$tmpfileext = substr($file, strlen($file)-4);
 		if(in_array($tmpfileext,array("jpeg",".jpg",".png",".gif",".bmp"))){
-			$isimg = 1;    
-		}   
-	}       
+			$isimg = 1;
+		}
+	}
 	return $isimg;
 
-}  
+}
 
 function isEmail($email){
     if(!preg_match('|^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]{2,})+$|i', $email)){
@@ -320,8 +324,8 @@ function getIdList($iarray, $ikey){
 
 # write log in a simple approach
 # by wadelau@ufqi.com, Sat Oct 17 17:38:26 CST 2015
-# e.g. 
-# debug($user); 
+# e.g.
+# debug($user);
 # debug($user, 'userinfo');  # with tag 'userinfo'
 # debug($user, 'userinfo', 1); # with tag 'userinfo' and in backend and frontend
 function debug($obj, $tag='', $output=null){
@@ -343,7 +347,7 @@ function debug($obj, $tag='', $output=null){
 	if($tag != ''){
 		$s = " $tag:[$s]";
 	}
-	$callidx = count($caller) - 2; 
+	$callidx = count($caller) - 2;
 	$s .= ' func:['.$caller[$callidx]['function'].'] file:['.$caller[$callidx]['file'].']';
 
 	if($output != null){
@@ -373,7 +377,7 @@ function debug($obj, $tag='', $output=null){
     		}
 	    }
 	}
-	else{ 
+	else{
 		error_log($s); # default mode
 	}
 	
@@ -412,7 +416,7 @@ function getIp() {
              $rtn = serialize ( $src );
          }
          else {
-             $rtn = trim($src[$k]);
+             $rtn = trim(isset($src[$k])?$src[$k]:'');
          }
          if (!$rtn && $defaultValue != null) {
              $rtn = $defaultValue;
@@ -471,11 +475,11 @@ function getIp() {
                      	
                      $ip = $_SERVER["HTTP_X_REAL_IP"];
          }
-         if (($ip == "Unknown" or $ip == "127.0.0.1" 
+         if (($ip == "Unknown" or $ip == "127.0.0.1"
                  or strpos( $ip, "192.168." ) === 0
                  or strpos( $ip, "172.31." ) === 0
                  or strpos( $ip, "10." ) === 0)
-                 and @$_SERVER["HTTP_X_FORWARDED_FOR"]) {  	
+                 and @$_SERVER["HTTP_X_FORWARDED_FOR"]) {
              $ip = $_SERVER["HTTP_X_FORWARDED_FOR"];
              if (($tmppos=strrpos($ip," "))>0){
                  $ip=substr($ip,$tmppos+1);

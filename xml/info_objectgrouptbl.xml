@@ -7,7 +7,7 @@
         <creator>Sunlit</creator>
     </table>
    
-    <field name="state">
+    <field name="istate">
             <chnname>状态</chnname>
         </field>
    

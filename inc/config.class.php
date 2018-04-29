@@ -8,14 +8,16 @@ ini_set("memory_limit","512M"); # memory limit avoding crush
 if(true){
 	$tblpre = "TABLE_PRE";
 	$conf = array();
-
+	$appdir = isset($appdir) ? $appdir : '';
+	$rtvdir = isset($rtvdir) ? $rtvdir : '';
+	
 	$conf['tblpre'] 	= $tblpre;
 	$conf['appname'] 	= '-gMIS';
 	$conf['appchnname'] 	= '-吉密斯';
 	$conf['appdir']		= $appdir;
 
 	$conf['rtvdir'] 	= $rtvdir;
-	$conf['agentname'] 	= '-XXXX-MIS';
+	$conf['agentname'] 	= 'AGENT_NAME';
 	$conf['agentalias']	= 'gMIS-Admin';
 	$conf['smarty']		= $appdir.'/class/Smarty';
 
@@ -28,6 +30,7 @@ if(true){
 	$conf['usertbl']	= $tblpre.'info_usertbl';
 	$conf['welcometbl']	= $tblpre.'info_welcometbl';
 	$conf['operatelogtbl']	= $tblpre.'fin_operatelogtbl';
+	$conf['ostype'] = 0; # 0 for *nix, 1 for windows, Mar 2018
 
 	# db info
 	$conf['dbhost'] 	= 'DB_HOST'; # use 127.0.0.1 instead of localhost
@@ -39,7 +42,7 @@ if(true){
 	$conf['db_enable_utf8_affirm'] = false; # append utf-8 affirm after db connection established, should be false in a all-utf-8 env.
 
 	# db slave info
-	$conf['dbhost_slave'] 	= 'SLAVE_DB'; #  -hadstatsdb -uadstats -padstatsaccess adstats
+	$conf['dbhost_slave'] 	= 'SLAVE_DB';
 	$conf['dbport_slave'] 	= '3306';
 	$conf['dbuser_slave'] 	= '';
 	$conf['dbpassword_slave'] 	= '';
@@ -62,8 +65,8 @@ if(true){
 	$conf['filedriver'] = 'FileSystem'; # files operations, since 2016-11-05
 	$conf['enable_filehandle_share'] = 1; # 17:31 10 November 2016
 
-	# misc 
-	$conf['frontpage'] = '#-XXXX';  # put # before -naturedns as #-naturedns
+	# misc
+	$conf['frontpage'] = 'FRONT_PAGE';  # put # before -naturedns as #-naturedns
 	$conf['is_debug'] = 0;
 	$conf['html_resp'] = '<!DOCTYPE html><html><head><title>RESP_TITLE</title></head><body>RESP_BODY</body></html>';
 	$conf['auto_save_interval'] = 20; # ref extra/htmleditor
@@ -88,11 +91,16 @@ class GConf{
 	private static $conf = array();
 
 	public static function get($key){
-		return self::$conf[$key];
+		if(isset(self::$conf[$key])){
+		    return self::$conf[$key];
+		}
+		else{
+		    return '';
+		}
 	}
 
 	public static function set($key, $value){
-		self::$conf[$key] = $value;	
+		self::$conf[$key] = $value;
 	}
 
 	public static function getConf(){
@@ -102,7 +110,7 @@ class GConf{
 	public static function setConf($conf){
 		foreach($conf as $k=>$v){
 			self::set($k, $v);
-		}	
+		}
 	}
 }
 

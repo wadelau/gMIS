@@ -50,7 +50,7 @@
       <chnname>更新時間</chnname>
 	  <listview>2</listview>
     </field> 
-	<field name="state">
+	<field name="istate">
 		<chnname>状态</chnname>
 		<selectoption>1:待做|2:进行中|0:已完成|3:擱置|-1:取消</selectoption>
 	</field>

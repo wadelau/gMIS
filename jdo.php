@@ -59,6 +59,7 @@ else if(startsWith($act, "list")){
     else{   
         #       
     }
+	#debug("orderfield:$orderfield hasid:$hasid myid:".$gtbl->getMyId());
     $gtbl->set("pagesize", $navi->get('pnps'));
     $gtbl->set("pagenum", $navi->get('pnpn'));
     $gtbl->set("orderby", $orderfield." ".($navi->getAsc()==1?"desc":"asc"));
@@ -207,7 +208,7 @@ else if(startsWith($act, "list")){
                $out .= "<td nowrap> <input name=\"checkboxid\" type=\"checkbox\" value=\"".$id
                 ."\"> &nbsp; <a onmouseover=\"javascript:showActList('".$i."', 1, '"
                 .str_replace("&".$gtbl->getMyId()."=","&oid=", $jdo)."&".$gtbl->getMyId()."=".$id
-                ."');\" onmouseout=\"javascript:showActList('".$id."', 0, '".str_replace("&".$gtbl->getMyId()."=","&oid=", $jdo)
+                ."');\" onmouseout=\"javascript:showActList('".$i."', 0, '".str_replace("&".$gtbl->getMyId()."=","&oid=", $jdo)
                 ."&".$gtbl->getMyId()."=".$id."');\" href='javascript:void(0);' onclick=\"javascript:doActionEx('".$jdo."&act=view&"
                 .$gtbl->getMyId()."=".$id."','contentarea');;\" title=\"详细信息\">"
                 .($i + (intval($navi->get('pnpn'))-1) * (intval($navi->get('pnps'))))." / ".$id
@@ -414,7 +415,7 @@ else if(startsWith($act, "list")){
                         ."');\" title='Remove this filter/去掉此条件'>[X]</a><br/>";
             }
         }
-        $out .= "<tr><td colspan='".$max_disp_cols."' style='text-align:center'><br/>No Data for These Criterions. "
+        $out .= "<tr><td colspan='".($max_disp_cols+2)."' style='text-align:center'><br/>No Data for These Criterions. "
                 ."/ 没有符合条件的数据. 請嘗試去掉一些條件再試試<br/><br/>".$queryFields."<br/>1609240951.<br/><br/></td></tr>";
     }
     $out .= "</table>";
@@ -442,6 +443,11 @@ else if(startsWith($act, "list")){
 else if($act == 'deepsearch'){
 
     include("./act/deepsearch.php");
+
+}
+else if(startsWith($act, 'pivot')){
+
+	include("./act/pivot.php");
 
 }
 else{

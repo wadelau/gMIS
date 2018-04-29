@@ -8,7 +8,7 @@
 if(!defined('__ROOT__')){
   define('__ROOT__', dirname(dirname(__FILE__)));
 }
-require_once(__ROOT__.'/inc/webapp.class.php'); 
+require_once(__ROOT__.'/inc/webapp.class.php');
 require_once(__ROOT__.'/inc/session.class.php');
 
 class User extends WebApp{
@@ -72,7 +72,7 @@ class User extends WebApp{
 	function chkIpRegi(){
 		$days = 2; # same ip within n days will need validating reCAPTCHA
 		$hasexist = false;
-		$hm = $this->getBy("id","DATE_ADD(createtime, INTERVAL $days DAY) > NOW() and ip=?", 
+		$hm = $this->getBy("id","DATE_ADD(createtime, INTERVAL $days DAY) > NOW() and ip=?",
 			$withCache=array('key'=>'user-check-reg-ip-'.date("Y-m-d", time())));
 		if($hm[0]){
 			$hasexist = true;
@@ -103,7 +103,7 @@ class User extends WebApp{
         #print "obj:[".$req['tbl']."] objgroup:[".$objgrp."] objid:[".$objid."]\n";
 
         $sql = "select id,accesstype,objectfield,userid,usergroup from "
-			.GConf::get('tblpre')."useraccesstbl where state=1 and (userid='".$this->getId()
+			.GConf::get('tblpre')."useraccesstbl where istate=1 and (userid='".$this->getId()
 			."' or userid=0) and (usergroup='".$this->getGroup()."' or usergroup=0) and (objectid='"
 			.$objid."' or objectid=0) and (objectgroup='".$objgrp."' or objectgroup=0) order by "
 			.$this->getMyId()." desc, accesstype desc limit 100";
@@ -114,7 +114,7 @@ class User extends WebApp{
         #print "\n";
         if($tmphm[0]){
             $tmphm = $tmphm[1];
-            #detailed access type will be evaluated in next canRead.... 
+            #detailed access type will be evaluated in next canRead....
             $this->set($this->accessinfo, $tmphm);
             $maxAccessType = $tmphm[0]['accesstype'];
             $minField = $tmphm[0]['objectfield'];
@@ -169,7 +169,7 @@ class User extends WebApp{
                     $accessInfo = array();
                 }
                 foreach($accessInfo as $k=>$v){
-                    if($v['accesstype'] < $this->accessLevel['read'] && $this->specifyAcc[$this->getId()] < 1 
+                    if($v['accesstype'] < $this->accessLevel['read'] && $this->specifyAcc[$this->getId()] < 1
 						&& $this->specifyAcc[$this->getGroup()] < 1 ){
                         if(strpos(",".$v['objectfield'].",", ",".$field.",") !== false){
                             $rtn['result'] = false;
@@ -211,7 +211,7 @@ class User extends WebApp{
                     $rtn['result'] = false;
                     $rtn['reason'] = $v['id'].", 2001";
                 }
-            } 
+            }
         }else if($field != ''){
             if($reqId == $currentId && $this->rgtArr['supacc'] && $this->rgtArr['w']){
                 $rtn['result'] = true;
@@ -228,9 +228,9 @@ class User extends WebApp{
                             break;
                         }
                     }
-                } 
+                }
             }
-        } 
+        }
         if(!$rtn['result']){
             error_log(__FILE__.": [$field] canWrite [".$rtn['result']."]. 201203132129. sql:[$sql] url:["
 				.$_SERVER['REQUEST_URI']."] reason:[".$rtn['reason']."] rec:[".$this->toString($tmphm)."]");
@@ -268,7 +268,7 @@ class User extends WebApp{
             error_log(__FILE__.": $obj canDelete [".$rtn['result']."]. 201203132129. sql:[$sql] url:["
 				.$_SERVER['REQUEST_URI']."] reason:[".$rtn['reason']."] rec:[".$this->toString($tmphm)."]");
         }
-        return $rtn['result']; 
+        return $rtn['result'];
     }
 
     function setSupAcc($mod, $tf){

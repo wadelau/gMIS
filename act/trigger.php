@@ -2,7 +2,7 @@
 
 #embedded in act/doaddmodi.php or act/dodelete.php
 
-error_log(__FILE__.": act:[$act] id:[$id] triggers:[".$triggers=$gtbl->getTrigger($id)."]");
+#error_log(__FILE__.": act:[$act] id:[$id] triggers:[".$triggers=$gtbl->getTrigger($id)."]");
 $IDTAG = 'id';
 if(!isset($fieldlist)){
 	$fieldlist = array();
@@ -12,7 +12,7 @@ if(true){
     if($id != ''){
         $tblTrigger = $gtbl->getTrigger('');
         #error_log(__FILE__.": act:[$act] id:[$id] tbl triggers:[".$triggers=$gtbl->getTrigger()."]");
-        error_log(__FILE__.": act:[$act] id:[$id] tbl triggers:[".$triggers=$gtbl->getTrigger('')."]");
+        #error_log(__FILE__.": act:[$act] id:[$id] tbl triggers:[".$triggers=$gtbl->getTrigger('')."]");
         if($tblTrigger != ''){
             $gtbl->setTrigger($IDTAG, $tblTrigger);
             error_log(__FILE__.": id triggers:[".$triggers=$gtbl->getTrigger($IDTAG)."]");

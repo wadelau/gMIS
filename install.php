@@ -402,8 +402,8 @@ else if($step == 'db'){
 		$tblpre = $_REQUEST['tablepre'];
 		if(substr($tblpre, -1) != '_'){ $tblpre .= "_"; }
 		#print $tblpre;
+		replaceInFile($config_file, 'TABLE_PRE', $tblpre);
 		if($tblpre != '' && $tblpre != 'gmis_'){
-			replaceInFile($config_file, 'TABLE_PRE', $tblpre);
 			replaceInFile('./gmis-tables.sql', 'gmis_', $tblpre);
 			sleep(2);
 		}
@@ -466,7 +466,7 @@ else if($step == 'init'){
 		$query = (($mysqlmode == 'mysql') ? @mysql_query($sql) : $link->query($sql));
 		if(true){
 			$sql = "insert into ".$_CONFIG['usertbl']." set email='".trim($_REQUEST['rootemail'])."', password='"
-				.sha1(trim($_REQUEST['rootpwd']))."', inserttime=NOW(), branchoffice=''";
+				.sha1(trim($_REQUEST['rootpwd']))."', updatetime=NOW(), inserttime=NOW(), branchoffice=''";
 			#print $sql;
 			$query = (($mysqlmode == 'mysql') ? @mysql_query($sql) : $link->query($sql));
 		}

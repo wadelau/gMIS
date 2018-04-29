@@ -23,7 +23,7 @@
 		<field name="click">
             <chnname>点击</chnname>
         </field>
-        <field name="state">
+        <field name="istate">
             <chnname>状态</chnname>
             <inputtype>select</inputtype>
             <selectoption>0:停用|1:正常|2:冻结</selectoption>

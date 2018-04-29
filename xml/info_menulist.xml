@@ -30,7 +30,8 @@
         </field>
 
 		<field name="thedb" type="text">
-			<chnname>数据</chnname>
+			<chnname>数据库</chnname>
+			<memo>认留空, 只有设置为连接 数据库时才需要填写数据库别名</memo>
         </field>
 		
 		<field name="inserttime" type="text">
@@ -45,7 +46,7 @@
             <chnname>操作人</chnname>
         </field>
 
-		<field name="state" type="text">
+		<field name="istate" type="text">
         	<chnname>状态</chnname>
         	<inputtype>select</inputtype>
         	<selectoption>0:停用|1:正常|2:冻结</selectoption>
