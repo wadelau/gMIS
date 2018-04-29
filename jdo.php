@@ -39,18 +39,25 @@ else if(startsWith($act, "list")){
     $navi = new PageNavi();
     $orderfield = $navi->getOrder();
     if($orderfield == ''){
-        $orderfield = $orderfield=='' ? '1' : $orderfield;
+        $orderfield = $gtbl->getOrderBy();
+        if($orderfield == '' && $hasid){
+            $orderfield = $gtbl->getMyId();
+        } 
+        $orderfield = $orderfield=='' ? '1 ' : $orderfield;
         if(strpos($orderfield, ' ') !== false){
             $tmpArr = explode(' ', $orderfield);
             $orderfield = $tmpArr[0];
             $navi->set('isasc', ($tmpArr[1]=='desc' ? 1 : 0));
         }
         else{
-            # @todo
-        }
+            # @todo?
+        }   
         if($orderfield == $gtbl->getMyId()){
             $navi->set('isasc', 1);
         }
+    }   
+    else{   
+        #       
     }
     $gtbl->set("pagesize", $navi->get('pnps'));
     $gtbl->set("pagenum", $navi->get('pnpn'));
