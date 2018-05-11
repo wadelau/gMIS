@@ -150,7 +150,7 @@ body {
 				{foreach $todo_list as $k=>$v}
 				<tr>
 				<td>{$v['id']}.</td>
-				<td><a href="{$ido}&tbl=fin_todotbl&pnskistate={$v['state']}&tit=事项管理">{$v['taskname']}</a></td>
+				<td><a href="{$ido}&tbl=fin_todotbl&pnskistate={$v['istate']}&tit=事项管理">{$v['taskname']}</a></td>
 				<td>{$todo_state[$v['state']]}</td>
 				<td>{$user_list[$v['triggerbyparentid']]['email']}</td>
 				<td>{$user_list[$v['touser']]['email']}</td>
