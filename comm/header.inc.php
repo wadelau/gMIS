@@ -164,7 +164,7 @@ if($isoput){
 
         }
     }
-    else{
+    else if(!startsWith($act, "modify") && !inString('-addform', $act)){
         $out .= "<style>html{background:white;}</style>";
     } 
 }
