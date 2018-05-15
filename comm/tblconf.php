@@ -30,7 +30,7 @@ if($hm[0]){
         else if(strtolower($field) == 'name' || strtolower($field) == 'type'
 			|| checkSQLKeyword($field)){
             $out .= __FILE__.": field:[".$field."] in tbl:[".$tbl
-				."]. It's bad idea to name a field as 'name' or 'type' or SQL reserved keywords. plz change it to xxxname or namexxx.\n";
+				."]. It's bad idea to name a field as 'name' or 'type' or SQL reserved keywords. Plz change it to xxxname or namexxx.\n";
         }
         $hmfield[$field] = $fieldv;
         $hmfield[$field."_default"] = $v['Default'];

@@ -54,7 +54,7 @@ class GTbl extends WebApp{
 			'hidesk' => 'hidesk', # default search key
 			'css' => 'css', # css of a field or the table
 			'superaccess' => 'superaccess', # access control over system settings
-			'stat' => 'stat', # 对该字段统计时的计算方法, sum|count|average
+			'stat' => 'stat', # computing methods: sum|count|average
 			'input2select' => 'input2select', # filter much more select options to a few of them...., Mon Jul 28 15:12:17 CST 2014
 			'rotatespan'=>'rotatespan', # table names contains variable datetime, e.g. _201412, _201501, Mon Jan  5 15:31:29 CST 2015
 			'myid'=>'myid', # get table's self-defined id, see inc/webapp.class, e.g. product_id, article_id, Wed Jun  8 13:26:07 CST 2016
@@ -142,6 +142,9 @@ class GTbl extends WebApp{
 		if($spantag != ''){
 			$this->rotatetag = $spantag;
 			if($tblrotate != ''){
+				if(strlen($tblrotate) > 6){ # YYYYmm
+                    $tblrotate = date("Ym", strtotime($tblrotate));
+                }
 				$this->tblrotate = $tblrotate;
 				$spantbl .= '_'.$tblrotate;
 			}
@@ -254,7 +257,7 @@ class GTbl extends WebApp{
         $tmpstr = $tmpstr==null?'':$tmpstr;
         if($tmpstr != ''){
             if($url != '' && strpos($tmpstr,"THIS_URL") !== false){
-                $tmpstr = str_replace("THIS_URL",$url,$tmpstr);
+                $tmpstr = str_replace("THIS_URL", $url, $tmpstr);
             }
             $arr = explode("|", $tmpstr);
             foreach($arr as $k=>$v){
@@ -650,7 +653,8 @@ class GTbl extends WebApp{
 				$tUrl = $vArr[0];
 				$title = $vArr[1];
 				if(strpos($tUrl,"THIS") > -1){
-					$tUrl = str_replace('THIS',$result[$field], $tUrl);
+					#$tUrl = str_replace('THIS', $result[$field], $tUrl);
+					$tUrl = $this->fillThis($tUrl, $field);
 				}
 				$tUrl = $this->appendSid($tUrl);
 			}
@@ -664,27 +668,37 @@ class GTbl extends WebApp{
     			}
                 $pArr = explode(",", $vArr[1]);
                 $title = $vArr[2];
+				/*
                 if($title == 'THIS'){
                     $title = $result[$field];
                 }
     			else if(strpos($title, 'THIS') !== false){
     				$title = str_replace('THIS',$result[$field], $title);
     			}
+				*/
+				$title = $this->fillThis($title, $field);
                 foreach($pArr as $k=>$v){
                     $para = explode("=", $v);
                     $tUrl .= $para[0].'=';
                     if(count($para) > 2){
                         $para[1] = $para[1]."=".$para[2];
-                        $para[1] = str_replace("THIS", $result[$field], $para[1]);
+                        #$para[1] = str_replace("THIS", $result[$field], $para[1]);
                     }
+					/*
                     if($para[1] == 'THIS'){
                         $tUrl .= $result[$field];
-                    }else if(strpos($para[1],"THIS_") !== false){
-                        $tUrl .= $result[substr($para[1],5)];
-                        
-                    }else if(strpos($para[1],"'") === 0){
-                        $tUrl .= substr($para[1],1,strlen($para[1])-2);
-                    }else{
+                    }
+					else if(strpos($para[1],"THIS_") !== false){
+                        $tUrl .= $result[substr($para[1],5)];    
+                    }
+					*/
+					if(inString('THIS', $para[1)){
+						$tUrl = $this->fillThis($tUrl.$para[1], $field);
+					}
+					else if(strpos($para[1], "'") === 0){
+                        $tUrl .= substr($para[1], 1, strlen($para[1])-2);
+                    }
+					else{
                         $tUrl .= $result[$para[1]];
                     }
                     $tUrl .= "&";
