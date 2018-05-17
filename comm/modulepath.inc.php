@@ -42,6 +42,7 @@ if($levelcode != ''){
 $module_path = $module_path == '' ? '<a href="'.$url.'&navidir=99">桌面 & 系统配置</a> &rarr; '.$tit : $module_path;
 if($lastLinkName != $tit){ $module_path .= "&nbsp;|&nbsp;".($tit==''?$lastLinkName:$tit); }
 $module_path = "<b> &Pi; <a href=\"".$url."\">首页</a> "
-        ."<span class=\"f17px\">&rarr;</span> ".$module_path." ".($db==''?'':'@ '.$db)."</b> ";
+        ."<span class=\"f17px\">&rarr;</span> ".$module_path." ".($db==''?'':'@ '.$db)." "
+	.($tblrotate=='' ? '' : $gtbl->getTblRotateName($tblrotate))."</b> ";
 
 ?>
