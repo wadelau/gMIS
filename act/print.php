@@ -57,7 +57,7 @@ if($printref != ''){
                 ."&isheader=0&isoput=0','linkinfo_".$rdnum."');</script><br/>\n";
     }
 }
-$out .= "<table align=\"center\" width=\"800px\" border=\"0px\" class=\"printtbl\">";
+$out .= "<table align=\"center\" width=\"800px\" border=\"0px\" class=\"printtbl\" cellpadding=\"6px\">";
 $out .= "\n<tr height=\"30\" valign=\"middle\"  onmouseover=\"javascript:this.style.backgroundColor='"
         .$hlcolor."';\" onmouseout=\"javascript:this.style.backgroundColor='';\">";
 

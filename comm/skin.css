@@ -87,7 +87,7 @@
 	height: 18px;
 	width: 100%;
 	overflow: hidden;
-	position: �̶�;
+	position: relative;
 }
 
 .left_bt {
@@ -237,10 +237,12 @@ a:visited {
 }
 .mainlist tr:hover{
     background-color: #afc4e2;
+    font-weight: bold;
 }
 
 .pivot_resultset_cls tr:hover{ /* Tue, 6 Dec 2016 17:41:34 +0800*/
 	background-color: #afc4e2;	
+    	font-weight: bold;
 }
 
 

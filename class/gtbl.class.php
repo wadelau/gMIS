@@ -1019,6 +1019,7 @@ class GTbl extends WebApp{
 			if(is_array($result)){
 				$tmpstr = str_replace('THIS_ID', $result[$this->getMyId()], $tmpstr);
 				$tmpstr = str_replace('THIS_TBL', $this->getTbl(), $tmpstr);
+				$tmpstr = str_replace('THIS_DB', trim($_REQUEST['db']), $tmpstr);
 				if($field != null && $field != ''){
 					if(preg_match_all('/THIS_([a-zA-Z]+)/', $tmpstr, $matchArr)){
 						$v = $matchArr[1];
