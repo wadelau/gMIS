@@ -12,6 +12,7 @@
  * Wed Jul 20 08:08:09 BST 2011
  * Fri Mar 16 16:36:52 CST 2012
  * Sun Jan 24 12:56:43 CST 2016
+ * Fri May 25 08:51:23 CST 2018, cA.sort bugfix
  */ 
 //---- DO NOT CHANGE ANY PART OF THE CODE UNDER THIS LINE ---
 var GTAj = null ; 
@@ -109,7 +110,7 @@ function GTAjax()
 						{
 							sValA[2] = ' has not expected value.' ;	
 						}
-						GTAj.cA[sValA[0]] = sValA[1]+GTAj.vA['cfs']+sValA[2];
+						GTAj.cA[sValA[0]] = sValA[1] + GTAj.vA['cfs'] + sValA[2];
 					}
 					if(GTAj.cA.length==0)
 					{
@@ -305,6 +306,13 @@ function GTAjax()
 						{
 							var el = sForm.elements[i];
 							var myCFM = this._CFM ;
+							var typeOfElement = (typeof GTAj.cA[el.name]);
+                            if(typeOfElement == 'function'){
+                                this._DBG( GTAj.vA['ib'],'formValidate-201805250855', 'typeof '+el.name+' is '+typeOfElement
+									+ ', conflict with JavaScript native code, please rename it to xxx'
+									+ el.name+' or '+el.name+'xxx.') ;
+                                continue;
+                            }
 							if (el.tagName.toLowerCase() == 'select') 
 							{
 								for (var j = 0; j < el.options.length; j++) 
@@ -313,7 +321,7 @@ function GTAjax()
 									if (op.selected)
 									{ 
                                         if(!this._chkAccept(sForm, el, myCFM)){ return false; }
-										if(typeof GTAj.cA[el.name] != 'undefined')
+										if(typeOfElement != 'undefined')
 										{
 											if(!myCFM(sForm,el.name,op.value,GTAj.cA[el.name]))
 											{
@@ -327,7 +335,7 @@ function GTAjax()
 							else if (el.tagName.toLowerCase() == 'textarea') 
 							{
                                 if(!this._chkAccept(sForm, el, myCFM)){ return false; }
-								if(typeof GTAj.cA[el.name] != 'undefined')
+								if(typeOfElement != 'undefined')
 								{
 									if(!myCFM(sForm,el.name,el.value,GTAj.cA[el.name]))
 									{
@@ -345,7 +353,7 @@ function GTAjax()
 										sPara += '&' + encodeURIComponent(el.name) + '=' + encodeURIComponent(el.value); 
 									}
                                     if(!this._chkAccept(sForm, el, myCFM)){ return false; }
-									if(typeof GTAj.cA[el.name] != 'undefined')
+									if(typeOfElement != 'undefined')
 									{
 										if(!myCFM(sForm,el.name,el.value,GTAj.cA[el.name]))
 										{
@@ -356,7 +364,7 @@ function GTAjax()
 								else if( el.type.toLowerCase() == 'file')
 								{
                                     if(!this._chkAccept(sForm, el, myCFM)){ return false; }
-									if(typeof GTAj.cA[el.name] != 'undefined')
+									if(typeOfElement != 'undefined')
 									{
 										if(!myCFM(sForm,el.name,el.value,GTAj.cA[el.name]))
 										{
@@ -376,7 +384,7 @@ function GTAjax()
 								else if(el.type.toLowerCase() != 'button' && el.type.toLowerCase() != 'submit')
 								{
                                     if(!this._chkAccept(sForm, el, myCFM)){ return false; }
-                                    if(typeof GTAj.cA[el.name] != 'undefined')
+                                    if(typeOfElement != 'undefined')
 									{
 										if(!myCFM(sForm,el.name,el.value,GTAj.cA[el.name]))
 										{

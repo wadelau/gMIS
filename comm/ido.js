@@ -1379,7 +1379,7 @@ function filterReplace(myField, myRegx){
 //- Tue, 7 Mar 2017 21:31:36 +0800
 function appendSid(urlx){
 	if(urlx.indexOf('.') == -1 && urlx.indexOf('?') == -1){
-		console.log('ido.js: invalid url:['+urlx+']');
+		//console.log('ido.js: invalid url:['+urlx+']');
 		return urlx;
 	}
 	var sidstr = 'sid='+userinfo.sid;
