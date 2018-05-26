@@ -172,7 +172,7 @@ body {
 			{if $mi==0 || ($mi) % 4 == 0}
 			<div class="wrapper">
 			{/if}
-				 <a href="{$ido}&tbl={$module_list_order[$k]}">
+				 <a href="{$ido}&tbl={$module_list_order[$k]}&db={$module_list_db[$module_list_order[$k]]}">
 				 <div class="left{($k%4)+1}">
 				 	<span style="size:14px; font-weight:bold;">{$mi+1}.
 				 	{if $module_list_name[$module_list_order[$k]] != ''}
@@ -206,7 +206,7 @@ body {
 			{if $mi==0 || ($mi) % 4 == 0}
 			<div class="wrapper">
 			{/if}
-				 <a href="{$ido}&tbl={$v['tblname']}"><div class="left{($k%4)+1}">
+				 <a href="{$ido}&tbl={$v['tblname']}&db={$module_list_db[$v['tblname']]}"><div class="left{($k%4)+1}">
 				 	<span style="size:14px; font-weight:bold;">{$mi+1}.{$v['objname']}</span><br/>({$v['tblname']})</div></a>
 			{if ($mi+1) % 4 == 0}
 			</div>

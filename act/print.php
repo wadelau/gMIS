@@ -14,9 +14,11 @@ else{
 
 $data = array(); # 用于打印模板的数据集
 $srcprefix = $gtbl->getSrcPrefix();
+$tblName = $gtbl->getTblCHN();
 
-$out .= "<div align=\"center\"><h2>".$_CONFIG['agentname'].$gtbl->getTblCHN()."</h2>";
-$data['title'] = $_CONFIG['agentname'].$gtbl->getTblCHN();
+$out .= "<div align=\"center\"><h2>".$_CONFIG['agentname'].($tblName=='' ? $tit : $tblName)."</h2>";
+$data['title'] = $_CONFIG['agentname'].($tblName=='' ? $tit : $tblName);
+$htmlheader = str_replace('TITLE', $tit.": ".$id, $htmlheader);
 $data['id'] = $id;
 
 $hmorig = array();
@@ -29,7 +31,7 @@ else{
     $fieldargv = "";
     for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
         $field = $gtbl->getField($hmi);
-        if($field == null | $field == '' 
+        if($field == null | $field == ''
                 || $field == 'id'){
             continue;
         }
@@ -37,11 +39,11 @@ else{
             $gtbl->set($field, $_REQUEST[$field]);
             $fieldargv[] = $field."=?";
         }
-    } 
+    }
     $hmorig = $gtbl->getBy("*", implode(" and ", $fieldargv));
 }
 if($hmorig[0]){
-    $hmorig = $hmorig[1][0]; 
+    $hmorig = $hmorig[1][0];
 }
 
 $data['hminfo'] = $hmorig;
@@ -72,7 +74,7 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
     $nextfieldinputtype = $gtbl->getInputType($nextfield);
     if($field == null || $field == ''){
         continue;
-    } 
+    }
     $hasclosed = 0;
     $needcloserow = 0;
 
@@ -134,7 +136,7 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
 			$isimg = isImg($fieldv);
 			if(strpos($fieldv, "$shortDirName/") !== false){ $fieldv = str_replace("$shortDirName/", "", $fieldv); }
 			if($isimg){
-				$fieldv = "<img src='".$fieldv."' width='80%' alt='-x-' />";	
+				$fieldv = "<img src='".$fieldv."' width='80%' alt='-x-' />";
 			}
 		}
 
@@ -150,7 +152,7 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
             $out .= "<td class=\"tdprintfixedwidth\"> ".$fieldv." </td>";
 			$tdi++;
         }
-		if($needcloserow ==0 
+		if($needcloserow ==0
 			&& ($nextfieldinputtype == 'file')){
             #$out .= "<td colspan=\"".($form_cols)."\"> <!-- $field --> </td>";
 			#$tdi++;
@@ -165,7 +167,7 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
         $hasclosed = 1;
     }
 
-    if($hasclosed == 0 && ++$i % 2 == 0){ 
+    if($hasclosed == 0 && ++$i % 2 == 0){
         $out .= "</tr>";
         $out .= "\n<tr height=\"30\" valign=\"middle\"  onmouseover=\"javascript:this.style.backgroundColor='"
                 .$hlcolor."';\" onmouseout=\"javascript:this.style.backgroundColor='';\" idata=\"$i\" "

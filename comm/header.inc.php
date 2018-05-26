@@ -16,7 +16,7 @@ if($rtvdir == ''){
 #print "docroot:[$docroot] rtvdir:[$rtvdir] appdir:[$appdir].";
 
 $dirArr = explode("/", $rtvdir);
-$shortDirName = $dirArr[count($dirArr)-1]; 
+$shortDirName = $dirArr[count($dirArr)-1];
 # the name of gMIS subdir, i.e. admin, mgmt ...Sat May 23 22:43:21 CST 2015
 
 require_once($appdir."/inc/config.class.php");
@@ -42,16 +42,16 @@ require($appdir."/class/gtbl.class.php");
 require($appdir."/class/pagenavi.class.php");
 require_once($appdir."/class/base62x.class.php");
 
-#session_start(); 
+#session_start();
 # in initial stage, using php built-in session manager
 # implemented with no storage session by Xenxin@ufqi.com, Tue, 7 Mar 2017 22:54:31 +0800
 define(UID, $_CONFIG['agentalias'].'_user_id');
 define(SID, 'sid');
 
 if(!isset($user)){
-    $user = new User(); 
+    $user = new User();
     $user->setTbl($_CONFIG['tblpre']."info_usertbl");
-} 
+}
 
 $userid = ''; $out = ''; $htmlheader = ''; $data = array();
 $reqUri = $_SERVER['REQUEST_URI'];
@@ -66,7 +66,7 @@ if($userid != ''){
 }
 else if(strpos($_SERVER['PHP_SELF'],'signupin.php') === false
 	&& strpos($_SERVER['PHP_SELF'],'readtblfield.php') === false){// ?
-    header("Location: ".$rtvdir."/extra/signupin.php?act=signin&bkl=".Base62x::encode($thisUrl));    
+    header("Location: ".$rtvdir."/extra/signupin.php?act=signin&bkl=".Base62x::encode($thisUrl));
 	exit(0);
 }
 
@@ -85,11 +85,11 @@ foreach($_REQUEST as $k=>$v){
             $k_orig = $k = $matcharr[1];
 			if(is_string($v)){
 				$v = trim($v);
-				if(stripos($v, "<") > -1){ 
+				if(stripos($v, "<") > -1){
 				    # <script , <embed, <img, <iframe, etc.  Mon Feb  1 14:48:32 CST 2016
 					$v = str_ireplace("<", "&lt;", $v);
 					$_REQUEST[$k] = $v;
-				}   
+				}
 			}
             $data[$k] = $v;
             if(preg_match('/[^\x20-\x7e]/', $k)){
@@ -107,7 +107,7 @@ if(isset($_REQUEST['isoput'])){
     else{
         $isoput = false;
     }
-} 
+}
 if(!isset($isheader)){
     $isheader = true;
 }
@@ -118,10 +118,10 @@ if(isset($_REQUEST['isheader'])){
     else{
         $isheader = false;
     }
-} 
+}
 
 if($isoput){
-    if(!$isheader){ 
+    if(!$isheader){
 		# another place at view/header.html!
         $htmlheader = '<!DOCTYPE html><html>
             <head>
@@ -129,7 +129,7 @@ if($isoput){
             <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
             <title>TITLE - '.$_CONFIG['appname'].' -'.$_CONFIG['agentname'].'</title>
             <link rel="stylesheet" type="text/css" href="'.$rtvdir.'/comm/default.css" />
-            <script type="text/javascript" src="'.$rtvdir.'/comm/GTAjax-5.4.js" charset=\"utf-8\" async></script>
+            <script type="text/javascript" src="'.$rtvdir.'/comm/GTAjax-5.5.js" charset=\"utf-8\" async></script>
             <script type="text/javascript" src="'.$rtvdir.'/comm/ido.js?i='
                     .($is_debug==1?rand(0,9999):'').'" charset=\"utf-8\" async></script>
             <script type="text/javascript" src="'.$rtvdir.'/comm/ido_proj.js?i='
@@ -166,7 +166,7 @@ if($isoput){
     }
     else if(!startsWith($act, "modify") && !inString('-addform', $act)){
         $out .= "<style>html{background:white;}</style>";
-    } 
+    }
 }
 
 # initialize new parameters
@@ -190,7 +190,7 @@ if($fmt == ''){
 $randi = rand(100000, 999999);
 
 if(strpos($tbl,$_CONFIG['tblpre']) !== 0){
-    $tbl = $_CONFIG['tblpre'].$tbl; //- default is appending tbl prefix 
+    $tbl = $_CONFIG['tblpre'].$tbl; //- default is appending tbl prefix
 }
 # tbl test, see inc/webapp.class::setTbl
 
@@ -207,7 +207,7 @@ if(true){ # used in mix mode to cover all kinds of table with or without tbl pre
 
 if(isset($_REQUEST['parent'])){
 	$tmpnewk = 'pnsk'.$_REQUEST['parent'];
-	$_REQUEST[$tmpnewk] = $_REQUEST[$_REQUEST['parent']]; 	
+	$_REQUEST[$tmpnewk] = $_REQUEST[$_REQUEST['parent']];
 	# print "tmpnewk:[$tmpnewk] value:[".$_REQUEST[$_REQUEST['parent']]."]";
 }
 

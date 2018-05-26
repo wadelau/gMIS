@@ -9,6 +9,8 @@ $out = str_replace('TITLE','欢迎', $out);  $data['title'] = '欢迎';
 $gtbl = new WebApp();
 
 $module_list = ""; $hm_module_order = array();  $hm_module_name = array(); $hm_todo_list = array();
+$hm_module_db = array();
+$moduleNeedDb = '';
 
 $hm = $gtbl->execBy($sql="select * from ".$_CONFIG['tblpre']."fin_todotbl where (togroup in (" # for multiple groups
         .$user->getGroup().") or touser=".$user->getId()." or triggerbyparent in (".$user->getGroup().") or triggerbyparentid="
@@ -49,8 +51,10 @@ if($hm[0]){
 		}
 		}
 	}
+	$moduleNeedDb = $module_list;
 }
 
+#
 $hm = $gtbl->execBy("select objname,tblname from "
         .$_CONFIG['tblpre']."info_objecttbl where addtodesktop > 0 order by addtodesktop", null,
 	$withCache=array('key'=>'info_object-select-desktop'));
@@ -59,7 +63,7 @@ if($hm[0]){
 	$data['module_list_byuser'] = $hm; #Todo add2desktop by user
 }
 else{
-    $hm = $gtbl->execBy("select objname,tblname from ".$_CONFIG['tblpre']."info_objecttbl order by rand() limit 4",
+    $hm = $gtbl->execBy("select objname,tblname from ".$_CONFIG['tblpre']."info_objecttbl order by rand() limit 7",
             null, $withCache=array('key'=>'info_object-select-desktop-rand'));
     if($hm[0]){
         $hm = $hm[1];
@@ -67,6 +71,24 @@ else{
     }
 }
 
+#
+$module_list = '';
+foreach($data['module_list_byuser'] as $k=>$v){
+    $module_list .= "'".$v['parenttype']."',";
+    $module_list = substr($module_list, 0, strlen($module_list)-1);
+}
+$moduleNeedDb .= ','.$module_list;
+$hm = $gtbl->execBY("select modulename,thedb from ".$_CONFIG['tblpre']
+        ."info_menulist where modulename in ($moduleNeedDb)", null,
+        $withCache=array('key'=>'info_menulist-select-'.$module_list));
+if($hm[0]){
+    $hm = $hm[1];
+    foreach($hm as $k=>$v){
+        $hm_module_db[$v['modulename']] = $v['thedb'];
+    }
+}
+
+#
 $hm = $gtbl->execBy("select count(*) as modulecount from ".$_CONFIG['tblpre']."info_objecttbl where istate=1", null,
 	$withCache=array('key'=>'info_object-select-count'));
 if($hm[0]){
@@ -130,6 +152,7 @@ include_once($appdir."/comm/modulepath.inc.php");
 $data['logged_user_count'] = $logged_user_count;
 $data['module_list_order'] = $hm_module_order;
 $data['module_list_name'] = $hm_module_name;
+$data['module_list_db'] = $hm_module_db;
 $data['todo_list'] = $hm_todo_list;
 $data['module_path'] = $module_path;
 
