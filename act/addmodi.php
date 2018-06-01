@@ -73,6 +73,7 @@ else{
 
 }
 
+# very first row
 if($hmorig[0]){
     $hmorig = $hmorig[1][0]; 
 }
@@ -243,7 +244,7 @@ for($hmi=$min_idx; $hmi<=$max_idx;$hmi++){
 
     }
 
-    $out .= $gtbl->getDelayJsAction($field);
+    $out .= $gtbl->getDelayJsAction($field, $hmorig);
     $columni++;
     if($columni % $colsPerRow == 0){
         $out .= "</tr>";

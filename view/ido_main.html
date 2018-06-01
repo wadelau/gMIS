@@ -15,8 +15,10 @@ body {
        <tr>
         <td valign="top" style="padding:0px;">
         <table class="login_top_bg" 
-        	style="border:0px;width:100%;background-image: url(./img/login-top-bg-small.png);background-repeat: repeat-x; 
-        	border-collapse:collapse; border-spacing:0px;"> <!-- cellpadding="0" cellspacing="0" width="100%" border="0px"  -->
+        	style="border:0px;width:100%;background-image:
+				url({$rtvdir}/img/login-top-bg-small.png);background-repeat: repeat-x; 
+				border-collapse:collapse; border-spacing:0px;
+				background-color:#2d475d;">
           <tr style="padding:0px; background-image:url({$rtvdir}/img/login-top-bg-small-updown.png); background-repeat:repeat-x;">
             <td width="33%" style="padding:0px;height:27px;">
             	<a href="{$url}" style="color:#ABCAD3;font-weight:bold;font-size:16px;font-family:Tahoma,Geneva,sans-serif;"
@@ -24,7 +26,16 @@ body {
             		&nbsp;{$agentname} </a>
             </td>
             <td width="5%" style="padding:0px;"> <div id="top_notice_div" 
-            	style="postion:absolute; width:400px; top:20px; left:20px; text-align:center;z-index:99"></div> </td>
+            	style="postion:absolute; width:400px; top:20px; left:20px; text-align:center;z-index:99"></div> 
+            </td>
+            <td id="searchform">
+				<form id="insitesearch" 
+                      action="{$rtvdir}/extra/insitesearch.php?sid={$sid}&db={$db}&issubmit=1&tit=InSiteSearch" 
+                      method="post">
+                    <input id="isskw" name="isskw" placeholder="Searching..." 
+                        style="width:80px;background-color:silver;text-align:center;vertical-align:middle;">
+               </form>
+            </td>
             <td width="62%" style="text-align:right;padding:0px;" class="login-buttom-txt"> {$welcomemsg} </td>
           </tr>
         </table>
@@ -32,7 +43,7 @@ body {
       </tr>
     {/if}
   <tr>
-     <td valign="top" style="padding:0px;">
+     <td style="padding:0px; vertical-align:top;">
      <table 
      	style="border:0px;width:100%;height:98%;border-collapse:collapse; border-spacing:0px;border-padding:0px;" 
      	class="login_bg"> <!-- width="100%" height="98%" border="0px" cellpadding="0" cellspacing="0"  -->

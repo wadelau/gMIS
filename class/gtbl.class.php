@@ -770,16 +770,28 @@ class GTbl extends WebApp{
 		$this->hmfieldinfo = $this->hmfield;
     }
 
-    public function getDelayJsAction($field){
+    public function getDelayJsAction($field, $result=null){
         $tmpstr = $this->hmconf[$this->taglist['field'].$this->sep.$field.$this->sep.$this->taglist['delayjsaction']];
         $tmpstr = $tmpstr==null?'':$tmpstr;
-		$tmpstr = $this->fillThis($tmpstr, $field);
+		if($result == null){
+            $result = $this->get($this->resultset);
+        }
+        else{
+            $this->set($this->resultset, $result);
+        }
+        if(is_array($result)){
+            $tmpstr = $this->fillThis($tmpstr, $field);
+        }
+        else{
+            # @todo
+        }
 		$jsact = "";
         if($tmpstr != ""){
             $arr = explode("|", $tmpstr);
             foreach($arr as $k=>$v){
                 $arr2 = explode("::", $v);
-                $jsact .= "parent.registerAct({'status':'".$arr2[0]."','delaytime':".$arr2[1].",'action':'".urlencode($arr2[2])."'});";
+                $jsact .= "parent.registerAct({'status':'".$arr2[0]."','delaytime':".$arr2[1]
+					.",'action':'".urlencode($arr2[2])."'});";
             }
         }
         return $jsact==''?'':"<script type=\"text/javascript\" async>".$jsact."</script>";
@@ -855,9 +867,13 @@ class GTbl extends WebApp{
 		$tblpre = GConf::get('tblpre');
 		$tblconf = str_replace($tblpre, "", $tbl);
         if(file_exists($xmlpath."/".$tblconf.".xml")){
+            libxml_use_internal_errors(true);
             $xmlobj = simplexml_load_file($xmlpath."/".$tblconf.".xml");
-            #print __FILE__.": xmlstr: [".print_r($xmlobj)."]\n";
-
+            if($xmlobj === false){
+                $xmlError = libxml_get_errors();
+                debug("xml error:".serialize($xmlError)." with $xmlpath/$tblconf.xml");
+            }
+			libxml_clear_errors();
             foreach($xmlobj as $key=>$value){
                 #print "leve-0: $key: [$value], name: [".$value['name']."] type:[".$value['type']."] typeof:[".gettype($value)."]\n";
                 $sortk = (String)$value['name'];
@@ -903,7 +919,8 @@ class GTbl extends WebApp{
 					}
 				}
 			}
-        }else{
+        }
+		else{
             error_log(__FILE__.": ".$xmlpath."/".$tblconf.".xml was not found.");
         }
         #print_r($hmsortinxml);

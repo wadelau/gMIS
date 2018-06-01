@@ -404,3 +404,21 @@ CREATE TABLE `gmis_useraccesstbl` (
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2014-03-12  8:21:05
+
+-- added by @Xenxin, May 29, 2018
+DROP TABLE IF EXISTS `gmis_insitesearchtbl`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `gmis_insitesearchtbl` (
+  `id` int(12) NOT NULL AUTO_INCREMENT,
+  `idb` char(24) NOT NULL DEFAULT '',
+  `itbl` char(64) NOT NULL DEFAULT '',
+  `ifield` char(64) NOT NULL DEFAULT '',
+  `ivalue` varchar(255) NOT NULL DEFAULT '',
+  `imd5` char(32) NOT NULL DEFAULT '' comment 'md5(idb, itbl, ifield, ivalue)',
+  `icount` mediumint(8) NOT NULL DEFAULT '1',
+  `updatetime` datetime NOT NULL DEFAULT '1001-01-01 00:00:01',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `key2` (`imd5`),
+  index `k3` (`ivalue`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

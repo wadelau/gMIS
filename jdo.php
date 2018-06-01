@@ -63,6 +63,7 @@ else if(startsWith($act, "list")){
     $gtbl->set("pagesize", $navi->get('pnps'));
     $gtbl->set("pagenum", $navi->get('pnpn'));
     $gtbl->set("orderby", $orderfield." ".($navi->getAsc()==1?"desc":"asc"));
+	$navi->setTbl($tbl); # sync tbl to navigator, May 30, 2018
     if($_REQUEST['pntc'] == '' || $_REQUEST['pntc'] == '0' || $navi->get('neednewpntc') == 1){
 		$pagenum = $gtbl->get('pagenum');
 		$gtbl->set('pagenum', 1);
@@ -448,6 +449,11 @@ else if($act == 'deepsearch'){
 else if(startsWith($act, 'pivot')){
 
 	include("./act/pivot.php");
+
+}
+else if(startsWith($act, 'insitesearch')){
+    
+    include("./act/insitesearchsort.php");
 
 }
 else{
