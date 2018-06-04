@@ -36,6 +36,13 @@ include_once($appdir."/comm/modulepath.inc.php");
 
 # actions
 if($issubmit == 1 && $isskw != ''){
+
+    if($act == 'init'){
+        # init a searcho
+        
+    }
+    else{
+
     $resultList = array();
     $succCount = 0;
     $succTblList = array();
@@ -106,6 +113,8 @@ if($issubmit == 1 && $isskw != ''){
     }
     $data['module_list'] = $moduleNameList;
 
+    }
+
 }
 else if($act == 'clickreport'){
     $objId = Wht::get($_REQUEST, 'objid');
@@ -158,6 +167,8 @@ $smt->assign('isep', $isep);
 $smt->assign('max_last_id', 0); # starting point next
 $smt->assign('tbl_all_count', $tbl_all_count+1);
 $smt->assign('time_all_cost', $time_all_cost);
+
+$smt->assign('act', $act);
 
 #tpl
 if($fmt == ''){

@@ -5,28 +5,57 @@ include_once($appdir.'/class/insitesearch.class.php');
 $MIN_CHAR_LENGTH = 4;
 $MAX_CHAR_LENGTH = 255;
 $tblpre = $_CONFIG['tblpre'];
-$fieldBlackList = array(
-    'un_promotion_p2p_ios'=>array('activaterate'=>1),
-    'un_promotion'=>array('activaterate'=>1),
-    'un_promotion_p2p'=>array('activaterate'=>1),
-    'un_promotion_nopb'=>array('activaterate'=>1),
-    'un_promotion_cpcm'=>array('activaterate'=>1),
-    'un_promotion_sub'=>array('activaterate'=>1),
-    'un_promotion_ios'=>array('activaterate'=>1),
-    'un_offers'=>array('img_v'=>1, 'img_h'=>1),
-    'un_offers_ios'=>array('img_v'=>1, 'img_h'=>1),
-    'un_offers_cpcm'=>array('img_v'=>1, 'img_h'=>1),
-    'un_offers_sub'=>array('img_v'=>1, 'img_h'=>1),
-    'un_offers_nopb'=>array('img_v'=>1, 'img_h'=>1),
-    'un_offers_incent'=>array('img_v'=>1, 'img_h'=>1),
-    );
-$tblBlackList = array($tblpre.'insitesearchtbl'=>1, $tblpre.'info_objecttbl'=>1);
+$tbl_black_white = $tblpre.'issblackwhitetbl';
+
+$fieldBlackList = array();
+$tblBlackList = array();
+$fieldWhiteList = array();
+$tblWhiteList = array();
+$tblBlackList_Init = array($tblpre.'insitesearchtbl'=>1, $tblpre.'info_objecttbl'=>1,
+        $tbl_black_white=>1);
 #print_r($tblBlackList);
 
 $iss = new InSiteSearch();
 
 # in-site search sorting
 if(true){
+
+    # read black and white list
+    $hm = $iss->execBy($sqlcfg="select * from $tbl_black_white "
+            ." where istate=1", null, $withCache=array("iss-tbl-black-white"));
+    if($hm[0]){
+        $hm = $hm[1];
+        foreach($hm as $k=>$v){
+            if($v['isblack'] == 1){
+                if($v['ifield'] == ''){
+                    $tblBlackList[$v['itbl']] = 1;
+                    $tblBlackList[$tblpre.$v['itbl']] = 1;
+                }
+                else{
+                    $fieldBlackList[$v['itbl']][$v['ifield']] = 1;
+                    $fieldBlackList[$tblpre.$v['itbl']][$v['ifield']] = 1;
+                }
+            }
+            else if($v['iswhite'] == 1){
+                if($v['ifield'] == ''){
+                    $tblWhiteList[$v['itbl']] = 1;
+                    $tblWhiteList[$tblpre.$v['itbl']] = 1;
+                }
+                else{
+                    $fieldWhiteList[$v['itbl']][$v['ifield']] = 1;
+                    $fielWhiteList[$tblpre.$v['itbl']][$v['ifield']] = 1;
+                }
+            }
+            else{
+                debug("neither black nor white with row:".serialize($v));
+            }
+        }
+    }
+    else{
+        debug("$tbl_black_white read failed. 201806031132.");
+    }
+    $tblBlackList = array_merge($tblBlackList, $tblBlackList_Init);
+
     $issTblList = array();
     $sql = "show tables";
     $hm = $gtbl->execBy($sql, null, $withCache=array('key'=>$db.'-show-tables'));
@@ -42,6 +71,7 @@ if(true){
     foreach($issTblList as $k=>$tmpTblArr){
         $tmpTbl = $tmpTblArr['Tables_in_adSystem'];
         #debug("tbl:$tmpTbl seri:".serialize($tmpTblArr));
+        # @todo  whitelist
         if(isset($tblBlackList[$tmpTbl])){
             continue;
         }
@@ -58,7 +88,7 @@ if(true){
         else if(preg_match("/_[0-9]+$/", $tmpTbl)){
             #debug($tmpMsg="found rotating tmptbl:$tmpTbl, skip...\n");
             #$out .= $tmpMsg;
-            continue; 
+            continue;
         }
         $issFieldList = array();
         $sql = "desc $tmpTbl";
@@ -77,6 +107,7 @@ if(true){
             $tmpFieldName = $tmpField['Field'];
             $tmpFieldType = $tmpField['Type'];
             $tmpName = strtolower($tmpFieldName);
+            ## @todo  whitelist
             if(startsWith($tmpFieldType, 'char') || startsWith($tmpFieldType, 'varchar')){
                 if(isset($fieldBlackList[$tmpTbl][$tmpFieldName])){
                     #debug($tmpMsg="found field:$tmpFieldName for blacklist, skip...\n");
@@ -89,7 +120,7 @@ if(true){
                     continue;
                 }
                 else if(inString('md5', $tmpName) || inString('url', $tmpName)
-                    || inString('size', $tmpName)){ 
+                    || inString('size', $tmpName)){
                     #debug($tmpMsg="found field:$tmpFieldName for sql potential md5/url, skip...\n");
                     #$out .= $tmpMsg;
                     continue;
@@ -127,7 +158,7 @@ if(true){
             $sql = "select ".implode(',', $issTargetField)." from $tmpTbl limit 0, 200";
             #debug($tmpMsg=" run sql:$sql\n");
             $out .= $tmpMsg;
-            $hm = $gtbl->execBy($sql, null, 
+            $hm = $gtbl->execBy($sql, null,
                             $withCache=array('key'=>$db.'-'.$tmpTbl.'-content-page-size=first-200'));
             if($hm[0]){
                 $hm = $hm[1];

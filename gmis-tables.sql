@@ -422,3 +422,20 @@ CREATE TABLE `gmis_insitesearchtbl` (
   UNIQUE KEY `key2` (`imd5`),
   index `k3` (`ivalue`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- added by @Xenxin, Jun 03, 2018
+DROP TABLE IF EXISTS `gmis_issblackwhitetbl`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `gmis_issblackwhitetbl` (
+  `id` int(12) NOT NULL AUTO_INCREMENT,
+  `idb` char(24) NOT NULL DEFAULT '',
+  `itbl` char(64) NOT NULL DEFAULT '',
+  `ifield` char(64) NOT NULL DEFAULT '',
+  `isblack` tinyint(1) NOT NULL DEFAULT 0,
+  `iswhite` tinyint(1) NOT NULL DEFAULT 0,
+  `istate` tinyint(1) NOT NULL DEFAULT 1,
+  `updatetime` datetime NOT NULL DEFAULT '1001-01-01 00:00:01',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `key2` (`idb`, `itbl`, `ifield`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;

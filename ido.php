@@ -188,6 +188,8 @@ $smt->assign('ido', $ido);
 $smt->assign('jdo', $jdo);
 $smt->assign('url', $url);
 
+$smt->assign('sid', $sid);
+
 require("./comm/footer.inc.php");
 
 #print $out;

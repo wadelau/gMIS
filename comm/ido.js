@@ -561,7 +561,9 @@ function registerAct(tObj){
         //window.alert('delaytime:['+tObj.delaytime+']');
 		var actx = unescape(tObj.action);
 		actx = actx.replace('+', ' '); //- need to be replaced with -Base62x, 09:14 24 September 2016
-         var actxId = 0; 
+		actx = actx.replace('\+', ' '); //- need to be replaced with -Base62x, 09:14 24 September 2016
+		actx = actx.replace('%20', ' '); //- need to be replaced with -Base62x, 09:14 24 September 2016
+        var actxId = 0; 
         if(!userinfo.registerAct){
         	userinfo.registerAct = {};
         }

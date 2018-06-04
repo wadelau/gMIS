@@ -20,7 +20,8 @@ $hm = $myNavi->execBy("select levelcode,linkname,modulename,dynamicpara,disptitl
 if($hm[0]){
     $hm = $hm[1];
     $hmkeys = array();
-    $hmkeysbylen = array("2"=>array(),"4"=>array(),"6"=>array(),"8"=>array());
+    $hmkeysbylen = array("2"=>array(),"4"=>array(),"6"=>array(),"8"=>array(),
+            "10"=>array(), "12"=>array(), "14"=>array());
     if(is_array($hm)){
     foreach($hm as $k=>$v){
         $hmkeys[$hm[$k]['levelcode']] = $hm[$k]; # use levelcode 作为key
@@ -37,7 +38,7 @@ if($hm[0]){
                 .'" orighref="javascript:void(0);" class="menulink">'.$linfo['linkname'].'</a>'."\n";
             $dynamicmenu .= "<ul>\n";
             $lv3 = '';
-            $lv4 = '';
+            $lv4 = ''; # @todo, lv5, lv6, lv7
             foreach($hmkeysbylen[4] as $k1=>$v1){
                 if(strpos($v1,$li) === 0){
                     $linfo = $hmkeys[$v1];
@@ -143,6 +144,12 @@ if($hm[0]){
         	<li><a href="'.$ido.'&tbl=info_helptbl&pnskid=2&tit=公司介绍&db=&act=view&id=16">公司介绍</a></li>
         	<li><a href="'.$ido.'&tbl=info_helptbl&pnskisfaq=1&tit=FAQ常见问题&db=">FAQ常见问题</a></li>
         	<li><a href="'.$ido.'&tbl=info_helptbl&tit=帮助主题&db=">帮助主题</a></li>
+     		</ul>
+     	</li>
+        <li><a href="javascript:void(0);" class="sub">站内搜索</a>
+     		<ul>
+        	<li><a href="'.$ido.'&tbl=insitesearchtbl&tit=搜索源配置&db=">搜索源配置</a></li>
+        	<li><a href="'.$ido.'&tbl=issblackwhitetbl&tit=搜索源黑白名单&db=">搜索源黑白名单</a></li>
      		</ul>
      	</li>
      </ul>

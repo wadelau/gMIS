@@ -22,7 +22,7 @@
     <field name="tblname" type="text">
         <chnname>表名称</chnname>
         <memo>只能是英文或者拼音字符</memo>
-        <delayjsaction>onload::3::oldv=document.getElementById('tblname').value;if(oldv!=''){document.getElementById('tblname').readOnly=true;}</delayjsaction>
+        <delayjsaction>onload::3::{var mytblobj=document.getElementById('tblname');var oldv='';if(mytblobj){oldv=mytblobj.value;if(oldv!=''){mytblobj.readOnly=true;}}}</delayjsaction>
     </field>
     
     <field name="tblfield">

@@ -56,6 +56,20 @@ body {
         	<input type="hidden" name="levelcode" value="{$levelcode}"/>
             <input type="hidden" name="isslastid" id="isslastid" value="{$max_last_id}"/>
 
+            {if $act == 'init'}
+                <script type="text/javascript">
+                    var delaysubmiti = window.setTimeout(function(){
+                            var theform = document.getElementById('issform');
+                            if(theform){
+                                theform.submit();
+                            }
+                            else{
+                                console.log("theform:["+theform+"]");
+                            }
+                        }, 1*1000);
+                </script>
+            {/if}
+
         </form>
         </div>
         <p> </p>
@@ -104,9 +118,13 @@ body {
                         })(this.id);" id="iss:{$isslastid}"> Next 下一页 &rarr;</a>
                 <br/><br/>
             {else}
+                {if $act == 'init'}
+                <p> Wating等待查询中..... </p>
+                {else}
                 <p>{$title} 快速扫描 {$tbl_all_count} 个数据源,</p>
                 <p>
                 Sorry抱歉, No results found for {$isskw} . / 没有找到与 {$isskw} 相关信息.
+                {/if}
                 <br/><br/>
                 <a href="javascript:void(0);" onclick="javascript:window.history.go(-1);">&larr; Previous 上一页</a>
                 </p>
