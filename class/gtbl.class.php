@@ -170,7 +170,6 @@ class GTbl extends WebApp{
 				
     }
 
-
     public function getOrderBy(){ # <orderby>statdate desc</orderby>
         $tmpstr = $this->hmconf[$this->taglist['table'].$this->sep.$this->prttbl.$this->sep.$this->taglist['orderby']];
         return $tmpstr = $tmpstr==null?$this->getMyId():$tmpstr;
@@ -249,7 +248,6 @@ class GTbl extends WebApp{
     {
         return $this->hmfield;
     }
-
 
     public function getRelatedRef($url=''){ # ref to xml/hss_info_objecttbl.xml
         $refArr = array();
@@ -331,6 +329,7 @@ class GTbl extends WebApp{
         return $tmpstr=='' ? $default : $tmpstr;
     }
 
+	#
     # functions based on $field, below
 
     public function getCHN($field){
@@ -398,8 +397,10 @@ class GTbl extends WebApp{
         }
     }
 
+	# remedy on 12:39 Jun 06, 2018
     public function getSelectOption($field, $defaultval, $tagpre='', $needv=0, $ismultiple=0){
-        $tmpstr = $this->hmconf[$this->taglist['field'].$this->sep.$field.$this->sep.$this->taglist['selectoption']];
+        $tmpstr = $this->hmconf[$this->taglist['field'].$this->sep.$field.$this->sep
+			.$this->taglist['selectoption']];
         $tmpstr = $tmpstr==null?'':$tmpstr;
         if($tmpstr == ''){
             if(inList($field, 'istate,state,status,istatus')){
@@ -422,7 +423,8 @@ class GTbl extends WebApp{
             }
 			$hmoption = array();
 			$optval = 'id'; $dispname = '';
-			if(isset($arr[4])){ $optval = $arr[4]; }  # alternative 'id', # see xml/fwn_sitetbl, sitetype, Fri Dec 12 13:43:36 CST 2014
+			if(isset($arr[4])){ $optval = $arr[4]; }  
+			# alternative 'id', # see xml/fwn_sitetbl, sitetype, Fri Dec 12 13:43:36 CST 2014
 			$hasExist = 0; $maxInitSelectCount = 512; $optioni = 0;
 			if(isset($this->hmconf['selectoption_'.$field])){
 				$optionlist = $this->hmconf['selectoption_'.$field]; $hasExist = 1;
@@ -433,7 +435,8 @@ class GTbl extends WebApp{
 				$this->hmf = array();
 				$this->setTbl($tbl);
 				$hm = $this->getBy("$optval,$dispfield", $arr[3],
-					$withCache=array('key'=>$tbl.'-select-'.$arr[3]));
+					$withCache=array('key'=>$tbl.'-select-$optval-$dispfield-'.$arr[3]));
+					# anti for various fields from the same src table
 				if($hm[0]){
 					$hmoption = $hm[1]; # $this->hmconf['selectoption_'.$field] = $hmoption;
 				}
@@ -450,11 +453,13 @@ class GTbl extends WebApp{
 				}
 				$optionlist .= "<option value=\"".$rec[$optval]."\"";
 				if($defaultval != null){
-					if($rec[$optval] == $defaultval || strpos(",".$defaultval.",", ",".$rec[$optval].",") !== false){
+					if($rec[$optval] == $defaultval 
+						|| strpos(",".$defaultval.",", ",".$rec[$optval].",") !== false){
 						$optionlist .= " selected";
 						$selectval = $dispname.(isset($arr[3])?"-".$rec[$arr[3]]:"")." (".$rec[$optval].")";
 						if($needv == 1){
-							$selectval_mul .= $dispname.(isset($arr[3])?"-".$rec[$arr[3]]:"")." (".$rec[$optval]."),";
+							$selectval_mul .= $dispname.(isset($arr[3])?"-".$rec[$arr[3]]:"")
+								." (".$rec[$optval]."),";
 						}
 					}
 				}
@@ -466,7 +471,10 @@ class GTbl extends WebApp{
             //$this->setTbl($oldtbl);
 			
 			if($hasExist == 0 && $optioni > $maxInitSelectCount){
-				print "<script type='text/javascript' async>parent.lazyLoad('".$field."','select','extra/readtblfield.php?objectid=0&logicid=".$dispfield."&tbl=".$theTbl."&field=".$field."');</script><input name='pnsk_".$field."_optionlist' id='pnsk_".$field."_optionlist' value='' type='hidden' />";
+				print "<script type='text/javascript' async>parent.lazyLoad('".$field
+					."','select','extra/readtblfield.php?objectid=0&logicid=".$dispfield
+					."&tbl=".$theTbl."&field=".$field."');</script><input name='pnsk_".$field
+					."_optionlist' id='pnsk_".$field."_optionlist' value='' type='hidden' />";
 				#error_log(__FILE__.": field:$field set lazy load...... optioni:$optioni");
 			}
 			if($defaultval != null && $selectval == ''){
@@ -483,13 +491,16 @@ class GTbl extends WebApp{
 								$dispname .= "-".$rec[$v2];
 							}
 						}
-						if($rec[$optval] == $defaultval || strpos(",".$defaultval.",", ",".$rec[$optval].",") !== false){
+						if($rec[$optval] == $defaultval 
+							|| strpos(",".$defaultval.",", ",".$rec[$optval].",") !== false){
 							$selectval = $dispname.(isset($arr[3])?"-".$rec[$arr[3]]:"")." (".$rec[$optval].")";
 							if($needv == 1){
-								$selectval_mul .= $dispname.(isset($arr[3])?"-".$rec[$arr[3]]:"")." (".$rec[$optval]."),";
+								$selectval_mul .= $dispname.(isset($arr[3])?"-".$rec[$arr[3]]:"")
+									." (".$rec[$optval]."),";
 							}
 						}
-						$hmSelect[$rec[$optval]] = $selectval==''?($dispname."-(".$rec[$optval].")"):$selectval; # multiple support?
+						$hmSelect[$rec[$optval]] = $selectval==''?($dispname."-(".$rec[$optval].")"):$selectval;
+						# multiple support?
 					}
 					$this->hmconf['selectoption_sel_'.$field] = $hmSelect;
 				}
@@ -517,14 +528,18 @@ class GTbl extends WebApp{
             }
         }
         if($this->getReadOnly($field,'select') == 'disabled'){
-            $tmpstr = "<select id=\"".$tagpre.$field."\" name=\"".$tagpre.$field."\" ".$this->getJsAction($field)." ".$this->getAccept($field)." disabled>".$optionlist."</select> <input type=\"hidden\" id=\"".$tagpre.$field."\" name=\"".$tagpre.$field."\" value=\"".$defaultval."\" />";
+            $tmpstr = "<select id=\"".$tagpre.$field."\" name=\"".$tagpre.$field."\" "
+				.$this->getJsAction($field)." ".$this->getAccept($field)." disabled>"
+				.$optionlist."</select> <input type=\"hidden\" id=\"".$tagpre.$field."\" name=\""
+				.$tagpre.$field."\" value=\"".$defaultval."\" />";
         }else{
             if($ismultiple == 0){
-                $tmpstr = "<select id=\"".$tagpre.$field."\" name=\"".$tagpre.$field."\" ".$this->getJsAction($field)." ".$this->getAccept($field)." ".$this->getCss($field).">".$optionlist."</select>";
+                $tmpstr = "<select id=\"".$tagpre.$field."\" name=\"".$tagpre.$field."\" "
+					.$this->getJsAction($field)." ".$this->getAccept($field)." "
+					.$this->getCss($field).">".$optionlist."</select>";
             }
 			else{
                 #$tmpstr = "<select id=\"".$tagpre.$field."\" name=\"".$tagpre.$field."[]\" ".$this->getJsAction($field)." ".$this->getAccept($field)." multiple=\"multiple\">".$optionlist."</select>";
-            
 				$tmpstr = "";
                 $oi = 1;
                 #print __FILE__;
@@ -535,13 +550,13 @@ class GTbl extends WebApp{
                 }
                 sort($hmTmp);
                 foreach($hmTmp as $ko=>$vo){
-                	$tmpstr .= ($oi++).".<input type='checkbox' name='".$tagpre.$field."[]' value='".$vo[$optval]."'"
-                		.(inList($vo[$optval], $defaultval) ? " checked" : "")."/> ".$vo[$arr[2]]."(".$vo[$optval].")&nbsp;&nbsp;&nbsp;";
+                	$tmpstr .= ($oi++).".<input type='checkbox' name='".$tagpre.$field."[]' value='"
+						.$vo[$optval]."'".(inList($vo[$optval], $defaultval) ? " checked" : "")."/> "
+						.$vo[$arr[2]]."(".$vo[$optval].")&nbsp;&nbsp;&nbsp;";
                 	if(($oi-1) % 5 == 0){
                 		$tmpstr .= "<br/>";
                 	}
                 }
-
 			}
         }
         if($needv != 1){
