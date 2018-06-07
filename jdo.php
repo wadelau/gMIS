@@ -78,7 +78,8 @@ else if(startsWith($act, "list")){
     }
     # list start
     $listid = array();
-    $out .= "<table width=\"98%\" cellspacing=\"0\" cellpadding=\"0\" style=\"\" class=\"mainlist\">"
+    $out .= "<table width=\"98%\" cellspacing=\"0\" cellpadding=\"0\""
+			." style=\"word-break:break-all;\" class=\"mainlist\">"
             ."<tr height=\"35px\"><td colspan=\"".($max_disp_cols+2)."\">";
     $out .= "<button name=\"selectallbtn\" type=\"button\" onclick=\"checkAll();\" value=\"\">全选</button> &nbsp;";
     $out .= "<button name=\"reversebtn\" type=\"button\" onclick=\"uncheckAll();\" value=\"\">反选</button>";
