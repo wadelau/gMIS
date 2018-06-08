@@ -253,7 +253,7 @@ body {
 		</tr>
 
 		<tr><td colspan="10">
-		<script type="text/javascript"> 
+		<script async type="text/javascript"> 
 		function diffInYearsAndDays(startDate, endDate) {
 			// Copy and normalise dates
 			var d0 = new Date(startDate);
@@ -282,7 +282,7 @@ body {
 			return [dY, dD];  
 		}
 		</script>
-		<b><i>ii</i></b>. 系统已上线 <a href="{$url}"><script type="text/javascript">
+		<b><i>ii</i></b>. 系统已上线 <a href="{$url}"><script async type="text/javascript">
 			diff=diffInYearsAndDays('{$start_date}',(new Date())); document.write(''+diff[0]+' 年 '+diff[1]
 			+' 天');</script></a> , 系统共 <a href="{$ido}&tbl=info_usertbl"><b>{$user_count}</b></a> 位用户，
 			管理着<a href="{$ido}&tbl=info_objecttbl"><b> {$module_count}  </b></a>个功能模块.  
@@ -295,7 +295,7 @@ body {
 		<input type='hidden' id='indexurl' value='{$url}'/>
 		<input type='hidden' id='watch_interval' value='{$watch_interval}'/>
 		{literal}
-		<script type="text/javascript">var idxHomeWto=window.setTimeout(function(){
+		<script async type="text/javascript">var idxHomeWto=window.setTimeout(function(){
 				console.log('reload time:['+(new Date())+']');
 				 window.location.href=document.getElementById('indexurl').value;},
 			parseInt(document.getElementById('watch_interval').value)*1000);</script>
