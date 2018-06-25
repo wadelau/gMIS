@@ -246,7 +246,7 @@ class ZeeA {
 	
 	//-- methods, private
 	//-
-	private function _something(){
+	private function _somethingElse(){
 	    $rtn = 0;
 	    # @todo
 	    return $rtn;
