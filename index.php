@@ -94,17 +94,18 @@ $hm = $gtbl->execBy("select count(*) as modulecount from ".$_CONFIG['tblpre']."i
 if($hm[0]){
 	$hm = $hm[1];
 	$data['module_count'] = $hm[0]['modulecount'];
-	foreach($hm as $k=>$v){
-        $userList[$v['id']] = $v['email'];
-    }
 }
 
+$userListOL = array();
 $hm = $gtbl->execBy("select id, email from "
 	.$_CONFIG['tblpre']."info_usertbl where istate=1", null, 
 	$withCache=array('key'=>'info_user-select-count'));
 if($hm[0]){
 	$hm = $hm[1];
 	$data['user_count'] = count($hm);
+	foreach($hm as $k=>$v){
+        $userListOL[$v['id']] = $v['email'];
+    }
 }
 
 $hm = $gtbl->execBy("select * from ".$_CONFIG['tblpre']."fin_operatelogtbl order by ".$gtbl->getMyId()." desc limit 7",
@@ -160,7 +161,7 @@ $data['module_list_name'] = $hm_module_name;
 $data['module_list_db'] = $hm_module_db;
 $data['todo_list'] = $hm_todo_list;
 $data['module_path'] = $module_path;
-$data['user_list'] = $userList;
+$data['user_list_ol'] = $userListOL;
 
 $smttpl = getSmtTpl(__FILE__, $act);
 
