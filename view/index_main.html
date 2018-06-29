@@ -240,7 +240,7 @@ body {
 				{foreach $log_list as $k=>$v}
 				<tr>
 				<td>{$v['inserttime']}</td>
-				<td><a>{$v['useremail']}/{$v['userid']}</a></td>
+				<td><a>{$user_list[$v['userid']]}/{$v['userid']}</a></td>
 				<td><a href="{$ido}&tbl={$v['parenttype']}">{$v['parenttype']}/{$v['parentid']}</a></td>
 				<td>{$v['actionstr']}</td>
 				</tr>

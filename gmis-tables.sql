@@ -27,7 +27,6 @@ CREATE TABLE `gmis_fin_operatelogtbl` (
   `parentid` int(11) NOT NULL DEFAULT '0',
   `parenttype` char(32) NOT NULL DEFAULT '',
   `userid` int(11) NOT NULL DEFAULT '0',
-  `useremail` char(32) NOT NULL DEFAULT '',
   `actionstr` char(255) NOT NULL DEFAULT '',
   `inserttime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   PRIMARY KEY (`id`)

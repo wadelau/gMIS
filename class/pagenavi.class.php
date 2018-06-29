@@ -228,13 +228,7 @@ class PageNavi extends WebApp{
 						# omit...
 						continue;
 					}
-                    if($hasId && $field == $myId){
-					    # use primary or unique key to query, Fri, 16 Dec 2016 19:29:44 +0800
-					    $condition = " $pnsm $field $fieldopv ?";
-					    $gtbl->set($field, $v);
-					    break;
-					}
-					else if($fieldopv == 'inlist'){
+                    if($fieldopv == 'inlist'){
                         if($this->isNumeric($hmfield[$field]) && strpos($hmfiled[$field],'date') === false){
                             # numeric
                         }else{
@@ -242,7 +236,9 @@ class PageNavi extends WebApp{
                             $v = $this->addQuote($v);
                         }
                         $condition .= " ".$pnsm." $field in ($v)";
-                    }else if($fieldopv == 'inrange'){
+						$gtbl->del($field);
+                    }
+					else if($fieldopv == 'inrange'){
 						$v = str_replace("，",",", $v);
                         $tmparr = explode(",", $v);
                         if(strpos($hmfield[$field],'date') === false){
@@ -250,16 +246,20 @@ class PageNavi extends WebApp{
                         }else{
                             $condition .= " ".$pnsm." ($field >= '".$tmparr[0]."' and $field <= '".$tmparr[1]."')";
                         }
-                    }else if($fieldopv == 'contains'){
+                    }
+					else if($fieldopv == 'contains'){
                         $condition .= " ".$pnsm." "."$field like ?";
                         $gtbl->set($field, "%".str_replace(' ','%',$v)."%");
-                    }else if($fieldopv == 'notcontains'){
+                    }
+					else if($fieldopv == 'notcontains'){
                         $condition .= " ".$pnsm." "."$field not like ?";
                         $gtbl->set($field, "%".str_replace(' ','%',$v)."%");
-                    }else if($fieldopv == 'startswith'){
+                    }
+					else if($fieldopv == 'startswith'){
                         $condition .= " ".$pnsm." "."$field like ?";
                         $gtbl->set($field, $v."%");
-                    }else if($fieldopv == 'endswith'){
+                    }
+					else if($fieldopv == 'endswith'){
                         $condition .= " ".$pnsm." "."$field like ?";
                         $gtbl->set($field, "%".$v);
 					}
@@ -275,7 +275,11 @@ class PageNavi extends WebApp{
                         $condition .= " ".$pnsm." $field $fieldopv ?"; # this should be numeric only.
                         $gtbl->set($field, $v);
                     }
-
+					if($hasId && $field == $myId && $fieldopv == '='){
+					    # use primary or unique key to query precisely, 
+						# June 27, 2018, Fri, 16 Dec 2016 19:29:44 +0800
+					    break;
+					}
                 }
             }
        }

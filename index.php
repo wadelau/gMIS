@@ -14,7 +14,7 @@ $moduleNeedDb = '';
 
 $hm = $gtbl->execBy($sql="select * from ".$_CONFIG['tblpre']."fin_todotbl where (togroup in (" # for multiple groups
         .$user->getGroup().") or touser=".$user->getId()." or triggerbyparent in (".$user->getGroup().") or triggerbyparentid="
-        .$user->getId().") and istate in (1,2) order by istate desc, id desc limit 6 ", null,
+        .$user->getId().") and istate in (1,2) order by istate desc, id desc limit 7 ", null,
 		$withCache=array('key'=>'info_todo-select-'.$user->getId()));
 if($hm[0]){
     $hm = $hm[1];
@@ -29,7 +29,7 @@ $mycachedate=date("Y-m-d", time()-(86400*60));
 $hm = $gtbl->execBy("select count(parenttype) as modulecount, parenttype from "
         .$_CONFIG['tblpre']."fin_operatelogtbl where inserttime > '"
         .$mycachedate." 00:00:00' and parenttype not in ('gmis_info_usertbl', 'gmis_fin_todotbl')"
-        ." group by parenttype order by modulecount desc limit 8", null,
+        ." group by parenttype order by modulecount desc limit 11", null,
 	$withCache=array('key'=>'fin_operatelog-select-'.$mycachedate));
 if($hm[0]){
 	$hm = $hm[1];
@@ -63,7 +63,7 @@ if($hm[0]){
 	$data['module_list_byuser'] = $hm; #Todo add2desktop by user
 }
 else{
-    $hm = $gtbl->execBy("select objname,tblname from ".$_CONFIG['tblpre']."info_objecttbl order by rand() limit 7",
+    $hm = $gtbl->execBy("select objname,tblname from ".$_CONFIG['tblpre']."info_objecttbl order by rand() limit 11",
             null, $withCache=array('key'=>'info_object-select-desktop-rand'));
     if($hm[0]){
         $hm = $hm[1];
@@ -94,15 +94,20 @@ $hm = $gtbl->execBy("select count(*) as modulecount from ".$_CONFIG['tblpre']."i
 if($hm[0]){
 	$hm = $hm[1];
 	$data['module_count'] = $hm[0]['modulecount'];
+	foreach($hm as $k=>$v){
+        $userList[$v['id']] = $v['email'];
+    }
 }
 
-$hm = $gtbl->execBy("select count(*) as usercount from ".$_CONFIG['tblpre']."info_usertbl where istate=1");
+$hm = $gtbl->execBy("select id, email from "
+	.$_CONFIG['tblpre']."info_usertbl where istate=1", null, 
+	$withCache=array('key'=>'info_user-select-count'));
 if($hm[0]){
 	$hm = $hm[1];
-	$data['user_count'] = $hm[0]['usercount'];
+	$data['user_count'] = count($hm);
 }
 
-$hm = $gtbl->execBy("select * from ".$_CONFIG['tblpre']."fin_operatelogtbl order by ".$gtbl->getMyId()." desc limit 6",
+$hm = $gtbl->execBy("select * from ".$_CONFIG['tblpre']."fin_operatelogtbl order by ".$gtbl->getMyId()." desc limit 7",
         null, $withCache=array('key'=>'info_user-select-count'));
 if($hm[0]){
 	$hm = $hm[1];
@@ -155,6 +160,7 @@ $data['module_list_name'] = $hm_module_name;
 $data['module_list_db'] = $hm_module_db;
 $data['todo_list'] = $hm_todo_list;
 $data['module_path'] = $module_path;
+$data['user_list'] = $userList;
 
 $smttpl = getSmtTpl(__FILE__, $act);
 
