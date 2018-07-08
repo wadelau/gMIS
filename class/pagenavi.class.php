@@ -16,13 +16,10 @@ class PageNavi extends WebApp{
 	//- variables
     var $dummy = '';
     const SID = 'sid';
+	const Omit_String = '----';
     
    public function __construct($args=null){
-
-       #$this->dba = new DBA(); # added by wadelau@ufqi.com, Wed Jul 11 14:31:52 CST 2012
-
-	   parent::__construct($args);
-	   
+   
        $file = $_SERVER['PHP_SELF'];
        $query = $_SERVER['QUERY_STRING'];
        if(strpos($query, "act=list-") !== false){
@@ -45,7 +42,10 @@ class PageNavi extends WebApp{
             $para[$k] = $para[$k]>0?$para[$k]:$pdef[$k];
             $this->hmf[$k]=$para[$k];
        }
-
+	   
+	   #$this->dba = new DBA(); # added by wadelau@ufqi.com, Wed Jul 11 14:31:52 CST 2012
+	   # call parent's constructor, explicitly
+	   parent::__construct($args);
    }
 
    function getNavi(){
