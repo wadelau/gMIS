@@ -187,6 +187,9 @@ $fmt = isset($_REQUEST['fmt'])?$_REQUEST['fmt']:''; # by wadelau on Tue Nov 24 2
 if($fmt == ''){
     header("Content-type: text/html;charset=utf-8");
 }
+else if($fmt == 'json'){
+	header("Content-type: application/json;charset=utf-8");
+}
 $randi = rand(100000, 999999);
 
 if(strpos($tbl,$_CONFIG['tblpre']) !== 0){
@@ -224,11 +227,6 @@ $smt->setCompileDir($viewdir.'/compile');
 $smt->setConfigDir($viewdir.'/config');
 $smt->setCacheDir($viewdir.'/cache');
 $smttpl = '';
-
-$fmt = isset($_REQUEST['fmt'])?$_REQUEST['fmt']:''; # by wadelau on Tue Nov 24 21:36:56 CST 2015
-if($fmt == ''){
-	header("Content-type: text/html;charset=utf-8");
-}
 
 function exception_handler($exception) {
 	echo '<div class="alert alert-danger">';

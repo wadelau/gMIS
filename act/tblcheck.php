@@ -22,18 +22,38 @@ if($mode != ''){
             'list-toexcel'=>'r',
             'view'=>'r',
             'list-dodelete'=>'d',
+			'print' => 'r',
+            'deepsearch' => 'r',
+            'dodeepsearch' => 'r',
+            'pivot' => 'r',
+            'pivot-do' => 'r',
             );
     $modechar = $act2mode[$act];
     if(!isset($modechar)){
         error_log(__FILE__.": unknown act:[$act] in act2mode.201202282117");
-    }else{
+    }
+	else{
         if(strpos($mode, $modechar) === false){
-            $out .= "act:[$act] is not allowed in mode:[$mode]. 201202282143\n";
-            $out .= "<br/><br/> <a href='".$ido."&tbl=hss_fin_managemodetbl&pnskparenttype="
-				.$tbl."&pnskparentid=".$id."&pnsm=1' target=\"_top\">申请变更</a> ";
+            $out = "<p>访问被拒绝. <br/>act:[$act] is not allowed in mode:[$mode]. 201202282143\n";
+            $out .= "<br/><br/> 联系上级或技术支持<a href='mailto:".$_CONFIG['adminmail']."?subject="
+                    .$_CONFIG['agentname']."权限申请访问$tbl@$db'> 申请变更 </a> <br/><br/></p>";
+            if($fmt == ''){
+                #
+            }
+            else if($fmt == 'json'){
+                $data = array();
+                $data['out'] = $out;
+                $data['targetid'] = $id;
+                $out = json_encode($data);
+            }
+            else{
+                debug($fmt, "unknown fmt:$fmt");
+            }   
+            #debug("act/tblcheck: out:$out");
             print $out;
             exit(0);
-        }else{
+        }
+		else{
             #$out .= "act:[$act] is ready.\n";
         }
     }
