@@ -194,7 +194,8 @@ class MYSQLIX {
 				$n = count($idxarr);
 				while($a !== false){
 					if($i>$n){
-						$this->sayErr("_enSafe, fields not matched with vars.sql:[".$origSql."] i:[".$i."] n:[".$n."].");
+						$this->sayErr("_enSafe, fields not matched with vars.sql:[".$origSql
+							."] i:[".$i."] n:[".$n."].");
 					}
 					$t = substr($sql,0,$a+1);
 					#print __FILE__.": t:[".$t."] i:[".$i."] vars:[".$idxarr[$i]."] hmv:[".$hmvars[$idxarr[$i]]."]\n";
@@ -313,6 +314,8 @@ class MYSQLIX {
 		global $REMOTE_ADDR;
 		global $PHP_SELF;
 		$str = '';
+		$errMsg = $this->getError();
+        $errNo = $this->getErrno();
 		if($this->isdebug){
 			$str .= "<br>sayError:";
 			$str .= "<font color=red>sayError sql : </font><br>&nbsp;&nbsp;".$sql;
@@ -322,12 +325,23 @@ class MYSQLIX {
 			$str .= "<font color=red>sayError information : </font><br>&nbsp;&nbsp;".$this->getError();
 		}
 		else{
-			$str .= "<div id=\"sayErrdiv_201210131751\" style=\"color:red;z-index:99;position:absolute\">Found internal Error when process your transaction..., please report this to wadelau@gmail.com . [2007211253]</div>\n";
-			error_log(__FILE__.": MYSQL_sayErrOR: sayErr_no:[".$this->getErrno()."] sayErr_info:[".$this->getError()."] sayErr_sql:[".serialize($sql)."] [07211253]");
+			$str .= "<div id=\"sayErrdiv_201210131751\" style=\"color:red;z-index:99;\" align=\"center\">"
+                ."<p>Found internal Error when process your transaction..., "
+                ."please report this to <a href='mailto:wadelau@gmail.com?subject=-GWA2-sql-error-$errNo'>"
+                ."wadelau@gmail.com</a> . 2007211253</p>\n";
+            if(stripos($errMsg, 'Duplicate entry') !== false){
+               $str .= "<p>$errMsg</p>";
+            }
+            else{
+                $str .= "<p>Unkown Error! <a href='mailto:".$GConf::get("adminmail")
+                    ."?subject=-GWA2-sql-error-$errNo'>Report to Tech Support</a></p>";
+            }
+            $str .= "</div>";
 		}
-		debug($sql);
-		$html = GConf::get('html_resp'); $html = str_replace("RESP_TITLE","sayError!", $html); $html = str_replace("RESP_BODY", $str, $html);
-		print $html;
+		debug("MYSQL_sayErrOR: sayErr_no:[".$errNo."] sayErr_info:[".$errMsg."] sayErr_sql:[$sql]");
+        $html = GConf::get('html_resp');
+        $html = str_replace("RESP_TITLE","sayError!", $html);
+        $html = str_replace("RESP_BODY", $str, $html);
 		exit(1);
 		
 	} 
