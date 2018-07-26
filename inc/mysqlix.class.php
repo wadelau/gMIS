@@ -19,7 +19,7 @@ class MYSQLIX {
 	var $m_link; 
 	var $isdebug = 0; # debug mode
 
-	# 
+	# constructor
 	function __construct($config){  
 	
 		$this->m_host     = $config->mDbHost;

@@ -481,6 +481,15 @@ function switchEditable(targetObj,fieldName,fieldType,fieldValue,myUrl,readOnly)
 		if(!userinfo.input2Select){ userinfo.input2Select = {}; }
 		userinfo.input2Select.makeSelect = 0;
 	}
+	else{
+        //- bugfix for disp shortening with non-select in list view
+        var tmpv = targetObj.innerHTML;
+        var fieldtmpv = Base62x.decode(fieldValue);
+        if(tmpv.length < fieldtmpv.length){
+            targetObj.innerHTML = fieldtmpv;
+            console.log("found disp shortenning and remedy...");
+        }
+	}
 	if(fieldType != 'input2select'){
 		if(!userinfo.input2Select){ userinfo.input2Select = {}; }
 		userinfo.input2Select.makeSelect = 1;
@@ -559,12 +568,15 @@ function sendNotice(isSucc, sMsg){
 function registerAct(tObj){
     if(tObj.status == 'onload'){
         //window.alert('delaytime:['+tObj.delaytime+']');
+		/*
 		var actx = unescape(tObj.action);
 		actx = actx.replace('+', ' '); //- need to be replaced with -Base62x, 09:14 24 September 2016
 		actx = actx.replace('\+', ' '); //- need to be replaced with -Base62x, 09:14 24 September 2016
 		actx = actx.replace('%20', ' '); //- need to be replaced with -Base62x, 09:14 24 September 2016
-        var actxId = 0; 
-        if(!userinfo.registerAct){
+        */
+		var actx = Base62x.decode(tObj.action); //- imprv, July 26, 2018
+		var actxId = 0;
+		if(!userinfo.registerAct){
         	userinfo.registerAct = {};
         }
         actxId = userinfo.registerAct[tObj.action];

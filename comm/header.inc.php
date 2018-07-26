@@ -136,7 +136,7 @@ if($isoput){
                     .($is_debug==1?rand(0,9999):'').'" charset=\"utf-8\" async></script>
             <script type="text/javascript" src="'.$rtvdir.'/comm/popdiv.js" charset=\"utf-8\" async></script>
             <script type="text/javascript" src="'.$rtvdir.'/comm/navimenu/navimenu.js" charset=\"utf-8\" async></script>
-
+			<script type="text/javascript" src="'.$rtvdir.'/comm/Base62x.class.js" charset=\"utf-8\" async></script>
             <link rel="stylesheet" type="text/css" href="'.$rtvdir.'/comm/navimenu/navimenu.css" />
             </head>
             <body> <!--  style="'.($isheader==0?"":"width:880px").'" -->';

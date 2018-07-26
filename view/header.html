@@ -1,6 +1,5 @@
 <!DOCTYPE html><html>
 <head>
-<!-- other stuff -->
 <!-- ! another place at comm/header.inc !  [{$isdebug}] [{$randi}] -->
 <title>{$title} - {$agentname} - {$appchnname}</title>
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
@@ -13,7 +12,7 @@
 <script type="text/javascript" async src="{$rtvdir}/comm/popdiv.js" charset="utf-8"></script>
 <script type="text/javascript" async 
 	src="{$rtvdir}/comm/navimenu/navimenu.js?i={if $isdebug==1}{$randi}{/if}" charset="utf-8"></script>
-
+<script type="text/javascript" async src="{$rtvdir}/comm/Base62x.class.js" charset="utf-8"></script>
 <link rel="stylesheet" type="text/css" href="{$rtvdir}/comm/navimenu/navimenu.css?i={if $isdebug==1}{$randi}{/if}" />
 <link href="{$rtvdir}/comm/skin.css?i={if $isdebug==1}{$randi}{/if}" rel="stylesheet" type="text/css">
 </head>

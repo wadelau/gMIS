@@ -98,7 +98,7 @@ class GTbl extends WebApp{
 		      $this->prttbl = str_replace(GConf::get('tblpre'), '', $this->prttbl);
 		  }
 		  else{
-		      error_log(__FILE__.":gtbl.class: error with tblname:[".$this->prttbl."].");
+		      #error_log(__FILE__.":gtbl.class: error with tblname:[".$this->prttbl."].");
 		  }
 		}
 
@@ -806,7 +806,7 @@ class GTbl extends WebApp{
             foreach($arr as $k=>$v){
                 $arr2 = explode("::", $v);
                 $jsact .= "parent.registerAct({'status':'".$arr2[0]."','delaytime':".$arr2[1]
-					.",'action':'".urlencode($arr2[2])."'});";
+					.",'action':'".Base62x::encode($arr2[2])."'});";
             }
         }
         return $jsact==''?'':"<script type=\"text/javascript\" async>".$jsact."</script>";

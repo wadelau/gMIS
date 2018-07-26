@@ -90,14 +90,14 @@ else if(startsWith($act, "list")){
 	if(true){
         $iswatch = Wht::get($_REQUEST, 'pnwatch');
         $watchInterval = $_CONFIG['watch_interval']; # seconds
-        $watchAct = "doActionEx(\'".$jdo."&act=list&pnwatch=1\', \'actarea\')";
+        $watchAct = "doActionEx('".$jdo."&act=list&pnwatch=1', 'actarea')";
         $out .= "&nbsp;&nbsp;&nbsp;<button name='watchbtn' title='觀察模式' onclick=\"javascript:parent.doActionEx('"
                 .$jdo."&act=list&pnwatch=".($iswatch==1?'0':'1')."', 'actarea');\">"
                 .($iswatch==1?'觀察中...':'觀  察')."</button>";
         if($iswatch == 1){
             # parent.doActionEx('".$jdo."&act=list&pnwatch=1', 'actarea');
             $out .= "<script type=\"text/javascript\">parent.registerAct({'status':'onload', "
-                    ."'action':escape('$watchAct'),"
+                    ."'action':'".Base62x::encode($watchAct)."',"
                     ." 'delaytime':$watchInterval});</script>";
         }
         else if(isset($_REQUEST['pnwatch'])){
@@ -336,7 +336,7 @@ else if(startsWith($act, "list")){
 				   $readonly = $gtbl->getReadOnly($field);
                    if($inputtype == 'textarea'){ $readonly = true; }
                    $out .= "<td ondblclick=\"javascript:switchEditable('othercont_div_".$id."_"
-                           .$field."','".$field."','".$inputtype."','','".$jdo."&act=updatefield&field="
+                           .$field."','".$field."','".$inputtype."','".Base62x::encode($fv_orig)."','".$jdo."&act=updatefield&field="
                            .$field."&".$gtbl->getMyId()."=".$id."','".$readonly."');\" title=\""
                            .str_replace("\"","", $fv_orig)."\" ".$gtbl->getCss($field)." "
                             .$gtbl->getJsAction($field, $rec)."><div id=\"othercont_div_".$id."_".$field."\">"

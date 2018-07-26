@@ -14,10 +14,8 @@
  * bugifx by _decodeByLength, 20:40 28 November 2016
  */
 
-
 class Base62x {
 
-	
 	# variables
 
 	var $isdebug = false;
@@ -47,7 +45,6 @@ class Base62x {
 	var $ascrlist = array();
 	const max_safe_base = 36;
 	static $ver = 0.8;
-	
 
 	# methods
 
