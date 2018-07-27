@@ -662,16 +662,14 @@ class GTbl extends WebApp{
         $tmpstr = $tmpstr==null?'':$tmpstr;
         $tUrl = "";
         $title = ""; $needJsConfirm = 0; $needBlank = 0;
-        if($tmpstr != ""){ # see xml/hss_info_usertbl.xml
+        if($tmpstr != ""){ # see xml/info_usertbl.xml
             $vArr = explode("::", $tmpstr);
 			if(startsWith($vArr[0],"javascript:")){
 				$tUrl = $vArr[0];
 				$title = $vArr[1];
 				if(strpos($tUrl,"THIS") > -1){
-					#$tUrl = str_replace('THIS', $result[$field], $tUrl);
 					$tUrl = $this->fillThis($tUrl, $field);
 				}
-				$tUrl = $this->appendSid($tUrl);
 			}
 			else{
                 $file = $vArr[0];
@@ -683,30 +681,13 @@ class GTbl extends WebApp{
     			}
                 $pArr = explode(",", $vArr[1]);
                 $title = $vArr[2];
-				/*
-                if($title == 'THIS'){
-                    $title = $result[$field];
-                }
-    			else if(strpos($title, 'THIS') !== false){
-    				$title = str_replace('THIS',$result[$field], $title);
-    			}
-				*/
 				$title = $this->fillThis($title, $field);
                 foreach($pArr as $k=>$v){
                     $para = explode("=", $v);
                     $tUrl .= $para[0].'=';
                     if(count($para) > 2){
                         $para[1] = $para[1]."=".$para[2];
-                        #$para[1] = str_replace("THIS", $result[$field], $para[1]);
                     }
-					/*
-                    if($para[1] == 'THIS'){
-                        $tUrl .= $result[$field];
-                    }
-					else if(strpos($para[1],"THIS_") !== false){
-                        $tUrl .= $result[substr($para[1],5)];    
-                    }
-					*/
 					if(inString('THIS', $para[1)){
 						$tUrl = $this->fillThis($tUrl.$para[1], $field);
 					}
@@ -719,6 +700,7 @@ class GTbl extends WebApp{
                     $tUrl .= "&";
                 }
                 $tUrl = $file."?".substr($tUrl, 0, strlen($tUrl)-1);
+				$tUrl = $this->appendSid($tUrl);
                 $fourthPara = $vArr[3];
                 if($fourthPara != ''){
                     if(strpos($fourthPara,"confirm=1") !== false){
@@ -758,7 +740,6 @@ class GTbl extends WebApp{
         $tmpstr = $this->hmconf[$this->taglist['field'].$this->sep.$field.$this->sep.$this->taglist['stat']];
         return $tmpstr = $tmpstr==null?'':$tmpstr;
     }
-
 
     public function getField($fieldi){
         $tmpstr = $this->hmfieldsort[$fieldi];
@@ -862,8 +843,6 @@ class GTbl extends WebApp{
         return $rtn;
     }
 
-
-
     # inner functions for this object
 
     //- max depth: 4
@@ -959,7 +938,8 @@ class GTbl extends WebApp{
        }
        return $ishidden;
     }
-
+	
+	//-
     function getFieldType(){
         $fieldtype = "";
         foreach($this->hmfield as $k=>$v){
@@ -976,7 +956,6 @@ class GTbl extends WebApp{
         return $tmpstr = $tmpstr==null?'':$tmpstr;
 	}
     
-
 	//-
 	public function getMyIdName(){
 		$tmpstr = $this->hmconf[$this->taglist['table'].$this->sep.$this->prttbl.$this->sep.$this->taglist['myid']];
@@ -1121,6 +1100,13 @@ class GTbl extends WebApp{
 	            }
 	        }
 	    }
+		//- append &db=
+		if(inString('&db=', $url)){
+			# goood
+		}
+		else{
+			$url .= "&db=".$this->db;
+		}
 	    return $url;
 	}
 	
