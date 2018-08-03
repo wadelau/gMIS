@@ -385,7 +385,7 @@ else if(startsWith($act, "list")){
                 $out .= "<td>".(is_int($tmpsum) ? number_format($tmpsum) : $tmpsum)."</td>";
             }
         }
-        $out .= "<td></td></tr>\n";
+        $out .= "</tr>\n";
         # sum end
         $out .= "<tr height=\"35px\"><td style=\"border-bottom:0px\" colspan=\"".($max_disp_cols+2)."\">";
         $out .= "<button name=\"selectallbtn\" type=\"button\" onclick=\"checkAll();\" value=\"\">全选</button> &nbsp;";
