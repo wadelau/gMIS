@@ -3,8 +3,8 @@
 $_REQUEST['tbl'] = ''; #  'fin_todotbl'; Wed Oct 22 09:10:01 CST 2014
 
 require("./comm/header.inc.php");
-
-$out = str_replace('TITLE','欢迎', $out);  $data['title'] = '欢迎';
+$data['title'] = $_CONFIG['agentname'];
+$out = str_replace('TITLE', $data['title'], $out);
 
 $gtbl = new WebApp();
 

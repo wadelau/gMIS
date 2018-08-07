@@ -21,7 +21,7 @@
 	
     <field name="tasktype">
       <chnname>任务类型</chnname>
-	  <selectoption>1:OfferSync|2:OfferExpo|3:OfferDSP|0:Other</selectoption>
+	  <selectoption>1:JoyTypeA|2:JobTypeB|0:Other</selectoption>
     </field>	
 
     <field name="triggerbyparent">

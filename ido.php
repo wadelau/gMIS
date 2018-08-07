@@ -1,7 +1,7 @@
 <?php
 require("./comm/header.inc.php");
 
-$out = str_replace('TITLE','欢迎', $out);
+$out = str_replace('TITLE', $_CONFIG['agengname'], $out);
 $isgo = true;
 if($tbl == ''){
     if(1){

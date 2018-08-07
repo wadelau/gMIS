@@ -69,8 +69,15 @@ if(true){
     
     # tables
     foreach($issTblList as $k=>$tmpTblArr){
-        $tmpTbl = $tmpTblArr['Tables_in_adSystem'];
-        #debug("tbl:$tmpTbl seri:".serialize($tmpTblArr));
+        #$tmpTbl = $tmpTblArr['Tables_in_adSystem'];
+        $tmpTbl = '';
+        foreach($tmpTblArr as $k2=>$v2){
+            if(inString('Tables_in_', $k2)){
+                $tmpTbl = $v2;
+                break;
+            }
+        }
+        #debug("k:$k tbl:$tmpTbl seri:".serialize($tmpTblArr)." k2:".$k2);
         # @todo  whitelist
         if(isset($tblBlackList[$tmpTbl])){
             continue;
@@ -149,7 +156,7 @@ if(true){
                 }
             }
             else{
-                #debug("$tmpTbl skip field:$tmpFieldName for type:$tmpFieldType.");
+                debug("$tmpTbl skip field:$tmpFieldName for type:$tmpFieldType.");
             }
         }
     
@@ -159,10 +166,10 @@ if(true){
             #debug($tmpMsg=" run sql:$sql\n");
             $out .= $tmpMsg;
             $hm = $gtbl->execBy($sql, null,
-                            $withCache=array('key'=>$db.'-'.$tmpTbl.'-content-page-size=first-200'));
+                            $withCache=array('key'=>$db.'-'.$tmpTbl.'-content-page-size=first-100'));
             if($hm[0]){
                 $hm = $hm[1];
-                #debug($tmpMsg="tbl-".($tbli++).":$tmpTl read val:".count($hm)." try to save...\n");
+                #debug($tmpMsg="tbl-".($tbli++).":$tmpTbl read val:".count($hm)." try to save...\n");
                 #$out .= $tmpMsg;
                 $result = $iss->saveInfo($hm, $itbl=$tmpTbl, $idb);
                 $out .= "tbl:$tmpTbl succ-count:".$result."\n\n";

@@ -688,7 +688,7 @@ class GTbl extends WebApp{
                     if(count($para) > 2){
                         $para[1] = $para[1]."=".$para[2];
                     }
-					if(inString('THIS', $para[1)){
+					if(inString('THIS', $para[1])){
 						$tUrl = $this->fillThis($tUrl.$para[1], $field);
 					}
 					else if(strpos($para[1], "'") === 0){
