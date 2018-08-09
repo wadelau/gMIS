@@ -2,7 +2,7 @@
 if($isoput){
 	if($isheader){
 		$out .= "<br/><br/><hr/>&nbsp; &copy; <script type=\"text/javascript\">document.write((new Date()).getFullYear());</script>
-			<b>Haossh</b>, 好事順. All rights reserved.";
+			<b>-gMIS</b>, -吉密斯. All rights reserved.";
 	}
 	$out .= "</body></html>";
 }

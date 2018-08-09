@@ -71,6 +71,7 @@ class InSiteSearch extends WebApp{
             }
         }
         # remove unwelcome
+        #debug("bfr trim targetList:".serialize($fieldList));
         $rowCount = count($rowList);
         $tmpFieldList = array();
         foreach($fieldList as $k=>$v){
@@ -79,10 +80,10 @@ class InSiteSearch extends WebApp{
             if($targetList[$ifield]['inblacklist'] == 1){
                 $needRm = true;
             }
-            else if($targetList[$ifield]['emptyc'] > $rowCount * 0.6){ # why .6?
+            else if($targetList[$ifield]['emptyc'] > $rowCount * 0.8){ # why .6?
                 $needRm = true;
             }
-            else if($targetList[$ifield]['numberc'] > $rowCount * 0.1){ # why .1?
+            else if($targetList[$ifield]['numberc'] > $rowCount * 0.5){ # why .1?
                 $needRm = true;
             }
             if(!$needRm){
@@ -97,12 +98,14 @@ class InSiteSearch extends WebApp{
         foreach($fieldList as $k=>$v){
             $ifield = $k;
             $imd5 = md5($tmps=$idb.$isep.$itbl.$isep.$ifield);
-
-            $hm = $this->execBy($sql="update ignore ".$this->getTbl()
-                ." set updatetime='".$this->currTime."'"
-                ." where imd5='$imd5'", null);
-            #debug("imd5:$imd5, update sql:$sql\n");
+            $hm = $this->execBy($sql="select id from ".$this->getTbl()
+                    ." where imd5='".$imd5."' limit 1", null);
             if($hm[0]){
+                $hm = $this->execBy($sql="update ignore ".$this->getTbl()
+                    ." set updatetime='".$this->currTime."'"
+                    ." where imd5='$imd5'", null);
+                debug("imd5:$imd5, update sql:$sql\n");
+
                 #$rtn .= $tmps . " save succ\n";
                 debug($tmps . " update succ\n");
                 $succi++;

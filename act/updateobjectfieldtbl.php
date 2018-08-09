@@ -1,10 +1,12 @@
 <?php
-# embeded in xml/hss_info_objecttbl.xml, sync field modifications to tbl
+# embeded in xml/info_objecttbl.xml, sync field modifications to tbl
 # wadelau@ufqi.com, Mon Jul  2 16:37:07 CST 2012
 # Wed Oct 22 08:29:09 CST 2014
 
 if(1){
     
+	$objFieldTbl = $_CONFIG['tblpre']."info_objectfieldtbl";
+	
     if($objectid == ""){
         $objectid = $user->getObjId();
     }
@@ -17,9 +19,18 @@ if(1){
         }
     }
 	$objectid = $objectid == '' ? 0 : $objectid;
+	
+	# bugfix for delete trigger, Thu Aug  9 21:44:39 CST 2018
+    # in case that delete in info_objecttbl
+    $tmpId = trim($_REQUEST[$gtbl->getMyId()]);
+    if($tmpId > 0 && $act == 'list-dodelete'){
+        $hm = $gtbl->execBy($tmpsql="delete from ".$objFieldTbl." where parentid='".$tmpId."'", null);
+        debug("objfieldtbl sync: sql:[$tmpsql] result:[".serialize($hm)."]");
+    }
+    else if($act != 'list-dodelete'){
 
     # tblfield 
-    $tblfield = "".$_CONFIG['tblpre']."info_objectfieldtbl";
+    $tblfield = $objFieldTbl;
     #error_log(__FILE__.": tbl:[$tbl] ");
     $sql = "desc $tbl";
     $hm = $gtbl->execBy($sql, null);
@@ -92,6 +103,9 @@ if(1){
             }
         }
     }
+	
+	}
+	
 }
 
 ?>

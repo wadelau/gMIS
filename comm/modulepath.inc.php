@@ -40,6 +40,7 @@ if($levelcode != ''){
         $module_path = substr($module_path, 0, strlen($module_path)-7); # '&rarr; '
     }
 }
+$data['modulename'] = $lastLinkName=='' ? '桌面 & 系统配置' : $lastLinkName;
 $tit = $tit=='' ? $tbl : $tit;
 $module_path = $module_path == '' ? '<a href="'.$url.'&navidir=99">桌面 & 系统配置</a> &rarr; '.$tit : $module_path;
 if($lastLinkName != $tit){ $module_path .= "&nbsp;|&nbsp;".($tit==''?$lastLinkName:$tit); }

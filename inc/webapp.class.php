@@ -10,7 +10,6 @@
  * Thu, 2 Mar 2017 19:36:45 +0800
  */
 
-
 if(!defined('__ROOT__')){
   define('__ROOT__', dirname(dirname(__FILE__)));
 }
@@ -21,7 +20,6 @@ require(__ROOT__."/inc/dba.class.php");
 require(__ROOT__."/inc/session.class.php");
 require(__ROOT__."/inc/cachea.class.php");
 require(__ROOT__."/inc/filesystem.class.php");
-
 
 class WebApp implements WebAppInterface{
 	
@@ -79,11 +77,14 @@ class WebApp implements WebAppInterface{
 	function __destruct(){
 	    #  @todo, long conn?
 	    $this->dba->close();
+		$this->dba = null;
 	    if($this->cachea != null){
 	        $this->cachea->close();
+			$this->cachea = null;
 	    }
 	    if($this->filea != null){
 	        $this->filea->close();
+			$this->filea = null;
 	    }
 	}
 	

@@ -11,6 +11,7 @@ class Config_Master{
 	var $mDbPassword = ""; 
 	var $mDbPort     = "";	
 	var $mDbDatabase = "";
+	var $mDbPersistent = true;
 	
 	function __construct(){
 		$gconf = new Gconf();
@@ -19,7 +20,7 @@ class Config_Master{
 		$this->mDbUser = $gconf->get('dbuser');
 		$this->mDbPassword = $gconf->get('dbpassword');
 		$this->mDbDatabase = $gconf->get('dbname');
-
+		$this->mDbPersistent = $gconf->get('dbpersistent');
 	} 
 }
 
@@ -38,7 +39,7 @@ class Config_Stats{
 		$this->mDbUser = $gconf->get('dbuser'.$db_suffix);
 		$this->mDbPassword = $gconf->get('dbpassword'.$db_suffix);
 		$this->mDbDatabase = $gconf->get('dbname'.$db_suffix);
-
+		$this->mDbPersistent = $gconf->get('dbpersistent');
 	} 
 }
 
