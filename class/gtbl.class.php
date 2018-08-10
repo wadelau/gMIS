@@ -805,7 +805,7 @@ class GTbl extends WebApp{
 
     public function getLogicOp($field){
 		$skiptag = Gconf::get('skiptag');
-        $intop = array('='=>'等于', $skiptag=>'忽略,不使用此條件',
+        $intop = array($skiptag=>'忽略,不使用此條件', '='=>'等于', 
                 '!='=>'不等于',
                 '>'=>'大于',
                 '>='=>'大于等于',
@@ -813,7 +813,7 @@ class GTbl extends WebApp{
                 '<='=>'小于等于',
                 'inlist'=>'等于列表中的一个,如: 1,2,3',
                 'inrange'=>'在一个值域中,如: min,max',);
-        $strop = array('contains'=>'包含', $skiptag=>'忽略,不使用此條件',
+        $strop = array($skiptag=>'忽略,不使用此條件', 'contains'=>'包含', 
 				'='=>'等于',
                 '!='=>'不等于',
                 'notcontains'=>'不包含',
