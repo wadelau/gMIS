@@ -3,7 +3,7 @@
 # Xenxin@ufqi
 # Wed May 30 15:40:33 CST 2018
 
-require("../comm/header.inc");
+require("../comm/header.inc.php");
 include("../comm/tblconf.php");
 include_once($appdir."/class/base62x.class.php");
 include_once($appdir."/class/insitesearch.class.php");
@@ -179,6 +179,6 @@ else{
     #debug("output $fmt format only....");
 }
 
-require("../comm/footer.inc");
+require("../comm/footer.inc.php");
 
 ?>

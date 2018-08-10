@@ -21,7 +21,6 @@ class DBA {
 
 	//-construct
 	function __construct($dbconf=null){
-		
 		$dbconf = ($dbconf==null ? 'Config_Master' : $dbconf);
 		//-
 		$this->conf = new $dbconf; //- need to be changed to Config_zoneli when sync to product enviro.
@@ -31,7 +30,13 @@ class DBA {
 		$this->sql_operator_list = array(' '=>1,'^'=>1,'~'=>1,':'=>1,'!'=>1,'/'=>1,
 				'*'=>1,'&'=>1,'%'=>1,'+'=>1,'='=>1,'|'=>1,
 				'>'=>1,'<'=>1,'-'=>1,'('=>1,')'=>1,','=>1);
-	}	
+	}
+	
+	//- descontruct
+	function __destruct(){
+		$this->close();
+		$this->dbconn = null;
+	}
 
 	/* 
 	 * mandatory return $hm = (0 => true|false, 1 => string|array);
@@ -161,6 +166,7 @@ class DBA {
 	//-
 	function close(){
 	    # @todo, long conn?
+		$this->dbconn->close();
 	    return true;
 	}
 }

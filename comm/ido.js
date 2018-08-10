@@ -603,7 +603,7 @@ function doActSelect(sSel, sUrl, iId, fieldVal){
 
     if(fieldv != ''){
         if(fieldv == 'list-dodelete'){
-           var deleteDelay = 11; // seconds
+           var deleteDelay = 7; // seconds
 			if(!actListDiv){
 				console.log('actListDiv was lost.....')
 			}
@@ -638,7 +638,7 @@ function doActSelect(sSel, sUrl, iId, fieldVal){
 							sendNotice(false, 'Data updated Failed. Please Try again/请重试.');
 						}
 					});
-				gta.get(appendSid(targetUrl+'&async=1&fmt=json'));
+				gta.get(appendSid(targetUrl+'&async=1&fmt=json&targetLineId='+iId));
 	
 				}, deleteDelay * 1000);
             

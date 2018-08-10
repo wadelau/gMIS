@@ -24,11 +24,13 @@ else if(startsWith($act, "list")){
     }
     if(startsWith($act, "list-dodelete")){
 		$origId = $id;
-       include("./act/dodelete.php"); 
-	   $jdo = str_replace('&'.$gtbl->getMyId().'=', '&xoid=', $jdo); 
+		include("./act/dodelete.php"); 
+		$jdo = str_replace('&'.$gtbl->getMyId().'=', '&xoid=', $jdo);
+		$targetLineId = trim($_REQUEST['targetLineId']);
 		if($fmt != ''){ 
 		   $data['respobj']['resultobj'] = array('resultcode'=>'0',  # 0 stands for success
-		   		'resulttrace'=>'1511242124', 'targetid'=>$origId); # unique trace id
+		   		'resulttrace'=>'1511242124', 
+				'targetid'=>($targetLineId=='' ? $origId : $targetLineId)); # unique trace id
 		   }
     }
 	if(isset($data['respobj']['resultobj'])){

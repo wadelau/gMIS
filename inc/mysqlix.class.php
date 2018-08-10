@@ -8,7 +8,6 @@
 # Wed Nov  5 14:10:39 CST 2014
 require_once(__ROOT__."/inc/config.class.php");
 
-
 class MYSQLIX { 
 
 	var $m_host; 
@@ -18,6 +17,16 @@ class MYSQLIX {
 	var $m_name; 
 	var $m_link; 
 	var $isdebug = 0; # debug mode
+	 /*
+	 * connection pool for db, Aug 11, 2018
+	 * this relies on 1) max_persistent in mysqli in php.ini,
+	 * and 2) processes/threads of MPM in httpd.conf,
+	 * and 3) max_connections in mysql.conf,
+	 * and 4) pool shared across process/thread, not application wide, diff with -Java.
+	 * and 5) active instances of all objects.
+	 */
+	var $m_persistent;
+	const Persistent_Tag = 'p:';
 
 	# constructor
 	function __construct($config){  
@@ -28,9 +37,18 @@ class MYSQLIX {
 		$this->m_password = $config->mDbPassword; 
 		$this->m_name     = $config->mDbDatabase; 
 		$this->m_link = null;
-		
+		if($this->m_persistent){
+			$this->m_host = Persistent_Tag . $this->m_host;
+		}
+
 	} 
 
+	# destructor
+	function __destruct(){
+		$this->close();
+		$this->m_link = null;
+	}
+	
 	//-
 	function _initConnection(){
 		
@@ -225,7 +243,6 @@ class MYSQLIX {
 
 	//--- for sql injection remedy, added on 20061113 by wadelau
 	function _quoteSafe($value, $defaultValue=null){
-
 		if (!is_numeric($value)) {
 			$value = "'".mysqli_real_escape_string($this->m_link, $value)."'";
 		    # in some case, e.g. $value = '010003', which is expected to be a string, but is_numeric return true.
@@ -237,41 +254,34 @@ class MYSQLIX {
 			}
 		} 
 		return $value;
-		
 	}
 	
 	#
 	function getErrno(){
-		
 		if (!$this->m_link){
 			$this->_initConnection();
 		}
-		
 		return mysqli_errno($this->m_link);
 	
 	}
 	
 	#
 	function getError(){
-
 		if (!$this->m_link){
 			$this->_initConnection();
 		}
-		
 		return mysqli_error($this->m_link);
 	}
 	
 	#
 	function freeResult(&$result){ 
-	
-		return mysqli_free_result($result) or eval($this->sayErr()); 
-		
+		return mysqli_free_result($result) or $this->sayErr();
 	} 
 
 	#
 	function getAffectedRows(){ 
 		
-		if (!$this->m_link){
+		if (!\$this->m_link){
 			$this->_initConnection();
 		}
 		$result=mysqli_affected_rows($this->m_link); 
@@ -281,19 +291,17 @@ class MYSQLIX {
 
 	#
 	function numFileds(){ 
-		
-		if (!$this->m_link){
+		if ($this->m_link){
 			$this->_initConnection();
 		}
 		$result=mysqli_num_fields($this->m_link); 
 		return $result; 
-		
 	}
 
 	#	
 	function close(){
-		if( !$this->m_link ){
-			mysqli_close($this->m_link) or eval($this->sayErr());
+		if( $this->m_link ){
+			mysqli_close($this->m_link) or $this->sayErr();
 		}
 		return 0;
 	}
@@ -309,7 +317,6 @@ class MYSQLIX {
 
 	#
 	function sayErr($sql = ""){
-		
 		global $HTTP_HOST;
 		global $REMOTE_ADDR;
 		global $PHP_SELF;

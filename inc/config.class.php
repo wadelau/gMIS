@@ -40,6 +40,7 @@ if(true){
 	$conf['dbname'] 	= $conf['maindb'];
 	$conf['dbdriver']	= 'MYSQLIX'; # 'MYSQL', 'MYSQLIX', 'PDOX', 'SQLSERVER', 'ORACLE' in support, UPCASE only
 	$conf['db_enable_utf8_affirm'] = false; # append utf-8 affirm after db connection established, should be false in a all-utf-8 env.
+	$conf['dbpersistent'] = true; # assume db connection pool per process is support
 
 	# db slave info
 	$conf['dbhost_slave'] 	= 'SLAVE_DB';

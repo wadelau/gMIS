@@ -1002,7 +1002,6 @@ class GTbl extends WebApp{
 			#debug(__FILE__.": get result: real tbl:[".$realtbl."]");
 		}
 		else{
-			$tblpre = GConf::get('tblpre');
 			if(startsWith($tbl, $tblpre)){ # remove prefix
 				$realtbl = str_replace($tblpre, "", $tbl);
 			}
