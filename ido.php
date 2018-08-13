@@ -10,6 +10,7 @@ if($tbl == ''){
         debug(__FILE__.": empty tbl detection. 1703082103.");
         redirect($url, $time=3000, $msg='');
     }
+    $isgo = false;
 }
 else{
     $out .= "<script type=\"text/javascript\">currenttbl='".$tbl."';\ncurrentdb='"
@@ -168,6 +169,8 @@ $out .= "&nbsp;&nbsp; <button id=\"refrehbtn2\" name=\"refreshbtn2\" "
         ."onclick=\"javascript:window.location.reload();\" title=\"刷新\">刷新</button>  &nbsp;&nbsp;&nbsp; </td> </tr></table>\n";
 
 $out_footer = "<hr width=\"1\"/> &nbsp;&nbsp;&nbsp;<span id=\"noticediv\" style=\"color:green;\"> </span>";
+
+$data['title'] = $gtbl->getTblCHN();
 
 $gtbl = null;
 $hmconf = null;
