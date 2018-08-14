@@ -13,6 +13,7 @@ require("./act/tblcheck.php");
 
 $jdo = mkUrl($jdo, $_REQUEST, $gtbl);
 $list_disp_limit = 38;
+$list_disp_title_length = 300;
 
 # act handler
 if(startsWith($act,'add') || startsWith($act, "modify")){
@@ -323,6 +324,9 @@ else if(startsWith($act, "list")){
                }
                else{
                    $fv = str_replace('<', '&lt;', $rec[$field]);
+				   if(strlen($fv) > $list_disp_max_title_length){
+                        $fv = shortenStr($fv, $list_disp_max_title_length).'...';
+                   }
                    $fv_short = $fv_orig = $fv;
                    $fv_short = shortenStr($fv, $list_disp_limit);
                    $fhref = $gtbl->getHref($field, $rec);

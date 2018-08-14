@@ -11,6 +11,7 @@
 //- imprvs on searchbytime, Thu, 2 Mar 2017 16:32:06 +0800
 //- bugfix on firefox with event, 23:34 02 August 2017
 //- bugfix for async, 19:14 Thursday, 15 March, 2018
+//- imprvs on pivot with addgroupbyseg, 17 August, 2018
 
 var currenttbl = currenttbl ? currenttbl : '';
 var currentdb =  currentdb ? currentdb : '';
@@ -1248,7 +1249,8 @@ function showPivotList(nId, isOn, sUrl, sName){
 	divObj.onmouseout = function(){ this.style.display='none'; };
 
 	var sCont = '<p> &nbsp; <b style="color:red;">'+nId+'. '+sName+'</b>: ';
-	var opList = {'addgroupby':'組項列', 'addgroupbyymd':'組項列Ymd', 'addgroupbyother':'組項列Other(?)', 
+	var opList = {'addgroupby':'組項列', 'addgroupbyymd':'組項列Ymd', 
+			'addgroupbyseg':'组项列区段', 'addgroupbyother':'組項列Other(?)', 
 			'__SEPRTa':1,
 			'addvaluebysum':'值列Sum', 
 			'addvaluebycount':'值列Count', 'addvaluebycountdistinct':'值列Count去重',
@@ -1285,10 +1287,22 @@ function doPivotSelect(sField, iId, sOp, isOn, sName){
 	var spanObj = _g('span_groupby');
 	var fieldObj = _g('groupby');
 	var fieldValue = fieldObj.value;
-	if(sOp == 'addgroupby'  || sOp == 'addgroupbyymd'){
-		spanObj = _g('span_groupby');
-		fieldObj = _g('groupby');
-	}
+	if(sOp == 'addgroupby'  || sOp == 'addgroupbyymd'
+        || sOp == 'addgroupbyother'
+        || sOp.indexOf('addgroupbyseg') > -1){
+        if(isOn == 1){
+            if(sOp == 'addgroupbyseg'){
+                var segPoints = window.prompt('请输入 '+sName+'/'+sField
+						+' 分组区间段起始位置, 起点-终点:', '1-4');
+                if(segPoints.indexOf('-') > 0){
+                    sOp += segPoints.replace(' ', '');
+                }
+                console.log("addgroupbyseg: "+sField+" +"+segPoints);
+            }
+        }
+        spanObj = _g('span_groupby');
+        fieldObj = _g('groupby');
+    }
 	else if(sOp == 'addorderby'){
 		spanObj = _g('span_orderby');
 		fieldObj = _g('orderby');

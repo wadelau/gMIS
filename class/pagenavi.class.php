@@ -115,8 +115,9 @@ class PageNavi extends WebApp{
         return $file.$query;
    }
 
+	#
    function getOrder(){
-       $order = "";
+        $order = "";
         foreach($_REQUEST as $k=>$v){
             if(strpos($k,"pnob") === 0){
                 $order .= substr($k,4);
@@ -131,18 +132,24 @@ class PageNavi extends WebApp{
             $order .= "1 "; # + "order by 1 ", compatible with this->get('isasc');
         }
         #debug(__FILE__.":getOrder:$order");
+		$this->set('orderby', $order);
         return $order;
    }
-
+	
+	#
    function getAsc($field=''){
        $isasc = 0; # 0: 0->1, asc; 1: 1->0, desc
-       if(array_key_exists('isasc',$this->hmf)){
-            if($field == '' || ($field != '' && $this->getOrder() == $field)){
+       if($field == ''){
+			if(array_key_exists('isasc',$this->hmf)){
                 $isasc = $this->hmf['isasc'];
             }
-       }else{
+			else{
+				# n/a
+			}
+       }
+	   else{
            foreach($_REQUEST as $k=>$v){
-               if(($field == '' || $field == substr($k,4)) && strpos($k,"pnob") === 0){
+               if($field == substr($k,4) && strpos($k,"pnob") === 0){
                    if($v == 1){
                        $isasc = 1;
                        $this->hmf['isasc'] = $isasc;
@@ -154,6 +161,7 @@ class PageNavi extends WebApp{
        return $isasc;
    }
 
+	#
    function getCondition($gtbl, $user){
        $condition = "";
        $pnsm = $_REQUEST['pnsm'];

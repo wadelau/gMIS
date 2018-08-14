@@ -812,7 +812,8 @@ class GTbl extends WebApp{
                 '<'=>'小于',
                 '<='=>'小于等于',
                 'inlist'=>'等于列表中的一个,如: 1,2,3',
-                'inrange'=>'在一个值域中,如: min,max',);
+                'inrange'=>'在一个值域中,如: min,max',
+				'contains' => '包含');
         $strop = array($skiptag=>'忽略,不使用此條件', 'contains'=>'包含', 
 				'='=>'等于',
                 '!='=>'不等于',

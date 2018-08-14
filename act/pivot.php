@@ -42,6 +42,29 @@ if($act == 'pivot-do'){
                         $sql .= ", substr(".$arr[0].", 1, 10) as $itag ";
                         $grpTagArr[$arr[0]] = $itag;
                     }
+					else if(startsWith($arr[1], 'seg')){
+                        $itag = $arr[0].$arr[1];
+                        $itag = str_replace('-', '', $itag);
+                        $itag = str_replace(' ', '', $itag);
+                        $tmpArr1 = str_replace("seg", '', $arr[1]);
+                        $tmpPosArr = explode("-", $tmpArr1);
+                        #debug($tmpPosArr);
+                        $tmpPosArr[0] = intval(trim($tmpPosArr[0]));
+                        $tmpPosArr[1] = intval(trim($tmpPosArr[1]));
+                        if($tmpPosArr[0] < 1){
+                            $tmpPosArr[0] = 1;
+                        }
+                        if($tmpPosArr[1] < $tmpPosArr[0]){
+                            $tmpPosArr[1] = $tmpPosArr[0] * 2; # why double?
+                        }
+                        $sql .= ", substr(".$arr[0].",".$tmpPosArr[0].","
+								.($tmpPosArr[1]-$tmpPosArr[0]).") as $itag ";
+                        $grpTagArr[$arr[0]] = $itag;
+                        #debug("arr-1:".$arr[1]." arr1:$tmpArr1 itag:$itag sql:$sql");
+                    }
+                    else{
+                        debug("unsupported addgroup:".$arr[1]);
+                    }
                 }
             }
         }
