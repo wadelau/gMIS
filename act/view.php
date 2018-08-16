@@ -202,6 +202,8 @@ $out .= "<tr><td colspan=\"".$form_cols."\" align=\"center\">
 	<input type=\"button\" name=\"deletebtn\" id=\"deletebtn\" value=\"删除\"
 		onclick=\"javascript:if(window.confirm('Are you sure to delete? / 您确定要删除 id:".$id
 		." 吗?')){doAction('".$jdo."&act=list-dodelete');}\"/>
+	<input type=\"button\" name=\"addbycopybtn\" id=\"addbycopybtn\" value=\"复制\"
+        onclick=\"javascript:doActionEx('".$jdo."&act=addbycopy','contentarea');\"/>
 	<input type=\"button\" name=\"cancelbtn\" value=\"关闭\"
 		onclick=\"javascript:parent.switchArea('contentarea_outer','off');\" />
 	

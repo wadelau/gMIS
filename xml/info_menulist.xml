@@ -2,7 +2,7 @@
 <tablecfg>   
     <table name="info_menulist">
         <chnname>菜单调整</chnname>
-        <listfieldcount>5</listfieldcount> <!--max_disp_cols-->
+        <listfieldcount>5</listfieldcount> <!--max_disp_cols, recommend 11-->
         <since>20121022</since>
         <creator>sunlit</creator>
         <!-- <superaccess>inherit::id=USER_ID::rw</superaccess> --> 

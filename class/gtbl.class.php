@@ -331,7 +331,7 @@ class GTbl extends WebApp{
 
 	#
     # functions based on $field, below
-
+	#
     public function getCHN($field){
         $tmpstr = $this->hmconf[$this->taglist['field'].$this->sep.$field.$this->sep.$this->taglist['chnname']];
         return $tmpstr = $tmpstr==null?$field:$tmpstr;

@@ -22,13 +22,15 @@ $out .= "<tr><td width=\"11%\">&nbsp;</td>
             <td width=\"22%\">&nbsp;</td>
             </tr>";
 			
-$hmorig = array(); 
-if(startsWith($act, "modify")){
+$hmorig = array();
+$isAddByCopy = false;
+if(startsWith($act, "modify") || $act == 'addbycopy'){
     if($hasid){
         $gtbl->setId($id);
         $hmorig = $gtbl->getBy("*", null);
         $gtbl->setId('');
-    }else{
+    }
+	else{
         $fieldargv = "";
         for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
             $field = $gtbl->getField($hmi);
@@ -43,6 +45,11 @@ if(startsWith($act, "modify")){
         }
         $hmorig = $gtbl->getBy("*", implode(" and ", $fieldargv));
     }
+	if($act == 'addbycopy' && $id != ''){
+		$id = '';
+		$gtbl->setId($id);
+		$isAddByCopy = true;
+	}
 }
 else{
     foreach($_REQUEST as $k=>$v){
@@ -84,15 +91,6 @@ for($hmi=$min_idx; $hmi<=$max_idx;$hmi++){
     $field = $gtbl->getField($hmi);
     $fieldinputtype = $gtbl->getInputType($field);
     
-    if($field == 'password'){
-        $hmorig[$field] = '';
-    }
-    if($closedtr == 1){
-        $out .= "<tr height=\"30px\" valign=\"middle\"  onmouseover=\"javascript:this.style.backgroundColor='"
-             .$hlcolor."';\" onmouseout=\"javascript:this.style.backgroundColor='';\">";
-        $closedtr = 0; $opentr = 1;
-    }
-    
 	if($field == null || $field == ''){
 		continue;
 	}
@@ -109,7 +107,20 @@ for($hmi=$min_idx; $hmi<=$max_idx;$hmi++){
 		.$hmorig[$field]."\" />";
         continue;
     }
+	
+	if($field == 'password'){
+        $hmorig[$field] = '';
+    }
+    else if($isAddByCopy && $gtbl->getReadOnly($field, $fieldinputtype) != ''){
+        $hmorig[$field] = '';
+    }
     
+	if($closedtr == 1){
+        $out .= "<tr height=\"30px\" valign=\"middle\"  onmouseover=\"javascript:this.style.backgroundColor='"
+             .$hlcolor."';\" onmouseout=\"javascript:this.style.backgroundColor='';\">";
+        $closedtr = 0; $opentr = 1;
+    }
+	
     if($fieldinputtype == 'select'){
         if($gtbl->getSingleRow($field) == '1' && $opentr < 1){
 			$out .= "</tr><tr height=\"30px\" valign=\"top\"  onmouseover=\"javascript:"

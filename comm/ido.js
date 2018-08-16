@@ -1160,6 +1160,8 @@ function showActList(nId, isOn, sUrl){
 		+nId+'\', \'print\');">打印Print</a>&nbsp; &nbsp;&nbsp;';
 	sCont += '<br/>&nbsp; &nbsp;&nbsp;<a href="javascript:void(0);" onclick="javascript:doActSelect(\'\', \''+sUrl+'\', \''
 		+nId+'\', \'list-dodelete\');">删除Delete</a>&nbsp; &nbsp;&nbsp;';
+	sCont += '<br/>&nbsp; &nbsp;&nbsp;<a href="javascript:void(0);" onclick="javascript:doActSelect(\'\', \''+sUrl+'\', \''+nId+'\', \'addbycopy\');">复制Copy</a>&nbsp; &nbsp;&nbsp;';
+	 
 	sCont += '</p>';
 
 	divObj.innerHTML = sCont;

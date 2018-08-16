@@ -2,7 +2,7 @@
 <tablecfg>   
     <table name="info_usertbl">
         <chnname>用户信息</chnname>
-        <listfieldcount>5</listfieldcount> <!--max_disp_cols-->
+        <listfieldcount>5</listfieldcount> <!--max_disp_cols, not more than 11-->
         <since>20120131</since>
         <creator>sunlit</creator>
         <!-- <superaccess>inherit::id=USER_ID::rw</superaccess> --> 

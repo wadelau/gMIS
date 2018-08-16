@@ -2,7 +2,7 @@
 <tablecfg>
     <table name="addresstbl">
         <chnname>待处理任务管理表</chnname>
-        <listfieldcount>6</listfieldcount> <!--max_disp_cols-->
+        <listfieldcount>6</listfieldcount> <!--max_disp_cols, recommend 11-->
         <since>20121024</since>
         <creator>Xenxin</creator>
         <!-- <superaccess>inherit::id=USER_ID::rw</superaccess> -->
