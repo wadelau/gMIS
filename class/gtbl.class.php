@@ -803,9 +803,9 @@ class GTbl extends WebApp{
         return $tmpstr==null?'':$tmpstr;
     }
 
-    public function getLogicOp($field){
+    public function getLogicOp($field, $defaultval=null){
 		$skiptag = Gconf::get('skiptag');
-        $intop = array($skiptag=>'忽略,不使用此條件', '='=>'等于', 
+        $intop = array( '='=>'等于', $skiptag=>'忽略,不使用此條件',
                 '!='=>'不等于',
                 '>'=>'大于',
                 '>='=>'大于等于',
@@ -814,7 +814,7 @@ class GTbl extends WebApp{
                 'inlist'=>'等于列表中的一个,如: 1,2,3',
                 'inrange'=>'在一个值域中,如: min,max',
 				'contains' => '包含');
-        $strop = array($skiptag=>'忽略,不使用此條件', 'contains'=>'包含', 
+        $strop = array('contains'=>'包含', $skiptag=>'忽略,不使用此條件', 
 				'='=>'等于',
                 '!='=>'不等于',
                 'notcontains'=>'不包含',
@@ -828,6 +828,9 @@ class GTbl extends WebApp{
         $isint = 0;
         if($this->isNumeric($hmfield[$field])){
             $isint = 1;
+			if(isset($defaultval) && $defaultval == 'contains'){
+                $defaultval = '=';
+            }
         }
         $targetArr = $intop;
         if(!$isint){
@@ -835,6 +838,7 @@ class GTbl extends WebApp{
         }
         foreach($targetArr as $k=>$v){
             $reqfieldv = $_REQUEST["oppnsk".$field];
+			$reqfieldv = isset($reqfieldv) ? $reqfieldv : $defaultval;
             $selected = "";
             if($k == $reqfieldv){
                 $selected = " selected";
