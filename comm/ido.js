@@ -704,7 +704,7 @@ function getUrlByTime(baseUrl, timepara, timeop, timeTag){
     toD = new Date(tod);
     fromDStr = fromD.getFullYear()+'-'+(fromD.getMonth()+1)+'-'+fromD.getDate();
     toDStr = toD.getFullYear()+'-'+(toD.getMonth()+1)+'-'+toD.getDate();
-	if(timepara.indexOf('time') > -1){
+	if(timepara.indexOf('time') > -1 || timepara.indexOf('hour') > -1){
     	fromDStr += ' 00:00:00';
     	toDStr += ' 23:59:59';
     }
