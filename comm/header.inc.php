@@ -2,7 +2,7 @@
 //- embedded in app entry
 
 global $appdir, $userid, $user, $gtbl, $out, $data;
-date_default_timezone_set("Asia/Chongqing");
+date_default_timezone_set("Europe/London"); # +0000
 
 $docroot = $_SERVER['DOCUMENT_ROOT'];
 $rtvdir = dirname(dirname(__FILE__)); # relative dir

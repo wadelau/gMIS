@@ -153,6 +153,12 @@ class WebApp implements WebAppInterface{
 	    return $rtn;
 	}
 	
+	//-
+	function del($field){
+	    unset($this->hmf[$field]);
+	    return true;
+	}
+	
 	function setTbl($tbl){
 		$this->set("tbl",$tbl);
 		if($this->dba == null){ $this->dba = new DBA(); }
