@@ -81,7 +81,7 @@ if(!isset($isoput)){
 foreach($_REQUEST as $k=>$v){
     $k = trim($k);
     if($k != ''){
-        if(preg_match("/([0-9a-z_]+)/i",$k,$matcharr)){
+        if(preg_match("/([0-9a-z_]+)/i", $k, $matcharr)){
             $k_orig = $k = $matcharr[1];
 			if(is_string($v)){
 				$v = trim($v);
@@ -92,13 +92,21 @@ foreach($_REQUEST as $k=>$v){
 				}
 			}
             $data[$k] = $v;
-            if(preg_match('/[^\x20-\x7e]/', $k)){
-                eval("\${$k} = \"$v\";");
-            }
+            if(true){ # preg_match("/[^\x20-\x7e]+/", $v)
+                #eval("\${$k} = \"$v\";"); # risky, Tue Aug 28 19:40:10 CST 2018
+				${$k} = $v;
+			}
+			else{
+				# @todo
+			}
         }
 		else{
+			# @todo
         }
   	}
+	else{
+		# @todo
+	}
 }
 if(isset($_REQUEST['isoput'])){
     if($_REQUEST['isoput'] == 1){
@@ -141,7 +149,6 @@ if($isoput){
             </head>
             <body> <!--  style="'.($isheader==0?"":"width:880px").'" -->';
     }
-
     if($isheader){
         if($userid != ''){
             $welcomemsg .= "Welcome, ";
@@ -161,7 +168,6 @@ if($isoput){
             //show message number if there are new messages.
             $out .= "<div id=\"a_separator\" style=\"height:10px;margin-top:25px;clear:both\"></div>"
                     ."<!-- height:15px;margin-top:8px;clear:both;text-align:center;z-index:99 -->";
-
         }
     }
     else if(!startsWith($act, "modify") && !inString('-addform', $act)){
