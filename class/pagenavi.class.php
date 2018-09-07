@@ -101,7 +101,8 @@ class PageNavi extends WebApp{
        return $str;
 
    }
-
+	
+   #
    function getInitUrl(){
         $fieldlist = array('tbl','tit','db');
         $file = $_SERVER['PHP_SELF'];
@@ -203,10 +204,11 @@ class PageNavi extends WebApp{
 					&& $_REQUEST[$field] != $v){
 					$v = $_REQUEST[$field];
 				}
+				# op list
                 if(strpos($v, "tbl:") === 0){
                     $condition .= " ".$pnsm." ".$field." in (".$this->embedSql($linkfield,$v).")";
                 }
-				else if(strpos($v,"in::") === 0){
+				else if(strpos($v, "in::") === 0){
 					# <hidesk>tuanid=id::in::tbl:hss_tuanduitbl:operatearea=IN=USER_OPERATEAREA</hidesk>
                     #error_log(__FILE__.": k:$k, v:$v");
                     $tmparr = explode("::", $v);
@@ -262,6 +264,28 @@ class PageNavi extends WebApp{
 					else if($fieldopv == 'notcontains'){
                         $condition .= " ".$pnsm." "."$field not like ?";
                         $gtbl->set($field, "%".str_replace(' ','%',$v)."%");
+                    }
+					else if($fieldopv == 'containslist'){
+                        $isString = false;
+                        if($this->isNumeric($hmfield[$field]) && strpos($hmfiled[$field],'date') === false){
+                            # numeric
+                        }
+                        else{
+                            $isString = true;
+                        }
+					    $v = str_replace("，",",", $v);
+                        $vArr = explode(",", $v);
+                        $conditionTmp = " 1=0 ";
+                        foreach($vArr as $vk=>$vv){
+                            #$vv = $this->addQuote($vv);
+                            $vv = trim($vv);
+                            $vv = addslashes($vv);
+                            $vv = "%$vv%";
+                            if($isString){ $vv = "'$vv'"; }
+                            $conditionTmp .= " or $field like $vv";
+                        }
+                        $condition .= " $pnsm ($conditionTmp)";
+						$gtbl->del($field);
                     }
 					else if($fieldopv == 'startswith'){
                         $condition .= " ".$pnsm." "."$field like ?";
@@ -332,10 +356,13 @@ class PageNavi extends WebApp{
            $arr = explode(",", $str);
            $tmpval = '';
            foreach($arr as $k12=>$v12){
+			   $v12 = trim($v12);
+			   $v12 = addslashes($v12);
                $tmpval .= "'".$v12."',";
            }
            $tmpval = substr($tmpval, 0, strlen($tmpval)-1);
        }else{
+		   $str = addslashes($str);
            $tmpval = "'".$str."'";
        }
        return $tmpval;

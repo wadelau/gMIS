@@ -11,6 +11,7 @@
 
     <field name="objname" type="text">
         <chnname>模块名称</chnname>
+		<href>ido.php::tbl=THIS::THIS_NAME::confirm=0,blank=1</href>
     </field>
 
     <field name="objgroup" type="text">

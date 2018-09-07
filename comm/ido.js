@@ -114,6 +114,7 @@ function switchArea(sArea, onf){
 }
 
 //-- search by a field in navigator menu
+//-- updt with security enhancement, Spet 08, 2018
 function searchBy(url){
     var fieldlist = document.getElementById('fieldlist').value;
     var fieldlisttype = document.getElementById('fieldlisttype').value;
@@ -125,6 +126,9 @@ function searchBy(url){
        typearr[tmparr[0]] = tmparr[1];
     }
     var appendquery = '';
+	var reg1055 = new RegExp("，", 'gm');
+	var reg1608 = new RegExp("\\\\", 'gm');
+	var reg1559 = new RegExp("'", 'gm');
     for(var i=0;i<fieldarr.length;i++){
         var fieldv = null;
         eval("var obj = document.getElementById('pnsk_"+fieldarr[i]+"');");
@@ -140,7 +144,8 @@ function searchBy(url){
 					url = url.replace(reg, "");
                     continue;
                 }
-            }else{
+            }
+			else{
                 eval("fieldv = document.getElementById('pnsk_"+fieldarr[i]+"').value;");
             }
             //if(fieldv != fieldarr[i]){
@@ -148,16 +153,15 @@ function searchBy(url){
 				var fieldopv = '';
                 if(document.getElementById('oppnsk_'+fieldarr[i]) != null){
                     eval("fieldopv = document.getElementById('oppnsk_"+fieldarr[i]+"').options[document.getElementById('oppnsk_"+fieldarr[i]+"').selectedIndex].value;");
-
                 	console.log('fieldv:['+fieldv+'] fieldop:'+fieldarr[i]+' select:fieldopv:['+fieldopv+']');
-
 					if(fieldopv != '----'){
 						if((fieldopv == 'inrange' || fieldopv == 'inlist') && fieldv == ''){
 							//- omit	
 						}
 						else{
-                			var reg1055 = new RegExp("，", 'gm');
-							fieldv = fieldv.replace(reg1055, ","); 
+							fieldv = fieldv.replace(reg1055, ",");
+							fieldv = fieldv.replace(reg1608, "");
+							fieldv = fieldv.replace(reg1559, "\\\'");
                 			appendquery += "&pnsk"+fieldarr[i]+"="+fieldv;
                     		appendquery += "&oppnsk"+fieldarr[i]+"="+fieldopv;
 						}
@@ -168,11 +172,9 @@ function searchBy(url){
 					}
                 }
 				else{
-					var reg1055 = new RegExp("，", 'gm');
 					fieldv = fieldv.replace(reg1055, ","); 
 					appendquery += "&pnsk"+fieldarr[i]+"="+fieldv;
 				}
-
                 var reg = new RegExp("&pnsk"+fieldarr[i]+"=([^&]*)", 'gm');
                 url = url.replace(reg, "");
 				reg = new RegExp("&oppnsk"+fieldarr[i]+"=([^&]*)", 'gm');
@@ -182,14 +184,17 @@ function searchBy(url){
     }
     //window.alert("fieldlist:"+fieldlist+", url:["+url+"]");
     console.log("fieldlist:"+fieldlist+", url:["+url+"]");
+	//- @todo 
     var reg = new RegExp("&pntc=([0-9]*)", 'gm');
     url = url.replace(reg, "");
     reg = new RegExp("&pnpn=([0-9]*)", 'gm');
-        url = url.replace(reg, "");
+    url = url.replace(reg, "");
     reg = new RegExp("&pnsk[0-9a-zA-Z]+=([^&]*)", 'gm');
-        url = url.replace(reg, "");
+    url = url.replace(reg, "");
+	reg = new RegExp("&oppnsk"+fieldarr[i]+"=([^&]*)", 'gm');
+    url = url.replace(reg, "");
 	reg = new RegExp("&id=([^&]*)", 'gm'); //- remove old id query, Mon, 12 Dec 2016 13:41:21 +0800
-        url = url.replace(reg, "");
+    url = url.replace(reg, "");
     
     doAction(url+appendquery);
     console.log("fieldlist:"+fieldlist+",last_url:["+url+appendquery+"]");

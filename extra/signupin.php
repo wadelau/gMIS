@@ -141,6 +141,30 @@ else if($act == 'resetpwd'){
     $smt->assign('result', $result);
     $smt->assign('nexturl', $nexturl);
 }
+else if($act == 'checkverifycode'){
+    #
+    $verifyResult = false;
+    $verifycode = $verifycode2 = '';
+    if(true){
+        $verifycode = strtolower(trim($_REQUEST['verifycode']));
+        $verifycode2 = substr($md5=Base62x::encode(md5(($i=$_REQUEST['verifyid'])
+                .$_CONFIG['sign_key']
+                .($d=substr(date('YmdHi', time()-date('Z')),0,11))
+                ).$_CONFIG['appchnname']), 1, 4); # same as comm/imagex
+        $verifycode2 = strtolower($verifycode2);
+    }
+    if($verifycode != '' && $verifycode == $verifycode2){
+        $verifyResult = true;
+    }
+
+    if($fmt == 'json'){
+        $smttpl = '';
+        $data['respobj'] = array('vfc'=>$verifycode, 'verifyresult'=>$verifyResult);
+    }
+}
+else{
+    $out .= "Oooops! Unknown act:[$act]. 1809060952.";
+}
 
 $smt->assign('rtvdir', $rtvdir);
 

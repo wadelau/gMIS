@@ -24,7 +24,6 @@ if(true){
 		window.setTimeout("top.location = window.location;",100);
 	}
 }
-
 </script>
 <table style="border:0px;width:100%;height:566px;border-collapse:collapse; border-spacing:0px;"
 	class="login_top_bg" > <!-- height="566px" border="0px" cellpadding="0" cellspacing="0" -->
@@ -127,9 +126,61 @@ if(true){
                 <input type="hidden" name="bkl" id="bkl" value="{$bkl}"/>
                 <input type="hidden" name="verifyid" id="verifyid" value="{$verifyid}"/>
             </form>
-
        </td> 
   </tr>
-
 </table>
+<script async type="text/javascript">
+//- verifycode validate in sync mode, Sep 08, 2018
+var verifyCodeTimer = 0; 
+var hasVerifyTrue = false;
+var lastVerifyCode = '';
+int ReTimerDelay = 3 * 1000;
+function checkVerifyCode(){
+   var vfcObj = document.getElementById('verifycode');
+   var vfc = '';
+   if(vfcObj){
+		vfc = vfcObj.value;
+   }
+   if(vfc.length >= 4 && vfc != lastVerifyCode){
+		var vidObj = document.getElementById('verifyid');
+		var vid = '';
+		if(vidObj){ vid = vidObj.value; }
+		var mygtajax = new GTAjax();
+		var verifyUrl = '{$url}&act=checkverifycode&fmt=json'
+			+'&verifycode='+vfc
+			+'&verifyid='+vid;
+		mygtajax.set('returndataonly', true);
+		mygtajax.set('callback', function(){
+				var resp = this;
+				console.log('resp:['+resp+']');
+				if(resp.indexOf('<pre') > -1){
+					var resp_1 = /<pre[^>]*>([^<]*)<\/pre>/g;
+					var resp_2 = resp_1.exec(resp);
+					resp = resp_2[1];
+				}
+				var json_resp = JSON.parse(resp);
+				var iResult = json_resp.verifyresult; 
+				var respDispObj = document.getElementById('verifycoderesult');
+				if(!respDispObj){ respDispObj = new Object(); }
+				if(iResult){
+					console.log("verify passed.["+iResult+"]");
+					respDispObj.innerHTML = '<span style="color:green;">&#10004;</span>';
+				}
+				else{
+					console.log("verify failed.["+iResult+"]");
+					respDispObj.innerHTML = '<span style="color:red;">&#10008;</span>';
+					verifyCodeTimer = window.setTimeout(checkVerifyCode, 3*1000);
+					console.log("continue trying again....");
+				}
+			});
+		var srvRtn = mygtajax.get(verifyUrl);
+		lastVerifyCode = vfc;
+   }
+   else if(!hasVerifyTrue){
+		verifyCodeTimer = window.setTimeout(checkVerifyCode, ReTimerDelay);
+		console.log("continue monitoring....");
+   }
+}
+verifyCodeTimer = window.setTimeout(checkVerifyCode, ReTimerDelay);
+</script>
 {include file='footer.html'}

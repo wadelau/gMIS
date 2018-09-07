@@ -813,12 +813,14 @@ class GTbl extends WebApp{
                 '<='=>'小于等于',
                 'inlist'=>'等于列表中的一个,如: 1,2,3',
                 'inrange'=>'在一个值域中,如: min,max',
-				'contains' => '包含');
+				'contains' => '包含',
+				'containslist' => '包含列表中的一个,如: 1,2,3');
         $strop = array('contains'=>'包含', $skiptag=>'忽略,不使用此條件', 
 				'='=>'等于',
                 '!='=>'不等于',
                 'notcontains'=>'不包含',
-                'inlist'=>'等于列表中的一个,如: 1,2,3',
+				'containslist'=>'包含列表中的一个,如: A,B,C',
+                'inlist'=>'等于列表中的一个,如: A,B,C',
                 'startswith'=>'以...开头',
                 'endswith'=>'以...结尾',
 				'regexp'=>'正則式匹配',
@@ -1024,13 +1026,14 @@ class GTbl extends WebApp{
 	//-
 	//- replace THIS* in settings, 14:23 27 September 2016
 	public function fillThis($tmpstr, $field=null){
-		if($tmpstr != '' && strpos($tmpstr, 'THIS') > 0){
+		if($tmpstr != '' && strpos($tmpstr, 'THIS') !== false){
 			if($result == null){
 				$result = $this->get($this->resultset);
 			}
 			#debug(__FILE__.": tmpstr:[$tmpstr] resultset:");
 			#debug($result);
 			$tmpstr = str_replace('THISNAME', $field, $tmpstr);
+			$tmpstr = str_replace('THIS_NAME', $field, $tmpstr);
 			if(is_array($result)){
 				$tmpstr = str_replace('THIS_ID', $result[$this->getMyId()], $tmpstr);
 				$tmpstr = str_replace('THIS_TBL', $this->getTbl(), $tmpstr);
