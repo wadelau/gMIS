@@ -74,12 +74,12 @@ else if($act == 'dosignin'){
             $issucc = true;
         }
         else{
-            $result .= "login failed. 1201302219. <!-- new:["
+            $result .= "login failed [账号/密码错误]. 1201302219. <!-- new:["
                     .SHA1($user->get('password'))."] -->";
         }
     }
     else{
-        $result .= "login failed. 1201302217.";
+        $result .= "login failed [账号/密码错误]. 1201302217.";
     }
         # verified end
     }

@@ -95,7 +95,7 @@ class PageNavi extends WebApp{
        $str .= " &nbsp;<b><a href=\"javascript:pnAction('".$para['url']."&pnpn=".$totalpage."');\" title=\"最后一页\">&raquo;|</a> </b> &nbsp; &nbsp; <a href=\"javascript:void(0);\" title=\"改变显示条数\" onclick=\"javascript:var pnps=window.prompt('请输入新的每页显示条数:','".$para['pnps']."'); if(pnps>0){ myurl='".$para['url']."'; myurl=myurl.replace('&pnps=','&opnps='); doAction(myurl+'&pnps='+pnps);};\"><b>".number_format($para['pnps'])."</b>条/页</a> &nbsp; 共 <b>".number_format($para['pntc'])."</b>条 / <b>".number_format($totalpage)."</b>页 &nbsp;";
        if($_REQUEST['isheader'] != '0'){
            $str .= "<button name=\"initbtn\" onclick=\"javascript:pnAction('".$this->getInitUrl()."');\">初始页</button>&nbsp;";
-           $str .= "<button name=\"initbtn\" onclick=\"javascript:doAction('".str_replace("=list","=list-toexcel",$para['url'])."');\">导出xls</button>";
+           $str .= "<button name=\"initbtn\" onclick=\"javascript:doAction('".str_replace("=list","=list-toexcel",$para['url'])."');\">导出Xls</button>";
        }
 
        return $str;

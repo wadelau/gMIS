@@ -47,6 +47,7 @@ require_once($appdir."/class/base62x.class.php");
 # implemented with no storage session by Xenxin@ufqi.com, Tue, 7 Mar 2017 22:54:31 +0800
 define(UID, $_CONFIG['agentalias'].'_user_id');
 define(SID, 'sid');
+$_CONFIG['client_ip'] = Wht::getIp();
 
 if(!isset($user)){
     $user = new User();
