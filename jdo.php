@@ -388,7 +388,7 @@ else if(startsWith($act, "list")){
                 if($gtbl->getStat($k) == 'average'){
                     $tmpsum = sprintf("%.2f",$tmpsum/$i);
                 }
-                $out .= "<td>".(is_int($tmpsum) ? number_format($tmpsum) : $tmpsum)."</td>";
+                $out .= "<td>".(is_numeric($tmpsum) ? number_format($tmpsum) : $tmpsum)."</td>";
             }
         }
         $out .= "</tr>\n";
