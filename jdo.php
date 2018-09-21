@@ -86,9 +86,12 @@ else if(startsWith($act, "list")){
             ."<tr height=\"35px\"><td colspan=\"".($max_disp_cols+2)."\">";
     $out .= "<button name=\"selectallbtn\" type=\"button\" onclick=\"checkAll();\" value=\"\">全选</button> &nbsp;";
     $out .= "<button name=\"reversebtn\" type=\"button\" onclick=\"uncheckAll();\" value=\"\">反选</button>";
-    $out .= "&nbsp; ".$navi->getNavi()." &nbsp;&nbsp;&nbsp;<button name='deepsearch' onclick=\"javascript:doActionEx('"
-    	.$jdo."&act=deepsearch', 'contentarea');\" title=\"深度复合查询\">深  搜</button>"
-    	."&nbsp;&nbsp;<button name='deepsearch' onclick=\"javascript:doActionEx('"
+    $out .= "&nbsp; ".$navi->getNavi()." &nbsp;";
+	$out .= "&nbsp;&nbsp;<button name='pickup' onclick=\"javascript:doActionEx('"
+    	.$jdo."&act=pickup', 'contentarea');\" title=\"快速点击勾选\">点  选</button>";
+	$out .= "&nbsp;&nbsp;<button name='deepsearch' onclick=\"javascript:doActionEx('"
+    	.$jdo."&act=deepsearch', 'contentarea');\" title=\"深度复合查询\">深  搜</button>";
+	$out .= "&nbsp;&nbsp;<button name='deepsearch' onclick=\"javascript:doActionEx('"
     	.$jdo."&act=pivot&pntc=".$navi->get('totalcount')."', 'contentarea');\" title=\"数据透视分析\">透  视</button>";
 	if(true){
         $iswatch = Wht::get($_REQUEST, 'pnwatch');
@@ -434,34 +437,28 @@ else if(startsWith($act, "list")){
     }
 	} # resultobj end
 
-}else if(startsWith($act,"view")){ 
-
+}
+else if(startsWith($act,"view")){ 
     include("./act/view.php");
-
-}else if($act == 'print'){
-
+}
+else if($act == 'print'){
     $smttpl = getSmtTpl(__FILE__, $act);
     include("./act/print.php");
-
-}else if($act == 'updatefield'){
-
+}
+else if($act == 'updatefield'){
     include("./act/updatefield.php");
-
 }
 else if($act == 'deepsearch'){
-
     include("./act/deepsearch.php");
-
 }
 else if(startsWith($act, 'pivot')){
-
 	include("./act/pivot.php");
-
 }
 else if(startsWith($act, 'insitesearch')){
-    
     include("./act/insitesearchsort.php");
-
+}
+else if(startsWith($act, 'pickup')){
+	include("./act/pickup.php");
 }
 else{
     $out .= "Ooops! No such action:[$act].<br/>&nbsp;\n";

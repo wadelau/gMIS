@@ -50,10 +50,10 @@ if(true){
         $fielddf = $gtbl->getDefaultValue($field);
         if($fielddf != ''){
             $tmparr = explode(":", $fielddf);
-            if($tmparr[0] == 'request'){ # see xml/hss_info_attachfiletbl.xml
+            if($tmparr[0] == 'request'){ # see xml/info_attachfiletbl.xml
                 $hmorig[$field] = $_REQUEST[$tmparr[1]];
             }else{
-                $hmorig[$field] = $tmparr[0]; # see xml/hss_tuanduitbl.xml
+                $hmorig[$field] = $tmparr[0]; # see xml/tuanduitbl.xml
             }
         }
     } 

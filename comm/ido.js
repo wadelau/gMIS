@@ -1,5 +1,5 @@
 //- 
-//- Mon Jul 28 15:38:37 CST 2014
+//- init from Mon Jul 28 15:38:37 CST 2014
 //- Fri Aug  1 13:58:12 CST 2014
 //-- Thu Sep 11 09:30:12 CST 2014
 //-- Thu Sep 25 16:07:58 CST 2014
@@ -12,6 +12,7 @@
 //- bugfix on firefox with event, 23:34 02 August 2017
 //- bugfix for async, 19:14 Thursday, 15 March, 2018
 //- imprvs on pivot with addgroupbyseg, 17 August, 2018
+//- imprvs on pickup, Fri Sep 21 21:09:34 CST 2018
 
 var currenttbl = currenttbl ? currenttbl : '';
 var currentdb =  currentdb ? currentdb : '';
@@ -1479,3 +1480,129 @@ userinfo.userAgent = {};
 	}
 	return container = env;
 })(userinfo.userAgent);
+
+//-
+//- pick up and make a reqt
+//- Fri Sep 21 19:59:08 CST 2018
+//- see class/pagenavi
+userinfo.PickUpList = {};
+function fillPickUpReqt(myUrl, field, fieldv, opStr, linkObj){
+    console.log("url:"+myUrl+", field:"+field+" link-text:"+linkObj.text);
+    var linkText = '';
+    if(linkObj){
+        linkText = linkObj.text;
+        if(linkText.substring(0, 1) == '+'){
+            linkText = '-' + linkText.substring(1);
+            linkObj.style.color = '#ffffff';
+            linkObj.style.backgroundColor = '#1730FD';
+        }
+        else{
+            linkText = '+' + linkText.substring(1);
+            linkObj.style.color = '';
+            linkObj.style.backgroundColor = '';
+        }
+        linkObj.text = linkText;
+    }
+
+    var fieldObj = {};
+    if(!userinfo.PickUpList){ userinfo.PickUpList = {}; }
+    if(userinfo.PickUpList.field){
+        fieldObj = userinfo.PickUpList.field;
+    }
+    if(fieldObj[fieldv]){
+        //- have
+        delete fieldObj[fieldv];
+    }
+    else{
+        fieldObj[fieldv] = opStr; //- why?
+    }
+    userinfo.PickUpList.field = fieldObj;
+    
+    var latestUrl = myUrl;
+    if(userinfo.PickUpList.latestUrl){
+        latestUrl = userinfo.PickUpList.latestUrl;
+    }
+    myUrl = latestUrl;
+    console.log("latesturl:"+myUrl+", field:"+field+" fieldobj:"+JSON.stringify(userinfo.PickUpList.field));
+
+    var hasReqK = false; var hasReqKop = false; var hasReqV = false;
+    var urlParts = myUrl.split('&');
+    if(opStr == 'inlist' || opStr == 'containslist'
+        || opStr == 'inrangelist'){
+
+        var urlSize = urlParts.length;
+        var paramParts = []; var pk = ''; var pv = '';
+        var tmpV = ''; var emptyList = {}; var newPList = [];
+        //fieldv = fieldv.toLowerCase(); //- why?
+        for(var i=0; i<urlSize; i++){
+            tmpV = urlParts[i]; emptyP = false;
+            paramParts = urlParts[i].split('=');
+            if(paramParts.length > 1){
+                pk = paramParts[0];
+                pv = paramParts[1]; 
+                if(pk == "pnsk"+field){
+                    //pv = pv.toLowerCase(); //- why?
+                    if(pv.indexOf(',') > -1){
+                        if(pv.indexOf(','+fieldv) > -1){
+                            pv = pv.replace(','+fieldv, ''); 
+                            hasReqV = true;
+                        }
+                        else if(pv.indexOf(fieldv+',') > -1){
+                            pv = pv.replace(fieldv+',', ''); 
+                            hasReqV = true;
+                        }
+                    }
+                    else if(pv == fieldv){
+                        pv = ''; hasReqV = true;
+                        emptyList[pk] = true;
+                    }
+                    else{
+                        pv += ','+fieldv;
+                    }
+                    hasReqK = true;
+                }
+                else if(pk == "oppnsk"+field){
+                    if(emptyList['pnsk'+field]){
+                        emptyList[pk] = true;
+                    }
+                    else{
+                        pv = opStr;
+                    }
+                    hasReqKop = true;
+                }
+            }
+            if(!emptyList[pk]){
+                tmpV = pk + '=' + pv; 
+                urlParts[i] = tmpV;
+                newPList[i] = tmpV;
+            }
+            else{
+                //urlParts.splice(i, 1);
+                console.log("\ti:"+i+" updt pk:"+pk+" pv:"+pv);
+            }
+        }
+        myUrl = newPList.join('&');
+        if(!hasReqK){
+            myUrl += '&pnsk'+field+'='+fieldv;
+        }
+        if(!hasReqKop){
+            myUrl += '&oppnsk'+field+'='+opStr;
+        }
+        console.log("newurl:"+myUrl);
+
+        userinfo.PickUpList.latestUrl = myUrl;
+
+        //-
+        doActionEx(myUrl+'&act=list&pnsm=1', 'actarea');
+
+    }
+    else if(opStr == 'moreoption'){
+        
+        console.log("newurl:"+myUrl+" ->"+opStr);
+        doActionEx(myUrl+'&act=pickup&pnsm=1&pickupfieldcount='+fieldv, 'contentarea');
+
+    }
+    else{
+        console.log("Unknown opstr:["+opStr+"].");
+    }
+}

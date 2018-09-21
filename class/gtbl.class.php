@@ -14,8 +14,10 @@ if(!defined('__ROOT__')){
 }
 
 require_once(__ROOT__.'/inc/webapp.class.php');
+require_once(__ROOT__.'/inc/config.class.php');
 
 class GTbl extends WebApp{
+	
 	public $sep = '';
 	private $hmfield = array();
 	private $hmconf = array();
@@ -68,6 +70,9 @@ class GTbl extends WebApp{
 	public $PRIUNI = 'primaryunique';
 	public $db = ''; # data db
 	public $mydb = ''; # the app, -gMIS runs on it, may differ with $db
+	private $skiptag = ''; # Gconf::get('skiptag');
+    private $intOperatorList = array();
+    private $strOperatorList = array();
 
 	//-
 	function __construct($tbl, $hmconf, $sep, $tblrotate=null){
@@ -107,6 +112,27 @@ class GTbl extends WebApp{
 		$this->setMyId($this->getMyIdName());
 		#debug(__FILE__.": get id name:[".$this->getMyId()."]");
 		
+		$this->skiptag = Gconf::get('skiptag');
+        $this->intOperatorList = array( '='=>'等于', $this->skiptag=>'忽略,不使用此條件',
+                '!='=>'不等于',
+                '>'=>'大于',
+                '>='=>'大于等于',
+                '<'=>'小于',
+                '<='=>'小于等于',
+                'inlist'=>'等于列表中的一个,如: 1,2,3',
+                'inrange'=>'在一个值域中,如: min,max',
+				'contains' => '包含',
+                'containslist'=>'包含列表中的一个, 如: 1,2,3');
+        $this->strOperatorList = array( 'contains'=>'包含', $this->skiptag=>'忽略,不使用此條件',
+				'='=>'等于',
+                '!='=>'不等于',
+                'notcontains'=>'不包含',
+                'containslist'=>'包含列表中的一个,如: A,B,C',
+                'inlist'=>'等于列表中的一个,如: A,B,C',
+                'startswith'=>'以...开头',
+                'endswith'=>'以...结尾',
+				'regexp'=>'正則式匹配',
+                'notregexp'=>'正則式非匹配',);
 	}
 
 	public function getTblCHN(){
@@ -452,7 +478,7 @@ class GTbl extends WebApp{
 					}
 				}
 				$optionlist .= "<option value=\"".$rec[$optval]."\"";
-				if($defaultval != null){
+				if($defaultval !== null){
 					if($rec[$optval] == $defaultval 
 						|| strpos(",".$defaultval.",", ",".$rec[$optval].",") !== false){
 						$optionlist .= " selected";
@@ -477,7 +503,7 @@ class GTbl extends WebApp{
 					."_optionlist' id='pnsk_".$field."_optionlist' value='' type='hidden' />";
 				#error_log(__FILE__.": field:$field set lazy load...... optioni:$optioni");
 			}
-			if($defaultval != null && $selectval == ''){
+			if($defaultval !== null && $selectval == ''){
 				$hmSelect = array();
 				if(isset($this->hmconf['selectoption_sel_'.$field])){
 					$hmSelect = $this->hmconf['selectoption_sel_'.$field];
@@ -515,7 +541,7 @@ class GTbl extends WebApp{
             foreach($varlist as $k=>$v){
                 $arr = explode(":", $v);
                 $optionlist .= "<option value=\"".$arr[0]."\"";
-                if($defaultval != null){
+                if($defaultval !== null){
                     if($arr[0] != '' && ($arr[0] == $defaultval || strpos($defaultval, $arr[0]) !== false)){
                         $optionlist .= " selected";
                         $selectval = $arr[1];
@@ -532,7 +558,8 @@ class GTbl extends WebApp{
 				.$this->getJsAction($field)." ".$this->getAccept($field)." disabled>"
 				.$optionlist."</select> <input type=\"hidden\" id=\"".$tagpre.$field."\" name=\""
 				.$tagpre.$field."\" value=\"".$defaultval."\" />";
-        }else{
+        }
+		else{
             if($ismultiple == 0){
                 $tmpstr = "<select id=\"".$tagpre.$field."\" name=\"".$tagpre.$field."\" "
 					.$this->getJsAction($field)." ".$this->getAccept($field)." "
@@ -805,26 +832,8 @@ class GTbl extends WebApp{
 
     public function getLogicOp($field, $defaultval=null){
 		$skiptag = Gconf::get('skiptag');
-        $intop = array( '='=>'等于', $skiptag=>'忽略,不使用此條件',
-                '!='=>'不等于',
-                '>'=>'大于',
-                '>='=>'大于等于',
-                '<'=>'小于',
-                '<='=>'小于等于',
-                'inlist'=>'等于列表中的一个,如: 1,2,3',
-                'inrange'=>'在一个值域中,如: min,max',
-				'contains' => '包含',
-				'containslist' => '包含列表中的一个,如: 1,2,3');
-        $strop = array('contains'=>'包含', $skiptag=>'忽略,不使用此條件', 
-				'='=>'等于',
-                '!='=>'不等于',
-                'notcontains'=>'不包含',
-				'containslist'=>'包含列表中的一个,如: A,B,C',
-                'inlist'=>'等于列表中的一个,如: A,B,C',
-                'startswith'=>'以...开头',
-                'endswith'=>'以...结尾',
-				'regexp'=>'正則式匹配',
-                'notregexp'=>'正則式非匹配',);
+        $intop = $this->intOperatorList;
+        $strop = $this->strOperatorList;
         $rtn = "";
         $hmfield = $this->hmfield;
         $isint = 0;
@@ -834,6 +843,12 @@ class GTbl extends WebApp{
                 $defaultval = '=';
             }
         }
+		else{
+			if($defaultval == $skiptag){
+                $tmpOpv = Wht::get($_REQUEST, 'pnsk'.$field);
+                if($tmpOpv != ''){ $defaultval = 'contains'; }
+            }
+		}
         $targetArr = $intop;
         if(!$isint){
             $targetArr = $strop;

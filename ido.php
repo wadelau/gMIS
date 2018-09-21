@@ -109,7 +109,7 @@ $out .= "<div id=\"contentarea_outer\" style=\"display:none;border:0px dotted gr
 $out .= "<div id=\"close_span\" style=\"text-align:right;height:10px;clear:both;\">"
         ."<button id=\"btn_close\" onclick=\"javascript:switchArea('contentarea_outer','off');\">X Close</button>"
         ."&nbsp;&nbsp;&nbsp;</div>";
-$out .= "<br/><div id=\"contentarea\" style=\"postion:absolute;\" align=\"center\"></div></div>\n";
+$out .= "<div id=\"contentarea\" style=\"postion:absolute;\" align=\"center\"></div></div>\n";
 
 $out .= "<span id=\"addarea\"></span> <span id=\"loadarea\"></span>\n";
 $out .= "<div id=\"actarea\" align=\"center\"><br/><br/><span style=\"margin-left:38px;\"> Loading...... "
@@ -127,6 +127,7 @@ $out .= "<table style=\"color:white;font-weight:bold;\" id=\"addareaextratab\"><
 
 if($act == ''){
     $out .= "<script async type=\"text/javascript\">if(typeof doAction == 'undefined'){ var doActionTimer=window.setTimeout(function(){ doAction('".$jdo."&act=list'); }, 2*1000); }else{ doAction('".$jdo."&act=list');}</script>\n";
+	$out .= "<script async type=\"text/javascript\">if(typeof doAction == 'undefined'){ var doActionTimer=window.setTimeout(function(){ doActionEx('".$jdo."&act=pickup', 'contentarea'); }, 2*1000); }else{ doActionEx('".$jdo."&act=pickup', 'contentarea');}</script>\n";
 }
 else{
     $out .= "<script async type=\"text/javascript\">if(typeof doAction == 'undefined'){ var doActionTimer=window.setTimeout(function(){ doActionEx('".$jdo."&act=".$act."','contentarea'); }, 2*1000); }else{ doActionEx('".$jdo."&act=".$act."','contentarea');}</script>\n";

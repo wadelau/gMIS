@@ -89,8 +89,26 @@ foreach($_REQUEST as $k=>$v){
 				if(stripos($v, "<") > -1){
 				    # <script , <embed, <img, <iframe, etc.  Mon Feb  1 14:48:32 CST 2016
 					$v = str_ireplace("<", "&lt;", $v);
-					$_REQUEST[$k] = $v;
 				}
+				if(inString('b62x.', $v)){
+                    if(inString(',', $v)){
+                        $tmpArr = explode(',', $v);
+                        $v = '';
+                        foreach($tmpArr as $tmpk=>$tmpv){
+                            if(startsWith($tmpv, 'b62x.')){
+                                $tmpv = Base62x::decode(substr($tmpv, 5));
+                            }
+                            $tmpArr[$tmpk] = $tmpv;
+                        }
+                        $v = implode(',', $tmpArr);
+                    }
+                    else{
+                        if(startsWith($v, 'b62x.')){
+                            $v = Base62x::decode(substr($v, 5)); 
+                        }
+                    }
+                }
+				$_REQUEST[$k] = $v;
 			}
             $data[$k] = $v;
             if(true){ # preg_match("/[^\x20-\x7e]+/", $v)

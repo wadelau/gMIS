@@ -190,6 +190,7 @@ class PageNavi extends WebApp{
 	   $skiptag = Gconf::get('skiptag');
 	   $hasId = $gtbl->get('hasid');
        $myId = $gtbl->getMyId();
+	   $isTimeField = false;
        foreach($_REQUEST as $k=>$v){
             if($k != 'pnsk' && strpos($k,"pnsk") === 0){
                 $field = substr($k, 4);
@@ -204,6 +205,10 @@ class PageNavi extends WebApp{
 					&& $_REQUEST[$field] != $v){
 					$v = $_REQUEST[$field];
 				}
+				if(strpos($hmfield[$field],'date') !== false
+                        || strpos($hmfield[$field],'time') !== false){
+                    $isTimeField = true;    
+                }
 				# op list
                 if(strpos($v, "tbl:") === 0){
                     $condition .= " ".$pnsm." ".$field." in (".$this->embedSql($linkfield,$v).")";
@@ -251,11 +256,52 @@ class PageNavi extends WebApp{
 					else if($fieldopv == 'inrange'){
 						$v = str_replace("，",",", $v);
                         $tmparr = explode(",", $v);
-                        if(strpos($hmfield[$field],'date') === false){
-                            $condition .= " ".$pnsm." ($field >= ".$tmparr[0]." and $field <= ".$tmparr[1].")";
-                        }else{
-                            $condition .= " ".$pnsm." ($field >= '".$tmparr[0]."' and $field <= '".$tmparr[1]."')";
+                        if(isset($tmparr[1])){
+                            if(!$isTimeField){
+                                $condition .= " ".$pnsm." ($field >= ".$tmparr[0]." and $field <= ".$tmparr[1].")";
+                            }
+                            else{
+                                $condition .= " ".$pnsm." ($field >= '".$tmparr[0]."' and $field <= '".$tmparr[1]."')";
+                            }
                         }
+                        else{
+                            if(!$isTimeField){
+                                $condition .= " ".$pnsm." ($field >= ".$tmparr[0].")";
+                            }
+                            else{
+                                $condition .= " ".$pnsm." ($field >= '".$tmparr[0]."')";
+                            }
+                        }
+						$gtbl->del($field);
+                    }
+					else if($fieldopv == 'inrangelist'){
+						$v = str_replace("，",",", $v);
+                        $tmparr = explode(",", $v);
+                        $conditionTmp = ' 1=0 '; 
+                        foreach($tmparr as $tmpk=>$tmpv){
+                            $tmpArr2 = explode('~', $tmpv);
+                            if(count($tmpArr2) > 1 && $tmpArr2[1] !== ''){
+                                $tmpbgn = $tmpArr2[0];
+                                $tmpend = $tmpArr2[1];
+                                if(!$isTimeField){
+                                    $conditionTmp .= " or ($field >= ".$tmpbgn." and $field < ".$tmpend.")";
+                                }
+                                else{
+                                    $conditionTmp .= " or ($field >= '".$tmpbgn."' and $field < '".$tmpend."')";
+                                }
+                            }
+                            else{
+                                $tmpbgn = $tmpArr2[0];
+                                if(!$isTimeField){
+                                    $conditionTmp .= " or ($field >= ".$tmpbgn.")";
+                                }
+                                else{
+                                    $conditionTmp .= " or ($field >= '".$tmpbgn."')";
+                                }
+                            }
+                        }
+                        $condition .= " $pnsm ($conditionTmp)";
+						$gtbl->del($field);
                     }
 					else if($fieldopv == 'contains'){
                         $condition .= " ".$pnsm." "."$field like ?";
@@ -273,7 +319,7 @@ class PageNavi extends WebApp{
                         else{
                             $isString = true;
                         }
-					    $v = str_replace("，",",", $v);
+					    $v = str_replace("，", ",", $v);
                         $vArr = explode(",", $v);
                         $conditionTmp = " 1=0 ";
                         foreach($vArr as $vk=>$vv){
