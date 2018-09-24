@@ -1489,6 +1489,7 @@ userinfo.PickUpList = {};
 function fillPickUpReqt(myUrl, field, fieldv, opStr, linkObj){
     console.log("url:"+myUrl+", field:"+field+" link-text:"+linkObj.text);
     var linkText = '';
+	var base62xTag = 'b62x.';
     if(linkObj){
         linkText = linkObj.text;
         if(linkText.substring(0, 1) == '+'){
@@ -1534,6 +1535,8 @@ function fillPickUpReqt(myUrl, field, fieldv, opStr, linkObj){
         var paramParts = []; var pk = ''; var pv = '';
         var tmpV = ''; var emptyList = {}; var newPList = [];
         //fieldv = fieldv.toLowerCase(); //- why?
+		var isString = false;
+        if(opStr == 'containslist'){ isString = true; }
         for(var i=0; i<urlSize; i++){
             tmpV = urlParts[i]; emptyP = false;
             paramParts = urlParts[i].split('=');
@@ -1542,6 +1545,28 @@ function fillPickUpReqt(myUrl, field, fieldv, opStr, linkObj){
                 pv = paramParts[1]; 
                 if(pk == "pnsk"+field){
                     //pv = pv.toLowerCase(); //- why?
+					if(true && isString){
+                        if(pv.indexOf(',') > -1){
+                            var tmpArr = pv.split(',');
+                            for(var tmpi=0; tmpi<tmpArr.length; tmpi++){
+                                if(tmpArr[tmpi].indexOf(base62xTag) > -1){
+                                
+                                }
+                                else{
+                                    tmpArr[tmpi] = base62xTag + Base62x.encode(tmpArr[tmpi]);
+                                }
+                            }
+                            pv = tmpArr.join(',');
+                        }
+                        else{
+                            if(pv.indexOf(base62xTag) > -1){
+                                //- okay
+                            }
+                            else{
+                                pv = base62xTag + Base62x.encode(pv);
+                            }
+                        }
+                    }
                     if(pv.indexOf(',') > -1){
                         if(pv.indexOf(','+fieldv) > -1){
                             pv = pv.replace(','+fieldv, ''); 
@@ -1550,6 +1575,9 @@ function fillPickUpReqt(myUrl, field, fieldv, opStr, linkObj){
                         else if(pv.indexOf(fieldv+',') > -1){
                             pv = pv.replace(fieldv+',', ''); 
                             hasReqV = true;
+                        }
+						else{
+                            pv += ','+fieldv;
                         }
                     }
                     else if(pv == fieldv){
@@ -1588,7 +1616,7 @@ function fillPickUpReqt(myUrl, field, fieldv, opStr, linkObj){
         if(!hasReqKop){
             myUrl += '&oppnsk'+field+'='+opStr;
         }
-        console.log("newurl:"+myUrl);
+        console.log("newurl:"+myUrl+' ->'+opStr);
 
         userinfo.PickUpList.latestUrl = myUrl;
 
@@ -1599,6 +1627,17 @@ function fillPickUpReqt(myUrl, field, fieldv, opStr, linkObj){
     else if(opStr == 'moreoption'){
         
         console.log("newurl:"+myUrl+" ->"+opStr);
+        doActionEx(myUrl+'&act=pickup&pnsm=1&pickupfieldcount='+fieldv, 'contentarea');
+
+    }
+	    else if(opStr == 'filterrollback'){
+        
+        myUrl = myUrl.replace('&pnsk'+field, '&dummy');
+        myUrl = myUrl.replace('oppnsk'+field, '&dummy');
+        console.log("newurl:"+myUrl+" ->"+opStr);
+
+        userinfo.PickUpList.latestUrl = myUrl;
+
         doActionEx(myUrl+'&act=pickup&pnsm=1&pickupfieldcount='+fieldv, 'contentarea');
 
     }

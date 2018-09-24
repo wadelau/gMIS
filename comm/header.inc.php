@@ -79,6 +79,8 @@ if(!isset($isoput)){
     $isoput = true;
 }
 # convert user input data to variables, tag#userdatatovar
+$base62xTag = 'b62x.';
+if(true){
 foreach($_REQUEST as $k=>$v){
     $k = trim($k);
     if($k != ''){
@@ -86,16 +88,16 @@ foreach($_REQUEST as $k=>$v){
             $k_orig = $k = $matcharr[1];
 			if(is_string($v)){
 				$v = trim($v);
-				if(stripos($v, "<") > -1){
+				if(stripos($v, "<") !== false){
 				    # <script , <embed, <img, <iframe, etc.  Mon Feb  1 14:48:32 CST 2016
 					$v = str_ireplace("<", "&lt;", $v);
 				}
-				if(inString('b62x.', $v)){
+                if(inString($base62xTag, $v)){
                     if(inString(',', $v)){
                         $tmpArr = explode(',', $v);
                         $v = '';
                         foreach($tmpArr as $tmpk=>$tmpv){
-                            if(startsWith($tmpv, 'b62x.')){
+                            if(startsWith($tmpv, $base62xTag)){
                                 $tmpv = Base62x::decode(substr($tmpv, 5));
                             }
                             $tmpArr[$tmpk] = $tmpv;
@@ -103,7 +105,7 @@ foreach($_REQUEST as $k=>$v){
                         $v = implode(',', $tmpArr);
                     }
                     else{
-                        if(startsWith($v, 'b62x.')){
+                        if(startsWith($v, $base62xTag)){
                             $v = Base62x::decode(substr($v, 5)); 
                         }
                     }
@@ -126,6 +128,7 @@ foreach($_REQUEST as $k=>$v){
 	else{
 		# @todo
 	}
+}
 }
 if(isset($_REQUEST['isoput'])){
     if($_REQUEST['isoput'] == 1){

@@ -19,6 +19,7 @@ $pickup->setTbl($gtbl->getTbl());
 $pickup->set('fieldlist', $gtbl->getFieldList());
 $pickup->set('myid', $gtbl->getMyId());
 $base62x = new Base62x();
+$base62xTag = 'b62x.';
 
 $out .= "<fieldset style=\"border-color:#5f8ac5;border: 1px solid #5f8ac5; background:#E8EEF7;\">"
     ."<legend><h4>点击勾选概览(测试中 Debugging)</h4></legend><form id=\""
@@ -123,7 +124,7 @@ for($hmi=$min_idx; $hmi<=$max_idx;$hmi++){
                         $opv = str_replace('<', '&lt;', $opv);
                     }
                     $opv = $gtbl->getSelectOption($field, $opv, '', $needv=1, $isMultiple=0); 
-                    $urlParts = fillPickUpReqt($jdo, $field, $origopv, 'inlist'); 
+                    $urlParts = fillPickUpReqt($jdo, $field, $origopv, 'inlist', $base62x); 
                     $options .= "<a href='javascript:void(0);' "
                         ." onclick=\"javascript:parent.fillPickUpReqt('".$jdo."', '$field', '$origopv', 'inlist', this);\""
                         ." style=\"".$urlParts[2]."\">";
@@ -137,8 +138,8 @@ for($hmi=$min_idx; $hmi<=$max_idx;$hmi++){
                     else{
                         $opv = str_replace('<', '&lt;', $opv);
                     }
-                    $origopv = "b62x.".$base62x->encode($opv);
-                    $urlParts = fillPickUpReqt($jdo, $field, $origopv, 'containslist'); 
+                    $origopv = $base62xTag.$base62x->encode($opv);
+                    $urlParts = fillPickUpReqt($jdo, $field, $origopv, 'containslist', $base62x); 
                     $options .= "<a href='javascript:void(0);' "
                         ." onclick=\"javascript:parent.fillPickUpReqt('".$jdo."', '$field', '$origopv', 'containslist', this);\""
                         ." style=\"".$urlParts[2]."\">";
@@ -155,7 +156,7 @@ for($hmi=$min_idx; $hmi<=$max_idx;$hmi++){
 
                         if($lastopv !== null){
                             $origopv = $lastopv.'~'.$opv;
-                            $urlParts = fillPickUpReqt($jdo, $field, $origopv, 'containslist'); 
+                            $urlParts = fillPickUpReqt($jdo, $field, $origopv, 'containslist', $base62x); 
                             $options .= "<a href='javascript:void(0);' "
                                 ." onclick=\"javascript:parent.fillPickUpReqt('".$jdo."', '$field', '$origopv', 'inrangelist', this);\""
                                 ." style=\"".$urlParts[2]."\">";
@@ -170,7 +171,7 @@ for($hmi=$min_idx; $hmi<=$max_idx;$hmi++){
 
                         if($opi == $opCount-1){
                             $origopv = $lastopv.'~';
-                            $urlParts = fillPickUpReqt($jdo, $field, $origopv, 'containslist'); 
+                            $urlParts = fillPickUpReqt($jdo, $field, $origopv, 'containslist', $base62x); 
                             $options .= "<a href='javascript:void(0);' "
                                 ." onclick=\"javascript:parent.fillPickUpReqt('".$jdo."', '$field', '$origopv', 'inrangelist', this);\""
                                 ." style=\"".$urlParts[2]."\">";
@@ -236,7 +237,7 @@ $out .= "</table> </form>  </fieldset>  <br/>";
 # save as an alternative backup
 # use javascript in front-end instead.
 #
-function fillPickUpReqt($myurl, $field, $fieldv, $oppnsk){
+function fillPickUpReqt($myurl, $field, $fieldv, $oppnsk, $base62x=null){
     $newurl = $myurl;
     $urlParts = explode("&", $newurl);
     $hasReqK = false;
@@ -244,8 +245,15 @@ function fillPickUpReqt($myurl, $field, $fieldv, $oppnsk){
     $hasReqV = false;
     $tagPrefix = '+';
     $stylestr = '';
+    $origFieldv = $fieldv;
+    $base62xTag = 'b62x.'; # for string only
+    if($base62x == null){
+        $base62x = new Base62x();
+    }
     if(inList($oppnsk, 'inlist,containslist,inrangelist')){
         #$fieldv = strtolower($fieldv); # why?
+        $isString = false;
+        if($oppnsk == 'containslist'){ $isString = true; }
         foreach($urlParts as $k=>$v){
             $paraParts = explode("=", $v);
             if(count($paraParts) > 1){
@@ -253,6 +261,22 @@ function fillPickUpReqt($myurl, $field, $fieldv, $oppnsk){
                 $reqv = $paraParts[1];
                 if($reqk == "pnsk$field"){
                     #$reqv = strtolower($reqv); # why?
+                    if(true && $isString){
+                        if(inString(',', $reqv)){
+                            $tmpArr = explode(',', $reqv);
+                            foreach($tmpArr as $tmpk=>$tmpv){
+                                if(!startsWith($tmpv, $base62xTag)){
+                                    $tmpArr[$tmpk] = $base62xTag.$base62x->encode($tmpv);
+                                }
+                            }
+                            $reqv = implode(',', $tmpArr);
+                        }
+                        else{
+                            if(!startsWith($reqv, $base62xTag)){
+                                $reqv = $base62xTag.$base62x->encode($reqv);
+                            }
+                        }
+                    }
                     if(inList($fieldv, $reqv)){
                         $tmpArr = implode(',', $reqv);
                         foreach($tmpArr as $k=>$v){

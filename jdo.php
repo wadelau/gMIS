@@ -422,8 +422,8 @@ else if(startsWith($act, "list")){
                     $queryFields .= $v; 
                 }
                 $queryFields .= " &nbsp;  &nbsp; <a href=\"javascript:pnAction('"
-                        .str_replace($k, 'old'.$k, $jdo)
-                        ."');\" title='Remove this filter/去掉此条件'>[X]</a><br/>";
+                        .$tmpFieldUrl."');\" title='Remove this filter/去掉此条件'"
+                        ." onclick=\"javascript:fillPickUpReqt('".$jdo."', '$field', '".($base62xTag.Base62x::encode($v))."', 'filterrollback', this);\">[X]</a><br/>";
             }
         }
         $out .= "<tr><td colspan='".($max_disp_cols+2)."' style='text-align:center'><br/>No Data for These Criterions. "
