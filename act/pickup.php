@@ -22,7 +22,7 @@ $base62x = new Base62x();
 $base62xTag = 'b62x.';
 
 $out .= "<fieldset style=\"border-color:#5f8ac5;border: 1px solid #5f8ac5; background:#E8EEF7;\">"
-    ."<legend><h4>点击勾选概览(测试中 Debugging)</h4></legend><form id=\""
+    ."<legend><h4>点击勾选概览</h4></legend><form id=\""
 	.$formid."\" name=\"".$formid."\" method=\"post\" action=\"".$jdo."&act=list\" "
 	.$gtbl->getJsActionTbl()."><table cellspacing=\"0\" cellpadding=\"0\" "
 	." style=\"border:0px solid black; width:98%; margin-left:auto; margin-right:auto; background:transparent;\">";
@@ -156,7 +156,7 @@ for($hmi=$min_idx; $hmi<=$max_idx;$hmi++){
 
                         if($lastopv !== null){
                             $origopv = $lastopv.'~'.$opv;
-                            $urlParts = fillPickUpReqt($jdo, $field, $origopv, 'containslist', $base62x); 
+                            $urlParts = fillPickUpReqt($jdo, $field, $origopv, 'inrangelist', $base62x); 
                             $options .= "<a href='javascript:void(0);' "
                                 ." onclick=\"javascript:parent.fillPickUpReqt('".$jdo."', '$field', '$origopv', 'inrangelist', this);\""
                                 ." style=\"".$urlParts[2]."\">";
@@ -171,7 +171,7 @@ for($hmi=$min_idx; $hmi<=$max_idx;$hmi++){
 
                         if($opi == $opCount-1){
                             $origopv = $lastopv.'~';
-                            $urlParts = fillPickUpReqt($jdo, $field, $origopv, 'containslist', $base62x); 
+                            $urlParts = fillPickUpReqt($jdo, $field, $origopv, 'inrangelist', $base62x); 
                             $options .= "<a href='javascript:void(0);' "
                                 ." onclick=\"javascript:parent.fillPickUpReqt('".$jdo."', '$field', '$origopv', 'inrangelist', this);\""
                                 ." style=\"".$urlParts[2]."\">";
@@ -279,9 +279,9 @@ function fillPickUpReqt($myurl, $field, $fieldv, $oppnsk, $base62x=null){
                     }
                     if(inList($fieldv, $reqv)){
                         $tmpArr = implode(',', $reqv);
-                        foreach($tmpArr as $k=>$v){
-                            if($v == $fieldv){
-                                unset($tmpArr[$k]);
+                        foreach($tmpArr as $tmpk=>$tmpv){
+                            if($tmpv == $fieldv){
+                                unset($tmpArr[$tmpk]); # break; ?
                             }
                         }
                         $reqv = implode(',', $tmpArr);
