@@ -90,8 +90,10 @@ if(true){
 				<tr>
                     <td width="13%" height="35" ><span class="login_txt">验证码Vfc：</span></td>
                     <td height="35" colspan="2" class="top_hui_text">
-                    	<input class=wenbenkuang name="verifycode" id="verifycode" type=text maxLength=4 size=10>
-                    	
+                    	<input name="verifycode" id="verifycode" 
+							type="text" maxLength="5" onload="javascript:this.focus();"
+							style="font-size:16px;font-weight:bold;" title="验证码不区分大小写, Code Case-Insensitive">
+                    	&nbsp;&nbsp;<span id="verifycoderesult" style="font-size:20px;"></span>
                       </td>
                   </tr>
                   {/if}
@@ -99,15 +101,19 @@ if(true){
                     <td width="13%" height="38" class="top_hui_text" nowrap>
                     	<span class="login_txt">用户电子邮箱Uid：&nbsp;&nbsp; </span></td>
                     <td height="38" colspan="2" class="top_hui_text">
-                    	<input name="email" id="email" class="editbox4" value="" size="20"> 
-                    		<script>var emailtag = document.getElementById('email'); emailtag.focus();</script> 
+                    	<input name="email" id="email" class="editbox4" value="" size="32"
+							style="font-size:16px;font-weight:bold;">
+							{if $islan==true}							
+                    		<script>var emailtag = document.getElementById('email'); emailtag.focus();</script>
+							{/if}
                     </td>
                   </tr>
                   <tr>
                     <td width="13%" height="35" class="top_hui_text">
                     <span class="login_txt"> 密 码Pwd： &nbsp;&nbsp; </span></td>
                     <td height="35" colspan="2" class="top_hui_text">
-                    	<input class="editbox4" type="password" size="20" name="password" id="password">
+                    	<input class="editbox4" type="password" size="20" name="password" id="password"
+							style="font-size:16px;font-weight:bold;">
                       <img src="../img/luck.gif" width="19" height="18"> </td>
                   </tr>
                  
@@ -135,8 +141,9 @@ var verifyCodeTimer = 0;
 var hasVerifyTrue = false;
 var lastVerifyCode = '';
 int ReTimerDelay = 3 * 1000;
+var vfcObj = document.getElementById('verifycode');
+var respDispObj = document.getElementById('verifycoderesult');
 function checkVerifyCode(){
-   var vfcObj = document.getElementById('verifycode');
    var vfc = '';
    if(vfcObj){
 		vfc = vfcObj.value;
@@ -178,9 +185,14 @@ function checkVerifyCode(){
    }
    else if(!hasVerifyTrue){
 		verifyCodeTimer = window.setTimeout(checkVerifyCode, ReTimerDelay);
-		console.log("continue monitoring....");
+		console.log((new Date())+"continue monitoring....");
+		var tmpVal = respDispObj.innerHTML;
+		tmpVal = '.' + tmpVal;
+		if(tmpVal.substring(0, 6) == '......'){ tmpVal = '.' + tmpVal.substring(6); }
+		respDispObj.innerHTML = tmpVal;
    }
 }
 verifyCodeTimer = window.setTimeout(checkVerifyCode, ReTimerDelay);
+vfcObj.focus();
 </script>
 {include file='footer.html'}
