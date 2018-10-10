@@ -45,10 +45,12 @@
 	<field name="inserttime">
       <chnname>開始時間</chnname>
 	  <listview>2</listview>
+	  <readonly>1</readonly>
     </field> 
-		<field name="updatetime">
+	<field name="updatetime">
       <chnname>更新時間</chnname>
 	  <listview>2</listview>
+	  <readonly>1</readonly>
     </field> 
 	<field name="istate">
 		<chnname>状态</chnname>

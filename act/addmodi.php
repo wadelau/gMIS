@@ -76,8 +76,7 @@ else{
                 $hmorig[$field] = $tmparr[0]; # see xml/hss_tuanduitbl.xml
             }
         }
-    } 
-
+    }
 }
 
 # very first row
@@ -141,9 +140,8 @@ for($hmi=$min_idx; $hmi<=$max_idx;$hmi++){
 				."';\" onmouseout=\"javascript:this.style.backgroundColor='';\">"; 
 			$opentr = 1;
 		}
-
-
-    }else if($fieldinputtype == 'textarea'){
+    }
+	else if($fieldinputtype == 'textarea'){
 
         $hmorig[$field] = str_replace("<br/>", "\n", $hmorig[$field]); 
 
@@ -167,16 +165,16 @@ for($hmi=$min_idx; $hmi<=$max_idx;$hmi++){
             		.$tmpmemo." </td></tr><tr>";
             $out .= '';
             $opentr = 1;
-
-        }else{
+        }
+		else{
             $out .= "<td style=\"vertical-align:top\"><b>".$gtbl->getCHN($field)."</b>:</td>"
                     ."<td><textarea id=\"".$field."\" name=\""
                     .$field."\" rows=\"11\" cols=\"35\" ".$gtbl->getJsAction($field).$gtbl->getAccept($field)." "
                     .$gtbl->getReadOnly($field)." class=\"search\">".$hmorig[$field]."</textarea> <br/> "
 		            .$gtbl->getMemo($field)." </td>";
         }
-
-    }else if($fieldinputtype == 'file'){
+    }
+	else if($fieldinputtype == 'file'){
 	    $origValue = $hmorig[$field];
         if($origValue != '' && $srcprefix != '' && !startsWith($origValue, 'http')){
             $hmorig[$field] = $srcprefix.'/'.$hmorig[$field];
@@ -189,13 +187,14 @@ for($hmi=$min_idx; $hmi<=$max_idx;$hmi++){
         }
         $fieldv = $hmorig[$field]; $fieldv = str_replace($shortDirName."/","", $fieldv);
         $isimg = isImg($fieldv);
-        $out .= "<td nowrap><b>".$gtbl->getCHN($field)."</b>:</td><td><input type=\"file\" id=\"".$field
-		."\" name=\"".$field."\" size=\"20\" class=\"noneinput wideinput\" ".$gtbl->getJsAction($field)
-		." /> <input type=\"hidden\" name=\"".$field."_orig\" value=\"".$fieldv."\" /> <br/> "
-		.($fieldv==''?'':$fieldv)." ".$gtbl->getMemo($field)."</td>";
-        $out .="<td colspan='4'> ".($isimg==1?"<img src=\"".$fieldv."\" alt=\"-x-\" width=\"118px\" /><br/>"
-		.$fieldv:"")." <script>document.getElementById('"
-		.$formid."').enctype='multipart/form-data';</script>  </td></tr><tr>";
+        $out .= "<td nowrap><b>".$gtbl->getCHN($field)."</b>:</td>"
+			."<td style='word-break:break-all;'><input type=\"file\" id=\"".$field
+			."\" name=\"".$field."\" size=\"20\" class=\"noneinput wideinput\" ".$gtbl->getJsAction($field)
+			." /> <input type=\"hidden\" name=\"".$field."_orig\" value=\"".$fieldv."\" /> <br/> "
+			.($fieldv==''?'':$fieldv)." ".$gtbl->getMemo($field)."</td>";
+			$out .="<td colspan='4'> ".($isimg==1?"<img src=\"".$fieldv."\" alt=\"-x-\" width=\"118px\" /><br/>"
+			.$fieldv:"")." <script>document.getElementById('"
+			.$formid."').enctype='multipart/form-data';</script>  </td></tr><tr>";
 	    $opentr = 1;
 
     }else if($gtbl->getExtraInput($field, $hmorig) != ''){

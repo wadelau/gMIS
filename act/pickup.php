@@ -33,16 +33,11 @@ $out .= "<tr height='".($rowHeight/2)."px'><td width=\"1%\">&nbsp;</td>
             <td style='width:35px;'>";
 if($pickupFieldCount <= $shortFieldCount){ 
     $out .= "<a onclick=\"javascript:parent.fillPickUpReqt('"
-    	        .$jdo."', '', $max_idx, 'moreoption', this);\" 
-                title=\"加载更多选项\">
-                <b>+更多</b></a>";
+         .$jdo."', '', $max_idx, 'moreoption', this);\" title=\"加载更多选项\"><b>+更多</b></a>";
 }
 else{
     $out .= "<a onclick=\"javascript:parent.fillPickUpReqt('"
-    	        .$jdo."', '', $shortFieldCount, 'moreoption', this);\" 
-                 title=\"减少选项\" 
-                 style=\"color:#ffffff;background-color:#1730FD;\">
-                <b>-更多</b></a>";
+    	 .$jdo."', '', $shortFieldCount, 'moreoption', this);\" title=\"减少选项\"  style=\"color:#ffffff;background-color:#1730FD;\"><b>-更多</b></a>";
 }
 $out .= "</td></tr>";
 			
@@ -198,7 +193,7 @@ for($hmi=$min_idx; $hmi<=$max_idx;$hmi++){
         }
         else{
             #$pickupFieldCount++;
-            debug("\tfield:$field has no options. 1809191930. skip....\n");
+            #debug("\tfield:$field has no options. 1809191930. skip....\n");
         }
 
     }

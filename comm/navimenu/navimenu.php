@@ -23,10 +23,10 @@ if($hm[0]){
     $hmkeysbylen = array("2"=>array(),"4"=>array(),"6"=>array(),"8"=>array(),
             "10"=>array(), "12"=>array(), "14"=>array());
     if(is_array($hm)){
-    foreach($hm as $k=>$v){
-        $hmkeys[$hm[$k]['levelcode']] = $hm[$k]; # use levelcode 作为key
-        $hmkeysbylen[strlen($hm[$k]['levelcode'])][] = $hm[$k]['levelcode']; # 按levelcode的长度划分menu等级
-    }
+		foreach($hm as $k=>$v){
+			$hmkeys[$hm[$k]['levelcode']] = $hm[$k]; # use levelcode 作为key
+			$hmkeysbylen[strlen($hm[$k]['levelcode'])][] = $hm[$k]['levelcode']; # 按levelcode的长度划分menu等级
+		}
     }
     #print_r($hmkeys);
     #print_r($hmkeysbylen);
@@ -97,7 +97,6 @@ if($hm[0]){
 								}
 							}
 							if($lv3 != ''){ $lv3 = str_replace("<!--LEVEL-4-->", $lv4, $lv3);  $lv4 = ''; }
-
                         }
                     }
 					$dynamicmenu = str_replace("<!--LEVEL-3-->", $lv3, $dynamicmenu); $lv3 = '';
@@ -124,6 +123,7 @@ if($hm[0]){
                 <li><a href="'.$ido.'&tbl=mynotetbl&tit=我的笔记&db=&pnskoperator='.$userid.'">我的笔记</a></li>
                 <li><a href="'.$ido.'&tbl=fin_operatelogtbl&tit=操作历史记录&db=&pnskuserid='.$userid.'">操作历史记录</a></li>
                 <li><a href="'.$ido.'&tbl=info_toolsettbl&tit=常用工具">日常工具</a></li>
+				<li><a href="'.$ido.'&tbl=filedirtbl&tit=文件柜&pnskparentname=/&pnsm=1">文件柜</a></li>
                 <li> <a href="javascript:void(0);">桌面设置</a> </li>
             </ul>
      </li>

@@ -4,6 +4,8 @@
 $fieldlist = array();
 $fieldvlist = array(); # remedy for overrided by $obj->get during adding, need a tmp container for query string, Thu Jun 11 22:15:32 CST 2015
 $filearr = array();
+$disableFileExtArr = array('html','php','js','jsp','pl','shtml', 'sh', 'c', 'cpp', 'py');
+
 if($id != ''){
     $gtbl->setId($id); # speical field
 }
@@ -25,8 +27,8 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
         $fieldlist[] = $field;
         #$gtbl->set($field, $fieldv);
 		$fieldvlist[$field] = $fieldv;
-
-    }else if(in_array($field,$timefield)){
+    }
+	else if(in_array($field,$timefield)){
 		$fieldv = '';
         if($gtbl->getId() == ''){
             # insert
@@ -47,12 +49,12 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
         }
         else{
             debug(__FILE__.": unclassified timefield:[$field]. 1611101112.");
-		$fieldv = date("Y-m-d H:i:s", time()); # 'NOW()';
-                $fieldlist[] = $field;
+			#$fieldv = date("Y-m-d H:i:s", time()); # 'NOW()';
+            #$fieldlist[] = $field;
         }
         continue;
-		
-    }else if($field == 'password'){
+    }
+	else if($field == 'password'){
         if($_REQUEST[$field] != ''){
            $fieldv = sha1($_REQUEST[$field]); 
 		   $fieldlist[] = $field; 
@@ -61,10 +63,10 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
         }else{
           continue;    
         }            
-        error_log(__FILE__.": field:[$field] fieldv:[$fieldv]");
+        debug("field:[$field] fieldv:[$fieldv]");
 		#print(__FILE__.": field:[$field] fieldv:[$fieldv]");
-		
-    }else{
+    }
+	else{
         if($fieldInputType == 'file'){
 
             $fieldv_orig = $_REQUEST[$field.'_orig'];
@@ -73,14 +75,12 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
                     $fieldv_orig = $shortDirName."/".$fieldv_orig;
                 }
                 $fieldv = $fieldv_orig;
-            
-            }else if($_FILES[$field]['name'] != ''){
-                
+            }
+			else if($_FILES[$field]['name'] != ''){
                 # safety check 
-                $disableFileExt = array('html','php','js','jsp','pl','shtml');
                 $tmpFileNameArr = explode(".",strtolower($_FILES[$field]['name']));
                 $tmpfileext = end($tmpFileNameArr);
-                if(in_array($tmpfileext, $disableFileExt)){
+                if(in_array($tmpfileext, $disableFileExtArr)){
                    error_log(__FILE__.": found illegal upload file:[".$_FILES[$field]['name']."]");
                    $out .= __FILE__.": file:[".$_FILES[$field]['name']."] is not allowed. 201210241927";
                    continue;
@@ -102,29 +102,35 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
 				}
 				$filename = basename($_FILES[$field]['name']);
 				$filename = Base62x::encode($filename);
-                $filename = date("dHi")."_".substr($filename,0,64).".".$tmpfileext;
+				$fileNameLength = strlen($filename);
+				$fileNameLength = $fileNameLength > 128 ? 128 : $fileNameLength; 
+                $filename = date("dHi")."_".substr($filename, -$fileNameLength).".".$tmpfileext;
 				#print __FILE__.": filename:[$filename]";
                 if(move_uploaded_file($_FILES[$field]['tmp_name'], $appdir."/".$filedir."/".$filename)){
-                    $out .= __FILE__.": file:[$filedir/$filename] succ.";
+                    $out .= "file:[$filedir/$filename] succ.";
                 }else{
-                    $out .= __FILE__.": file:[$filename] fail. 201202251535";
+                    $out .= "file:[$filename] fail. 201202251535";
                 }
                 #$fieldv = $filedir."/".$filename;
                 $fieldv = $shortDirName."/".$filedir."/".$filename; 
                 $filearr['filename'] = basename($_FILES[$field]['name']); # sometimes original name may be different with uploadedfile.
-                $filearr['filesize'] = $_FILES[$field]['size'];
+                $filearr['filesize'] = intval($_FILES[$field]['size']/1000 + 1); # KB
                 $filearr['filetype'] = $_FILES[$field]['type'];
+				
+				$tmpFileName = Wht::get($_REQUEST, 'filename');
+				if($tmpFileName != ''){ $filearr['filename'] = $tmpFileName.$filearr['filename']; }
+				
             }
-
-        }else if($gtbl->getSelectMultiple($field)){
+        }
+		else if($gtbl->getSelectMultiple($field)){
 
             if(is_array($_REQUEST[$field])){ 
                 $fieldv = implode(",", $_REQUEST[$field]);
             }else{
                 $fieldv = $_REQUEST[$field]; 
             }
-
-        }else{
+        }
+		else{
             $fieldv = trim(Wht::get($_REQUEST, $field));
 			if($fieldv == ''){
 				$fieldv = $hmfield[$field."_default"];

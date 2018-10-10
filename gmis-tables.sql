@@ -438,3 +438,25 @@ CREATE TABLE `gmis_issblackwhitetbl` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `key2` (`idb`, `itbl`, `ifield`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- added by @Xenxin, OCT 10, 2018
+DROP TABLE IF EXISTS `gmis_filedirtbl`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `gmis_filedirtbl` (
+  `id` int(12) NOT NULL AUTO_INCREMENT,
+  `filename` char(128) NOT NULL DEFAULT '' COMMENT 'file or dir name',
+  `parentname` varchar(768) NOT NULL DEFAULT '' COMMENT 'file or dir path',
+  `pparentname` varchar(768) NOT NULL DEFAULT '' COMMENT 'file or dir path uplevel',
+  `idesc` char(255) NOT NULL DEFAULT '',
+  `itype` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0:file, 1:dir',
+  `filetype` char(32) NOT NULL DEFAULT '' COMMENT 'mime type',
+  `filesize` int(12) NOT NULL DEFAULT '0' COMMENT 'KB',
+  `filepath` char(255) NOT NULL DEFAULT '' COMMENT 'file system dir',
+  `ioperator` tinyint(1) NOT NULL DEFAULT '0',
+  `inserttime` datetime NOT NULL DEFAULT '1001-01-01 00:00:01',
+  `updatetime` datetime NOT NULL DEFAULT '1001-01-01 00:00:01',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `key2` (`parentname`,`filename`),
+  KEY `key3` (`filename`)
+) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=utf8;

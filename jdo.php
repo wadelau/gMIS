@@ -287,8 +287,11 @@ else if(startsWith($act, "list")){
 						}
 					   if(count($fhref) == 0){
 						   $fieldT = '';
-						   if($rec[$field] != ''){ 
-								$fieldT = Base62x::decode(substr($rec[$field], strpos($rec[$field],'_')+1)).' -- '; 
+						   if($rec[$field] != ''){
+								$tmpPos1 = strpos($rec[$field], '_') + 1;
+                                $tmpPos2 = strpos($rec[$field], '.');
+                                $fieldT = Base62x::decode(substr($rec[$field], $tmpPos1, $tmpPos2-$tmpPos1)).' -- '; 
+								$fieldT = str_replace('"', '-', $fieldT);
 							}
 							$fhref = "<a href=\"javascript:void(0);\" onclick=\"window.open('".$rec[$field]."');\" title=\""
 							        .$fieldT."点击大图或者下载 ".$rec[$field]."\">"; 	   

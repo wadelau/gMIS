@@ -55,7 +55,7 @@ class PickUp extends WebApp{
         }
         $fieldDefineLength = $this->_getFieldDefineLength($field, $fieldtype);
         if($fieldDefineLength > self::PICK_MAX_FIELD_LENGTH * 20){ # why 20? <255?
-            debug("\tfield:$field has too long:$fieldDefineLength skip....\n");
+            #debug("\tfield:$field has too long:$fieldDefineLength skip....\n");
         }
         else if(inString("char", $fieldtype) || $fieldinputtype == 'select'){
 
