@@ -450,7 +450,7 @@ CREATE TABLE `gmis_filedirtbl` (
   `pparentname` varchar(768) NOT NULL DEFAULT '' COMMENT 'file or dir path uplevel',
   `idesc` char(255) NOT NULL DEFAULT '',
   `itype` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0:file, 1:dir',
-  `filetype` char(32) NOT NULL DEFAULT '' COMMENT 'mime type',
+  `filetype` char(64) NOT NULL DEFAULT '' COMMENT 'mime type',
   `filesize` int(12) NOT NULL DEFAULT '0' COMMENT 'KB',
   `filepath` char(255) NOT NULL DEFAULT '' COMMENT 'file system dir',
   `ioperator` tinyint(1) NOT NULL DEFAULT '0',
@@ -458,5 +458,6 @@ CREATE TABLE `gmis_filedirtbl` (
   `updatetime` datetime NOT NULL DEFAULT '1001-01-01 00:00:01',
   PRIMARY KEY (`id`),
   UNIQUE KEY `key2` (`parentname`,`filename`),
-  KEY `key3` (`filename`)
-) ENGINE=InnoDB AUTO_INCREMENT=42 DEFAULT CHARSET=utf8;
+  KEY `key3` (`filename`),
+  KEY `key4` (`filetype`)
+) ENGINE=InnoDB AUTO_INCREMENT=58 DEFAULT CHARSET=utf8;

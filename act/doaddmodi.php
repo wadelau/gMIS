@@ -81,8 +81,8 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
                 $tmpFileNameArr = explode(".",strtolower($_FILES[$field]['name']));
                 $tmpfileext = end($tmpFileNameArr);
                 if(in_array($tmpfileext, $disableFileExtArr)){
-                   error_log(__FILE__.": found illegal upload file:[".$_FILES[$field]['name']."]");
-                   $out .= __FILE__.": file:[".$_FILES[$field]['name']."] is not allowed. 201210241927";
+                   debug("found illegal upload file:[".$_FILES[$field]['name']."]");
+                   $out .= "file:[".$_FILES[$field]['name']."] is not allowed. 201210241927";
                    continue;
                 }
 
@@ -92,8 +92,9 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
                     if($oldfile != ""){
                     	$oldfile = str_replace($shortDirName."/","", $oldfile);
                         unlink($appdir."/".$oldfile);
-                    }else{
-                        error_log(__FILE__.": oldfile:[$oldfile] not FOUND. field:[$field]");				
+                    }
+					else{
+                        debug("oldfile:[$oldfile] not FOUND. field:[$field]. 201810111959.");				
                     }
                 }
 				$filedir = $filedir."/".date("Ym"); # Fri Dec  5 14:19:05 CST 2014
@@ -115,10 +116,10 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
                 $fieldv = $shortDirName."/".$filedir."/".$filename; 
                 $filearr['filename'] = basename($_FILES[$field]['name']); # sometimes original name may be different with uploadedfile.
                 $filearr['filesize'] = intval($_FILES[$field]['size']/1000 + 1); # KB
-                $filearr['filetype'] = $_FILES[$field]['type'];
+                $filearr['filetype'] = substr($_FILES[$field]['type'], 0, 64); # see filedirtbl definition
 				
 				$tmpFileName = Wht::get($_REQUEST, 'filename');
-				if($tmpFileName != ''){ $filearr['filename'] = $tmpFileName.$filearr['filename']; }
+				if($tmpFileName != '' && $tmpFileName != $filearr['filename']){ $filearr['filename'] = $tmpFileName.$filearr['filename']; }
 				
             }
         }
