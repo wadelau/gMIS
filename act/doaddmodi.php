@@ -60,7 +60,8 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
 		   $fieldlist[] = $field; 
 		   #$gtbl->set($field, $fieldv); # 2014-10-26 21:33
 		   $fieldvlist[$field] = $fieldv;
-        }else{
+        }
+		else{
           continue;    
         }            
         debug("field:[$field] fieldv:[$fieldv]");
@@ -109,8 +110,32 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
 				#print __FILE__.": filename:[$filename]";
                 if(move_uploaded_file($_FILES[$field]['tmp_name'], $appdir."/".$filedir."/".$filename)){
                     $out .= "file:[$filedir/$filename] succ.";
-                }else{
-                    $out .= "file:[$filename] fail. 201202251535";
+                }
+				else{
+                    // Check $_FILES['upfile']['error'] value.
+                    $tmpErrMsg = '';
+                    switch ($_FILES[$field]['error']) {
+                        case UPLOAD_ERR_OK:
+                            break;
+                        case UPLOAD_ERR_NO_FILE:
+                            $tmpErrMsg = ('No file sent');
+                            break;
+                        case UPLOAD_ERR_INI_SIZE:
+                            $tmpErrMsg = ('Exceeded filesize limit '.ini_get('upload_max_filesize').' in server-side');
+                            break;
+                        case UPLOAD_ERR_FORM_SIZE:
+                            $tmpErrMsg = ('Exceeded filesize limit/'.$_REQUEST['MAX_FILE_SIZE'].' in client-side');
+                            break;
+                        case UPLOAD_ERR_PARTIAL:
+                            $tmpErrMsg = 'Only partially uploaded';
+                            break;
+                        case UPLOAD_ERR_EXTENSION:
+                            $tmpErrMsg = 'Stopped by other extensions';
+                            break;
+                        default:
+                            $tmpErrMsg = ('Unknown errors ['.$_FILES[$field]['error'].']');
+                    }
+                    $out .= " file:[$filename] fail for $tmpErrMsg. 201202251535.";
                 }
                 #$fieldv = $filedir."/".$filename;
                 $fieldv = $shortDirName."/".$filedir."/".$filename; 
