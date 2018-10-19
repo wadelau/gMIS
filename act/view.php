@@ -190,24 +190,63 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
     }
 }
 
+# access ctrl
+$hasDisableW = false;
+if(true){
+    $accMode = $gtbl->getMode();
+    if($accMode == 'r'){
+        $hasDisableW = true;
+    }
+    else if($accMode == 'o-w'){
+        $hasDisableW = true;
+        $recOwnerList = array('op', 'operator', 'ioperator', 'editor');
+        foreach($recOwnerList as $ownk=>$ownv){
+            $theOwner = $hmorig[$ownv];
+            if($theOwner == $userid){
+                $hasDisableW = false;
+                break;
+            }
+        }
+    }
+    else{
+        debug("unkown accmode:[$accMode].");
+    }
+}
+
 $out .= "<tr ><td style=\"border-top: 1px dotted #cccccc; vertical-align:middle;\" colspan=\""
         .$form_cols."\">  </td></tr>";
 $out .= "<tr><td colspan=\"".$form_cols."\" align=\"center\">
 	<input type=\"button\" name=\"viewbtn\" id=\"viewbtn\" value=\"编辑\"
 		onclick=\"javascript:doActionEx('"
-		.$jdo."&act=modify','contentarea');\"/>
+		.$jdo."&act=modify','contentarea');\"".($hasDisableW ? ' disabled' : '')."/>
 	<input type=\"button\" name=\"printbtn\" id=\"printbtn\" value=\"打印预览\"
 		onclick=\"javascript:window.open('"
 		.$jdo."&act=print&isoput=1&isheader=0','PrintWindow','scrollbars,toolbar,location=0');\"/>
 	<input type=\"button\" name=\"deletebtn\" id=\"deletebtn\" value=\"删除\"
 		onclick=\"javascript:if(window.confirm('Are you sure to delete? / 您确定要删除 id:".$id
-		." 吗?')){doAction('".$jdo."&act=list-dodelete');}\"/>
+		." 吗?')){doAction('".$jdo."&act=list-dodelete');}\"".($hasDisableW ? ' disabled' : '')."/>
 	<input type=\"button\" name=\"addbycopybtn\" id=\"addbycopybtn\" value=\"复制\"
         onclick=\"javascript:doActionEx('".$jdo."&act=addbycopy','contentarea');\"/>
 	<input type=\"button\" name=\"cancelbtn\" value=\"关闭\"
-		onclick=\"javascript:parent.switchArea('contentarea_outer','off');\" />
+		onclick=\"javascript:parent.switchArea('contentarea_outer','off');\" />";
+		
+# more act options
+if(true){
+    $actArr = $gtbl->getActOption($hmorig);
+    $out .= "\n";
+    foreach($actArr as $actk=>$actv){
+        if(startsWith($actv[0], 'javascript:')){
+            #
+        }
+        else{
+            $actv[0] = "javascript:doActionEx('".$actv[0]."','contentarea');";
+        }
+        $out .= "<input type='button' name='actoption_$actk' value='".$actv[1]."'"
+            ." onclick=\"".$actv[0]."\"/>\n";
+    }
+}
 	
-	</td></tr>";
+$out .="</td></tr>";
 
 $out .= "</table> </fieldset>  <br/>";
 

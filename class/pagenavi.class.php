@@ -166,7 +166,7 @@ class PageNavi extends WebApp{
    function getCondition($gtbl, $user){
        $condition = "";
        $pnsm = $_REQUEST['pnsm'];
-       $pnsm = $pnsm=='' ? "or" : $pnsm;
+       $pnsm = ($pnsm=='' || $pnsm=='0') ? "or" : $pnsm;
        $pnsm = $pnsm=='1'? "and" : $pnsm;
        $hmfield = $gtbl->getFieldList();
 

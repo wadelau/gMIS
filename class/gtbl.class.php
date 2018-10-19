@@ -61,7 +61,8 @@ class GTbl extends WebApp{
 			'rotatespan'=>'rotatespan', # table names contains variable datetime, e.g. _201412, _201501, Mon Jan  5 15:31:29 CST 2015
 			'myid'=>'myid', # get table's self-defined id, see inc/webapp.class, e.g. product_id, article_id, Wed Jun  8 13:26:07 CST 2016
 			'srcprefix'=>'srcprefix', # set for files and/or images
-			'searchbytimefield' => 'searchbytimefield' # provide timebased search buttons
+			'searchbytimefield' => 'searchbytimefield', # provide timebased search buttons
+			'actoption' => 'actoption', # more act options for all records, Oct 20, 2018
 			);
 
 	private static $MAX_FIELD_LIST = 99;
@@ -355,6 +356,94 @@ class GTbl extends WebApp{
         return $tmpstr=='' ? $default : $tmpstr;
     }
 
+	//- 
+    public function getActOption($result=null){
+        $tmpstr = $this->hmconf[$this->taglist['table'].$this->sep.$this->prttbl.$this->sep.$this->taglist['actoption']];
+        $tmpstr = $tmpstr==null?'':$tmpstr;
+
+        $actArr = array(); $tUrl = "";
+        $title = ""; $needJsConfirm = 0; $needBlank = 0;
+        if($result != null){
+		    $this->set($this->resultset, $result);
+        }
+        if($tmpstr != ""){ # see xml/info_usertbl.xml
+    
+        $tmpStrArr = explode('|', $tmpstr);
+        foreach ($tmpStrArr as $k=>$tmpstr){
+            $vArr = explode("::", $tmpstr);
+			if(startsWith($vArr[0],"javascript:")){
+				$tUrl = $vArr[0];
+				$title = $vArr[1];
+				if(strpos($tUrl,"THIS") > -1){
+					$tUrl = $this->fillThis($tUrl, $field);
+				}
+			}
+			else{
+                $file = $vArr[0];
+                if($file == 'THIS'){
+                    $file = $result[$field];
+                }
+    			else if(strpos($file, 'THIS') !== false){
+    				$file = str_replace('THIS',$result[$field], $file); # <href>http://THIS::a=1::跳转登录::blank=1</href>
+    			}
+                $pArr = explode(",", $vArr[1]);
+                $title = $vArr[2];
+				$title = $this->fillThis($title, $field);
+                foreach($pArr as $k=>$v){
+                    $para = explode("=", $v);
+                    $tUrl .= $para[0].'=';
+                    if(count($para) > 2){
+                        $para[1] = $para[1]."=".$para[2];
+                    }
+					if(inString('THIS', $para[1])){
+						$tUrl = $this->fillThis($tUrl.$para[1], $field=1); # trigger THIS_xxxx
+					}
+					else if(strpos($para[1], "'") === 0){
+                        $tUrl .= substr($para[1], 1, strlen($para[1])-2);
+                    }
+					else{
+                        $tUrl .= $result[$para[1]];
+                    }
+                    $tUrl .= "&";
+                }
+                $tUrl = $file."?".substr($tUrl, 0, strlen($tUrl)-1);
+				$tUrl = $this->appendSid($tUrl);
+                $fourthPara = $vArr[3];
+                if($fourthPara != ''){
+                    if(strpos($fourthPara,"confirm=1") !== false){
+                        $needJsConfirm = 1;
+                    }
+                    if(strpos($fourthPara,"blank=1") !== false){
+                        $needBlank = 1;
+                    }
+                    else if(strpos($fourthPara,"blank=2") !== false){
+                        $needBlank = 2;
+                    }
+                }
+                if($needJsConfirm == 1){
+                    $tUrl = "javascript:if(window.confirm('确认要执行此操作吗?')){document.location.href='".$tUrl."';}";
+                }
+			}
+			if($needBlank == 1){
+			    $needBlank = "_blank";
+			}
+			else if($needBlank == 2){
+			    $needBlank = "_top";
+			}
+			else{
+			    $needBlank = "_self";
+			}
+            #return array($tUrl, $title, $needBlank);
+            $actArr[] = array($tUrl, $title, $needBlank);
+        }
+
+        } # end tmpstr
+
+        debug($actArr);
+
+        return $actArr;
+    }
+	
 	#
     # functions based on $field, below
 	#

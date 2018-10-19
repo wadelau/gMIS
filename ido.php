@@ -127,7 +127,9 @@ $out .= "<table style=\"color:white;font-weight:bold;\" id=\"addareaextratab\"><
 
 if($act == ''){
     $out .= "<script async type=\"text/javascript\">if(typeof doAction == 'undefined'){ var doActionTimer=window.setTimeout(function(){ doAction('".$jdo."&act=list'); }, 2*1000); }else{ doAction('".$jdo."&act=list');}</script>\n";
+	if(false){ # auto trigger by js, Oct 17, 2018
 	$out .= "<script async type=\"text/javascript\">if(typeof doAction == 'undefined'){ var doActionTimer=window.setTimeout(function(){ doActionEx('".$jdo."&act=pickup', 'contentarea'); }, 2*1000); }else{ doActionEx('".$jdo."&act=pickup', 'contentarea');}</script>\n";
+	}
 }
 else{
     $out .= "<script async type=\"text/javascript\">if(typeof doAction == 'undefined'){ var doActionTimer=window.setTimeout(function(){ doActionEx('".$jdo."&act=".$act."','contentarea'); }, 2*1000); }else{ doActionEx('".$jdo."&act=".$act."','contentarea');}</script>\n";

@@ -27,13 +27,17 @@ if($mode != ''){
             'dodeepsearch' => 'r',
             'pivot' => 'r',
             'pivot-do' => 'r',
+			'pickup' => 'r',
             );
     $modechar = $act2mode[$act];
     if(!isset($modechar)){
         error_log(__FILE__.": unknown act:[$act] in act2mode.201202282117");
     }
 	else{
-        if(strpos($mode, $modechar) === false){
+		if($mod == 'o-w'){
+			# @todo
+		}
+        else if(strpos($mode, $modechar) === false){
             $out = "<p>访问被拒绝. <br/>act:[$act] is not allowed in mode:[$mode]. 201202282143\n";
             $out .= "<br/><br/> 联系上级或技术支持<a href='mailto:".$_CONFIG['adminmail']."?subject="
                     .$_CONFIG['agentname']."权限申请访问$tbl@$db'> 申请变更 </a> <br/><br/></p>";

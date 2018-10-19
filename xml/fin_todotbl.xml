@@ -1,11 +1,14 @@
 ﻿<?xml version="1.0" standalone="yes"?>
 <tablecfg>
-    <table name="addresstbl">
+    <table name="fin_todotbl">
         <chnname>待处理任务管理表</chnname>
-        <listfieldcount>6</listfieldcount> <!--max_disp_cols, recommend 11-->
+        <listfieldcount>6</listfieldcount> <!--max_disp_cols-->
         <since>20121024</since>
         <creator>Xenxin</creator>
         <!-- <superaccess>inherit::id=USER_ID::rw</superaccess> -->
+        <managemode>o-w</managemode><!-- record owner write only, others cannot write -->
+        <actoption>jdo.php::tbl=THIS_TBL,pnskpid=THIS_ID,id=THIS_ID,pnsktriggerbyparent=THIS_triggerbyparent,pnsktriggerbyparentid=THIS_triggerbyparentid,act='addbycopy'::回复::confirm=0,blank=0
+            |jdo.php::tbl=THIS_TABLE,pnskpid=THIS_ID,id=THIS_ID,act='addbycopy'::转交::confirm=0,blank=0</actoption>
     </table>
     <field name="id">
       <chnname>序号</chnname>
@@ -13,27 +16,32 @@
 
     <field name="taskname">
       <chnname>任务名</chnname>
-    </field>
-	<field name="taskmemo">
-      <chnname>任务描述</chnname>
-	  <inputtype>textarea</inputtype>
+      <memo>新建任务时填写; &lt;br/>回复或转交任务时忽略过;</memo>
     </field>
 	
     <field name="tasktype">
       <chnname>任务类型</chnname>
-	  <selectoption>1:JoyTypeA|2:JobTypeB|0:Other</selectoption>
+	  <selectoption>1:生产子系统|2:统计子系统|0:Other</selectoption>
     </field>	
 
     <field name="triggerbyparent">
       <chnname>需方组</chnname>
 	   <selectoption>fromtable::info_grouptbl::groupname</selectoption>
 	   <listview>0</listview>
+       <defaultvalue>system:GROUPID</defaultvalue>
+       <!-- <readonly>1</readonly> -->
+       <delayjsaction>onload::3::if(true){ var tmpObj=_g('triggerbyparent'); if(tmpObj){tmpObj.disabled=true;} console.log('triggerbyparent set disabled.'); };</delayjsaction>
+       <memo>Auto Fill...</memo>
     </field>
     <field name="triggerbyparentid">
       <chnname>需方用户</chnname>
 	  <selectoption>fromtable::info_usertbl::email</selectoption>
+       <defaultvalue>system:USERID</defaultvalue>
+       <!-- <readonly>1</readonly> -->
+       <delayjsaction>onload::3::if(true){ var tmpObj=_g('triggerbyparentid'); if(tmpObj){tmpObj.disabled=true;} console.log('triggerbyparentid set disabled.'); };</delayjsaction>
+       <memo>Auto Fill...</memo>
     </field>	 
-     <field name="togroup">
+    <field name="togroup">
       <chnname>供方组</chnname>
 	  <selectoption>fromtable::info_grouptbl::groupname</selectoption>
 	  <listview>0</listview>
@@ -42,26 +50,63 @@
       <chnname>供方用户</chnname>
 	  <selectoption>fromtable::info_usertbl::email</selectoption>
     </field> 
+    <field name="fwgroup">
+      <chnname>转发至组</chnname>
+	  <selectoption>fromtable::info_grouptbl::groupname</selectoption>
+	  <listview>0</listview>
+      <jsaction>onclick::if('THIS_id'==''){ this.disabled=true; console.log('fwgroup has been set disabled.'); };</jsaction>
+      <memo>新建任务时忽略过;
+        &lt;br/>回复或转交任务时据实填写;</memo>
+    </field> 
+    <field name="fwuser">
+      <chnname>转发至用户</chnname>
+	  <selectoption>fromtable::info_usertbl::email</selectoption>
+      <jsaction>onclick::if('THIS_id'==''){ this.disabled=true; console.log('fwuser has been set disabled.'); };</jsaction>
+      <memo>新建任务时忽略过; &lt;br/>回复或转交任务时据实填写;</memo>
+    </field> 
 	<field name="inserttime">
       <chnname>開始時間</chnname>
 	  <listview>2</listview>
-	  <readonly>1</readonly>
+      <readonly>1</readonly>
+      <memo>Auto Fill...</memo>
     </field> 
 	<field name="updatetime">
       <chnname>更新時間</chnname>
 	  <listview>2</listview>
-	  <readonly>1</readonly>
+      <readonly>1</readonly>
+      <memo>Auto Fill...</memo>
     </field> 
-	<field name="istate">
+  	<field name="istate">
 		<chnname>状态</chnname>
 		<selectoption>1:待做|2:进行中|0:已完成|3:擱置|-1:取消</selectoption>
+        <delayjsaction>onload::3::if('THIS_ID'==''){parent.fillReset('istate','select',1);}</delayjsaction>
+        <css>0:greycolor|1::redcolor|2::greencolor|3::purplecolor</css>
 	</field>
+	<field name="taskmemo">
+      <chnname>任务描述</chnname>
+	  <inputtype>textarea</inputtype>
+      <delayjsaction>onload::3::if('THIS_pid'!=''){ parent._g('taskmemo').readOnly=true; console.log('taskmemo has been set disabled.'); };</delayjsaction>
+      <memo>新建任务时填写; &lt;br/>回复或转交任务时忽略过;</memo>
+    </field>
+    <field name="taskreply">
+      <chnname>处理进度</chnname>
+	  <inputtype>textarea</inputtype>
+      <delayjsaction>onload::3::if('THIS_id'==''){ parent._g('taskreply').readOnly=true; console.log('taskreplay has been set disabled.'); };</delayjsaction>
+      <memo>新建任务时忽略过;
+        &lt;br/>回复或转交任务时据实填写;</memo>
+    </field>
 	<field name="taskfile">
       <chnname>附件</chnname>
 	  <inputtype>file</inputtype>
     </field>
+    <field name="pid">
+        <chnname>任务主线</chnname>
+        <!-- <readonly>1</readonly> -->
+        <delayjsaction>onload::3::if(true){ parent._g('pid').readOnly=true; console.log('pid has been set disabled.'); };</delayjsaction>
+        <memo>Auto Fill...</memo>
+    </field>
 
-	 <field name="operator">
+  	<field name="operator">
       <chnname>操作人</chnname>
 	  <selectoption>fromtable::info_usertbl::email</selectoption>
     </field>

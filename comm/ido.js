@@ -13,12 +13,16 @@
 //- bugfix for async, 19:14 Thursday, 15 March, 2018
 //- imprvs on pivot with addgroupbyseg, 17 August, 2018
 //- imprvs on pickup, Fri Sep 21 21:09:34 CST 2018
+//- imprvs on todo/filedir, Sat Oct 20 CST 2018
 
 var currenttbl = currenttbl ? currenttbl : '';
 var currentdb =  currentdb ? currentdb : '';
 var currentpath = currentpath ?  currentpath : '';
 var currentlistid = currentlistid ? currentlistid : {}; //-- associative array
 var userinfo =  userinfo ? userinfo : {};
+
+//-
+userinfo.pickUpFromTag = '&frompickup=1';
 
 if(!window.console){
 	console = { log:function(){}};
@@ -41,6 +45,15 @@ function doAction(strUrl){
 	myAjax.set('forceframe',true);
 	myAjax.set('nobacktag','nobacktag');
 	var tmps = myAjax.get( appendTab(strUrl) );
+	if(true){
+        if(strUrl.indexOf('&act=list') > -1 && strUrl.indexOf(userinfo.pickUpFromTag) == -1){
+            var pickUpUrl = strUrl.replace('&act=list', '&act=pickup');
+            var doActionPickUpTimer=window.setTimeout(function(){ doActionEx(pickUpUrl, 'contentarea'); }, 2*1000);
+            console.log('doAction: found list refresh, trigger pickup reload.... timer:'+doActionPickUpTimer+' purl:'+pickUpUrl);
+			if(typeof userinfo.PickUpList == 'undefined'){ userinfo.PickUpList = {}; }
+            userinfo.PickUpList.latestUrl = pickUpUrl;
+        }
+    }
 	return rtn;
 }
 
@@ -63,6 +76,16 @@ function doActionEx(strUrl,sActive){
 	myAjax.set('nobacktag','nobacktag');
 	myAjax.set('forceframe',true);
 	var tmps = myAjax.get( appendTab(strUrl) );
+	if(true){
+        if(sActive == 'actarea' && strUrl.indexOf('&act=list') > -1 && strUrl.indexOf(userinfo.pickUpFromTag) == -1){
+            var pickUpUrl = strUrl.replace('&act=list', '&act=pickup');
+            var doActionPickUpTimer=window.setTimeout(function(){ doActionEx(pickUpUrl, 'contentarea'); }, 2*1000);
+            console.log('doActionEx: found list refresh, trigger pickup reload.... timer:'+doActionPickUpTimer+' purl:'+pickUpUrl);
+			if(typeof userinfo.PickUpList == 'undefined'){ userinfo.PickUpList = {}; }
+            userinfo.PickUpList.latestUrl = pickUpUrl;
+        }
+    }
+	return tmps;
 }
 
 function _g( str ){
@@ -628,6 +651,7 @@ function doActSelect(sSel, sUrl, iId, fieldVal){
 							resp = resp_2[1];
 						}
 						var json_resp = JSON.parse(resp);
+						if(typeof json_resp.resultobj == 'undefined'){ json_resp.resultobj = {}; }
 						var iId = json_resp.resultobj.targetid; //- anonymous func embeded in another anonymos func, cannot share variables in runtime.
 						//console.log('delete_resp_after-2:['+resp+'] id:['+iId+']');
 						if(json_resp.resultobj.resultcode == 0){
@@ -1485,11 +1509,13 @@ userinfo.userAgent = {};
 //- pick up and make a reqt
 //- Fri Sep 21 19:59:08 CST 2018
 //- see class/pagenavi
-userinfo.PickUpList = {};
+//userinfo.PickUpList = {};
+if(typeof userinfo.PickUpList == 'undefined'){ userinfo.PickUpList = {}; }
 function fillPickUpReqt(myUrl, field, fieldv, opStr, linkObj){
     console.log("url:"+myUrl+", field:"+field+" link-text:"+linkObj.text);
     var linkText = '';
 	var base62xTag = 'b62x.';
+	var pickUpFromTag = userinfo.pickUpFromTag;
     if(linkObj){
         linkText = linkObj.text;
         if(linkText.substring(0, 1) == '+'){
@@ -1621,7 +1647,7 @@ function fillPickUpReqt(myUrl, field, fieldv, opStr, linkObj){
         userinfo.PickUpList.latestUrl = myUrl;
 
         //-
-        doActionEx(myUrl+'&act=list&pnsm=1', 'actarea');
+        doActionEx(myUrl+'&act=list&pnsm=1'+pickUpFromTag, 'actarea');
 
     }
     else if(opStr == 'moreoption'){
@@ -1643,5 +1669,32 @@ function fillPickUpReqt(myUrl, field, fieldv, opStr, linkObj){
     }
     else{
         console.log("Unknown opstr:["+opStr+"].");
+    }
+}
+
+//- fill reset value
+//- Thu Apr 12 10:36:27 CST 2018, tdid=537
+function fillReset(fieldId, iType, myVal){
+    var f = document.getElementById(fieldId);
+    if(typeof f != 'undefined'){
+        var oldv = f.value;
+        if(true){
+            if(iType == null || iType == ''){
+                iType = 'input';
+            }
+            if(iType == 'input'){
+                f.value = myVal;
+            }
+            else if(iType == 'select'){
+                parent.setSelectIndex(fieldId, myVal);
+            }
+            console.log(' myVal:['+myVal+'] fillReset succ.');
+        }
+        else{
+            console.log('oldv not empty. filReset stopped.');
+        }
+    }
+    else{
+        console.log('fieldId:['+fieldId+'] invalid. fillReset failed.');
     }
 }

@@ -1,7 +1,7 @@
 <?xml version="1.0" standalone="yes"?>
 <tablecfg>   
     <table name="info_grouptbl">
-        <chnname>笔记</chnname>
+        <chnname>用户分组</chnname>
         <listfieldcount>5</listfieldcount> <!--max_disp_cols-->
         <since>20121022</since>
         <creator>sunlit</creator>

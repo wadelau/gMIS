@@ -24,7 +24,7 @@ $out .= "<tr><td width=\"11%\">&nbsp;</td>
 			
 $hmorig = array();
 $isAddByCopy = false;
-if(startsWith($act, "modify") || $act == 'addbycopy'){
+if(startsWith($act, "modify")){
     if($hasid){
         $gtbl->setId($id);
         $hmorig = $gtbl->getBy("*", null);
@@ -45,22 +45,47 @@ if(startsWith($act, "modify") || $act == 'addbycopy'){
         }
         $hmorig = $gtbl->getBy("*", implode(" and ", $fieldargv));
     }
-	if($act == 'addbycopy' && $id != ''){
-		$id = '';
-		$gtbl->setId($id);
-		$isAddByCopy = true;
-	}
+    # very first row
+    if($hmorig[0]){
+        $hmorig = $hmorig[1][0]; 
+    }
 }
 else{
-    foreach($_REQUEST as $k=>$v){
-        if(startsWith($k,"pnsk")){
-            $hmorig[substr($k,4)] = $v;
+    # read copy obj
+    if($act == 'addbycopy'){
+        if($hasid){
+            $gtbl->setId($id);
+            $hmorig = $gtbl->getBy("*", null);
+            $gtbl->setId('');
         }
-		else if(startsWith($k, 'parent')){ # Attention! parentid
-			$k2 = $v;
-			$hmorig[$k2] = $_REQUEST[$k2];	
-		}
+        else{
+            $fieldargv = "";
+            for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
+                $field = $gtbl->getField($hmi);
+                if($field == null | $field == '' 
+                        || $field == $gtbl->getMyId()){
+                    continue;
+                }
+                if(array_key_exists($field, $_REQUEST)){
+                    $gtbl->set($field, $_REQUEST[$field]);
+                    $fieldargv[] = $field."=?";
+                }
+            }
+            $hmorig = $gtbl->getBy("*", implode(" and ", $fieldargv));
+        }
+        if($act == 'addbycopy' && $id != ''){
+            $id = '';
+            $gtbl->setId($id);
+            $isAddByCopy = true;
+        }
+        # very first row
+        if($hmorig[0]){
+            $hmorig = $hmorig[1][0]; 
+        }
+
     }
+
+    # reset preset info
     for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
         $field = $gtbl->getField($hmi);
         if($field == null | $field == '' 
@@ -70,18 +95,29 @@ else{
         $fielddf = $gtbl->getDefaultValue($field);
         if($fielddf != ''){
             $tmparr = explode(":", $fielddf);
-            if($tmparr[0] == 'request'){ # see xml/hss_info_attachfiletbl.xml
+            if($tmparr[0] == 'request'){ # see xml/info_attachfiletbl.xml
                 $hmorig[$field] = $_REQUEST[$tmparr[1]];
-            }else{
-                $hmorig[$field] = $tmparr[0]; # see xml/hss_tuanduitbl.xml
+            }
+            else if($tmparr[0] == 'system'){
+                $systemInfoArr = array('USERID'=>$user->getId(), 'GROUPID'=>$user->getGroup());
+                $hmorig[$field] = $systemInfoArr[$tmparr[1]];
+            }
+            else{
+                $hmorig[$field] = $tmparr[0]; # see xml/tuanduitbl.xml
             }
         }
     }
-}
-
-# very first row
-if($hmorig[0]){
-    $hmorig = $hmorig[1][0]; 
+    # highest level
+    foreach($_REQUEST as $k=>$v){
+        if(startsWith($k,"pnsk")){
+            $hmorig[substr($k,4)] = $v;
+        }
+		else if(startsWith($k, 'parent')){ # Attention! parentid
+			$k2 = $v;
+			$hmorig[$k2] = $_REQUEST[$k2];	
+		}
+    }
+    #print_r($hmorig);
 }
 
 $closedtr = 1; $opentr = 0; # just open a tr, avoid blank line, Sun Jun 26 10:08:55 CST 2016
@@ -180,15 +216,15 @@ for($hmi=$min_idx; $hmi<=$max_idx;$hmi++){
             $hmorig[$field] = $srcprefix.'/'.$hmorig[$field];
         }
         if($columni % 2 != 0 || $gtbl->getSingleRow($field)){
-		$out .= "</tr><tr height=\"30px\" valign=\"middle\"  onmouseover=\"javascript:"
-	    		."this.style.backgroundColor='".$hlcolor."';\" onmouseout=\"javascript:"
-			."this.style.backgroundColor='';\">";
-		$opentr = 1;
+			$out .= "</tr><tr height=\"30px\" valign=\"middle\"  onmouseover=\"javascript:"
+					."this.style.backgroundColor='".$hlcolor."';\" onmouseout=\"javascript:"
+				."this.style.backgroundColor='';\">";
+			$opentr = 1;
         }
         $fieldv = $hmorig[$field]; $fieldv = str_replace($shortDirName."/","", $fieldv);
         $isimg = isImg($fieldv);
-        $out .= "<td nowrap><b>".$gtbl->getCHN($field)."</b>:</td>"
-			."<td style='word-break:break-all;'><input type=\"file\" id=\"".$field
+        $out .= "<td nowrap style=\"vertical-align:top\"><b>".$gtbl->getCHN($field)."</b>:</td>"
+			."<td style='word-break:break-all;vertical-align:top;'><input type=\"file\" id=\"".$field
 			."\" name=\"".$field."\" size=\"20\" class=\"noneinput wideinput\" ".$gtbl->getJsAction($field)
 			." /> <input type=\"hidden\" name=\"".$field."_orig\" value=\"".$fieldv."\" /> <br/> "
 			.($fieldv==''?'':$fieldv)." ".$gtbl->getMemo($field)."</td>";
