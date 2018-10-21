@@ -8,7 +8,7 @@
         <!-- <superaccess>inherit::id=USER_ID::rw</superaccess> -->
         <managemode>o-w</managemode><!-- record owner write only, others cannot write -->
         <actoption>jdo.php::tbl=THIS_TBL,pnskpid=THIS_ID,id=THIS_ID,pnsktriggerbyparent=THIS_triggerbyparent,pnsktriggerbyparentid=THIS_triggerbyparentid,act='addbycopy'::回复::confirm=0,blank=0
-            |jdo.php::tbl=THIS_TABLE,pnskpid=THIS_ID,id=THIS_ID,act='addbycopy'::转交::confirm=0,blank=0</actoption>
+            |jdo.php::tbl=THIS_TBL,pnskpid=THIS_ID,id=THIS_ID,pnsktriggerbyparent=THIS_triggerbyparent,pnsktriggerbyparentid=THIS_triggerbyparentid,act='addbycopy',pnskisforward=1::转交::confirm=0,blank=0</actoption>
     </table>
     <field name="id">
       <chnname>序号</chnname>
@@ -54,15 +54,15 @@
       <chnname>转发至组</chnname>
 	  <selectoption>fromtable::info_grouptbl::groupname</selectoption>
 	  <listview>0</listview>
-      <jsaction>onclick::if('THIS_id'==''){ this.disabled=true; console.log('fwgroup has been set disabled.'); };</jsaction>
+      <jsaction>onclick::if('THIS_id'==''||'THIS_isforward'!='1'){ this.disabled=true; console.log('fwgroup has been set disabled.'); };</jsaction>
       <memo>新建任务时忽略过;
-        &lt;br/>回复或转交任务时据实填写;</memo>
+        &lt;br/>转交任务时据实填写;</memo>
     </field> 
     <field name="fwuser">
       <chnname>转发至用户</chnname>
 	  <selectoption>fromtable::info_usertbl::email</selectoption>
-      <jsaction>onclick::if('THIS_id'==''){ this.disabled=true; console.log('fwuser has been set disabled.'); };</jsaction>
-      <memo>新建任务时忽略过; &lt;br/>回复或转交任务时据实填写;</memo>
+      <jsaction>onclick::if('THIS_id'==''||'THIS_isforward'!='1'){ this.disabled=true; console.log('fwuser has been set disabled.'); };</jsaction>
+      <memo>新建任务时忽略过; &lt;br/>转交任务时据实填写;</memo>
     </field> 
 	<field name="inserttime">
       <chnname>開始時間</chnname>

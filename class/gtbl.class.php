@@ -370,6 +370,7 @@ class GTbl extends WebApp{
     
         $tmpStrArr = explode('|', $tmpstr);
         foreach ($tmpStrArr as $k=>$tmpstr){
+            $tUrl = '';
             $vArr = explode("::", $tmpstr);
 			if(startsWith($vArr[0],"javascript:")){
 				$tUrl = $vArr[0];
