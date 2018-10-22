@@ -7,7 +7,7 @@
 $dnld_dir = $appdir."/dnld";
 $dnld_file = "data_".str_replace("hss_","",$tbl)."_".date("Y-m-d").".csv";
 
-$myfp = fopen($dnld_dir.'/'.$dnld_file, 'w');
+$myfp = fopen($dnld_dir.'/'.$dnld_file, 'wb');
 fwrite($myfp, chr(0xEF).chr(0xBB).chr(0xBF));
 if($myfp){
     $fieldsname = array();
@@ -40,7 +40,7 @@ if($myfp){
 fclose($myfp);
 
 $out .= "<script type=\"text/javascript\">";
-$out .= "window.open('".$rtvdir."/dnld/".$dnld_file."','Excel File Download','scrollbars,toolbar,location=0');";
+$out .= "window.open('".$rtvdir."/dnld/".$dnld_file."','Excel File Download','scrollbars,toolbar,location=0,status=yes,resizable,width=600,height=400'');";
 $out .= "</script>";
 
 ?>
