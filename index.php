@@ -14,7 +14,7 @@ $moduleNeedDb = '';
 
 $hm = $gtbl->execBy($sql="select * from ".$_CONFIG['tblpre']."fin_todotbl where (togroup in (" # for multiple groups
         .$user->getGroup().") or touser=".$user->getId()." or triggerbyparent in (".$user->getGroup().") or triggerbyparentid="
-        .$user->getId().") and istate in (1,2) order by istate desc, id desc limit 7 ", null,
+        .$user->getId().") and istate in (1,2) and pid=0 order by istate desc, id desc limit 7 ", null,
 		$withCache=array('key'=>'info_todo-select-'.$user->getId()));
 if($hm[0]){
     $hm = $hm[1];
