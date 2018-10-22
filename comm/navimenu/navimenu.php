@@ -1,12 +1,12 @@
 <?php
 
 $myNavi = new PageNavi();
-$pnscTodo = "state in (1,2) and (touser like '".$user->getId()."' or togroup like '".$user->getGroup()
+$pnscTodo = "istate in (1,2) and pid=0 and (touser like '".$user->getId()."' or togroup like '".$user->getGroup()
 ."' or triggerbyparentid like '".$user->getId()."' or triggerbyparent like '".$user->getGroup()."')";
 $pnsckTodo = $myNavi->signPara($pnscTodo);
 $pnscTodo = base62x($pnscTodo);
 
-$pnscDone = "state in (-2,-1,0) and (touser like '".$user->getId()."' or togroup like '".$user->getGroup()
+$pnscDone = "istate in (-2,-1,0) and pid=0 and (touser like '".$user->getId()."' or togroup like '".$user->getGroup()
 ."' or triggerbyparentid like '".$user->getId()."' or triggerbyparent like '".$user->getGroup()."')";
 $pnsckDone = $myNavi->signPara($pnscDone);
 $pnscDone = base62x($pnscDone);

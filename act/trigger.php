@@ -31,6 +31,7 @@ if(true){
 # some triggers bgn, added on Fri Mar 23 21:51:12 CST 2012
 foreach($fieldlist as $i=>$field){
 # e.g. <trigger>1::copyto::hss_dijietbl::tuanid=id::tuanid=id</trigger>
+#		0:currentFieldValue, 1:action, 2:targetTbl, 3:targetField, 4:where
     $triggers = $gtbl->getTrigger($field);
     if($triggers != ''){
         error_log(__FILE__.": triggers:[".$triggers."]");
@@ -40,8 +41,10 @@ foreach($fieldlist as $i=>$field){
             $tArr = explode("::", $trigger);
             if($tArr[0] == 'ALL' || $tArr[0] == $gtbl->get($field)){
                 $tmptbl = $tArr[2];
+				if(!startsWith($tmptbl, $_CONFIG['tblpre'])){
+					$tmptbl = $_CONFIG['tblpre'].$tmptbl;
+				}
                 if($tArr[1] == 'copyto'){
-
                     $sqlchk = "select id from $tmptbl where ";
                     $chkFArr = explode(",", $tArr[4]);
                     foreach($chkFArr as $k=>$v){
@@ -52,10 +55,9 @@ foreach($fieldlist as $i=>$field){
                     }
                     $sqlchk = substr($sqlchk, 0, strlen($sqlchk)-4);
                     $sqlchk .= " limit 1";
-
                     $sql = "insert into ".$tmptbl." set ";
                     $sqlupd = "update ".$tmptbl." set ";
-                    $fieldArr = explode(",",$tArr[4]);
+                    $fieldArr = explode(",",$tArr[3]);
                     foreach($fieldArr as $k=>$v){
                         if($v != ''){
                             $vArr = explode("=",$v);
@@ -66,7 +68,7 @@ foreach($fieldlist as $i=>$field){
                                 $vArr[1] = $field;
                             }
                             $tmpfieldv = $gtbl->get($vArr[1]);
-                            if($vArr[1] == 'THIS_TABLE'){
+                            if($vArr[1] == 'THIS_TABLE' || $vArr[1] == 'THIS_TBL'){
                                 $tmpfieldv = $tbl;
                             }else if($vArr[1] == 'THIS_ID'){
                                 $tmpfieldv = $id;
@@ -88,10 +90,9 @@ foreach($fieldlist as $i=>$field){
                         $tmphm = $gtbl->execBy($sqlupd, null);
                         error_log(__FILE__.": trigger upd sql:[".$sqlupd."]");
                     }
-#print_r($tmphm);
-
-                }else if($tArr[1] == 'lockto'){
-
+					#print_r($tmphm);
+                }
+				else if($tArr[1] == 'lockto'){
                     $sql = "replace into ".$tmptbl." set inserttime=NOW(), operator='".$userid."', ";
                     $sqlchk = "select id from $tmptbl where ";
                     $fieldArr = explode(",",$tArr[3]);
@@ -105,7 +106,7 @@ foreach($fieldlist as $i=>$field){
                                 $vArr[1] = $field;
                             }
                             $tmpfieldv = $gtbl->get($vArr[1]);
-                            if($vArr[1] == 'THIS_TABLE'){
+                            if($vArr[1] == 'THIS_TABLE' || $vArr[1] == 'THIS_TBL'){
                                 $tmpfieldv = $tbl;
                             }else if($vArr[1] == 'THIS_ID'){
                                 $tmpfieldv = $id;
@@ -117,7 +118,7 @@ foreach($fieldlist as $i=>$field){
                     $sql .= " mode='r' ";
                     $sqlchk = substr($sqlchk, 0, strlen($sqlchk)-3);
                     $tmphm = $gtbl->execBy($sql,null);
-#print_r($tmphm);
+					#print_r($tmphm);
 
                 }else if($tArr[1] == 'extraact'){ 
                     # see xml/hss_tuandui_shouzhitbl.xml
@@ -131,8 +132,6 @@ foreach($fieldlist as $i=>$field){
         }
     }
 }
-
 # some triggers end, added on Fri Mar 23 21:51:12 CST 2012
-
 
 ?>

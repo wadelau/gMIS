@@ -751,7 +751,6 @@ function getUrlByTime(baseUrl, timepara, timeop, timeTag){
 
 
 //-- old functions
-
 function updateTag(tagtype,tagid,str){
 	try{
 		if(tagtype=='div' || tagtype=='span'){
@@ -768,7 +767,7 @@ function updateTag(tagtype,tagid,str){
 
 }
 
-
+//-
 function checkAll(){
 	var boxValue="";
 	for(var i=0;i<document.all.checkboxid.length;i++){
@@ -779,6 +778,7 @@ function checkAll(){
 	window.alert("something wrong. 03061743.");
 }
 
+//-
 function uncheckAll(){
 	var box1="";
 	for(var i=0;i<document.all.checkboxid.length;i++){
@@ -796,7 +796,7 @@ function uncheckAll(){
   window.alert("something wrong. 03061744.");
 }
 
-
+//-
 function batchDelete(url,checkboxid){
 	var box="";
 	for(var i=0;i<document.all.checkboxid.length;i++){
@@ -827,6 +827,7 @@ function batchDelete(url,checkboxid){
 	}
 }
 
+//-
 function WdatePicker(){
     var evt;
     if(navigator.userAgent.toLowerCase().indexOf('firefox/') > -1){ // firefox
@@ -856,6 +857,7 @@ function WdatePicker(){
     }
 }
 
+//-
 var DatePicker = function () {
     var $ = function (i) {return document.getElementById(i)},
         addEvent = function (o, e, f) {o.addEventListener ? o.addEventListener(e, f, false) : o.attachEvent('on'+e, function(){f.call(o)})},
@@ -991,6 +993,7 @@ function getCont(sId){
     return cont;
 }
 
+//-
 function setCont(sId, sCont){
     var obj = document.getElementById(sId);
     var objtype = '';
@@ -1007,6 +1010,7 @@ function setCont(sId, sCont){
     return 0;
 }
 
+//-
 function openEditor(sUrl, sField){
     document.getElementById(sField+"_myeditordiv").innerHTML = "<iframe name=\'myeditoriframe\' id=\'myeditoriframe\' src=\'"+sUrl+"\' width=\'680px\' height=\'450px\' border=\'0px\' frameborder=\'0px\'></iframe>"; 
 } 
@@ -1020,6 +1024,8 @@ function changeBGC(obj, onoff){
 		obj.style.background='#fff';
 	}
 }
+
+//-
 function makeSelect(sId, sCont, sDiv, sSele, iStop){
 	//-- this would be called after targetObj.onblur
 	setCont(sId, sCont);
@@ -1049,6 +1055,7 @@ function makeSelect(sId, sCont, sDiv, sSele, iStop){
 	}
 }
 
+//-
 function input2Search(inputx, obj, div3rd, valueoption){
 	var lastSearchTime = userinfo.lastInput2SearchTime;
 	var lastSearchItem = userinfo.lastInput2SearchItem;
@@ -1167,9 +1174,9 @@ function input2Search(inputx, obj, div3rd, valueoption){
 		userinfo.lastInput2SearchItem = inputVal;
 		userinfo.input2Select.makeSelect = 0; //-- clear makeSelect
 	}
-
 }
 
+//-
 function showActList(nId, isOn, sUrl){
 	var divId = 'divActList_'+nId;		
 	//console.log((new Date())+": divId:["+divId+"]");
@@ -1258,10 +1265,9 @@ function copyAndReturn(theField){
 
 }
 
-
-userinfo.showList = {}; //- holder of current active showing div
 //- show pivot list
 //- Xenxin@Ufqi, 18:23 05 December 2016
+userinfo.showList = {}; //- holder of current active showing div
 function showPivotList(nId, isOn, sUrl, sName){
 	var divPrefix = 'divPivotList_';
 	var divId = divPrefix + nId;
@@ -1698,3 +1704,15 @@ function fillReset(fieldId, iType, myVal){
         console.log('fieldId:['+fieldId+'] invalid. fillReset failed.');
     }
 }
+
+//-
+if(typeof userinfo.urlParams == 'undefined'){ userinfo.urlParams = {}; }
+function getUrlParams(){
+    var vars = {};
+    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m, key, value) {
+        vars[key] = value;
+        });
+    //console.log('vars:'+JSON.stringify(vars));    
+    return vars;
+};
+userinfo.urlParams = getUrlParams();
