@@ -12,7 +12,6 @@ if(true){
     if($id != ''){
         $tblTrigger = $gtbl->getTrigger('');
         #error_log(__FILE__.": act:[$act] id:[$id] tbl triggers:[".$triggers=$gtbl->getTrigger()."]");
-        #error_log(__FILE__.": act:[$act] id:[$id] tbl triggers:[".$triggers=$gtbl->getTrigger('')."]");
         if($tblTrigger != ''){
             $gtbl->setTrigger($IDTAG, $tblTrigger);
             error_log(__FILE__.": id triggers:[".$triggers=$gtbl->getTrigger($IDTAG)."]");
@@ -29,9 +28,10 @@ if(true){
 }
 
 # some triggers bgn, added on Fri Mar 23 21:51:12 CST 2012
+# see xml/fin_todotbl.xml
 foreach($fieldlist as $i=>$field){
-# e.g. <trigger>1::copyto::hss_dijietbl::tuanid=id::tuanid=id</trigger>
-#		0:currentFieldValue, 1:action, 2:targetTbl, 3:targetField, 4:where
+# e.g. <trigger>1::copyto::dijietbl::tuanid=id::tuanid=id</trigger>
+#		0:currentFieldValue, 1:action, 2:targetTbl, 3:targetField, 4:where, 5:extra
     $triggers = $gtbl->getTrigger($field);
     if($triggers != ''){
         error_log(__FILE__.": triggers:[".$triggers."]");
@@ -79,16 +79,26 @@ foreach($fieldlist as $i=>$field){
                     }
                     $sql = substr($sql, 0, strlen($sql)-1);
                     $sqlupd = substr($sqlupd, 0, strlen($sqlupd)-1);
-                    error_log(__FILE__.": trigger: sqlchk:[".$sqlchk."]");
+                    debug(" trigger: sqlchk:[".$sqlchk."]");
+					$tmpExtraArr = explode(',', $tArr[5]); # extra
+                    $allowInsert = true;
+                    if(in_array('NO_INSERT', $tmpExtraArr)){
+                        $allowInsert = false;
+                    }
                     $tmphm = $gtbl->execBy($sqlchk, null);
                     if(!$tmphm[0]){
-                        $tmphm = $gtbl->execBy($sql,null);
-                        error_log(__FILE__.": trigger insert sql:[".$sql."]");
+                        if($allowInsert){
+                            $tmphm = $gtbl->execBy($sql,null);
+                        }
+                        else{
+                            debug('trigger skip for not allow insert. sql:['.$sql.']');
+                        }
+                        debug(" trigger insert sql:[".$sql."] extraArr:[".serialize($tmpExtraArr)."]");
                     }else{
                         $newtmphm = $tmphm[1];
                         $sqlupd = $sqlupd." where id='".$newtmphm[0]['id']."' limit 1";
                         $tmphm = $gtbl->execBy($sqlupd, null);
-                        error_log(__FILE__.": trigger upd sql:[".$sqlupd."]");
+                        debug(" trigger upd sql:[".$sqlupd."]");
                     }
 					#print_r($tmphm);
                 }
