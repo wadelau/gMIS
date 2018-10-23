@@ -7,8 +7,9 @@
         <creator>Xenxin</creator>
         <!-- <superaccess>inherit::id=USER_ID::rw</superaccess> -->
         <managemode>o-w</managemode><!-- record owner write only, others cannot write -->
-        <actoption>jdo.php::tbl=THIS_TBL,pnskpid=THIS_ID,id=THIS_ID,pid=THIS_pid,pnsktriggerbyparent=THIS_triggerbyparent,pnsktriggerbyparentid=THIS_triggerbyparentid,act='addbycopy'::回复::confirm=0,blank=0
-            |jdo.php::tbl=THIS_TBL,pnskpid=THIS_ID,id=THIS_ID,pid=THIS_pid,pnsktriggerbyparent=THIS_triggerbyparent,pnsktriggerbyparentid=THIS_triggerbyparentid,act='addbycopy',pnskisforward=1::转交::confirm=0,blank=0</actoption>
+        <actoption>jdo.php::tbl=THIS_TBL,pnskpid=THIS_ID,id=THIS_ID,pid=THIS_pid,pnsktriggerbyparent=THIS_triggerbyparent,pnsktriggerbyparentid=THIS_triggerbyparentid,act='addbycopy',_Updt_Clit_Urlp='1'::回复::confirm=0,blank=0
+            |jdo.php::tbl=THIS_TBL,pnskpid=THIS_ID,id=THIS_ID,pid=THIS_pid,pnsktriggerbyparent=THIS_togroup,pnsktriggerbyparentid=THIS_touser,pnsktogroup='0',pnsktouser='0',act='addbycopy',_Updt_Clit_Urlp='1'::转交::confirm=0,blank=0</actoption>
+        <hidesk>touser::=::THIS_USER|togroup::=::THIS_GROUP</hidesk> <!-- |sm::=::0 -->
     </table>
     <field name="id">
       <chnname>序号</chnname>
@@ -51,6 +52,7 @@
       <chnname>供方用户</chnname>
 	  <selectoption>fromtable::info_usertbl::email</selectoption>
     </field> 
+    <!--
     <field name="fwgroup">
       <chnname>转发至组</chnname>
 	  <selectoption>fromtable::info_grouptbl::groupname</selectoption>
@@ -65,6 +67,7 @@
       <jsaction>onclick::if('THIS_id'==''||'THIS_isforward'!='1'){ this.disabled=true; console.log('fwuser has been set disabled.'); };</jsaction>
       <memo>新建任务时忽略过; &lt;br/>转交任务时据实填写;</memo>
     </field> 
+    -->
 	<field name="inserttime">
       <chnname>開始時間</chnname>
 	  <listview>2</listview>
@@ -82,7 +85,7 @@
 		<selectoption>1:待做|2:进行中|0:已完成|3:擱置|-1:取消</selectoption>
         <delayjsaction>onload::3::if('THIS_ID'==''){parent.fillReset('istate','select',1);}</delayjsaction>
         <css>0:greycolor|1::redcolor|2::greencolor|3::purplecolor</css>
-        <trigger>ALL::copyto::fin_todotbl::istate=istate::id=pid::NO_INSERT</trigger>    
+        <trigger>ALL::copyto::fin_todotbl::istate=istate,updatetime=NOW()::id=pid::NO_INSERT</trigger>    
 	</field>
 	<field name="taskmemo">
       <chnname>任务描述</chnname>
@@ -106,7 +109,7 @@
     <field name="pid">
         <chnname>任务主线</chnname>
         <!-- <readonly>1</readonly> -->
-        <delayjsaction>onload::3::if(true){ var pidObj=parent._g('pid'); if(pidObj&amp;&amp;parent.userinfo.urlParams){ var urlPid=parent.userinfo.urlParams['pid']; if(!urlPid){ urlPid=parent.userinfo.urlParams['pnskpid'];};  if(urlPid>0){ pidObj.value=urlPid; }else{ console.log('urlPid:'+urlPid); }; pidObj.readOnly=true; }  console.log('pid has been set disabled.'); };</delayjsaction>
+        <delayjsaction>onload::3::if(true){ var pidObj=parent._g('pid'); if(pidObj&amp;&amp;parent.userinfo.urlParams){ var urlPid=parent.userinfo.urlParams['pid']; var urlPidP=0; if(!urlPid){ urlPidP=parent.userinfo.urlParams['pnskpid']; }; if(urlPid &amp;&amp; urlPidP){ if(urlPid>urlPidP){ urlPid=urlPidP; } }  if(urlPid>0){ pidObj.value=urlPid; }else{ console.log('urlPid:'+urlPid+' urlPidP:'+urlPidP); }; pidObj.readOnly=true; }  console.log('pid has been set disabled.'); };</delayjsaction>
         <memo>Auto Fill...</memo>
     </field>
 

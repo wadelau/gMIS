@@ -49,7 +49,7 @@ function doAction(strUrl){
         if(strUrl.indexOf('&act=list') > -1 && strUrl.indexOf(userinfo.pickUpFromTag) == -1){
             var pickUpUrl = strUrl.replace('&act=list', '&act=pickup');
             var doActionPickUpTimer=window.setTimeout(function(){ doActionEx(pickUpUrl, 'contentarea'); }, 2*1000);
-            console.log('doAction: found list refresh, trigger pickup reload.... timer:'+doActionPickUpTimer+' purl:'+pickUpUrl);
+            //console.log('doAction: found list refresh, trigger pickup reload.... timer:'+doActionPickUpTimer+' purl:'+pickUpUrl);
 			if(typeof userinfo.PickUpList == 'undefined'){ userinfo.PickUpList = {}; }
             userinfo.PickUpList.latestUrl = pickUpUrl;
         }
@@ -80,14 +80,22 @@ function doActionEx(strUrl,sActive){
         if(sActive == 'actarea' && strUrl.indexOf('&act=list') > -1 && strUrl.indexOf(userinfo.pickUpFromTag) == -1){
             var pickUpUrl = strUrl.replace('&act=list', '&act=pickup');
             var doActionPickUpTimer=window.setTimeout(function(){ doActionEx(pickUpUrl, 'contentarea'); }, 2*1000);
-            console.log('doActionEx: found list refresh, trigger pickup reload.... timer:'+doActionPickUpTimer+' purl:'+pickUpUrl);
+            //console.log('doActionEx: found list refresh, trigger pickup reload.... timer:'+doActionPickUpTimer+' purl:'+pickUpUrl);
 			if(typeof userinfo.PickUpList == 'undefined'){ userinfo.PickUpList = {}; }
             userinfo.PickUpList.latestUrl = pickUpUrl;
+        }
+		if(strUrl.indexOf('_Updt_Clit_Urlp=1') > -1){
+            if(typeof userinfo.urlParams == 'undefined'){ userinfo.urlParams={}; };
+            var tmpTimerId = window.setTimeout(function(){ 
+                    userinfo.urlParams = getUrlParams(strUrl); 
+                    console.log("strUrl:["+strUrl+"] try to reload urlparams"); 
+                }, 2*1000);  
         }
     }
 	return tmps;
 }
 
+//-
 function _g( str ){
 	return document.getElementById( str );
 }
@@ -1707,9 +1715,10 @@ function fillReset(fieldId, iType, myVal){
 
 //-
 if(typeof userinfo.urlParams == 'undefined'){ userinfo.urlParams = {}; }
-function getUrlParams(){
+function getUrlParams(tmpUrl){
     var vars = {};
-    var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m, key, value) {
+	if(typeof tmpUrl == 'undefined' || tmpUrl == '' || tmpUrl == null){ tmpUrl = window.location.href; }
+    var parts = tmpUrl.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m, key, value) {
         vars[key] = value;
         });
     //console.log('vars:'+JSON.stringify(vars));    

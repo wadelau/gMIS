@@ -170,7 +170,7 @@ class PageNavi extends WebApp{
        $pnsm = $pnsm=='1'? "and" : $pnsm;
        $hmfield = $gtbl->getFieldList();
 
-       $hidesk = $gtbl->getHideSk($user); # xml/hss_tuanduitbl.xml
+       $hidesk = $gtbl->getHideSk($user); # xml/fin_todotbl.xml
        if($hidesk != ''){
            $harr = explode("|", $hidesk);
            foreach($harr as $k=>$v){
@@ -179,11 +179,12 @@ class PageNavi extends WebApp{
                $tmpop = $harr2[1];
                $tmpval = $harr2[2];
 			   if(!isset($_REQUEST['pnsk'.$tmpfield])){
-               		$_REQUEST['pnsk'.$tmpfield] = $tmpop."::".$tmpval;
+               		$_REQUEST['oppnsk'.$tmpfield] = $tmpop;
+					$_REQUEST['pnsk'.$tmpfield] = $tmpval;
 			   }
 			   else{
-				error_log(__FILE__.": found hidesk:[$hidesk] but override by user request:[".$_REQUEST['pnsk'.$tmpfield]."]");
-				}
+				   debug(" found hidesk:[$tmpfield] but override by user request:[".$_REQUEST['pnsk'.$tmpfield]."]");
+			   }
            }
        }
 	   # error_log(__FILE__.": req:".$this->toString($_REQUEST));

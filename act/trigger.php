@@ -61,18 +61,22 @@ foreach($fieldlist as $i=>$field){
                     foreach($fieldArr as $k=>$v){
                         if($v != ''){
                             $vArr = explode("=",$v);
-                            if(strpos($vArr[1],"'") === 0 ||strpos($vArr[1],'"') === 0) # hss_fin_applylogtbl.xml
-                            {
+                            if(strpos($vArr[1],"'") === 0 ||strpos($vArr[1],'"') === 0){ # hss_fin_applylogtbl.xml
                                 $gtbl->set($vArr[1], substr($vArr[1],1,strlen($vArr[1])-2));
-                            }else if($vArr[1] == 'THIS'){
+                            }
+							else if($vArr[1] == 'THIS'){
                                 $vArr[1] = $field;
                             }
                             $tmpfieldv = $gtbl->get($vArr[1]);
                             if($vArr[1] == 'THIS_TABLE' || $vArr[1] == 'THIS_TBL'){
                                 $tmpfieldv = $tbl;
-                            }else if($vArr[1] == 'THIS_ID'){
+                            }
+							else if($vArr[1] == 'THIS_ID'){
                                 $tmpfieldv = $id;
                             }
+							else if(in_array($vArr[0], $timefield)){
+								$tmpfieldv = date("Y-m-d H:i:s", time()); # 'NOW()';
+							}
                             $sql .= " ".$vArr[0]."='".$tmpfieldv."',";
                             $sqlupd .= " ".$vArr[0]."='".$tmpfieldv."',";
                         }

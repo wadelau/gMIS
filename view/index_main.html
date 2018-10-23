@@ -165,7 +165,11 @@ body {
 				{foreach $todo_list as $k=>$v}
 				<tr>
 				<td>{$v['id']}.</td>
-				<td><a href="{$ido}&tbl=fin_todotbl&pnskistate={$v['istate']}&tit=事项管理">{$v['taskname']}</a></td>
+				{if $v['pid'] == '0'}
+				<td><a href="{$ido}&tbl=fin_todotbl&pnskpid={$v['id']}&pnskid={$v['id']}&pnsm=0&tit=事项管理">{$v['taskname']}</a></td>
+				{else}
+				<td><a href="{$ido}&tbl=fin_todotbl&pnskpid={$v['pid']}&pnskid={$v['id']}&pnsm=0&tit=事项管理">{$v['taskname']}</a></td>
+				{/if}
 				<td>{$todo_state[$v['state']]}</td>
 				<td>{$user_list[$v['triggerbyparentid']]['email']}</td>
 				<td>{$user_list[$v['touser']]['email']}</td>
@@ -173,7 +177,7 @@ body {
 				</tr>
 				{/foreach}
 				<tr><td style="white-space:nowrap;">
-					<a href="{$ido}&tbl=fin_todotbl&pnobistate=1&tit=事项管理&pnsktouserid={$userid}&pnobid=1&pnskpid=0&pnsm=1">更多...</a></td></tr>
+					<a href="{$ido}&tbl=fin_todotbl&pnobistate=1&tit=事项管理&pnsktouser={$userid}&pnobid=1&pnsm=1">更多...</a></td></tr>
 			</table>
 			</div>	
 			</td>

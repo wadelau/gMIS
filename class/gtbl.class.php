@@ -328,10 +328,15 @@ class GTbl extends WebApp{
         # see xml/hss_tuanduitbl.xml
         $tmpstr = $this->hmconf[$this->taglist['table'].$this->sep.$this->prttbl.$this->sep.$this->taglist['hidesk']];
         $tmpstr = $tmpstr==null?'':$tmpstr;
-        
         #error_log(__FILE__.": 111 tmpstr:$tmpstr");
         if(strpos($tmpstr,"USER_OPERATEAREA") !== false){
             $tmpstr = str_replace( "USER_OPERATEAREA", $user->getOperateArea(), $tmpstr);
+        }
+		if(inString('THIS_USER', $tmpstr)){
+            $tmpstr = str_replace('THIS_USER', $user->getId(), $tmpstr);
+        }
+        if(inString('THIS_GROUP', $tmpstr)){
+            $tmpstr = str_replace('THIS_GROUP', $user->getGroup(), $tmpstr);
         }
         #error_log(__FILE__.": 222 tmpstr:$tmpstr");
         return $tmpstr;
@@ -440,8 +445,7 @@ class GTbl extends WebApp{
 
         } # end tmpstr
 
-        debug($actArr);
-
+        #debug($actArr);
         return $actArr;
     }
 	

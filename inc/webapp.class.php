@@ -387,7 +387,7 @@ class WebApp implements WebAppInterface{
 			$issqlready = 1;
 		}
 		$this->hmf['hmfieldinfo'] = $this->hmfieldinfo;
-		error_log(__FILE__.": rmBy, sql:[".$sql."] hmf:[".$this->toString($this->hmf)."] [1201241223].\n");
+		debug(" rmBy: sql:[".$sql."] hmf:[".serialize($this->hmf)."] [1201241223].\n");
 		if($issqlready == 1){
 			$hm = $this->dba->update($sql, $this->hmf);
 		}

@@ -12,7 +12,7 @@ $module_list = ""; $hm_module_order = array();  $hm_module_name = array(); $hm_t
 $hm_module_db = array();
 $moduleNeedDb = '';
 
-$hm = $gtbl->execBy($sql="select * from ".$_CONFIG['tblpre']."fin_todotbl where (togroup in (" # for multiple groups
+$hm = $gtbl->execBy($sql="select * from ".$_CONFIG['tblpre']."fin_todotbl where 1=1 and (togroup in (" # for multiple groups
         .$user->getGroup().") or touser=".$user->getId()." or triggerbyparent in (".$user->getGroup().") or triggerbyparentid="
         .$user->getId().") and istate in (1,2) and pid=0 order by istate desc, id desc limit 7 ", null,
 		$withCache=array('key'=>'info_todo-select-'.$user->getId()));

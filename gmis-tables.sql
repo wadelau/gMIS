@@ -42,19 +42,24 @@ DROP TABLE IF EXISTS `gmis_fin_todotbl`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `gmis_fin_todotbl` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
+  `pid` int(12) NOT NULL DEFAULT '0',
   `taskname` char(128) NOT NULL DEFAULT '',
   `tasktype` tinyint(1) NOT NULL DEFAULT '0',
   `triggerbyparent` char(64) NOT NULL DEFAULT '',
   `triggerbyparentid` int(11) NOT NULL DEFAULT '0',
-  `togroup` char(32) NOT NULL DEFAULT '',
-  `touser` char(32) NOT NULL DEFAULT '',
-  `inserttime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `togroup` mediumint(4) NOT NULL DEFAULT '0',
+  `touser` mediumint(4) NOT NULL DEFAULT '0',
+  `inserttime` datetime NOT NULL DEFAULT '1001-01-01 00:00:00',
   `operator` char(32) NOT NULL DEFAULT '',
   `istate` tinyint(1) NOT NULL DEFAULT '1',
   `taskmemo` varchar(2048) NOT NULL DEFAULT '',
+  `taskreply` varchar(1024) NOT NULL DEFAULT '',
   `taskfile` char(255) NOT NULL DEFAULT '',
-  `updatetime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
-  PRIMARY KEY (`id`)
+  `updatetime` datetime NOT NULL DEFAULT '1001-01-01 00:00:00',
+  PRIMARY KEY (`id`),
+  KEY `k2` (`pid`),
+  KEY `k3` (`touser`),
+  KEY `k4` (`triggerbyparentid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
