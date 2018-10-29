@@ -82,7 +82,7 @@
     </field> 
   	<field name="istate">
 		<chnname>状态</chnname>
-		<selectoption>1:待做|2:进行中|0:已完成|3:擱置|-1:取消</selectoption>
+		<selectoption>1:待做|2:进行中|0:已完成|-2:擱置|-1:取消</selectoption>
         <delayjsaction>onload::3::if('THIS_ID'==''){parent.fillReset('istate','select',1);}</delayjsaction>
         <css>0:greycolor|1::redcolor|2::greencolor|3::purplecolor</css>
         <trigger>ALL::copyto::fin_todotbl::istate=istate,updatetime=NOW()::id=pid::NO_INSERT</trigger>    
