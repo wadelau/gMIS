@@ -18,7 +18,8 @@
     <field name="taskname">
       <chnname>任务名</chnname>
       <memo>新建任务时填写; &lt;br/>回复或转交任务时忽略过;</memo>
-      <href>ido.php::tbl='fin_todotbl',pnskpid=THIS_id,pnskid=THIS_id,pnsm='0',pnobid='1'::打开::isblank=0</href>
+      <!-- <href>ido.php::tbl='fin_todotbl',pnskpid=THIS_id,pnskid=THIS_id,pnsm='0',pnobid='1'::打开::isblank=0</href> -->
+	  <href>javascript:if(true){var tmpUrl='ido.php?tbl=THIS_TBL&amp;sid=THIS_SID&amp;pnsm=0'; if('THIS_pid'!='0'){ tmpUrl+='&amp;pnskpid=THIS_pid&amp;pnskid=THIS_pid';}else{ tmpUrl+='&amp;pnskpid=THIS_id&amp;pnskid=THIS_id'; } window.location.href=tmpUrl; }::打开::isblank=0</href>
     </field>
 	
     <field name="tasktype">

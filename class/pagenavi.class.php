@@ -170,8 +170,13 @@ class PageNavi extends WebApp{
        $pnsm = $pnsm=='1'? "and" : $pnsm;
        $hmfield = $gtbl->getFieldList();
 
+	   $skiptag = Gconf::get('skiptag');
+	   $hasId = $gtbl->get('hasid');
+       $myId = $gtbl->getMyId();
+	   $isTimeField = false;
+	   
        $hidesk = $gtbl->getHideSk($user); # xml/fin_todotbl.xml
-       if($hidesk != ''){
+       if($hidesk != '' && !$hasid){ # why so?
            $harr = explode("|", $hidesk);
            foreach($harr as $k=>$v){
                $harr2 = explode("::", $v);
@@ -188,10 +193,7 @@ class PageNavi extends WebApp{
            }
        }
 	   # error_log(__FILE__.": req:".$this->toString($_REQUEST));
-	   $skiptag = Gconf::get('skiptag');
-	   $hasId = $gtbl->get('hasid');
-       $myId = $gtbl->getMyId();
-	   $isTimeField = false;
+	   
        foreach($_REQUEST as $k=>$v){
             if($k != 'pnsk' && strpos($k,"pnsk") === 0){
                 $field = substr($k, 4);
@@ -354,9 +356,11 @@ class PageNavi extends WebApp{
                         $condition .= " ".$pnsm." $field $fieldopv ?"; # this should be numeric only.
                         $gtbl->set($field, $v);
                     }
-					if($hasId && $field == $myId && $fieldopv == '='){
+					if($hasId && $field == $myId && $fieldopv == '=' && $pnsm == 'and'){
 					    # use primary or unique key to query precisely, 
 						# June 27, 2018, Fri, 16 Dec 2016 19:29:44 +0800
+						# updt Oct 30, 2018, + pnsm=and
+						debug("field:$field/v:$v reached end.");
 					    break;
 					}
                 }

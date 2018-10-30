@@ -785,7 +785,7 @@ class GTbl extends WebApp{
         $title = ""; $needJsConfirm = 0; $needBlank = 0;
         if($tmpstr != ""){ # see xml/info_usertbl.xml
             $vArr = explode("::", $tmpstr);
-			if(startsWith($vArr[0],"javascript:")){
+			if(startsWith($vArr[0], "javascript:")){
 				$tUrl = $vArr[0];
 				$title = $vArr[1];
 				if(strpos($tUrl,"THIS") > -1){
@@ -1147,6 +1147,7 @@ class GTbl extends WebApp{
 				$tmpstr = str_replace('THIS_ID', $result[$this->getMyId()], $tmpstr);
 				$tmpstr = str_replace('THIS_TBL', $this->getTbl(), $tmpstr);
 				$tmpstr = str_replace('THIS_DB', trim($_REQUEST['db']), $tmpstr);
+				$tmpstr = str_replace('THIS_SID', $_REQUEST[self::SID], $tmpstr);
 				if($field != null && $field != ''){
 					if(preg_match_all('/THIS_([a-zA-Z]+)/', $tmpstr, $matchArr)){
 						$v = $matchArr[1];
