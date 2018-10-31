@@ -328,10 +328,42 @@ class PageNavi extends WebApp{
                         foreach($vArr as $vk=>$vv){
                             #$vv = $this->addQuote($vv);
                             $vv = trim($vv);
+							if(startsWith($vv, 'b62x.')){
+                                $vv = substr($vv, 5);
+                                $vv = Base62x::decode($vv);
+                                debug("\tfound base62x and decode:$vv aft");
+                            }
                             $vv = addslashes($vv);
                             $vv = "%$vv%";
                             if($isString){ $vv = "'$vv'"; }
                             $conditionTmp .= " or $field like $vv";
+                        }
+                        $condition .= " $pnsm ($conditionTmp)";
+						$gtbl->del($field);
+                    }
+					else if($fieldopv == 'notcontainslist'){
+                        $isString = false;
+                        if($this->isNumeric($hmfield[$field]) && strpos($hmfiled[$field],'date') === false){
+                            # numeric
+                        }
+                        else{
+                            $isString = true;
+                        }
+					    $v = str_replace("，",",", $v);
+                        $vArr = explode(",", $v);
+                        $conditionTmp = " 1=1 ";
+                        foreach($vArr as $vk=>$vv){
+                            #$vv = $this->addQuote($vv);
+                            $vv = trim($vv);
+                            if(startsWith($vv, 'b62x.')){
+                                $vv = substr($vv, 5);
+                                $vv = Base62x::decode($vv);
+                                debug("\tfound base62x and decode:$vv aft");
+                            }
+                            $vv = addslashes($vv);
+                            $vv = "%$vv%";
+                            if($isString){ $vv = "'$vv'"; }
+                            $conditionTmp .= " and $field not like $vv";
                         }
                         $condition .= " $pnsm ($conditionTmp)";
 						$gtbl->del($field);

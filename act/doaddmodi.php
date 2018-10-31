@@ -227,8 +227,9 @@ if($hm[0]){
 
     $out .= "<script> parent.sendNotice(true, '操作成功！'); parent.switchArea('contentarea_outer','off'); </script>";
 
-}else{
-    $out .= "<script> parent.sendNotice(false, '遗憾！操作失败，请重试');</script>";
+}
+else{
+    $out .= "<script> if(typeof parent.sendNotice !='undefined'){ parent.sendNotice(false, '遗憾！操作失败，请重试'); } </script>";
 }
 
 $gtbl->setId('');

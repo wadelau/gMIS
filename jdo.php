@@ -404,7 +404,7 @@ else if(startsWith($act, "list")){
         $out .= "<button name=\"reversebtn\" type=\"button\" onclick=\"uncheckAll();\" value=\"\">反选</button>";
         $out .= $navi->getNavi();
         //$out .= " <script> parent.sendLinkInfo('".implode(",",$listid)."','w',''); </script> ";
-        $out .= " <script type=\"text/javascript\"> parent.sendLinkInfo('".urlencode(substr($fstfields, 0, strlen($fstfields)-1))."','w','".$_REQUEST['field']."'); </script> ";
+        $out .= " <script type=\"text/javascript\"> if(typeof parent.sendLinkInfo != 'undefined'){ parent.sendLinkInfo('".urlencode(substr($fstfields, 0, strlen($fstfields)-1))."','w','".$_REQUEST['field']."'); } </script> ";
         $out .= "</td></tr>";
     }
 	else{

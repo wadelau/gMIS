@@ -168,7 +168,7 @@ body {
 				{if $v['pid'] == '0'}
 				<td><a href="{$ido}&tbl=fin_todotbl&pnskpid={$v['id']}&pnskid={$v['id']}&pnsm=0&tit=事项管理">{$v['taskname']}</a></td>
 				{else}
-				<td><a href="{$ido}&tbl=fin_todotbl&pnskpid={$v['pid']}&pnskid={$v['id']}&pnsm=0&tit=事项管理">{$v['taskname']}</a></td>
+				<td><a href="{$ido}&tbl=fin_todotbl&pnskpid={$v['pid']}&pnskid={$v['pid']}&pnsm=0&tit=事项管理">{$v['taskname']}</a></td>
 				{/if}
 				<td>{$todo_state[$v['state']]}</td>
 				<td>{$user_list[$v['triggerbyparentid']]['email']}</td>
@@ -209,13 +209,13 @@ body {
 			{$mi=$mi+1}
 		{/foreach}
 		<!--
-			<div class="wrapper">
-				 <div class="left1"></div>
-					<div class="left2"></div>
-					<div class="left3"></div>
-					<div class="left4"></div>
-			</div>
-			-->
+		<div class="wrapper">
+			<div class="left1"></div>
+			<div class="left2"></div>
+			<div class="left3"></div>
+			<div class="left4"></div>
+		</div>
+		-->
 		</td>
 		</tr><tr>
 		<td>

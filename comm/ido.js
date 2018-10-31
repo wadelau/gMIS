@@ -76,7 +76,7 @@ function doActionEx(strUrl,sActive){
 	myAjax.set('nobacktag','nobacktag');
 	myAjax.set('forceframe',true);
 	var tmps = myAjax.get( appendTab(strUrl) );
-	if(true){
+	if(typeof strUrl == 'string'){
         if(sActive == 'actarea' && strUrl.indexOf('&act=list') > -1 && strUrl.indexOf(userinfo.pickUpFromTag) == -1){
             var pickUpUrl = strUrl.replace('&act=list', '&act=pickup');
             var doActionPickUpTimer=window.setTimeout(function(){ doActionEx(pickUpUrl, 'contentarea'); }, 2*1000);
@@ -102,6 +102,7 @@ function _g( str ){
 
 //
 function appendTab(strUrl){
+	if(typeof strUrl == 'string'){
 	if(strUrl.indexOf(".php")>-1){
 		if(strUrl.indexOf("tbl")==-1){
 			//window.alert('need to append acctab.');
@@ -117,6 +118,7 @@ function appendTab(strUrl){
 			strUrl+="&db="+currentdb;
 			//window.alert('need to append acctab.done:['+strUrl+']');
 		}
+	}
 	}
 	return appendSid(strUrl);
 }
@@ -1452,7 +1454,10 @@ function filterReplace(myField, myRegx){
 //- append sid
 //- Tue, 7 Mar 2017 21:31:36 +0800
 function appendSid(urlx){
-	if(urlx.indexOf('.') == -1 && urlx.indexOf('?') == -1){
+	if(typeof urlx != 'string'){
+		return urlx;
+	}
+	else if(urlx.indexOf('.') == -1 && urlx.indexOf('?') == -1){
 		//console.log('ido.js: invalid url:['+urlx+']');
 		return urlx;
 	}

@@ -11,7 +11,8 @@ if($_REQUEST['otbl'] != ''){
 
 $out .= "<fieldset style=\"border-color:#5f8ac5;border: 1px solid #5f8ac5;\"><legend><h4>新增/修改</h4>"
         ."</legend><form id=\"".$formid."\" name=\"".$formid."\" method=\"post\" action=\""
-        .$jdo."&act=list-addform\" ".$gtbl->getJsActionTbl()."><table align=\"center\" width=\"98%\" "
+        .$jdo."&act=list-addform\" ".$gtbl->getJsActionTbl()." data-formid=\"$formid\" "
+		." title=\"$formid\"><table align=\"center\" width=\"98%\" "
         ."cellspacing=\"0\" cellpadding=\"6px\" border=\"0px\">";
 $out .= "<tr><td width=\"11%\">&nbsp;</td>
             <td width=\"22%\">&nbsp;</td>

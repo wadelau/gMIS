@@ -115,25 +115,27 @@ class GTbl extends WebApp{
 		
 		$this->skiptag = Gconf::get('skiptag');
         $this->intOperatorList = array( '='=>'等于', $this->skiptag=>'忽略,不使用此條件',
-                '!='=>'不等于',
-                '>'=>'大于',
-                '>='=>'大于等于',
-                '<'=>'小于',
-                '<='=>'小于等于',
-                'inlist'=>'等于列表中的一个,如: 1,2,3',
-                'inrange'=>'在一个值域中,如: min,max',
-				'contains' => '包含',
-                'containslist'=>'包含列表中的一个, 如: 1,2,3');
+			'!='=>'不等于',
+			'>'=>'大于',
+			'>='=>'大于等于',
+			'<'=>'小于',
+			'<='=>'小于等于',
+			'inlist'=>'等于列表中的一个,如: 1,2,3',
+			'inrange'=>'在一个值域中,如: min,max',
+			'contains' => '包含',
+			'containslist'=>'包含列表中的一个, 如: 1,2,3',
+			'notcontainslist'=>'不包含列表中的任一个, 如: 1,2,3',);
         $this->strOperatorList = array( 'contains'=>'包含', $this->skiptag=>'忽略,不使用此條件',
-				'='=>'等于',
-                '!='=>'不等于',
-                'notcontains'=>'不包含',
-                'containslist'=>'包含列表中的一个,如: A,B,C',
-                'inlist'=>'等于列表中的一个,如: A,B,C',
-                'startswith'=>'以...开头',
-                'endswith'=>'以...结尾',
-				'regexp'=>'正則式匹配',
-                'notregexp'=>'正則式非匹配',);
+			'='=>'等于',
+			'!='=>'不等于',
+			'notcontains'=>'不包含',
+			'containslist'=>'包含列表中的一个,如: A,B,C',
+			'notcontainslist'=>'不包含列表中的任一个,如: A,B,C',
+			'inlist'=>'等于列表中的一个,如: A,B,C',
+			'startswith'=>'以...开头',
+			'endswith'=>'以...结尾',
+			'regexp'=>'正則式匹配',
+			'notregexp'=>'正則式非匹配',);
 	}
 
 	public function getTblCHN(){
