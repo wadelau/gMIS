@@ -10,6 +10,7 @@
         <actoption>jdo.php::tbl=THIS_TBL,pnskpid=THIS_ID,id=THIS_ID,pid=THIS_pid,pnsktriggerbyparent=THIS_triggerbyparent,pnsktriggerbyparentid=THIS_triggerbyparentid,act='addbycopy',_Updt_Clit_Urlp='1'::回复::confirm=0,blank=0
             |jdo.php::tbl=THIS_TBL,pnskpid=THIS_ID,id=THIS_ID,pid=THIS_pid,pnsktriggerbyparent=THIS_togroup,pnsktriggerbyparentid=THIS_touser,pnsktogroup='0',pnsktouser='0',act='addbycopy',_Updt_Clit_Urlp='1'::转交::confirm=0,blank=0</actoption>
         <hidesk>touser::=::THIS_USER|togroup::=::THIS_GROUP</hidesk> <!-- |sm::=::0 -->
+		<orderby>updatetime desc</orderby>
     </table>
     <field name="id">
       <chnname>序号</chnname>
