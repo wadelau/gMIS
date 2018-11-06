@@ -12,10 +12,12 @@ $module_list = ""; $hm_module_order = array();  $hm_module_name = array(); $hm_t
 $hm_module_db = array();
 $moduleNeedDb = '';
 
-$hm = $gtbl->execBy($sql="select * from ".$_CONFIG['tblpre']."fin_todotbl where 1=1 and (togroup in (" # for multiple groups
-        .$user->getGroup().") or touser=".$user->getId()." or triggerbyparent in (".$user->getGroup().") or triggerbyparentid="
-        .$user->getId().") and istate in (1,2) and pid=0 order by istate desc, id desc limit 7 ", null,
+$userGroup = $user->getGroup();
+$hm = $gtbl->execBy($sql="select * from ".$_CONFIG['tblpre']."fin_todotbl where 1=1 and ((togroup in (" # for multiple groups
+        .$userGroup.") or touser=".$user->getId()." or triggerbyparent in (".$userGroup.") or triggerbyparentid="
+        .$user->getId().") or $userGroup=0) and istate in (1,2) and pid=0 order by istate desc, id desc limit 7 ", null,
 		$withCache=array('key'=>'info_todo-select-'.$user->getId()));
+		# give overall data to admin group, Nov 10, 2018
 if($hm[0]){
     $hm = $hm[1];
     foreach ($hm as $k=>$v){
@@ -173,13 +175,13 @@ $smt->assign('ido', $ido);
 $smt->assign('jdo', $jdo);
 $smt->assign('today', date("Y-m-d"));
 $smt->assign('historyurl', $ido.'&tbl=info_operatelogtbl&tit=操作历史记录&a1=0&pnsktogroup='
-	.$user->getGroup().'&pnskuserid='.$userid);
+	.$userGroup.'&pnskuserid='.$userid);
 
 $navi = new PageNavi();
 
-$pnsc = "state=? and (touser like '".$user->getId()."' or togroup like '".$user->getGroup()."')";
+$pnsc = "state=? and (touser like '".$user->getId()."' or togroup like '".$userGroup."')";
 $smt->assign('todourl','ido.php?tbl=fin_todotbl&tit=待处理任务&a1=1&pnskistate=0&pnsm=1&pnsktouser='.$userid
-	.'&pnsc='.$pnsc.'&pnsck='.$navi->signPara($pnsc).'&pnsktogroup='.$user->getGroup());
+	.'&pnsc='.$pnsc.'&pnsck='.$navi->signPara($pnsc).'&pnsktogroup='.$userGroup);
 
 $smt->assign('sid', $sid);
 $smt->assign('userid', $userid);
