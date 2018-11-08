@@ -1534,7 +1534,8 @@ function fillPickUpReqt(myUrl, field, fieldv, opStr, linkObj){
     console.log("url:"+myUrl+", field:"+field+" link-text:"+linkObj.text);
     var linkText = '';
 	var base62xTag = 'b62x.';
-	var pickUpFromTag = userinfo.pickUpFromTag;
+	//var pickUpFromTag = userinfo.pickUpFromTag;
+	var pickUpFromTag = userinfo.pickUpFromTag ? userinfo.pickUpFromTag : '&frompickup=1';
     if(linkObj){
         linkText = linkObj.text;
         if(linkText.substring(0, 1) == '+'){
@@ -1666,6 +1667,7 @@ function fillPickUpReqt(myUrl, field, fieldv, opStr, linkObj){
         userinfo.PickUpList.latestUrl = myUrl;
 
         //-
+		myUrl = myUrl.replace('&act=', '&dummyact=');
         doActionEx(myUrl+'&act=list&pnsm=1'+pickUpFromTag, 'actarea');
 
     }
