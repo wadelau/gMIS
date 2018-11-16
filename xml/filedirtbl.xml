@@ -36,11 +36,12 @@
       <memo>如果上传实际文件, 忽略此项; 
         &lt;br/>如果创建子目录,请按格式填写子目录名称; 
         &lt;br/>注意! 目录名称不能包含 / 斜杠</memo>
-      <href>ido.php::tbl=THIS_TBL,pnskparentname=THIS_parentname/THIS,pnsm='1'::进入::confirm=0</href>
+      <href>ido.php::tbl=THIS_TBL,pnskparentname=THIS_parentname/THIS,pnskparentid=THIS_ID,pnsm='1'::进入::confirm=0</href>
       <jsaction>onclick::if('THIS_itype'=='0'){ parent.sendNotice(true, '直接下载文件即可.'); return false; };</jsaction>
       <!--
       <jsaction>onclick::var thisFileNameObject=parent._g('filename'); function appendOrigValue(origV, iStart){var tmpObj=thisFileNameObject; if(tmpObj){ var tmpv=tmpObj.value; console.log((new Date())+': tmpv:'+tmpv);  if(tmpv.indexOf(origV+'/')==-1){ tmpv=origV+'/'+tmpv; } tmpObj.value=tmpv; }; if(iStart==0){ var appendOVTimer=window.setTimeout(function(){ appendOrigValue(origV, 0); }, 2000); } }; if(!userinfo.hasRunAppendOrigValue){userinfo.hasRunAppendOrigValue = 0;}; if(userinfo.hasRunAppendOrigValue==0){var origFieldValue=this.value; this.value=''; console.log('orig-v:'+origFieldValue); appendOrigValue(origFieldValue, 0); userinfo.hasRunAppendOrigValue=1; };</jsaction>
       -->
+      <trigger>ALL::extraact::extra/fdrename.php::filename=THIS_filename,id=THIS_ID</trigger>
     </field>
  
     <field name="filetype">
@@ -78,6 +79,13 @@
       -->
       <memo>Auto fill...</memo>
     </field> 
+
+    <field name="parentid">
+      <chnname>上级Id</chnname>
+      <readonly>1</readonly>
+      <listview>0</listview>
+      <memo>Auto fill...&lt;br/>系统自动识别</memo>
+    </field>
 
   	<field name="inserttime">
       <chnname>创建時間</chnname>

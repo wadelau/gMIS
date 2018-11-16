@@ -14,7 +14,7 @@ $pickupFieldCount = Wht::get($_REQUEST, 'pickupfieldcount');
 $pickupFieldCount = $pickupFieldCount < $shortFieldCount ? $shortFieldCount : $pickupFieldCount;
 $rowHeight = 40;
 
-$pickup = new PickUp();
+$pickup = new PickUp($gtbl->get('args_to_parent')); # args see class/GTbl
 $pickup->setTbl($gtbl->getTbl());
 $pickup->set('fieldlist', $gtbl->getFieldList());
 $pickup->set('myid', $gtbl->getMyId());
@@ -190,6 +190,10 @@ for($hmi=$min_idx; $hmi<=$max_idx;$hmi++){
             $out .= "<td></td></tr>"; 
             $rows++; 
             $lastBlankTr = 0;
+			$bgcolor = "#DCDEDE";
+            if($rows%2 == 0){
+                $bgcolor = "";
+            }
         }
         else{
             #$pickupFieldCount++;

@@ -15,7 +15,8 @@ $tblBlackList_Init = array($tblpre.'insitesearchtbl'=>1, $tblpre.'info_objecttbl
         $tbl_black_white=>1);
 #print_r($tblBlackList);
 
-$iss = new InSiteSearch();
+#$iss = new InSiteSearch($gtbl->get('args_to_parent')); # args see class/GTbl
+$iss = new InSiteSearch(); # not specified table related?
 
 # in-site search sorting
 if(true){

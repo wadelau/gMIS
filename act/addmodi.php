@@ -121,6 +121,36 @@ else{
     #print_r($hmorig);
 }
 
+# check writeable
+$hasDisableW = false;
+if(true){
+    $accMode = $gtbl->getMode();
+    if($accMode == 'r'){
+        $hasDisableW = true;
+    }
+    else if($accMode == 'o-w'){
+        $hasDisableW = true;
+        $recOwnerList = array('op', 'operator', 'ioperator', 'editor');
+        foreach($recOwnerList as $ownk=>$ownv){
+            $theOwner = $hmorig[$ownv];
+            if($theOwner == $userid){
+                $hasDisableW = false;
+                #print "userid:$userid theowner:$theOwner .";
+                break;
+            }
+        }
+    }
+    else{
+        debug("unkown accmode:[$accMode].");
+    }
+}
+if(startsWith($act, 'modify') && $hasDisableW && !$isAddByCopy){
+    $out .= "Access to writing denied. 访问被拒绝. 201811111014.";
+    $out .= "<br/><br/><a href=\"javascript:switchArea('contentarea_outer','off');\">关闭 并尝试其他操作.</a>";
+
+}
+else{
+
 $closedtr = 1; $opentr = 0; # just open a tr, avoid blank line, Sun Jun 26 10:08:55 CST 2016
 $columni = 0;
 for($hmi=$min_idx; $hmi<=$max_idx;$hmi++){
@@ -321,5 +351,7 @@ $out .= "</table> </form>  </fieldset>  <br/>";
 
 #$out .= "<script> parent.userinfo.targetId='".$id."'; parent.userinfo.act='".$act."'; </script>"; 
 # relocated to comm/footer.inc
+
+} # end of hasDisableW
 
 ?>
