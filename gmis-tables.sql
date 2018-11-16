@@ -461,6 +461,7 @@ CREATE TABLE `gmis_filedirtbl` (
   `ioperator` tinyint(1) NOT NULL DEFAULT '0',
   `inserttime` datetime NOT NULL DEFAULT '1001-01-01 00:00:01',
   `updatetime` datetime NOT NULL DEFAULT '1001-01-01 00:00:01',
+  `parentid` int(12) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `key2` (`parentname`,`filename`),
   KEY `key3` (`filename`),
