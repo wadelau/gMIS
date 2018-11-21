@@ -14,7 +14,7 @@ if(true){
         #error_log(__FILE__.": act:[$act] id:[$id] tbl triggers:[".$triggers=$gtbl->getTrigger()."]");
         if($tblTrigger != ''){
             $gtbl->setTrigger($IDTAG, $tblTrigger);
-            error_log(__FILE__.": id triggers:[".$triggers=$gtbl->getTrigger($IDTAG)."]");
+            debug("id triggers:[".$triggers=$gtbl->getTrigger($IDTAG)."]");
             $fieldlist[] = $IDTAG;
         }
         if(count($hmorig) > 0){
@@ -34,10 +34,9 @@ foreach($fieldlist as $i=>$field){
 #		0:currentFieldValue, 1:action, 2:targetTbl, 3:targetField, 4:where, 5:extra
     $triggers = $gtbl->getTrigger($field);
     if($triggers != ''){
-        error_log(__FILE__.": triggers:[".$triggers."]");
+        debug("field:$field triggers:[".$triggers."]");
         $fstArr = explode("|",$triggers);
         foreach($fstArr as $k=>$trigger){
-            error_log("current trigger:[$trigger]");
             $tArr = explode("::", $trigger);
             if($tArr[0] == 'ALL' || $tArr[0] == $gtbl->get($field)){
                 $tmptbl = $tArr[2];
@@ -133,14 +132,13 @@ foreach($fieldlist as $i=>$field){
                     $sqlchk = substr($sqlchk, 0, strlen($sqlchk)-3);
                     $tmphm = $gtbl->execBy($sql,null);
 					#print_r($tmphm);
-
-                }else if($tArr[1] == 'extraact'){ 
+                }
+				else if($tArr[1] == 'extraact'){ 
                     # see xml/hss_tuandui_shouzhitbl.xml
                     # e.g. <trigger>ALL::extraact::extra/sendmail.php::Offer入口调整修改id=THIS_ID</trigger>
                     $extraact = $tArr[2];
 					$args = $tArr[3];
                     include($appdir."/".$extraact);
-
                 }    
             }
         }

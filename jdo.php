@@ -21,18 +21,28 @@ if(startsWith($act,'add') || startsWith($act, "modify")){
 }
 else if(startsWith($act, "list")){
     if(startsWith($act, "list-addform")){
-       include("./act/doaddmodi.php"); 
+		include("./act/doaddmodi.php");
+		$jdo = str_replace('&'.$gtbl->getMyId().'=', '&xoid=', $jdo); # abandon targetid?	   
     }
     if(startsWith($act, "list-dodelete")){
-		$origId = $id;
+		$origId = $id; $doDeleteResult = true; $deleteErrCode = 0;
 		include("./act/dodelete.php"); 
-		$jdo = str_replace('&'.$gtbl->getMyId().'=', '&xoid=', $jdo);
-		$targetLineId = trim($_REQUEST['targetLineId']);
-		if($fmt != ''){ 
-		   $data['respobj']['resultobj'] = array('resultcode'=>'0',  # 0 stands for success
-		   		'resulttrace'=>'1511242124', 
-				'targetid'=>($targetLineId=='' ? $origId : $targetLineId)); # unique trace id
-		   }
+		if($doDeleteResult == true){ # why here?
+            $jdo = str_replace('&'.$gtbl->getMyId().'=', '&xoid=', $jdo); 
+            if($fmt != ''){ 
+                $targetLineId = trim($_REQUEST['targetLineId']);
+                $data['respobj']['resultobj'] = array('resultcode'=>'0',  # 0 stands for success
+                        'resulttrace'=>'1511242124', 
+                        'targetid'=>($targetLineId=='' ? $origId : $targetLineId)); # unique trace id
+            }
+        }
+        else{
+            if($deleteErrCode == 0){ $deleteErrCode = '201811241140'; }
+            debug("$act failed. out:$out errcode:$deleteErrCode"); 
+            $data['respobj']['resultobj'] = array('resultcode'=>'1',  # 1 stands for failure
+                    'resulttrace'=>$deleteErrCode, 
+                    'targetid'=>($targetLineId=='' ? $origId : $targetLineId)); # unique trace id
+        }
     }
 	if(isset($data['respobj']['resultobj'])){
 		# json, xml, Tue Nov 24 21:31:23 CST 2015

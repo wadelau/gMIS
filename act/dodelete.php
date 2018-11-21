@@ -32,6 +32,8 @@ include("./act/checkconsistence.php");
 $hm = $gtbl->rmBy(implode(" and ", $fieldargv));
 #print_r(__FILE__.": delete:[".$hm."]\n");
 
+$doDeleteResult = true;
+
 # some triggers bgn, added on Sat May 26 10:22:14 CST 2012
 include("./act/trigger.php");
 # some triggers end, added on Sat May 26 10:22:27 CST 2012
@@ -41,11 +43,17 @@ $_REQUEST[$gtbl->getMyId().'.old'] = $_REQUEST[$gtbl->getMyId()];
 $_REQUEST[$gtbl->getMyId()] = ''; # remedy Thu Apr 17 08:41:11 CST 2014
 $id = '';
 
-if($hm[0]){
+if($hm[0] && $doDeleteResult){
     $out .= "<script> parent.sendNotice(true,'操作成功！'); parent.switchArea('contentarea_outer','off'); </script>";
 }
 else{
-    $out .= "<script> parent.sendNotice(false,'遗憾！操作失败，请重试！');</script>";
+	if(!$doDeleteResult){
+		$out .= "<script> parent.sendNotice(false,'遗憾！操作失败，请重试！".$out."');</script>";
+	}
+	else{
+		$out .= "<script> parent.sendNotice(false,'遗憾！操作失败，请重试！');</script>";
+		$deleteErrCode = '201811241202';
+	}
 }
 
 ?>

@@ -15,13 +15,13 @@ include("../comm/tblconf.php");
 # main actions
 # file dir rename
 
-if(true){
+if($args['triggertype'] == 'renamecheck'){
     $out = ''; # 'fdrename: args:['.serialize($args).']';
     $fdname = Wht::get($_REQUEST, 'filename');
     if(!startsWith($fdname, '/')){ $fdname = '/'.$fdname; }
     
     $tmpObj = new WebApp();
-    $fdname_orig = '';
+    $fdname_orig = ''; $hasSubContent = true;
     $hm = $tmpObj->execBy("select id, parentname, pparentname from ".$_CONFIG['tblpre']."filedirtbl where parentid=$id", '');
     if($hm[0]){
         $hm = $hm[1][0];
@@ -35,16 +35,26 @@ if(true){
             debug("extra/fdrename: cannot found orig. id:".$hm['id']." parentname:$parentname pparentname:$pparentname new:$fdname");
         }
     }
+	else{
+		$hasSubContent = false;
+	}
     if($fdname_orig != '' && $fdname_orig != $fdname){
         $out .= updateSubDir($tmpObj, $id, $fdname, $fdname_orig);
     }
-    else if($fdname_orig == ''){
+    else if($fdname_orig == '' && $hasSubContent){
         $out .= "update subdir failed. 201811161902.";
     }
     else{
         $out .= "same dirname $fdname. 201811162001.";
     }
-
+}
+else if($args['triggertype'] == 'deletecheck'){
+	# move into extra/fddelete.php
+	$out = "trigger to deletecheck";
+}
+else{
+	$out .= "unknown triggertype:[".$args['triggertype']."]";
+	debug($out);
 }
 
 #$out .= serialize($_REQUEST);

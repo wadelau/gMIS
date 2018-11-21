@@ -589,15 +589,15 @@ function switchEditable(targetObj,fieldName,fieldType,fieldValue,myUrl,readOnly)
 function sendNotice(isSucc, sMsg){
     var obj = document.getElementById('top_notice_div');
     if(obj != undefined && obj != null){
-        
         if(isSucc){
             obj.innerHTML = '<span style="background-color:yellow; color:green">&nbsp; <b> '+sMsg+' </b> &nbsp;</span>';
-        }else{
+        }
+		else{
             obj.innerHTML = '<span style="background-color:yellow; color:red">&nbsp; <b> '+sMsg+' </b> &nbsp; </span>';
         }
         window.setTimeout(function(){ obj.innerHTML = ''; }, 8*1000);
-
-    }else{
+    }
+	else{
         window.alert(sMsg);
     }
 }
@@ -676,7 +676,8 @@ function doActSelect(sSel, sUrl, iId, fieldVal){
 							}
 						}
 						else{
-							sendNotice(false, 'Data updated Failed. Please Try again/请重试.');
+							iId = json_resp.resultobj.resulttrace;
+							sendNotice(false, 'Data updated Failed. Please Try again/请重试. ErrCode:'+iId);
 						}
 					});
 				gta.get(appendSid(targetUrl+'&async=1&fmt=json&targetLineId='+iId));

@@ -6,6 +6,8 @@
         <since>201810</since>
         <creator>Xenxin</creator>
         <!-- <superaccess>inherit::id=USER_ID::rw</superaccess> -->
+		<relatedref>返回&#x2191;::JS::window.history.go(-1);</relatedref> <!-- @todo -->
+		<trigger>ALL::extraact::extra/fddelete.php::filename=THIS_filename,id=THIS_ID,triggertype=deletecheck</trigger>
     </table>
     <field name="id">
       <chnname>序号</chnname>
@@ -41,7 +43,7 @@
       <!--
       <jsaction>onclick::var thisFileNameObject=parent._g('filename'); function appendOrigValue(origV, iStart){var tmpObj=thisFileNameObject; if(tmpObj){ var tmpv=tmpObj.value; console.log((new Date())+': tmpv:'+tmpv);  if(tmpv.indexOf(origV+'/')==-1){ tmpv=origV+'/'+tmpv; } tmpObj.value=tmpv; }; if(iStart==0){ var appendOVTimer=window.setTimeout(function(){ appendOrigValue(origV, 0); }, 2000); } }; if(!userinfo.hasRunAppendOrigValue){userinfo.hasRunAppendOrigValue = 0;}; if(userinfo.hasRunAppendOrigValue==0){var origFieldValue=this.value; this.value=''; console.log('orig-v:'+origFieldValue); appendOrigValue(origFieldValue, 0); userinfo.hasRunAppendOrigValue=1; };</jsaction>
       -->
-      <trigger>ALL::extraact::extra/fdrename.php::filename=THIS_filename,id=THIS_ID</trigger>
+      <trigger>ALL::extraact::extra/fdrename.php::filename=THIS_filename,id=THIS_ID,triggertype=renamecheck</trigger>
     </field>
  
     <field name="filetype">

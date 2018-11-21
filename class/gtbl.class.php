@@ -279,7 +279,7 @@ class GTbl extends WebApp{
         return $this->hmfield;
     }
 
-    public function getRelatedRef($url=''){ # ref to xml/hss_info_objecttbl.xml
+    public function getRelatedRef($url=''){ # ref to xml/info_objecttbl.xml
         $refArr = array();
         $tmpstr = $this->hmconf[$this->taglist['table'].$this->sep.$this->prttbl.$this->sep.$this->taglist['relatedref']];
         $tmpstr = $tmpstr==null?'':$tmpstr;

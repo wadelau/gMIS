@@ -22,7 +22,7 @@ $base62x = new Base62x();
 $base62xTag = 'b62x.';
 
 $out .= "<fieldset style=\"border-color:#5f8ac5;border: 1px solid #5f8ac5; background:#E8EEF7;\">"
-    ."<legend><h4>点击勾选概览</h4></legend><form id=\""
+    ."<legend><h4>点选概览</h4></legend><form id=\""
 	.$formid."\" name=\"".$formid."\" method=\"post\" action=\"".$jdo."&act=list\" "
 	.$gtbl->getJsActionTbl()."><table cellspacing=\"0\" cellpadding=\"0\" "
 	." style=\"border:0px solid black; width:98%; margin-left:auto; margin-right:auto; background:transparent;\">";
