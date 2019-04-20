@@ -182,7 +182,6 @@ class WebApp implements WebAppInterface{
 	 * update by extending to writeObject by wadelau, Sat May  7 11:06:37 CST 2016
 	 */
 	function setBy($fields, $conditions){
-
 		if(strpos($fields, ':') !== false){ # write to  file: or http(s):
 			$hm = $this->writeObject($type=$fields, $args=$conditions);
 		}
@@ -250,7 +249,8 @@ class WebApp implements WebAppInterface{
 	 */
 	function getBy($fields, $conditions, $withCache=null){
 	    $hm = array();
-	    if($fields == 'cache:' && $withCache != null){
+		$colonPos =  strpos($fields, ':'); 
+	    if($colonPos === false && $withCache != null){
 	        $hm = $this->readObject($type='cache:', $args=$withCache);
 	        if($hm[0]){
 	            #debug(__FILE__.": getBy: get from cache succ. ckstr:[".$this->toString($withCache)."]");
@@ -262,7 +262,7 @@ class WebApp implements WebAppInterface{
 	            $hm = $this->getBy($fields, $conditions);
 	        }
 	    }
-	    else if(strpos($fields, ':') !== false){
+	    else if($colonPos !== false){
 	        # read from file: or http(s): or cache
 	        $hm = $this->readObject($type=$fields, $args=$conditions);
 	    }
