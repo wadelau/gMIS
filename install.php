@@ -428,15 +428,19 @@ else if($step == 'db'){
 		
 		$sql = 'show tables'; # from '.$_CONFIG['dbname'];
 		$query = (($mysqlmode == 'mysql') ? @mysql_query($sql) : $link->query($sql));
-
-		while($row = (($mysqlmode == 'mysql') ? mysql_fetch_row($query) : $query->fetch_row())) {
-			$out .= "<br/>".$row[0];	
+		
+		if($query){
+			while($row = (($mysqlmode == 'mysql') ? mysql_fetch_row($query) : $query->fetch_row())) {
+				$out .= "<br/>".$row[0];	
+			}
+			$out .= "<br/><br/>Tables created.";
+			$out .= xForm($file."&step=init", null);
 		}
-
-		$out .= "<br/><br/>Tables created.";
-
-		$out .= xForm($file."&step=init", null);
-
+		else{
+			error_log("sql:$sql result:[".$query."]");
+			$out .= "<br/><br/>Tables created fail. <br/>Need to see logs and check db info in inc/config.class again.";
+			$out .= xForm($file."&step=db", null);
+		}
 	}
 }
 # part-4, init and settings

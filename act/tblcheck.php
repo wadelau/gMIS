@@ -34,7 +34,7 @@ if($mode != ''){
         error_log(__FILE__.": unknown act:[$act] in act2mode.201202282117");
     }
 	else{
-		if($mod == 'o-w'){
+		if($mode == 'o-w'){
 			# @todo
 		}
         else if(strpos($mode, $modechar) === false){

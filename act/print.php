@@ -28,7 +28,7 @@ if($hasid){
     $gtbl->setId('');
 }
 else{
-    $fieldargv = "";
+    $fieldargv = array();
     for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
         $field = $gtbl->getField($hmi);
         if($field == null | $field == ''

@@ -32,7 +32,7 @@ if(startsWith($act, "modify")){
         $gtbl->setId('');
     }
 	else{
-        $fieldargv = "";
+        $fieldargv = array(); # ""; # for php 7.3+
         for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
             $field = $gtbl->getField($hmi);
             if($field == null | $field == '' 
@@ -60,7 +60,7 @@ else{
             $gtbl->setId('');
         }
         else{
-            $fieldargv = "";
+            $fieldargv = array(); # ""; # for php 7.3+
             for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
                 $field = $gtbl->getField($hmi);
                 if($field == null | $field == '' 

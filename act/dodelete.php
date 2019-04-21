@@ -2,11 +2,12 @@
 # do delete for act=list-dodelete, Fri Apr  6 20:46:13 CST 2012
 
 $fieldlist = array();
-if(!isset($fieldargv)){ $fieldargv = array(); }
+if(!isset($fieldargv) || !is_array($fieldargv)){ $fieldargv = array(); }
 
 if($hasid){
     $gtbl->setId($id);
-    $fieldargv[] = $gtbl->getMyId()."=?";
+    $tmpVal = $gtbl->getMyId()."=?";
+    $fieldargv[] = $tmpVal;
 }
 else{
     #$fieldargv = "";

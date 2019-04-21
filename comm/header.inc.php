@@ -2,18 +2,25 @@
 //- embedded in app entry
 
 global $appdir, $userid, $user, $gtbl, $out, $data;
-date_default_timezone_set("Europe/London"); # +0000
+date_default_timezone_set("Asia/Hong_Kong"); # +0800
 
 $docroot = $_SERVER['DOCUMENT_ROOT'];
 $rtvdir = dirname(dirname(__FILE__)); # relative dir
-$rtvdir = str_replace($docroot,"", $rtvdir);
+$rtvdir = str_replace($docroot, "", $rtvdir);
 $appdir = $docroot.$rtvdir;
+if(false){ //- true for soft links in os
+	$appdir = $docroot;
+	$dirArr = explode("/", $rtvdir);
+	$rtvdir = "/".$dirArr[count($dirArr)-1];
+	$appdir .= $rtvdir;
+}
 if($rtvdir == ''){
 	$tmpDirArr = explode("/", $_SERVER['PHP_SELF']);
 	$rtvdir = '/'.$tmpDirArr[1];
 	$tmpDirArr = null;
 }
 #print "docroot:[$docroot] rtvdir:[$rtvdir] appdir:[$appdir].";
+#exit(0);
 
 $dirArr = explode("/", $rtvdir);
 $shortDirName = $dirArr[count($dirArr)-1];
