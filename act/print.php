@@ -120,7 +120,7 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
         }
         $out .= "<td width=\"20%\" nowrap><b>".$gtbl->getCHN($field)."</b>:</td><td colspan=\"".($form_cols)
             ."\"><span id=\"linkinfo_".$rdnum."\"></span><script type=\"text/javascript\"> doActionEx('./act/readfield.php?tbl="
-            .$refdetail[0]."&".$urlpart."&fieldlist=".$refdetail[2]."&isheader=0&isoput=0&mode=intbl','linkinfo_"
+            .$refdetail[0]."&".$urlpart."&fieldlist=".$refdetail[2]."&isheader=0&isoput=0&mode=intbl&sid=$sid','linkinfo_"
             .$rdnum."');</script></td>\n";
 		$tdi++; $needcloserow = 1;
     }
@@ -144,7 +144,11 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
 			if($tdi > 0){
 				$out .= "</tr>\n<tr idata=\"$i-$lastclosed\">";
 			}
-            $out .= "<td><b>".$gtbl->getCHN($field)."</b>:&nbsp;</td><td colspan=\"".($form_cols)."\"> ".$fieldv." </td>";
+            if(inString('&lt;', $fieldv)){
+                $fieldv = str_replace('&lt;', '<', $fieldv);
+            }
+            $out .= "<td><b>".$gtbl->getCHN($field)."</b>:&nbsp;</td>"
+                ."<td colspan=\"".($form_cols)."\"> ".$fieldv." </td>";
 			$needcloserow = 1;
         }
 		else{

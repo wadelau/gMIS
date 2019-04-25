@@ -17,6 +17,7 @@ if($fmt == ''){ # default html
 
 # content output
 $isOB = 0; $enableZip = true;
+if($out == ''){ $enableZip = false; } # e.g. extra/htmleditor
 if($enableZip && ob_start('ob_gzhandler')){ $isOB = 1; }
 else if($enableZip && ob_start()){ $isOB = 1; }
 
@@ -30,7 +31,7 @@ if($smttpl != ''){
 	$smt->display($smttpl);
 }
 else{
-	#error_log(__FILE__.": smttpl is empty. not display with Smarty.req:[".$_SERVER['REQUEST_URI']);
+	#error_log(__FILE__.": smttpl is empty. fmt:$fmt not display with Smarty.req:[".$_SERVER['REQUEST_URI']);
 	if($out_header != ''){
 		$out_header = $htmlheader . $out_header;
 	}
@@ -64,6 +65,5 @@ $gtbl = null;
 $user = null;
 $smt = null;
 $out = null;
-
 
 ?>

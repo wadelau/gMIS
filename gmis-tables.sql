@@ -138,7 +138,7 @@ DROP TABLE IF EXISTS `gmis_info_menulist`;
 CREATE TABLE `gmis_info_menulist` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `linkname` char(24) NOT NULL DEFAULT '',
-  `levelcode` char(12) NOT NULL DEFAULT '',
+  `levelcode` char(48) NOT NULL DEFAULT '',
   `modulename` char(48) NOT NULL DEFAULT '',
   `dynamicpara` char(128) NOT NULL DEFAULT '',
   `istate` tinyint(1) NOT NULL DEFAULT '1',

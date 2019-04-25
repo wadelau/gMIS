@@ -32,14 +32,14 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
 		$fieldv = '';
         if($gtbl->getId() == ''){
             # insert
-            if(inList($field, 'inserttime,insertime,insertd,created,starttime')){ # see comm/tblconf.php
+            if(inList($field, 'inserttime,insertime,insertd,created,starttime,dinserttime')){ # see comm/tblconf.php
                 $fieldv = date("Y-m-d H:i:s", time()); # 'NOW()';
                 $fieldlist[] = $field;
             }
         }
         else{
             # update
-            if(inList($field, 'updatetime,endtime,editime,edittime,modifytime,updated')){
+            if(inList($field, 'updatetime,endtime,editime,edittime,modifytime,updated,dupdatetime')){
                 $fieldv = date("Y-m-d H:i:s", time()); # 'NOW()';
                 $fieldlist[] = $field;
             }

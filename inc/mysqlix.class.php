@@ -127,13 +127,13 @@ class MYSQLIX {
 			else{
 				$hm[0] = false;
 				$hm[1] = array('sayError'=>'No record. 200607050101.');
-				debug("inc/mysqlix: readSingle failed for sql:[$sql]. errno:".$this->getErrno()." err:".$this->getError());
+				debug("inc/mysqlix: readSingle failed. errno:".$this->getErrno()." err:".$this->getError());
 			}
 		}
 		else{
 			$hm[0] = false;
 			$hm[1] = array('sayError'=>'No record. 200607050202.');
-			debug("inc/mysqlix: readSingle failed for sql:[$sql]. errno:".$this->getErrno()." err:".$this->getError());
+			debug("inc/mysqlix: readSingle failed. errno:".$this->getErrno()." err:".$this->getError());
 		}
         #debug($hm);
 		return $hm;
@@ -225,7 +225,7 @@ class MYSQLIX {
 					#print __FILE__.": t:[".$t."] i:[".$i."] vars:[".$idxarr[$i]."] hmv:[".$hmvars[$idxarr[$i]]."]\n";
 					if(!array_key_exists($idxarr[$i], $hmvars)){
 						# in case that, field was not set by $obj->set but written in sql with '?', Sat Apr  2 23:54:48 CST 2016
-						debug(__FILE__.": found unmatched field:[$t].");
+						debug(__FILE__.": found unmatched field:[$t]. hmvars:[".serialize($hmvars)."]");
 						$sql = substr($sql,$a+1);
 						$a = strpos($sql,"?");
 						$newsql .= str_replace("?", '\'\'', $t);
@@ -241,6 +241,7 @@ class MYSQLIX {
 					$newsql .=  $sql ;
 				}
 				#print __FILE__."\n: sql:[".$sql."] sql_new:[".$newsql."]\n";
+				#debug(__FILE__."\n: sql:[".$sql."] sql_new:[".$newsql."]\n");
 				return $newsql;
 			}
 		}

@@ -412,7 +412,7 @@ function GTAjax(){
 										}
 										else if( GTAj.tBro.indexOf("netscape")==-1 && GTAj.sFld!=null 
                                                 && typeof GTAj.sFld !='undefined' && GTAj.sFld!='' 
-                                                && document.getElementByName(GTAj.sFld)){
+                                                && document.getElementsByName(GTAj.sFld)){
 											document.getElementsByName(GTAj.sFld).disabled =true ;
 										}
 										else{

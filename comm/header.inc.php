@@ -7,8 +7,8 @@ date_default_timezone_set("Asia/Hong_Kong"); # +0800
 $docroot = $_SERVER['DOCUMENT_ROOT'];
 $rtvdir = dirname(dirname(__FILE__)); # relative dir
 $rtvdir = str_replace($docroot, "", $rtvdir);
-$appdir = $docroot.$rtvdir;
-if(false){ //- true for soft links in os
+#$appdir = $docroot.$rtvdir;
+if(true){ //- due to soft links in os
 	$appdir = $docroot;
 	$dirArr = explode("/", $rtvdir);
 	$rtvdir = "/".$dirArr[count($dirArr)-1];
@@ -199,8 +199,9 @@ if($isoput){
                     ."<!-- height:15px;margin-top:8px;clear:both;text-align:center;z-index:99 -->";
         }
     }
-    else if(!startsWith($act, "modify") && !inString('-addform', $act)){
-        $out .= "<style>html{background:white;}</style>";
+    else if(!startsWith($act, "modify") && !inString('-addform', $act)
+        && !inString("/extra", $thisUrl)){
+        $out .= "<style>html{background:white;}</style><!--$thisUrl-->";
     }
 }
 

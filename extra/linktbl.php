@@ -49,7 +49,7 @@ $out .= "<tr><td width=\"100%\" height=\"400px\">";
 if($id == '' || $id == '0'){
     $out .= " &nbsp;&nbsp;&nbsp; id為空, 請先填寫其他信息，然後保存後再添加項內容.<br/>&nbsp;<br/>&nbsp;";   
 }else{
-    $out .= "<iframe id=\"linktblframe\" name=\"linktblframe\" width=\"100%\" height=\"100%\" src=\"".$url."&isheader=0\" frameborder=\"0\"></iframe>";
+    $out .= "<iframe id=\"linktblframe\" name=\"linktblframe\" width=\"100%\" height=\"100%\" src=\"".$url."&isheader=0&needautopickup=no\" frameborder=\"0\"></iframe>";
 }
 $out .= "</td></tr>";
 

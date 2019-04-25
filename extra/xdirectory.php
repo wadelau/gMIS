@@ -1,8 +1,14 @@
 <?php
 # directory management module
 # wadelau@ufqi.com on Sun Jan 31 10:22:15 CST 2016
+# updts by Xenxin@ufqi, Tue Apr 23 13:35:30 HKT 2019
 
 #$isoput = false;
+
+$isheader = 0;
+$_REQUEST['isheader'] = $isheader;
+#$out_header = $isheader;
+
 require("../comm/header.inc.php");
 
 include("../comm/tblconf.php");
@@ -57,7 +63,11 @@ $out .= "";
 $icode = $_REQUEST['icode'];
 $iname = $_REQUEST['iname'];
 
-$parentCode = $_REQUEST['parentcode'];
+$parentCode = Wht::get($_REQUEST, 'parentcode');
+if(inString('-', $parentCode)){ //- 0100-止疼药2级
+    $tmpArr = explode('-', $parentCode);
+    $parentCode = $tmpArr[0];
+}
 $expandList = array();
 if(strlen($parentCode) > $dirLevelLength){
 	$codeV = '';
@@ -67,6 +77,7 @@ if(strlen($parentCode) > $dirLevelLength){
 		$expandList[$codeV] = $codeV;
 	}
 }
+#debug("extra/xdir: parentcode:$parentCode expandList:".serialize($expandList));
 
 $list = array();
 $sqlCondi = "1=1 order by $icode asc";
@@ -94,7 +105,13 @@ if(1){
 	$out .= $str;
 }
 
-$out .= " <script type=\"text/javascript\"> var current_link_field='".$_REQUEST['icode']
+$targetField = Wht::get($_REQUEST, 'targetfield');
+$imode = Wht::get($_REQUEST, "imode");
+if($imode == 'read' && $targetField != $icode){
+    $icode = $targetField;
+}
+
+$out .= " <script type=\"text/javascript\"> var current_link_field='".$icode
     ."'; parent.sendLinkInfo('".$parentCode."','w', current_link_field); </script> ";
 
 $out .= '
@@ -134,6 +151,7 @@ $out .= '
 		});
 		';
 
+/*
 foreach($list as $k=>$v){
 	$out .='
 		function xianshi'.$k.'() {
@@ -144,6 +162,33 @@ foreach($list as $k=>$v){
 		}
 	   ';
 }
+ */
+
+$out .= '
+    //- disp menu options    
+    function xianShi(nodeId) {
+			document.getElementById("nodelink"+nodeId).style.display="inline";
+        }
+    //- hide options
+	function yinCang(nodeId) {
+			document.getElementById("nodelink"+nodeId).style.display="none";
+        }
+    //- highlights selected
+    var lastSelectedK = \'\';
+    function changeBgc(nodeId){
+        var myObj = document.getElementById(nodeId);
+        if(myObj){
+            myObj.style.backgroundColor=\'silver\';
+        }
+        if(lastSelectedK != \'\' && lastSelectedK != nodeId){
+            myObj = document.getElementById(lastSelectedK);
+            if(myObj){
+                myObj.style.backgroundColor=\'\';
+            }
+        }
+        lastSelectedK = nodeId;
+    }
+    ';
 
 $out .='</script>';
 

@@ -141,7 +141,7 @@ if(true){
         }
     }
     else{
-        debug("unkown accmode:[$accMode].");
+        #debug("unkown accmode:[$accMode].");
     }
 }
 if(startsWith($act, 'modify') && $hasDisableW && !$isAddByCopy){
@@ -152,7 +152,7 @@ if(startsWith($act, 'modify') && $hasDisableW && !$isAddByCopy){
 else{
 
 $closedtr = 1; $opentr = 0; # just open a tr, avoid blank line, Sun Jun 26 10:08:55 CST 2016
-$columni = 0;
+$columni = 0; $hasEndLine = 0;
 for($hmi=$min_idx; $hmi<=$max_idx;$hmi++){
     $field = $gtbl->getField($hmi);
     $fieldinputtype = $gtbl->getInputType($field);
@@ -226,7 +226,7 @@ for($hmi=$min_idx; $hmi<=$max_idx;$hmi++){
                         <div id='".$field."_myeditordiv' style='width:680px;height:450px;display:none'></div>
                         <div id='".$field."_mytextdiv' style='width:680px;height:450px;display:block'>
                         <textarea id=\"".$field."\" name=\"".$field."\" rows=\"11\" cols=\"85\"  class=\"search\""
-            		." onclick=\"javascript:openEditor('".$rtvdir."/extra/htmleditor.php?field=".$field."', '"
+            		." onclick=\"javascript:openEditor('".$rtvdir."/extra/htmleditor.php?field=".$field."&sid=".$sid."', '"
             		.$field."'); parent.switchArea('".$field."_myeditordiv','on'); parent.switchArea('"
             		.$field."_mytextdiv','off');\">".$hmorig[$field]."</textarea> </div><br/> "
             		.$tmpmemo." </td></tr><tr>";
@@ -334,12 +334,18 @@ for($hmi=$min_idx; $hmi<=$max_idx;$hmi++){
                 .$hlcolor."';\" onmouseout=\"javascript:this.style.backgroundColor='';\" >"
                 ."<td style=\"border-top: 1px dotted #cccccc; vertical-align:middle;\" colspan=\""
                 .$form_cols."\">  </td> </tr>";
+        $hasEndLine = 1;
+    }
+    else{
+        $hasEndLine = 0;
     }
 
 }
 
-$out .= "<tr height=\"10px\"><td style=\"border-top: 1px dotted #cccccc; vertical-align:middle;\" colspan=\""
+if($hasEndLine == 0){
+    $out .= "<tr height=\"10px\"><td style=\"border-top: 1px dotted #cccccc; vertical-align:middle;\" colspan=\""
         .$form_cols."\">  </td></tr>";
+}
 $out .= "<tr><td colspan=\"".$form_cols."\" align=\"center\">"
         ."<input type=\"submit\" name=\"addsub\" id=\"addsub\" value=\"递交\" "
         ."onclick=\"javascript:doActionEx(this.form.name,'actarea');\" /> \n";

@@ -43,10 +43,10 @@ document.getElementById('myeditor').value = parent.getCont('<?php print $myfield
 
 // auto-save, Wed Aug 13 15:55:22 CST 2014
 var autoSaveInterval = <?php print $_CONFIG['auto_save_interval']; ?> * 1000; // 60*1000;
-window.setTimeout('setAutoSave('+autosavetime+')', autosavetime);
-function setAutoSave(autosavetime){
+window.setTimeout('setAutoSave('+autoSaveInterval+')', autoSaveInterval);
+function setAutoSave(autoSaveInterval){
 	parent.setCont('<?php print $myfield;?>',ue.getContent()); 
-	window.setTimeout('setAutoSave('+autosavetime+')', autosavetime);	
+	window.setTimeout('setAutoSave('+autoSaveInterval+')', autoSaveInterval);	
 }
 
 </script>

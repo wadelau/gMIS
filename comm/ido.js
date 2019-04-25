@@ -45,7 +45,8 @@ function doAction(strUrl){
 	myAjax.set('forceframe',true);
 	myAjax.set('nobacktag','nobacktag');
 	var tmps = myAjax.get( appendTab(strUrl) );
-	if(true){
+	if(typeof strUrl == 'string'){
+	if(strUrl.indexOf('needautopickup=no') < 0){ //- see extra/linktbl
         if(strUrl.indexOf('&act=list') > -1 && strUrl.indexOf(userinfo.pickUpFromTag) == -1){
             var pickUpUrl = strUrl.replace('&act=list', '&act=pickup');
             var doActionPickUpTimer=window.setTimeout(function(){ doActionEx(pickUpUrl, 'contentarea'); }, 2*1000);
@@ -53,6 +54,7 @@ function doAction(strUrl){
 			if(typeof userinfo.PickUpList == 'undefined'){ userinfo.PickUpList = {}; }
             userinfo.PickUpList.latestUrl = pickUpUrl;
         }
+    }
     }
 	return rtn;
 }
@@ -77,12 +79,14 @@ function doActionEx(strUrl,sActive){
 	myAjax.set('forceframe',true);
 	var tmps = myAjax.get( appendTab(strUrl) );
 	if(typeof strUrl == 'string'){
+	    if(strUrl.indexOf('needautopickup=no') < 0){ //- see extra/linktbl
         if(sActive == 'actarea' && strUrl.indexOf('&act=list') > -1 && strUrl.indexOf(userinfo.pickUpFromTag) == -1){
             var pickUpUrl = strUrl.replace('&act=list', '&act=pickup');
             var doActionPickUpTimer=window.setTimeout(function(){ doActionEx(pickUpUrl, 'contentarea'); }, 2*1000);
             //console.log('doActionEx: found list refresh, trigger pickup reload.... timer:'+doActionPickUpTimer+' purl:'+pickUpUrl);
 			if(typeof userinfo.PickUpList == 'undefined'){ userinfo.PickUpList = {}; }
             userinfo.PickUpList.latestUrl = pickUpUrl;
+        }
         }
 		if(strUrl.indexOf('_Updt_Clit_Urlp=1') > -1){
             if(typeof userinfo.urlParams == 'undefined'){ userinfo.urlParams={}; };

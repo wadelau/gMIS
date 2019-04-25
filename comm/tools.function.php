@@ -128,7 +128,7 @@ function inString($needle, $haystack){
 function mkUrl($file, $_REQU, $gtbl=null){
     $url = $file.(inString('?', $file) ? '&' : '?');
     $needdata = array('id','tbl','db','oid','otbl','oldv','field','linkfield',
-		'linkfield2','tit','tblrotate');
+		'linkfield2','tit','tblrotate', 'needautopickup');
 	if(isset($gtbl)){
         $needdata[] = $gtbl->getMyId();
     }

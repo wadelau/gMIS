@@ -51,7 +51,7 @@ if($hmorig[0]){
     $hmorig = $hmorig[1][0];
 }
 
-$closedtr = 1;
+$closedtr = 1; $hasEndLine = 0;
 $columni = 0;
 for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
     $field = $gtbl->getField($hmi);
@@ -89,7 +89,8 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
 		}
 		if($gtbl->getSingleRow($field)){ $out .= "</tr><tr>"; }
         if($isimg){
-            $out .= "<td >".$gtbl->getCHN($field).":&nbsp;</td><td class=\"tdiviewfixedwidth\"> <a href=\""
+            $out .= "<td style=\"vertical-align:top\">".$gtbl->getCHN($field).":&nbsp;</td>"
+                    ."<td class=\"tdiviewfixedwidth\" style=\"vertical-align:top\"> <a href=\""
                     .$hmorig[$field]."\" target=\"_blank\" title=\"打开大图\"><img src=\"".$hmorig[$field]
                     ."\" alt=\"-x-\" style=\"width:118px\"/></a><br/>".($srcprefix==''?$rtvdir."/":'')
                     .$hmorig[$field]." </td>";
@@ -105,7 +106,8 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
                 .$hmorig[$field]."\" /></span> <span id=\"span_".$act."_".$field
                 ."\"><a href=\"javascript:void(0);\" onclick=\"javascript:doActionEx('"
                 .$gtbl->getExtraInput($field,$hmorig)."&act="
-                .$act."&otbl=".$tbl."&field=".$field."&oldv=".$hmorig[$field]."&oid=".$id."','extrainput_".$act."_"
+                .$act."&otbl=".$tbl."&field=".$field."&oldv=".$hmorig[$field]."&oid=".$id."&isheader=0&sid=$sid&parentcode=".$hmorig[$field]
+                ."','extrainput_".$act."_"
                 .$field."_inside');document.getElementById('extrainput_".$act."_".$field
                 ."').style.display='block';\">Disp</a></span> <div id=\"extrainput_".$act."_".$field."\" class=\"extrainput\"> ";
 		$out .= "<table width=\"100%\"><tr><td width=\"100%\" style=\"text-align:right\"> <b> <a href=\"javascript:void(0);\""
@@ -117,7 +119,8 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
 		        ."_inside\"></div></td></tr></table> </div>";
         if($field != 'operatelog'){
             $out .= " <script type=\"text/javascript\"> parent.doActionEx('".$gtbl->getExtraInput($field,$hmorig)
-                ."&act=".$act."&otbl=".$tbl."&field=".$field."&oldv=".$hmorig[$field]."&oid=".$id."','extrainput_".$act."_"
+                ."&act=".$act."&otbl=".$tbl."&field=".$field."&oldv=".$hmorig[$field]."&oid=".$id."&isheader=0&sid=$sid&parentcode="
+                .$hmorig[$field]."','extrainput_".$act."_"
                 .$field."_inside'); document.getElementById('extrainput_".$act."_".$field."').style.display='block';</script>";
         }
         $out .= "  <br/>".$gtbl->getMemo($field)." </td></tr><tr>";
@@ -136,7 +139,7 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
             $out .= "</tr>\n<tr><td style=\"vertical-align:top\">".$gtbl->getCHN($field).":</td><td colspan=\"".($form_cols)."\">
                 <div id='".$field."_myeditordiv' style='width:680px;height:450px;display:none'></div>
                 <div id='".$field."_mytextdiv' style='width:680px;height:450px;display:block'>
-                <textarea id=\"".$field."\" name=\"".$field."\" rows=\"5\" cols=\"65\"  class=\"search\" "
+                <textarea id=\"".$field."\" name=\"".$field."\" rows=\"20\" cols=\"96\" class=\"search\" "
                         ."onclick=\"javascript:openEditor('".$rtvdir."/extra/htmleditor.php?field=".$field."', '"
                         .$field."'); parent.switchArea('".$field."_myeditordiv','on'); parent.switchArea('".$field
                         ."_mytextdiv','off');\">".$hmorig[$field]."</textarea> </div><br/> ".$tmpmemo."<br/> </td></tr><tr>";
@@ -187,6 +190,10 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
     if(++$rows % 6 == 0 && $closedtr == 1){
         $out .= "<tr><td style=\"border-top: 1px dotted #cccccc; vertical-align:middle;\" colspan=\""
                 .$form_cols."\">  </td> </tr>";
+        $hasEndLine = 1;
+    }
+    else{
+        $hasEndLine = 0;
     }
 }
 
@@ -213,8 +220,10 @@ if(true){
     }
 }
 
-$out .= "<tr ><td style=\"border-top: 1px dotted #cccccc; vertical-align:middle;\" colspan=\""
+if($hasEndLine == 0){
+    $out .= "<tr ><td style=\"border-top: 1px dotted #cccccc; vertical-align:middle;\" colspan=\""
         .$form_cols."\">  </td></tr>";
+}
 $out .= "<tr><td colspan=\"".$form_cols."\" align=\"center\">
 	<input type=\"button\" name=\"viewbtn\" id=\"viewbtn\" value=\"编辑\"
 		onclick=\"javascript:doActionEx('"

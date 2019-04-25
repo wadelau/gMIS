@@ -7,6 +7,8 @@ require_once(__ROOT__.'/inc/webapp.class.php');
 
 class XDirectory extends WebApp{
 
+    private $dirLevelLength = 2; # default
+
     function __construct($tbl = ''){
 
         $this->dba = new DBA();
@@ -37,10 +39,11 @@ class XDirectory extends WebApp{
 			$j = $this->getSubDir($targetDir, $levelLen, $ilevel, $k);
 			#$nodeContent = $ilevel."-".$k."-".$v;
 			$nodeContent = $k."-".$v;
-			$nodeContent = "<div class=\"tree\" onmouseover=\"xianshi".$k."()\" onmouseout=\"yincang".$k."()\" id=\"".$k."\">".$nodeContent;
-			$nodeContent .= "&nbsp;&nbsp;<span id=\"nodelink".$k."\"><a href=\"javascript:void(0);\" onclick=\"javascript:parent.sendLinkInfo('".$k."', 'w', current_link_field); parent.copyAndReturn(current_link_field);\">该项</a>";
-			$nodeContent .= "&nbsp&nbsp<a href=\"javascript:void(0);\" onclick=\"javascript:parent.sendLinkInfo('".$i."', 'w', current_link_field); parent.copyAndReturn(current_link_field);\">+同级</a>";	
-			$nodeContent .= "&nbsp&nbsp<a href=\"javascript:void(0);\" onclick=\"javascript:parent.sendLinkInfo('".$j."', 'w', current_link_field); parent.copyAndReturn(current_link_field);\">+下级</a>";	
+			$nodeContent = "<div class=\"tree\" id=\"".$k."\" onmouseover=\"xianShi('".$k."');\" onmouseout=\"yinCang('".$k."');\">".$nodeContent; # 
+			$nodeContent .= "&nbsp;&nbsp;<span id=\"nodelink".$k."\"><a href=\"javascript:void(0);\" onclick=\"javascript:parent.sendLinkInfo('".$k."', 'w', current_link_field); parent.copyAndReturn(current_link_field); changeBgc('".$k."');\">该项</a>";
+			$nodeContent .= "&nbsp;&nbsp;<a href=\"javascript:void(0);\" onclick=\"javascript:parent.sendLinkInfo('".$k."-".$v."', 'w', current_link_field); parent.copyAndReturn(current_link_field); changeBgc('".$k."');\">该项+名</a>";
+			$nodeContent .= "&nbsp;&nbsp;<a href=\"javascript:void(0);\" onclick=\"javascript:parent.sendLinkInfo('".$i."', 'w', current_link_field); parent.copyAndReturn(current_link_field);\">+同级项</a>";	
+			$nodeContent .= "&nbsp;&nbsp;<a href=\"javascript:void(0);\" onclick=\"javascript:parent.sendLinkInfo('".$j."', 'w', current_link_field); parent.copyAndReturn(current_link_field);\">+下级项</a>";	
 			$nodeContent .= "</span></div>";			
 			if($lastNode == ''){
 				$dirList .= $nodeContent;								
@@ -139,5 +142,21 @@ class XDirectory extends WebApp{
 			return $currentVal;
 		}
 	}
+
+    //- extract all possible upside dirs from a dir
+    //- Xenxin@ufqi,  Wed Apr 24 13:09:17 HKT 2019
+    function extractDir($dir, $dirLevelLen=null){
+        $rtnDirList = array($dir);
+        $dirLen = strlen($dir);
+        if($dirLevelLen == null || $dirLevelLen < 1){
+            $dirLevelLen = $this->dirLevelLength;
+        }
+        for($ilen=$dirLevelLen; $ilen<$dirLen; $ilen+=$dirLevelLen){
+            $rtnDirList[] = substr($dir, 0, $ilen);     
+        }
+        return $rtnDirList;
+
+    }
+
 }
 ?>

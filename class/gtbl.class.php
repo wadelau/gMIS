@@ -287,6 +287,9 @@ class GTbl extends WebApp{
             if($url != '' && strpos($tmpstr,"THIS_URL") !== false){
                 $tmpstr = str_replace("THIS_URL", $url, $tmpstr);
             }
+            if($url != '' && strpos($tmpstr,"THIS_TBL") !== false){
+                $tmpstr = str_replace("THIS_TBL", $this->getTbl(), $tmpstr);
+            }
             $arr = explode("|", $tmpstr);
             foreach($arr as $k=>$v){
                 $arr2 = explode("::", $v);
@@ -546,7 +549,7 @@ class GTbl extends WebApp{
             }
 			$hmoption = array();
 			$optval = 'id'; $dispname = '';
-			if(isset($arr[4])){ $optval = $arr[4]; }  
+			if(isset($arr[4]) && $arr[4] != ''){ $optval = $arr[4]; }  
 			# alternative 'id', # see xml/fwn_sitetbl, sitetype, Fri Dec 12 13:43:36 CST 2014
 			$hasExist = 0; $maxInitSelectCount = 512; $optioni = 0;
 			if(isset($this->hmconf['selectoption_'.$field])){
@@ -703,6 +706,9 @@ class GTbl extends WebApp{
         $tmpstr = $tmpstr==null?'':$tmpstr;
         if($tmpstr != ''){
         	if(strpos($tmpstr, "THIS_") !== false){
+
+                $tmpstr = $this->fillThis($tmpstr, $field);
+                /*
 				if($tmpcount=preg_match_all("/THIS_([^&]+)/", $tmpstr, $matches)){
 					#print_r($matches);
 					foreach($matches[1] as $k=>$v){
@@ -715,7 +721,8 @@ class GTbl extends WebApp{
 							$tmpstr = str_replace("THIS_$v", $result[$v], $tmpstr);
 						}
 					}
-				}
+                }
+                 */
 			}
 		}
         return $tmpstr ;
@@ -1142,15 +1149,19 @@ class GTbl extends WebApp{
 			if($result == null){
 				$result = $this->get($this->resultset);
 			}
+            if(!is_array($result)){
+                $result = array();
+            }
 			#debug(__FILE__.": tmpstr:[$tmpstr] resultset:");
 			#debug($result);
 			$tmpstr = str_replace('THISNAME', $field, $tmpstr);
-			$tmpstr = str_replace('THIS_NAME', $field, $tmpstr);
+            $tmpstr = str_replace('THIS_NAME', $field, $tmpstr);
+            $tmpstr = str_replace('THIS_TBL', $this->getTbl(), $tmpstr);
+            $tmpstr = str_replace('THIS_TABLE', $this->getTbl(), $tmpstr);
+            $tmpstr = str_replace('THIS_DB', trim($_REQUEST['db']), $tmpstr);
+            $tmpstr = str_replace('THIS_SID', $_REQUEST[self::SID], $tmpstr);
 			if(is_array($result)){
-				$tmpstr = str_replace('THIS_ID', $result[$this->getMyId()], $tmpstr);
-				$tmpstr = str_replace('THIS_TBL', $this->getTbl(), $tmpstr);
-				$tmpstr = str_replace('THIS_DB', trim($_REQUEST['db']), $tmpstr);
-				$tmpstr = str_replace('THIS_SID', $_REQUEST[self::SID], $tmpstr);
+				$tmpstr = str_replace('THIS_ID', $result[$this->getMyId()], $tmpstr);	
 				if($field != null && $field != ''){
 					if(preg_match_all('/THIS_([a-zA-Z]+)/', $tmpstr, $matchArr)){
 						$v = $matchArr[1];
