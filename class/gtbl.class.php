@@ -367,7 +367,9 @@ class GTbl extends WebApp{
         return $tmpstr=='' ? $default : $tmpstr;
     }
 
-	//- 
+	//- Action options in popup menu and/or act/view for every single row
+    //- retrieve in ido, act/view
+    //- see xml/fin_todotbl
     public function getActOption($result=null){
         $tmpstr = $this->hmconf[$this->taglist['table'].$this->sep.$this->prttbl.$this->sep.$this->taglist['actoption']];
         $tmpstr = $tmpstr==null?'':$tmpstr;

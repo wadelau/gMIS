@@ -226,8 +226,8 @@ else if(startsWith($act, "list")){
                $out .= "<td nowrap> <input name=\"checkboxid\" type=\"checkbox\" value=\"".$id
                 ."\"> &nbsp; <a onmouseover=\"javascript:showActList('".$i."', 1, '"
                 .str_replace("&".$gtbl->getMyId()."=","&oid=", $jdo)."&".$gtbl->getMyId()."=".$id
-                ."');\" onmouseout=\"javascript:showActList('".$i."', 0, '".str_replace("&".$gtbl->getMyId()."=","&oid=", $jdo)
-                ."&".$gtbl->getMyId()."=".$id."');\" href='javascript:void(0);' onclick=\"javascript:doActionEx('".$jdo."&act=view&"
+                ."', '$id');\" onmouseout=\"javascript:showActList('".$i."', 0, '".str_replace("&".$gtbl->getMyId()."=","&oid=", $jdo)
+                ."&".$gtbl->getMyId()."=".$id."', '$id');\" href='javascript:void(0);' onclick=\"javascript:doActionEx('".$jdo."&act=view&"
                 .$gtbl->getMyId()."=".$id."','contentarea');;\" title=\"详细信息\">"
                 .($i + (intval($navi->get('pnpn'))-1) * (intval($navi->get('pnps'))))." / ".$id
                 ." &#x25BE;</a> <div id=\"divActList_$i\" style=\"display:none; position: absolute; margin-left:50px; "
@@ -237,8 +237,8 @@ else if(startsWith($act, "list")){
                $url_uni_extra = $gtbl->getUniquePara($rec);
                $out .= "<td nowrap> <input name=\"checkboxid\" type=\"checkbox\" value=\"".$id
                 ."\"> &nbsp; <a onmouseover=\"javascript:showActList('".$i."', 1, '".$jdo."&".$url_uni_extra
-                ."');\" onmouseout=\"javascript:showActList('".$i."', 0, '".$jdo."&".$url_uni_extra
-                ."');\" href='javascript:void(0);' onclick=\"javascript:doActionEx('".$jdo."&act=view&".$url_uni_extra
+                ."', '$id');\" onmouseout=\"javascript:showActList('".$i."', 0, '".$jdo."&".$url_uni_extra
+                ."', '$id');\" href='javascript:void(0);' onclick=\"javascript:doActionEx('".$jdo."&act=view&".$url_uni_extra
                 ."','contentarea');;\" title=\"详细信息\">".($i + (intval($navi->get('pnpn'))-1) * (intval($navi->get('pnps'))))
                 ." / ".$id." &#x25BE;</a> <div id=\"divActList_$i\" style=\"display:none; position: absolute; margin-left:50px; "
                 ."margin-top:-11px; z-index:99; background-color:silver;\">actlist-$i</div> </td>";

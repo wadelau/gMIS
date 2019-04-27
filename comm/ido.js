@@ -638,11 +638,14 @@ function registerAct(tObj){
 function doActSelect(sSel, sUrl, iId, fieldVal){
     
     var fieldv = fieldVal;
-    if(fieldv == null || fieldv ==''){
+    if((fieldv == null || fieldv =='') && fieldv != 'ActOption'){
     	fieldv = document.getElementById(sSel).options[document.getElementById(sSel).selectedIndex].value;
 	}
     console.log("doActSelect: fieldv:["+fieldv+"]");
-    var targetUrl = sUrl+"&act="+fieldv;
+    var targetUrl = sUrl;
+    if(fieldv != 'ActOption'){
+        targetUrl += "&act="+fieldv;
+    }
 	var actListDiv = document.getElementById('divActList_'+iId); var hideActListDiv = 1;
 
     if(fieldv != ''){
@@ -1192,7 +1195,7 @@ function input2Search(inputx, obj, div3rd, valueoption){
 }
 
 //-
-function showActList(nId, isOn, sUrl){
+function showActList(nId, isOn, sUrl, dataId){
 	var divId = 'divActList_'+nId;		
 	//console.log((new Date())+": divId:["+divId+"]");
 	var divObj = document.getElementById(divId);
@@ -1202,20 +1205,33 @@ function showActList(nId, isOn, sUrl){
 	divObj.onmouseover = function(){ this.style.display='block'; };
 	divObj.onmouseout = function(){ this.style.display='none'; };
 
-	var sCont = '<p>';
-	
-	sCont += '&nbsp; &nbsp;&nbsp;<a href="javascript:void(0);" onclick="javascript:doActSelect(\'\', \''+sUrl+'\', \''
+	var sCont = '<p>'; var targetAreaId = '#contentarea_outer';
+	sCont += '&nbsp; &nbsp;&nbsp;<a href="'+targetAreaId+'" onclick="javascript:doActSelect(\'\', \''+sUrl+'\', \''
 		+nId+'\', \'view\');">查看View</a>&nbsp; &nbsp;&nbsp;';
-	sCont += '<br/>&nbsp; &nbsp;&nbsp;<a href="javascript:void(0);" onclick="javascript:doActSelect(\'\', \''+sUrl+'\', \''
+	sCont += '<br/>&nbsp; &nbsp;&nbsp;<a href="'+targetAreaId+'" onclick="javascript:doActSelect(\'\', \''+sUrl+'\', \''
 		+nId+'\', \'modify\');">修改Edit</a>&nbsp; &nbsp;&nbsp;';
-	sCont += '<br/>&nbsp; &nbsp;&nbsp;<a href="javascript:void(0);" onclick="javascript:doActSelect(\'\', \''+sUrl+'\', \''
+	sCont += '<br/>&nbsp; &nbsp;&nbsp;<a href="'+targetAreaId+'" onclick="javascript:doActSelect(\'\', \''+sUrl+'\', \''
 		+nId+'\', \'print\');">打印Print</a>&nbsp; &nbsp;&nbsp;';
-	sCont += '<br/>&nbsp; &nbsp;&nbsp;<a href="javascript:void(0);" onclick="javascript:doActSelect(\'\', \''+sUrl+'\', \''
+	sCont += '<br/>&nbsp; &nbsp;&nbsp;<a href="'+targetAreaId+'" onclick="javascript:doActSelect(\'\', \''+sUrl+'\', \''
 		+nId+'\', \'list-dodelete\');">删除Delete</a>&nbsp; &nbsp;&nbsp;';
-	sCont += '<br/>&nbsp; &nbsp;&nbsp;<a href="javascript:void(0);" onclick="javascript:doActSelect(\'\', \''+sUrl+'\', \''+nId+'\', \'addbycopy\');">复制Copy</a>&nbsp; &nbsp;&nbsp;';
+	sCont += '<br/>&nbsp; &nbsp;&nbsp;<a href="'+targetAreaId+'" onclick="javascript:doActSelect(\'\', \''+sUrl+'\', \''
+        +nId+'\', \'addbycopy\');">复制Copy</a>&nbsp; &nbsp;&nbsp;';
+   
+    //- add more options on popup menu, Fri Apr 26 10:58:24 HKT 2019
+    if(typeof userinfo.actListOption != 'undefined'){
+        var actArr = userinfo.actListOption; var tmpName, tmpUrl;
+        for(var ai=0; ai<actArr.length; ai++){
+            tmpName = actArr[ai].actName;
+            tmpUrl = actArr[ai].actUrl;
+            if(tmpUrl != null && tmpUrl.indexOf('&id=&') > -1){
+                tmpUrl = tmpUrl.replace('&id=&', '&id='+dataId+'&');
+            }
+            sCont += '<br/>&nbsp; &nbsp;&nbsp;<a href="'+targetAreaId+'" onclick="javascript:doActSelect(\'\', \''+tmpUrl+'\', \''
+                +nId+'\', \'ActOption\');">'+tmpName+'</a>&nbsp; &nbsp;&nbsp;';
+        }
+    }
 	 
 	sCont += '</p>';
-
 	divObj.innerHTML = sCont;
 
 }

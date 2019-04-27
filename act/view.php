@@ -224,10 +224,11 @@ if($hasEndLine == 0){
     $out .= "<tr ><td style=\"border-top: 1px dotted #cccccc; vertical-align:middle;\" colspan=\""
         .$form_cols."\">  </td></tr>";
 }
-$out .= "<tr><td colspan=\"".$form_cols."\" align=\"center\">
+$rtn2top = 'document.location.href=\'#contentarea_outer\';';
+$out .= "<tr><td colspan=\"".$form_cols."\" align=\"center\" style=\"word-spacing:8px;\">
 	<input type=\"button\" name=\"viewbtn\" id=\"viewbtn\" value=\"编辑\"
 		onclick=\"javascript:doActionEx('"
-		.$jdo."&act=modify','contentarea');\"".($hasDisableW ? ' disabled' : '')."/>
+		.$jdo."&act=modify','contentarea');$rtn2top\"".($hasDisableW ? ' disabled' : '')."/>
 	<input type=\"button\" name=\"printbtn\" id=\"printbtn\" value=\"打印预览\"
 		onclick=\"javascript:window.open('"
 		.$jdo."&act=print&isoput=1&isheader=0','PrintWindow','scrollbars,toolbar,location=0');\"/>
@@ -235,10 +236,8 @@ $out .= "<tr><td colspan=\"".$form_cols."\" align=\"center\">
 		onclick=\"javascript:if(window.confirm('Are you sure to delete? / 您确定要删除 id:".$id
 		." 吗?')){doAction('".$jdo."&act=list-dodelete');}\"".($hasDisableW ? ' disabled' : '')."/>
 	<input type=\"button\" name=\"addbycopybtn\" id=\"addbycopybtn\" value=\"复制\"
-        onclick=\"javascript:doActionEx('".$jdo."&act=addbycopy','contentarea');\"/>
-	<input type=\"button\" name=\"cancelbtn\" value=\"关闭\"
-		onclick=\"javascript:parent.switchArea('contentarea_outer','off');\" />";
-		
+        onclick=\"javascript:doActionEx('".$jdo."&act=addbycopy','contentarea');$rtn2top\"/>";
+
 # more act options
 if(true){
     $actArr = $gtbl->getActOption($hmorig);
@@ -251,9 +250,12 @@ if(true){
             $actv[0] = "javascript:doActionEx('".$actv[0]."','contentarea');";
         }
         $out .= "<input type='button' name='actoption_$actk' value='".$actv[1]."'"
-            ." onclick=\"".$actv[0]."\"/>\n";
+            ." onclick=\"".$actv[0].";$rtn2top\"/>\n";
     }
 }
+
+$out .=	"<input type=\"button\" name=\"cancelbtn\" value=\"关闭\"
+		onclick=\"javascript:parent.switchArea('contentarea_outer','off');\" />";
 	
 $out .="</td></tr>";
 

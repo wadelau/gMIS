@@ -171,6 +171,21 @@ $out .= "&nbsp;&nbsp; <button id=\"refrehbtn2\" name=\"refreshbtn2\" "
 
 $out_footer = "<hr width=\"1\"/> &nbsp;&nbsp;&nbsp;<span id=\"noticediv\" style=\"color:green;\"> </span>";
 
+if(true){
+    //- output more act options
+    $actArr = $gtbl->getActOption();
+    $out .= "\n<script type=\"text/javascript\">userinfo.actListOption=[";
+    $tmpstr = '';
+    if(count($actArr) > 0){
+        foreach($actArr as $actk=>$actv){
+            $tmpstr .= "{\"actName\":\"".$actv[1]."\", \"actUrl\":\"".$actv[0]."\""."},";
+        }
+    }
+    if(endsWith($tmpstr, ',')){ $tmpstr = substr($tmpstr, 0, strlen($tmpstr)-1); }
+    $out .= $tmpstr;
+    $out .= "];</script>";
+}
+
 $data['title'] = $gtbl->getTblCHN();
 
 $gtbl = null;
