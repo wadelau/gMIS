@@ -86,7 +86,7 @@ for($hmi=$min_idx; $hmi<=$max_idx;$hmi++){
     if($gtbl->filterHiddenField($field, $opfield,$timefield)){
         #continue;
     }
-    if($field == 'password'){
+    if(inString('password', $field) || inString('pwd', $field)){
         $hmorig[$field] = '';
         continue;
     }

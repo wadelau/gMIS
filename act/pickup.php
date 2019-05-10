@@ -92,7 +92,7 @@ for($hmi=$min_idx; $hmi<=$max_idx;$hmi++){
 	if($field == null || $field == ''){
 		continue;
 	}
-	else if($field == 'password'){
+	else if(inString('password', $field) || inString('pwd', $field)){
         $hmorig[$field] = '';
         continue;
     }

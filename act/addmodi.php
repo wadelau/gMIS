@@ -174,7 +174,7 @@ for($hmi=$min_idx; $hmi<=$max_idx;$hmi++){
         continue;
     }
 	
-	if($field == 'password'){
+	if(inString('password', $field) || inString('pwd', $field)){
         $hmorig[$field] = '';
     }
     else if($isAddByCopy && $gtbl->getReadOnly($field, $fieldinputtype) != ''){

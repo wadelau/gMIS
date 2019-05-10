@@ -54,7 +54,7 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
         }
         continue;
     }
-	else if($field == 'password'){
+	else if(inString('password', $field) || inString('pwd', $field)){
         if($_REQUEST[$field] != ''){
            $fieldv = sha1($_REQUEST[$field]); 
 		   $fieldlist[] = $field; 

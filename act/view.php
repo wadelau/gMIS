@@ -66,7 +66,7 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
         $closedtr = 0;
     }
 
-    if($field == 'password'){
+    if(inString('password', $field) || inString('pwd', $field)){
         $hmorig[$field] = '';
     }
 

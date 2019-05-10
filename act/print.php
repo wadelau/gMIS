@@ -78,7 +78,7 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
     $hasclosed = 0;
     $needcloserow = 0;
 
-    if($field == 'password'){
+    if(inString('password', $field) || inString('pwd', $field)){
         $fieldv = $hmorig[$field] = $skiptag;
     }
     if($lastclosed == 1){

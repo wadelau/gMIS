@@ -111,7 +111,7 @@ if($hm[0]){
 }
 
 $hm = $gtbl->execBy("select * from ".$_CONFIG['tblpre']."fin_operatelogtbl order by ".$gtbl->getMyId()." desc limit 7",
-        null, $withCache=array('key'=>'info_user-select-count'));
+        null, $withCache=array('key'=>'info_user-select-log'));
 if($hm[0]){
 	$hm = $hm[1];
 	$data['log_list'] = $hm;

@@ -16,7 +16,7 @@ $time_bgn = time();
 
 $gtbl2 = $gtbl;
 if($testDb != ''){
-    $args = array('db'=>'adsystemtest');
+    $args = array('db'=>$_CONFIG['maindb']);
     $gtbl2 = new GTbl($tbl, $args, $sep);
     debug($gtbl2);
 }
