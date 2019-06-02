@@ -434,6 +434,7 @@ else if(startsWith($act, "list")){
                 else{   
                     $queryFields .= $v; 
                 }
+				$tmpFieldUrl = str_replace($k, 'old'.$k, $jdo);
                 $queryFields .= " &nbsp;  &nbsp; <a href=\"javascript:pnAction('"
                         .$tmpFieldUrl."');\" title='Remove this filter/去掉此条件'"
                         ." onclick=\"javascript:fillPickUpReqt('".$jdo."', '$field', '".($base62xTag.Base62x::encode($v))."', 'filterrollback', this);\">[X]</a><br/>";
