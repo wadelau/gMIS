@@ -174,9 +174,12 @@ class PageNavi extends WebApp{
 	   $hasId = $gtbl->get('hasid');
        $myId = $gtbl->getMyId();
 	   $isTimeField = false;
-	   
+	   $hasPnskId = false;
+       if(Wht::get($_REQUEST, "pnskid") != ''){
+           $hasPnskId = true;
+       }
        $hidesk = $gtbl->getHideSk($user); # xml/fin_todotbl.xml
-       if($hidesk != '' && !$hasid){ # why so?
+       if($hidesk != '' && !$hasid && !$hasPnskId){ # why so?
            $harr = explode("|", $hidesk);
            foreach($harr as $k=>$v){
                $harr2 = explode("::", $v);

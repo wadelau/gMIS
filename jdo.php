@@ -370,10 +370,9 @@ else if(startsWith($act, "list")){
                if($gtbl->getInputType($field) != 'select' 
                        && $gtbl->isNumeric($hmfield[$field])
                        && strpos($hmfield[$field], "date") === false){
-
                    $hmsum[$field] += $rec[$field]; 
-
-               }else{
+               }
+               else{
                    if($rec[$field] != ''){
                         if(!isset($hmsumuniq[$field][$rec[$field]])){
                             $hmsum[$field]++;
@@ -392,6 +391,9 @@ else if(startsWith($act, "list")){
                $fstfields .= $listid[1].",";
            }
            else{ $fstfields .= $listid[$_REQUEST['linkfieldcopy']].","; }
+
+            # ready for dataList
+            $out .= "<script type='text/javascript' async>parent.userinfo.dataList.push(".json_encode($rec).");</script>";
         } 
         # record end
         # sum bgn
@@ -434,9 +436,9 @@ else if(startsWith($act, "list")){
                 else{   
                     $queryFields .= $v; 
                 }
-				$tmpFieldUrl = str_replace($k, 'old'.$k, $jdo);
-                $queryFields .= " &nbsp;  &nbsp; <a href=\"javascript:pnAction('"
-                        .$tmpFieldUrl."');\" title='Remove this filter/去掉此条件'"
+                $tmpFieldUrl = str_replace($k, 'old'.$k, $jdo);
+                $queryFields .= " &nbsp;  &nbsp; <a href=\"javascript:pnAction('".$tmpFieldUrl."');\""
+                        ." title='Remove this filter/去掉此条件'"
                         ." onclick=\"javascript:fillPickUpReqt('".$jdo."', '$field', '".($base62xTag.Base62x::encode($v))."', 'filterrollback', this);\">[X]</a><br/>";
             }
         }

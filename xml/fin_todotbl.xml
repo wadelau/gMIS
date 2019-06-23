@@ -7,7 +7,8 @@
         <creator>Xenxin</creator>
         <!-- <superaccess>inherit::id=USER_ID::rw</superaccess> -->
         <managemode>o-w</managemode><!-- record owner write only, others cannot write -->
-        <actoption>jdo.php::tbl=THIS_TBL,pnskpid=THIS_ID,id=THIS_ID,pid=THIS_pid,pnsktriggerbyparent=THIS_triggerbyparent,pnsktriggerbyparentid=THIS_triggerbyparentid,act='addbycopy',_Updt_Clit_Urlp='1'::回复::confirm=0,blank=0
+        <!-- <actoption>jdo.php::tbl=THIS_TBL,pnskpid=THIS_ID,id=THIS_ID,pid=THIS_pid,pnsktriggerbyparent=THIS_triggerbyparent,pnsktriggerbyparentid=THIS_triggerbyparentid,act='addbycopy',_Updt_Clit_Urlp='1'::回复::confirm=0,blank=0 -->
+        <actoption>jdo.php::tbl=THIS_TBL,pnskpid=THIS_ID,id=THIS_ID,pid=THIS_pid,pnsktriggerbyparent=THIS_togroup,pnsktriggerbyparentid=THIS_touser,pnsktogroup=THIS_triggerbyparent,pnsktouser=THIS_triggerbyparentid,act='addbycopy',_Updt_Clit_Urlp='1'::回复::confirm=0,blank=0
             |jdo.php::tbl=THIS_TBL,pnskpid=THIS_ID,id=THIS_ID,pid=THIS_pid,pnsktriggerbyparent=THIS_togroup,pnsktriggerbyparentid=THIS_touser,pnsktogroup='0',pnsktouser='0',act='addbycopy',_Updt_Clit_Urlp='1'::转交::confirm=0,blank=0</actoption>
         <hidesk>touser::=::THIS_USER|togroup::=::THIS_GROUP</hidesk> <!-- |sm::=::0 -->
 		<orderby>istate desc</orderby>
@@ -87,32 +88,33 @@
 		<selectoption>1:待做|2:供方进行中|3:待需方确认|0:已完成|-2:擱置|-1:取消</selectoption>
         <delayjsaction>onload::3::if('THIS_ID'==''){parent.fillReset('istate','select',1);}</delayjsaction>
         <css>0:greycolor|1::redcolor|2::greencolor|3::purplecolor</css>
-        <trigger>ALL::copyto::fin_todotbl::istate=istate,updatetime=NOW()::id=pid::NO_INSERT</trigger>    
+        <trigger>ALL::copyto::fin_todotbl::istate=istate,updatetime=NOW()::id=pid::NO_INSERT</trigger> 
 	</field>
 	<field name="taskmemo">
       <chnname>任务描述</chnname>
 	  <inputtype>textarea</inputtype>
       <listview>0</listview>
-      <delayjsaction>onload::3::if('THIS_pid'!=''&amp;&amp;'THIS_pid'!='0'){ parent._g('taskmemo').readOnly=true; console.log('taskmemo has been set disabled.'); };</delayjsaction>
+      <delayjsaction>onload::3::if(true){ var hasDisabled=false;var taskMemoObj=parent._g('taskmemo');if('THIS_pid'!=''&amp;&amp;'THIS_pid'!='0'){ taskMemoObj.readOnly=true; hasDisabled=true;}else if('THIS_istate'=='0'&amp;&amp;taskMemoObj){taskMemoObj.readOnly=true;hasDisabled=true} if(hasDisabled){console.log('taskmemo has been set disabled.');}}</delayjsaction>
       <memo>新建任务时填写; &lt;br/>回复或转交任务时忽略过;</memo>
     </field>
     <field name="taskreply">
       <chnname>处理进度</chnname>
 	  <inputtype>textarea</inputtype>
-      <delayjsaction>onload::3::if('THIS_id'==''){ parent._g('taskreply').readOnly=true; console.log('taskreplay has been set disabled.'); };</delayjsaction>
+      <delayjsaction>onload::3::if(true){var hasDisabled=false;var taskReplyObj=parent._g('taskreply'); if('THIS_id'==''){ taskReplyObj.readOnly=true;}else if('THIS_istate'=='0'&amp;&amp;taskReplyObj){ taskReplyObj.readOnly=true; hasDisabled=true}; if(hasDisabled){console.log('taskreplay has been set disabled.');};}</delayjsaction>
       <memo>新建任务时忽略过;
         &lt;br/>回复或转交任务时据实填写;</memo>
 	  <listview>2</listview>
-    </field>
-	<field name="taskfile">
-      <chnname>附件</chnname>
-	  <inputtype>file</inputtype>
     </field>
     <field name="pid">
         <chnname>任务主线</chnname>
         <!-- <readonly>1</readonly> -->
         <delayjsaction>onload::3::if(true){ var pidObj=parent._g('pid'); if(pidObj&amp;&amp;parent.userinfo.urlParams){ var urlPid=parent.userinfo.urlParams['pid']; var urlPidP=0; if(!urlPid){ urlPidP=parent.userinfo.urlParams['pnskpid']; }; if(urlPid &amp;&amp; urlPidP){ if(urlPid>urlPidP){ urlPid=urlPidP; } }  if(urlPid>0){ pidObj.value=urlPid; }else{ console.log('urlPid:'+urlPid+' urlPidP:'+urlPidP); }; pidObj.readOnly=true; }  console.log('pid has been set disabled.'); };</delayjsaction>
         <memo>Auto Fill...</memo>
+    </field>
+    
+    <field name="taskfile">
+      <chnname>附件</chnname>
+	  <inputtype>file</inputtype>
     </field>
 
   	<field name="operator">

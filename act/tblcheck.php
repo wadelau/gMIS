@@ -15,6 +15,7 @@ if(count($checkactions) > 0){
 $mode = $gtbl->getMode();
 if($mode != ''){
     $act2mode = array('add'=>'w',
+            'addbycopy' => 'w',
             'list-addform'=>'w',
             'modify'=>'w',
             'updatefield'=>'w',

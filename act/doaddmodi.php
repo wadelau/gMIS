@@ -54,7 +54,8 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
         }
         continue;
     }
-	else if(inString('password', $field) || inString('pwd', $field)){
+	#else if($field == 'password'){
+    else if(inString('password', $field) || inString('pwd', $field)){
         if($_REQUEST[$field] != ''){
            $fieldv = sha1($_REQUEST[$field]); 
 		   $fieldlist[] = $field; 
@@ -229,7 +230,9 @@ if($hm[0]){
 
 }
 else{
-    $out .= "<script> if(typeof parent.sendNotice !='undefined'){ parent.sendNotice(false, '遗憾！操作失败，请重试'); } </script>";
+    $servResp = serialize($hm); $servResp = str_replace("'", "\'", $servResp);
+    $out .= "<script> if(typeof parent.sendNotice !='undefined'){ parent.sendNotice(false, '遗憾！操作失败，请重试'); }; if(true){ var servResp=parent._g('respFromServ'); if(servResp){ servResp.innerHTML='<p style=\"color:red;\">Operation Failed. / 操作失败.<br/>".$servResp."</p>';}} </script>";
+    debug("act/doaddmodi: ".$servResp);
 }
 
 $gtbl->setId('');

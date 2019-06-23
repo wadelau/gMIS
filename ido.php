@@ -183,7 +183,7 @@ if(true){
     }
     if(endsWith($tmpstr, ',')){ $tmpstr = substr($tmpstr, 0, strlen($tmpstr)-1); }
     $out .= $tmpstr;
-    $out .= "];</script>";
+    $out .= "]; userinfo.dataList=[];</script>";
 }
 
 $data['title'] = $gtbl->getTblCHN();

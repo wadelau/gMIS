@@ -629,7 +629,7 @@ function registerAct(tObj){
         }
         actxId = window.setTimeout(actx, tObj.delaytime*1000);
         userinfo.registerAct[tObj.action] = actxId;
-        console.log('register.action:['+unescape(tObj.action)+'] actx:['+actx+'] axtxId:['+actxId+']');
+        //console.log('register.action:['+unescape(tObj.action)+'] actx:['+actx+'] axtxId:['+actxId+']');
     }
 }
 //-- register an action to be run in a few seconds, end
@@ -1220,11 +1220,29 @@ function showActList(nId, isOn, sUrl, dataId){
     //- add more options on popup menu, Fri Apr 26 10:58:24 HKT 2019
     if(typeof userinfo.actListOption != 'undefined'){
         var actArr = userinfo.actListOption; var tmpName, tmpUrl;
+        var tmpRecord = {};
+        //- userinfo.dataList init in ido.php and load data in jdo.php
+        for(var ri=0; ri<userinfo.dataList.length; ri++){
+            if(userinfo.dataList[ri].id==dataId){
+                tmpRecord = userinfo.dataList[ri];
+                //console.log("dataList:"+tmpRecord+" id:"+tmpRecord['id']);
+                break;
+            }
+        }
         for(var ai=0; ai<actArr.length; ai++){
             tmpName = actArr[ai].actName;
             tmpUrl = actArr[ai].actUrl;
-            if(tmpUrl != null && tmpUrl.indexOf('&id=&') > -1){
-                tmpUrl = tmpUrl.replace('&id=&', '&id='+dataId+'&');
+            if(tmpUrl != null && tmpUrl != ''){
+                //console.log("comm/ido: tmpUrl:"+tmpUrl);
+                var tmpk = ''; var fieldRe = /THIS_([a-zA-Z]+)/gm; var match;
+                var tmpUrl2 = tmpUrl;
+                while(match = fieldRe.exec(tmpUrl)){
+                    //console.log(match);
+                    tmpk = match[1]; if(tmpk=='ID'){ tmpk = 'id'; }
+                    // due to 'field' 'fieldx' 'fieldxxxx'
+                    tmpUrl2 = tmpUrl2.replace((new RegExp(match[0]+"([&|'|$]+)", "gm")), tmpRecord[tmpk]+'$1');
+                }
+                tmpUrl = tmpUrl2;
             }
             sCont += '<br/>&nbsp; &nbsp;&nbsp;<a href="'+targetAreaId+'" onclick="javascript:doActSelect(\'\', \''+tmpUrl+'\', \''
                 +nId+'\', \'ActOption\');">'+tmpName+'</a>&nbsp; &nbsp;&nbsp;';
@@ -1698,7 +1716,7 @@ function fillPickUpReqt(myUrl, field, fieldv, opStr, linkObj){
         doActionEx(myUrl+'&act=pickup&pnsm=1&pickupfieldcount='+fieldv, 'contentarea');
 
     }
-	    else if(opStr == 'filterrollback'){
+	else if(opStr == 'filterrollback'){
         
         myUrl = myUrl.replace('&pnsk'+field, '&dummy');
         myUrl = myUrl.replace('oppnsk'+field, '&dummy');

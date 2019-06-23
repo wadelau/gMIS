@@ -352,7 +352,7 @@ $out .= "<tr><td colspan=\"".$form_cols."\" align=\"center\">"
 $out .= "<input type=\"hidden\" id=\"id\" name=\"id\" value=\"".$id."\"/>\n ".$hiddenfields."\n";
 $out .= "&nbsp;&nbsp;&nbsp;<input type=\"reset\" name=\"resetbtn\" />";
 $out .= "&nbsp;&nbsp;&nbsp;<input type=\"button\" name=\"cancelbtn\" value=\"取消\" "
-        ."onclick=\"javascript:switchArea('contentarea_outer','off');\" /> </td></tr>";
+        ."onclick=\"javascript:switchArea('contentarea_outer','off');\" /> <br/><span id='respFromServ'></span> </td></tr>";
 $out .= "</table> </form>  </fieldset>  <br/>";
 
 #$out .= "<script> parent.userinfo.targetId='".$id."'; parent.userinfo.act='".$act."'; </script>"; 

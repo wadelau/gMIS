@@ -447,6 +447,7 @@ class GTbl extends WebApp{
 			else{
 			    $needBlank = "_self";
 			}
+            #debug(__FILE__." tUrl:$tUrl");
             #return array($tUrl, $title, $needBlank);
             $actArr[] = array($tUrl, $title, $needBlank);
         }
@@ -1162,21 +1163,27 @@ class GTbl extends WebApp{
             $tmpstr = str_replace('THIS_TABLE', $this->getTbl(), $tmpstr);
             $tmpstr = str_replace('THIS_DB', trim($_REQUEST['db']), $tmpstr);
             $tmpstr = str_replace('THIS_SID', $_REQUEST[self::SID], $tmpstr);
-			if(is_array($result)){
+			if(is_array($result) && count($result)>0){
 				$tmpstr = str_replace('THIS_ID', $result[$this->getMyId()], $tmpstr);	
 				if($field != null && $field != ''){
 					if(preg_match_all('/THIS_([a-zA-Z]+)/', $tmpstr, $matchArr)){
 						$v = $matchArr[1];
 						foreach ($v as $k1=>$v1){
-							#debug("k1:$k1 v1:$v1");
-							$tmpstr = str_replace('THIS_'.$v1, $result[$v1], $tmpstr);
+							//debug("k1:$k1 v1:$v1 tmpstr:$tmpstr");
+                            # due to 'field' 'fieldx' 'fieldxxxx'
+							$tmpstr = preg_replace('/THIS_'.$v1.'([&|\'|$]*)/', $result[$v1].'\1', $tmpstr);
+							//debug("aft k1:$k1 v1:$v1 tmpstr:$tmpstr");
 						}
 					}
+                    else{
+                        //debug("umatched? tmpstr:$tmpstr field:$field");
+                    }
+                    //- @todo: why this?
 					$tmpstr = str_replace('THIS', $result[$field], $tmpstr);
 				}
 			}
 		}
-        #debug(__FILE__.": tmpstr:[$tmpstr]");
+        #debug(__FILE__.":field:$field tmpstr:[$tmpstr] result:".serialize($result));
 		return $tmpstr;
 	}
 
