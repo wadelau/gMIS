@@ -88,7 +88,7 @@
 		<selectoption>1:待做|2:供方进行中|3:待需方确认|0:已完成|-2:擱置|-1:取消</selectoption>
         <delayjsaction>onload::3::if('THIS_ID'==''){parent.fillReset('istate','select',1);}</delayjsaction>
         <css>0:greycolor|1::redcolor|2::greencolor|3::purplecolor</css>
-        <trigger>ALL::copyto::fin_todotbl::istate=istate,updatetime=NOW()::id=pid::NO_INSERT</trigger> 
+        <trigger>ALL::copyto::fin_todotbl::istate=istate,updatetime=NOW()::id=pid,operator=operator::NO_INSERT</trigger> 
 	</field>
 	<field name="taskmemo">
       <chnname>任务描述</chnname>

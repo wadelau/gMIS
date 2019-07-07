@@ -97,9 +97,19 @@ foreach($fieldlist as $i=>$field){
                             debug('trigger skip for not allow insert. sql:['.$sql.']');
                         }
                         debug(" trigger insert sql:[".$sql."] extraArr:[".serialize($tmpExtraArr)."]");
-                    }else{
+                    }
+                    else{
                         $newtmphm = $tmphm[1];
-                        $sqlupd = $sqlupd." where id='".$newtmphm[0]['id']."' limit 1";
+                        $sqlupd = $sqlupd." where "; #id='".$newtmphm[0]['id']."' limit 1";
+                        $chkFArr = explode(",", $tArr[4]);
+                        foreach($chkFArr as $k=>$v){
+                            if($v != ''){
+                                $chkField = explode("=", $v);
+                                $sqlupd .= $chkField[0]."='".$gtbl->get($chkField[1])."' and ";
+                            }
+                        }
+                        $sqlupd = substr($sqlupd, 0, strlen($sqlupd)-4);
+                        # no limit 1?
                         $tmphm = $gtbl->execBy($sqlupd, null);
                         debug(" trigger upd sql:[".$sqlupd."]");
                     }

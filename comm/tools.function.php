@@ -290,8 +290,8 @@ function redirect($url, $time=0, $msg='') {
 function isImg($file){
 	$isimg = 0;
 	if($file != ''){
-		$tmpfileext = substr($file, strlen($file)-4);
-		if(in_array($tmpfileext,array("jpeg",".jpg",".png",".gif",".bmp"))){
+		$tmpfileext = strtolower(substr($file, strlen($file)-4));
+		if(in_array($tmpfileext,array("jpeg",".jpg",".png",".gif",".bmp",".webp"))){
 			$isimg = 1;
 		}
 	}

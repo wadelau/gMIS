@@ -563,7 +563,10 @@ class GTbl extends WebApp{
 				$oldhmf = $this->hmf;
 				$this->hmf = array();
 				$this->setTbl($tbl);
-				$hm = $this->getBy("$optval,$dispfield", $arr[3],
+                $tmpWhere = $arr[3];
+                if($tmpWhere==''){ $tmpWhere='1=1'; }
+                $tmpWhere .= " order by CONVERT($dispfield USING gbk)";
+				$hm = $this->getBy("$optval,$dispfield", $tmpWhere,
 					$withCache=array('key'=>$tbl.'-select-$optval-$dispfield-'.$arr[3]));
 					# anti for various fields from the same src table
 				if($hm[0]){
