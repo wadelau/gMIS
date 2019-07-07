@@ -99,7 +99,10 @@ class PickUp extends WebApp{
                     }
                 }
                 else{
-                    $options[] = array($field=>sprintf("%0.1f", $i));
+                    $val = $i;
+                    if($isTimeField){ $val = date("Y-m-d", $val); }
+                    else{ $val = sprintf("%0.1f", $val); }
+                    $options[] = array($field=>$val);
                 }
             }
             #debug("\t read tbl:$tbl field:$field type:$fieldtype imax:$imax imin:$imin istep:$istep hm:[".serialize($options)."]");
