@@ -316,7 +316,6 @@ else if($step == 'getsrc'){
 				$out .= "<br/><a href='".$file."&step=getsrc'>终止当前进程, 重新开始获取源程序</a> .";
 				redirect($file."&step=getsrc&istep=waitfile", 6 , $header.$out.$footer);
 			}
-
 		}
 	}
 	else{
@@ -404,7 +403,7 @@ else if($step == 'db'){
 		#print $tblpre;
 		replaceInFile($config_file, 'TABLE_PRE', $tblpre);
 		if($tblpre != '' && $tblpre != 'gmis_'){
-			replaceInFile('./gmis-tables.sql', 'gmis_', $tblpre);
+			replaceInFile('./gmis.tables.sql', 'gmis_', $tblpre);
 			sleep(2);
 		}
  
@@ -415,7 +414,7 @@ else if($step == 'db'){
 			: new mysqli($_CONFIG['dbhost'].":".$_CONFIG['dbport'], $_CONFIG['dbuser'], $_CONFIG['dbpassword']);
 		$query = (($mysqlmode == 'mysql') ? @mysql_query($sql) : $link->query($sql));
 		
-		$sqlstr = file_get_contents("./gmis-tables.sql");;
+		$sqlstr = file_get_contents("./gmis.tables.sql");;
 		#print "<br/>sqlstr:[$sqlstr]";
 		$sqlarr = explode(';', $sqlstr);
 		foreach($sqlarr as $k=>$v){
@@ -461,7 +460,7 @@ else if($step == 'init'){
 		replaceInFile($config_file, 'FRONT_PAGE', $_REQUEST['frontpage']);
 
 		# save super admin 
- 		$sql = 'use '.$_CONFIG['dbname'].''; #source '.$appdir.'/gmis-tables.sql;';
+ 		$sql = 'use '.$_CONFIG['dbname'].''; #source '.$appdir.'/gmis.tables.sql;';
 		$mysqlmode = function_exists('mysql_connect') ? 'mysql' : 'mysqli';
 		#print "<br/>mysqlmode:[$mysqlmode]";
 		$link = ($mysqlmode == 'mysql') 
@@ -469,8 +468,9 @@ else if($step == 'init'){
 			: new mysqli($_CONFIG['dbhost'].":".$_CONFIG['dbport'], $_CONFIG['dbuser'], $_CONFIG['dbpassword']);
 		$query = (($mysqlmode == 'mysql') ? @mysql_query($sql) : $link->query($sql));
 		if(true){
-			$sql = "insert into ".$_CONFIG['usertbl']." set email='".trim($_REQUEST['rootemail'])."', password='"
-				.sha1(trim($_REQUEST['rootpwd']))."', updatetime=NOW(), inserttime=NOW(), branchoffice=''";
+			$sql = "insert into ".$_CONFIG['usertbl']." set email='".trim($_REQUEST['rootemail'])
+				."', password='".sha1(trim($_REQUEST['rootpwd']))
+				."', updatetime=NOW(), inserttime=NOW(), branchoffice=''";
 			#print $sql;
 			$query = (($mysqlmode == 'mysql') ? @mysql_query($sql) : $link->query($sql));
 		}

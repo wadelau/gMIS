@@ -91,13 +91,22 @@ else if(startsWith($act, "list")){
     }
     # list start
     $listid = array();
-    $out .= "<table width=\"98%\" cellspacing=\"0px\" cellpadding=\"3px\""
+    $out .= "<table width=\"98%\" id=\"gmisjdomaintbl\" cellspacing=\"0px\" cellpadding=\"3px\""
 			." style=\"word-break:break-all;\" class=\"mainlist\">"
             ."<tr height=\"35px\"><td colspan=\"".($max_disp_cols+2)."\">";
     $out .= "<button name=\"selectallbtn\" type=\"button\" onclick=\"checkAll();\" value=\"\">全选</button> &nbsp;";
     $out .= "<button name=\"reversebtn\" type=\"button\" onclick=\"uncheckAll();\" value=\"\">反选</button>";
     $out .= "&nbsp; ".$navi->getNavi()." &nbsp;";
-	$out .= "&nbsp;&nbsp;<button name='pickup' onclick=\"javascript:doActionEx('"
+
+    if($accMode!='' && ($accMode == 'r' || !inString('w', $accMode))){
+        # readonly
+    }
+    else{
+	$out .= "&nbsp;<button name='importexcel' onclick=\"javascript:doActionEx('"
+    	."extra/importexcel.php?sid=$sid&tbl=$tbl&db=$db', 'contentarea');\" title=\"批量导入外部数据\">导入Xlsx</button>";
+    }
+
+	$out .= "&nbsp;&nbsp;&nbsp;<button name='pickup' onclick=\"javascript:doActionEx('"
     	.$jdo."&act=pickup', 'contentarea');\" title=\"快速点击勾选\">点  选</button>";
 	$out .= "&nbsp;&nbsp;<button name='deepsearch' onclick=\"javascript:doActionEx('"
     	.$jdo."&act=deepsearch', 'contentarea');\" title=\"深度复合查询\">深  搜</button>";
@@ -191,8 +200,12 @@ else if(startsWith($act, "list")){
 			}
 			else{
 				$out .= $gtbl->getSelectOption($field, (isset($_REQUEST['pnsk'.$field])?$_REQUEST['pnsk'.$field]:null),"pnsk_",0,0);
+                $out .= "<script type=\"text/javascript\">parent.userinfo.searchBySelectUrl='".$jdo."&act=list&pnsm=and';parent.registerAct({'status':'onload', "
+                    ."'action':'".Base62x::encode("addEvent('pnsk_$field', 'change', searchBySelect)")."',"
+                    ." 'delaytime':5});</script>";
 			}
-        }else{
+        }
+        else{
             $tmpfieldv = $_REQUEST['pnsk'.$field];
             if(!isset($tmpfieldv)){ $tmpfieldv = $untouched; }
             $out .= "<div style=\"display:none\" id=\"pnsk_{$field}_op_div\"><select name=\"oppnsk_{$field}\" id=\"oppnsk_{$field}\" "
@@ -332,7 +345,7 @@ else if(startsWith($act, "list")){
                else if($gtbl->getExtraInput($field) != ''){
 
                    $out .= "<td ondblclick=\"javascript:show('span_disp_".$field."','".$gtbl->getExtraInput($field)."&act=".$act
-                    ."&field=".$field."&otbl=".$tbl."&oldv=".$rec[$field]."&oid=".$id."',true,true);\" title=\"".addslashes($rec[$field])
+                    ."&field=".$field."&otbl=".$tbl."&oldv=".$rec[$field]."&oid=".$id."&randi=".rand(0,99999)."',true,true);\" title=\"".addslashes($rec[$field])
                     ."\">".shortenStr($rec[$field], $list_disp_limit)." <span id=\"span_disp_".$field."\"> </span> <div id=\"extrainput_"
                     .$act."_".$field."\" class=\"extrainput\">  </div> </td>";
 

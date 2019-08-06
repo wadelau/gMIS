@@ -161,8 +161,8 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
             $fieldv = trim(Wht::get($_REQUEST, $field));
 			if($fieldv == ''){
 				$fieldv = $hmfield[$field."_default"];
-					if($fieldv == ''){
-					if(inString('int', $hmfield[$field])){
+				if($fieldv == ''){
+					if($gtbl->isNumeric($hmfield[$field]) == 1){
 						#print __FILE__.": field:[".$field."] type:[".$hmfield[$field]."] is int.";
 						$fieldv = 0;
 					}
@@ -231,6 +231,28 @@ if($hm[0]){
 }
 else{
     $servResp = serialize($hm); $servResp = str_replace("'", "\'", $servResp);
+    $foundErr = false;
+    foreach($fieldlist as $k=>$v){
+        if(inString($v, $servResp)){
+            $servResp .= "<br/>".$gtbl->getCHN($v)."[$v]: 数据异常/出错, 请修正后重试. / Please revise and retry.";        
+            $foundErr = true;
+        }
+    }
+    if(!$foundErr){
+        if(inString('Duplicate entry', $servResp)){
+            $priuni = $gtbl->get($gtbl->PRIUNI);
+            $servResp .= "<br/>发现重复冲突数据, 请修正后重试. / Please revise and retry.";
+            foreach($priuni as $k=>$v){
+                if($k == 'PRI'){ continue; } # skip id?
+                foreach($v as $k2=>$v2){
+                    if(isset($_REQUEST[$v2])){
+                        $servResp .= "<br/>".$gtbl->getCHN($v2)."[$v2]: ".$_REQUEST[$v2]."";        
+                    }
+                }
+            }
+            $foundErr = true;
+        }
+    }
     $out .= "<script> if(typeof parent.sendNotice !='undefined'){ parent.sendNotice(false, '遗憾！操作失败，请重试'); }; if(true){ var servResp=parent._g('respFromServ'); if(servResp){ servResp.innerHTML='<p style=\"color:red;\">Operation Failed. / 操作失败.<br/>".$servResp."</p>';}} </script>";
     debug("act/doaddmodi: ".$servResp);
 }

@@ -277,7 +277,7 @@ for($hmi=$min_idx; $hmi<=$max_idx;$hmi++){
 			.$act."_".$field."\"><input id=\"".$field."\" name=\"".$field."\" class=\"search\" value=\""
 			.$hmorig[$field]."\" /></span> <span id=\"span_".$act."_".$field."_v\"><a href=\"javascript:"
 			."void(0);\" onclick=\"javascript:doActionEx('".$gtbl->getExtraInput($field, $hmorig)."&act="
-			.$act."&field=".$field."&oldv=".$hmorig[$field]."&otbl=".$tbl."&oid=".$id."&isheader=0&sid=".$sid."','extrainput_"
+			.$act."&field=".$field."&oldv=".$hmorig[$field]."&otbl=".$tbl."&oid=".$id."&isheader=0&sid=".$sid."&randi=".rand(0,99999)."','extrainput_"
 			.$act."_".$field."_inside');document.getElementById('extrainput_".$act."_".$field
 			."').style.display='block'; document.getElementById('extendicon_${id}_$field').src='./img/minus.gif';"
 			."\"><img border=\"0\" id=\"extendicon_${id}_$field\" src=\"img/".$iconImage."\""
@@ -311,10 +311,15 @@ for($hmi=$min_idx; $hmi<=$max_idx;$hmi++){
             $opentr = 1;
 		}
 		else{
+            $rdonly = $gtbl->getReadOnly($field);
         	$out .= "<td nowrap ".$gtbl->getCss($field)." style=\"vertical-align:top\"><b>".$gtbl->getCHN($field)."</b>: "
         	        ."</td><td style=\"vertical-align:top\"><input type=\"text\" id=\""
         	        .$field."\" name=\"".$field."\" class=\"noneinput wideinput\" value=\"".$hmorig[$field]."\" "
-        	        .$gtbl->getJsAction($field).$gtbl->getAccept($field)." ".$gtbl->getReadOnly($field)." /> <br/> "
+                    .$gtbl->getJsAction($field).$gtbl->getAccept($field)." ".$rdonly." ";
+             if(in_array($field, $timefield) && $rdonly==''){
+                $out .= " onclick=\"javascript:WdatePicker();\"";
+             }
+             $out .= "/> <br/> "
         	        .$gtbl->getMemo($field)."</td>";
         	$opentr = 0;
 		}

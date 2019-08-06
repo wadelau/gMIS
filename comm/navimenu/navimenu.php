@@ -124,7 +124,7 @@ if($hm[0]){
                 <li><a href="'.$ido.'&tbl=fin_operatelogtbl&tit=操作历史记录&db=&pnskuserid='.$userid.'">操作历史记录</a></li>
                 <li><a href="'.$ido.'&tbl=info_toolsettbl&tit=常用工具">日常工具</a></li>
 				<li><a href="'.$ido.'&tbl=filedirtbl&tit=文件柜&pnskparentname=/&pnsm=1">文件柜</a></li>
-                <li> <a href="javascript:void(0);">桌面设置</a> </li>
+                <li> <a href="'.$ido.'&tbl=info_objecttbl&tit=桌面设置">桌面设置</a> </li>
             </ul>
      </li>
      

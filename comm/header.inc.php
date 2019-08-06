@@ -7,8 +7,8 @@ date_default_timezone_set("Asia/Hong_Kong"); # +0800
 $docroot = $_SERVER['DOCUMENT_ROOT'];
 $rtvdir = dirname(dirname(__FILE__)); # relative dir
 $rtvdir = str_replace($docroot, "", $rtvdir);
-#$appdir = $docroot.$rtvdir;
-if(true){ //- due to soft links in os
+$appdir = $docroot.$rtvdir;
+if(false){ //- due to soft links in os
 	$appdir = $docroot;
 	$dirArr = explode("/", $rtvdir);
 	$rtvdir = "/".$dirArr[count($dirArr)-1];
@@ -52,8 +52,9 @@ require_once($appdir."/class/base62x.class.php");
 #session_start();
 # in initial stage, using php built-in session manager
 # implemented with no storage session by Xenxin@ufqi.com, Tue, 7 Mar 2017 22:54:31 +0800
-define(UID, $_CONFIG['agentalias'].'_user_id');
-define(SID, 'sid');
+#const UID = 'UID'; const SID = 'SID';
+define("UID", $_CONFIG['agentalias'].'_user_id');
+define("SID", 'sid');
 $_CONFIG['client_ip'] = Wht::getIp();
 
 if(!isset($user)){
@@ -69,6 +70,9 @@ $thisUrl = 'http' . (isset($_SERVER['HTTPS']) ? 's' : '') . '://' . "{$_SERVER['
 
 $sid = Wht::get($_REQUEST, SID);
 $userid = $user->getUserBySession($_REQUEST);
+
+//- @todo: workspace id, see inc/config
+//
 if($userid != ''){
     $user->setId($userid);
 }

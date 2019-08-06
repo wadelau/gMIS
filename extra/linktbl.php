@@ -13,7 +13,6 @@ $field = $_REQUEST['field'];
 $url = $rtvdir."/ido.php?sid=".$sid;
 
 $url = mkUrl($url, $_REQUEST);
-$maintbl_sanke = "hss_sanke_tuanduitbl";
 
 $otbl = $_REQUEST['otbl'];
 $oid = $_REQUEST['oid'];

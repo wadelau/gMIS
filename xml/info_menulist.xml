@@ -44,6 +44,7 @@
         
 		<field name="operator" type="text">
             <chnname>操作人</chnname>
+            <selectoption>fromtable::info_usertbl::email::1=1</selectoption>
         </field>
 
 		<field name="istate" type="text">

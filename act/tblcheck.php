@@ -13,11 +13,13 @@ if(count($checkactions) > 0){
 
 # manage mode check
 $mode = $gtbl->getMode();
+$accMode = $mode;
 if($mode != ''){
     $act2mode = array('add'=>'w',
             'addbycopy' => 'w',
             'list-addform'=>'w',
             'modify'=>'w',
+            'import'=>'w',
             'updatefield'=>'w',
             'list'=>'r',
             'list-toexcel'=>'r',

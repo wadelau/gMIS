@@ -47,7 +47,7 @@ if($hm[0]){
 		if($v['Key'] == 'PRI'){
             $priuni[$v['Key']][] = $v['Field'];
         }
-        else if($v['Key'] == 'UNI'){
+        else if($v['Key'] == 'UNI' || $v['Key'] == 'MUL'){
             $priuni[$v['Key']][] = $v['Field'];
         }
     }
@@ -102,7 +102,7 @@ $gtbl->setFieldList($hmfield);
 $opfield = array('operator','author','op','creator','operatorid', 'authorid', 'creatorid',
         'insertu', 'updateu', 'ioperator', 'soperator');
 $timefield = array('inserttime','insertime','updatetime','starttime','endtime','editime','edittime',
-        'modifytime','created', 'dinsertime', 'dupdatetime');
+        'modifytime','created','dinserttime', 'dupdatetime', 'dstarttime', 'dendtime');
 
 $idName = $gtbl->getMyId(); # need to replace all following, Fri, 16 Dec 2016 19:43:16 +0800
 $id = $_REQUEST[$idName];

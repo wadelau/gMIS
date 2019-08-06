@@ -28,6 +28,10 @@
         <chnname>對象Id</chnname>
     </field>
 
+	<field name="useremail">
+        <chnname>用户Email</chnname>
+    </field>
+
     <field name="inserttime">
         <chnname>时间</chnname>
         <listview>2</listview>

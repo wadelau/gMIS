@@ -6,7 +6,7 @@
 ini_set("memory_limit","512M"); # memory limit avoding crush
 
 if(true){
-	$tblpre = "TABLE_PRE";
+	$tblpre = "gmis_";
 	$conf = array();
 	$appdir = isset($appdir) ? $appdir : '';
 	$rtvdir = isset($rtvdir) ? $rtvdir : '';
@@ -17,7 +17,7 @@ if(true){
 	$conf['appdir']		= $appdir;
 
 	$conf['rtvdir'] 	= $rtvdir;
-	$conf['agentname'] 	= 'AGENT_NAME';
+	$conf['agentname'] 	= 'gMIS通用管理信息系统';
 	$conf['agentalias']	= 'gMIS-Admin';
 	$conf['smarty']		= $appdir.'/class/Smarty';
 
@@ -51,15 +51,15 @@ if(true){
 	
 	# cache server
 	$conf['enable_cache'] = 0; # or true for 1, false for 0
-	$conf['cachehost'] = '/www/bin/memcached/memcached.sock'; # '127.0.0.1'; #  ip, domain or .sock
+	$conf['cachehost'] = '127.0.0.1'; # /www/bin/memcached/memcached.sock #  ip, domain or .sock
 	$conf['cacheport'] = '11211'; # empty or '0' for linux/unix socket
 	$conf['cachedriver'] = 'MEMCACHEDX'; # REDISX, XCACHEX
-	$conf['cacheexpire'] = 1800; # 30 * 60;
+	$conf['cacheexpire'] = 300; # 5 * 60;
 	
 	# session service
 	$conf['enable_session'] = 1; # or true for 1, false for 0
 	$conf['sessiondriver'] = 'SESSIONX'; # SESSIONX, REDISX
-	$conf['sessionexpire'] = 1800; # 30 * 60;
+	$conf['sessionexpire'] = 300; #1800; # 5 * 60;
 
 	# file system
 	$conf['enable_file'] = 1; # true for 1, false for 0 to init at entry stage
@@ -67,16 +67,28 @@ if(true){
 	$conf['enable_filehandle_share'] = 1; # 17:31 10 November 2016
 
 	# misc
-	$conf['frontpage'] = 'FRONT_PAGE';  # put # before -naturedns as #-naturedns
+	$conf['frontpage'] = '/';  # put # before -naturedns as #-naturedns
 	$conf['is_debug'] = 0;
 	$conf['html_resp'] = '<!DOCTYPE html><html><head><title>RESP_TITLE</title></head><body>RESP_BODY</body></html>';
 	$conf['auto_save_interval'] = 20; # ref extra/htmleditor
-	$conf['auto_install'] = 'INSTALL_DONE';
+	$conf['auto_install'] = 'INSTALL_AUTO';
 
 	$conf['adminmail'] = 'system@local';
 	$conf['start_date'] = '2016-06-08'; # first action date in fin_operatelogtbl
-	$conf['sign_key'] = 'my_sign_key_at_random-----';
+	$conf['sign_key'] = 'my_sign_key_at_myProJEct------14:54 Monday, August 5, 2019';
 	$conf['watch_interval'] = 5 * 60; # seconds
+
+    # a gMIS running across many db same-syntax systems.
+    $conf['workspace'] = array(
+            array('name'=>'默认', 'maindb'=>$conf['maindb']),
+            array('name'=>'测试二区', 'maindb'=>$conf['maindb'])
+        );
+    /*
+     * @todo: 1) login with workspace id, extra/signin
+     *  2) bind workspace id with userid in sid of each single request, inc/session
+     *  3) retrieve workspace id in each request after userid, comm/header
+     *  4) apply the workspace id to specify maindb, comm/header
+     */
 
 	# set them all
 	GConf::setConf($conf);
@@ -114,6 +126,5 @@ class GConf{
 		}
 	}
 }
-
 
 ?>

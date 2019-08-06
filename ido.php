@@ -40,13 +40,19 @@ $module_path = ''; $levelcode = ''; $codelist = '';
 include_once($appdir."/comm/modulepath.inc.php");
 
 $jdo = mkUrl($jdo, $_REQUEST, $gtbl); # ".($isheader?"</h3>":"")."
+$accMode = $gtbl->getMode();
 
 $out .= "<table align=\"center\" width=\"98%\"  style=\"background:transparent\">";
 $out .= "<tr><td width=\"40%\" ".($isheader?"class=\"f17px\"":"")."> <!-- <b> &Pi; <a href=\"".$url."\">首页</a> "
         ."<span class=\"f17px\">&rarr;</span> --> ".$module_path." </b> </td>";
+$out .= "<td style=\"text-align:left\" colspan=\"18\">";
 
-$out .= "<td style=\"text-align:left\" colspan=\"18\">
-    &nbsp;&nbsp; <button onclick=\"javascript:doActionEx('".$jdo."&act=add','contentarea');\">新增</button>";
+if($accMode!='' && ($accMode == 'r' || !inString('w', $accMode))){
+    # readonly
+}
+else{
+    $out .= "&nbsp;&nbsp; <button onclick=\"javascript:doActionEx('".$jdo."&act=add','contentarea');\">新增</button>";
+}
 
 $refArr = $gtbl->getRelatedRef($jdo."&act=list"); # related ref, added on Thu Apr 12 18:54:43 CST 2012
 #print_r($refArr);
@@ -137,8 +143,15 @@ $out .= "<!--bottom line-->";
 
 $out .= "<table align=\"center\" width=\"98%\"  style=\"background:transparent\"> <tr><td width=\"25%\" colspan=\"4\"> <b>"
         ." ".$module_path." </b> &nbsp; </td>";
-$out .= "<td style=\"text-align:left;margin-right:58px\" colspan=\"15\"> &nbsp;  <button onclick=\"javascript:doActionEx('"
+$out .= "<td style=\"text-align:left;margin-right:58px\" colspan=\"15\"> ";
+
+if($accMode!='' && ($accMode == 'r' || !inString('w', $accMode))){
+    # readonly
+}
+else{
+    $out .= "&nbsp;  <button onclick=\"javascript:doActionEx('"
         .$jdo."&act=add','contentarea');\">新增</button>  ";
+}
 # repeat related menu, Wed, 12 Apr 2017 21:34:24 +0800
 if(count($refArr) > 0){
     foreach($refArr as $k=>$v){
@@ -167,7 +180,8 @@ if(count($refArr) > 0){
 }
         
 $out .= "&nbsp;&nbsp; <button id=\"refrehbtn2\" name=\"refreshbtn2\" "
-        ."onclick=\"javascript:window.location.reload();\" title=\"刷新\">刷新</button>  &nbsp;&nbsp;&nbsp; </td> </tr></table>\n";
+    ."onclick=\"javascript:window.location.reload();\" title=\"刷新\">刷新</button>  &nbsp;&nbsp;&nbsp;";
+$out .= "</td> </tr></table>\n";
 
 $out_footer = "<hr width=\"1\"/> &nbsp;&nbsp;&nbsp;<span id=\"noticediv\" style=\"color:green;\"> </span>";
 

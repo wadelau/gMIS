@@ -17,7 +17,7 @@ if($fmt == ''){ # default html
 
 # content output
 $isOB = 0; $enableZip = true;
-if($out == ''){ $enableZip = false; } # e.g. extra/htmleditor
+if($out == '' || $is_debug){ $enableZip = false; } # e.g. extra/htmleditor
 if($enableZip && ob_start('ob_gzhandler')){ $isOB = 1; }
 else if($enableZip && ob_start()){ $isOB = 1; }
 

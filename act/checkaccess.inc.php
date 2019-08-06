@@ -11,7 +11,7 @@ if(0){
                 .$chkAccess['reason'].".\\n201203132113.'); window.history.go(-1);</script>";
     }
     # 写权限判断
-    $writeAct = array('add','modify','list-doaddform','updatefield');
+    $writeAct = array('add','modify','list-doaddform','updatefield', 'import');
     if(in_array($_REQUEST['act'],$writeAct)){
         if(!$user->canWrite('',$_REQUEST['tbl'])){
             $chkResult = false; 

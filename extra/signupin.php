@@ -30,6 +30,8 @@ if($act == 'signin'){
 	$smt->assign('bkl', $_REQUEST['bkl']);
 	$smt->assign('verifyid', $user->getVerifyId());
 	$smt->assign('islan', $islan);
+    //- @todo: workspace list, see inc/config
+    //- list workspace options when the list.length > 1
 }
 else if($act == 'dosignin'){
     $issucc = false;
@@ -79,7 +81,8 @@ else if($act == 'dosignin'){
         }
     }
     else{
-        $result .= "login failed [账号/密码错误]. 1201302217.";
+        $result .= "login failed [账号/密码错误]. 1201302217."; 
+        #error_log("login failed [账号/密码错误]. 1201302217. email:[".$_REQUEST['email']."] pwd:[".$_REQUEST['password']."] opwd:[".$hm['password']."]"." sha-1:[".SHA1($user->get('password'))."] hm:[".serialize($hm)."]");
     }
         # verified end
     }

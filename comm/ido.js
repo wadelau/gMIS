@@ -611,25 +611,31 @@ function sendNotice(isSucc, sMsg){
 //-- see xml/x_useraccesstbl.xml
 function registerAct(tObj){
     if(tObj.status == 'onload'){
-        //window.alert('delaytime:['+tObj.delaytime+']');
-		/*
-		var actx = unescape(tObj.action);
-		actx = actx.replace('+', ' '); //- need to be replaced with -Base62x, 09:14 24 September 2016
-		actx = actx.replace('\+', ' '); //- need to be replaced with -Base62x, 09:14 24 September 2016
-		actx = actx.replace('%20', ' '); //- need to be replaced with -Base62x, 09:14 24 September 2016
-        */
-		var actx = Base62x.decode(tObj.action); //- imprv, July 26, 2018
-		var actxId = 0;
-		if(!userinfo.registerAct){
-        	userinfo.registerAct = {};
-        }
-        actxId = userinfo.registerAct[tObj.action];
-        if(actxId){
-        	window.clearTimeout(actxId);
-        }
-        actxId = window.setTimeout(actx, tObj.delaytime*1000);
-        userinfo.registerAct[tObj.action] = actxId;
+        //window.addEventListener('load', function(){
+        if(true){
+            //window.alert('delaytime:['+tObj.delaytime+']');
+            /*
+            var actx = unescape(tObj.action);
+            actx = actx.replace('+', ' '); //- need to be replaced with -Base62x, 09:14 24 September 2016
+            actx = actx.replace('\+', ' '); //- need to be replaced with -Base62x, 09:14 24 September 2016
+            actx = actx.replace('%20', ' '); //- need to be replaced with -Base62x, 09:14 24 September 2016
+            */
+            var actx = Base62x.decode(tObj.action); //- imprv, July 26, 2018
+            var actxId = 0;
+            if(!userinfo.registerAct){
+                userinfo.registerAct = {};
+            }
+            actxId = userinfo.registerAct[tObj.action];
+            if(actxId){
+                window.clearTimeout(actxId);
+            }
+            actxId = window.setTimeout(actx, tObj.delaytime*1000);
+            userinfo.registerAct[tObj.action] = actxId;
+        };//, false);
         //console.log('register.action:['+unescape(tObj.action)+'] actx:['+actx+'] axtxId:['+actxId+']');
+    }
+    else{
+        console.log((new Date())+" comm/ido: unsupported registerAct:"+tobj.status);
     }
 }
 //-- register an action to be run in a few seconds, end
@@ -676,11 +682,19 @@ function doActSelect(sSel, sUrl, iId, fieldVal){
 							var its_list_tr = document.getElementById('list_tr_'+iId);
 							if(its_list_tr){
 								its_list_tr.style.backgroundColor = '#404040';
-							}
+							} 
 							var actListDiv = document.getElementById('divActList_'+iId); //- 
 							if(actListDiv){
     							actListDiv.style.display = 'none';
 							}
+                            var parentDataTbl = parent._g('gmisjdomaintbl');
+                            if(typeof parentDataTbl != 'undefined'){
+                                parentDataTbl.deleteRow((parseInt(iId)-1)+3); //- first 3 rows are funcs
+                                console.log("found main tbl:["+parentDataTbl+"] and delete tr-id:["+iId+"]");
+                            }
+                            else{
+                                console.log("not found main tbl:["+parentDataTbl+"] with tr-id:["+iId+"]");
+                            }
 						}
 						else{
 							iId = json_resp.resultobj.resulttrace;
@@ -1771,3 +1785,26 @@ function getUrlParams(tmpUrl){
     return vars;
 };
 userinfo.urlParams = getUrlParams();
+
+//- for triger by registerAct from child page, Tue Jul 16 17:28:40 HKT 2019
+function addEvent(sId, sAct, sFunc){
+    var timerId0716=0;
+    var tmpSelect=document.getElementById(sId);
+    if(tmpSelect){
+        tmpSelect.addEventListener(sAct, sFunc);
+        //console.log('evnt added:'+tmpSelect.sAct);
+        window.clearTimeout(timerId0716);
+    }
+    else{
+        //console.log('tmpSelect:['+tmpSelect+'] is empty? try later..'); 
+        //timerId0716=window.setTimeout(addEvent(sId, sAct, sFunc), 15*1000);
+        //- anti dead lock?
+        timerId0716=window.setTimeout(function(){ addEvent(sId, sAct, sFunc); }, 10*1000);
+    }
+}
+
+//- for select onchange in list view, Tue Jul 16 17:29:15 HKT 2019
+function searchBySelect(){
+    var url = userinfo.searchBySelectUrl;
+    searchBy(url);
+}

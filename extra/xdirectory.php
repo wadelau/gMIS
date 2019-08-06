@@ -112,7 +112,7 @@ if($imode == 'read' && $targetField != $icode){
 }
 
 $out .= " <script type=\"text/javascript\"> var current_link_field='".$icode
-    ."'; parent.sendLinkInfo('".$parentCode."','w', current_link_field); </script> ";
+    ."'; var tmpTimer0859=window.setTimeout(function(){parent.sendLinkInfo('".$parentCode."','w', current_link_field);}, 1*1000);</script> ";
 
 $out .= '
 		<script type="text/javascript">

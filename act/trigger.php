@@ -17,7 +17,7 @@ if(true){
             debug("id triggers:[".$triggers=$gtbl->getTrigger($IDTAG)."]");
             $fieldlist[] = $IDTAG;
         }
-        if(count($hmorig) > 0){
+        if(is_array($hmorig) && count($hmorig) > 0){
             foreach($hmorig as $k=>$v){
                 if(!defined($_REQUEST[$K]) || $_REQUEST[$k] == ''){
                     $_REQUEST[$k] = $v;

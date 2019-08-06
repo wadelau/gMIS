@@ -18,6 +18,7 @@ $hm = $gtbl->execBy($sql="select * from ".$_CONFIG['tblpre']."fin_todotbl where 
         .$user->getId().") or $userGroup=0) and istate in (1,2) order by istate desc, id desc limit 7 ", null,
 		$withCache=array('key'=>'info_todo-select-'.$user->getId()));
 		# give overall data to admin group, Nov 10, 2018
+#debug("sql:$sql");
 if($hm[0]){
     $hm = $hm[1];
     foreach ($hm as $k=>$v){
@@ -71,6 +72,9 @@ else{
         $hm = $hm[1];
         $data['module_list_byuser'] = $hm;
     }
+	else{
+        $data['module_list_byuser'] = array();
+	}
 }
 
 #
@@ -79,7 +83,12 @@ foreach($data['module_list_byuser'] as $k=>$v){
     $module_list .= "'".$v['parenttype']."',";
     $module_list = substr($module_list, 0, strlen($module_list)-1);
 }
-$moduleNeedDb .= ','.$module_list;
+if($moduleNeedDb == ''){
+	$moduleNeedDb = '\'\'';	
+}
+if($module_list != ''){
+	$moduleNeedDb .= ','.$module_list;
+}
 $hm = $gtbl->execBY("select modulename,thedb from ".$_CONFIG['tblpre']
         ."info_menulist where modulename in ($moduleNeedDb)", null,
         $withCache=array('key'=>'info_menulist-select-'.$module_list));
@@ -126,6 +135,9 @@ if($navidir != ''){
 	if($hm[0]){
 		$hm = $hm[1];
 		$data['navidir_list'] = $hm;
+	}
+	else{
+		$data['navidir_list'] = array();
 	}
 	#debug($hm, '', 1);
 }
