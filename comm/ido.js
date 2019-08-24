@@ -56,6 +56,9 @@ function doAction(strUrl){
         }
     }
     }
+	if(typeof userinfo.time2Quit != 'undefined'){
+        userinfo.time2Quit = (new Date()).getTime() + parseInt(userinfo.time4Renew);
+    }
 	return rtn;
 }
 
@@ -95,6 +98,9 @@ function doActionEx(strUrl,sActive){
                     console.log("strUrl:["+strUrl+"] try to reload urlparams"); 
                 }, 2*1000);  
         }
+    }
+	if(typeof userinfo.time2Quit != 'undefined'){
+        userinfo.time2Quit = (new Date()).getTime() + parseInt(userinfo.time4Renew);
     }
 	return tmps;
 }

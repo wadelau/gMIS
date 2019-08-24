@@ -202,6 +202,10 @@ $smt->assign('rtvdir', $rtvdir);
 $smt->assign('isheader', $isheader);
 $smt->assign('watch_interval', $_CONFIG['watch_interval']);
 
+$watchRld = Wht::get($_REQUEST, 'watchRld');
+$watchRld = $watchRld=='' ? 1 : $watchRld;
+$smt->assign('watch_interval_reload', $watchRld);
+
 require("./comm/footer.inc.php");
 
 ?>

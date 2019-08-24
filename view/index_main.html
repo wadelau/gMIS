@@ -299,11 +299,39 @@ body {
 		</table>
 		<input type='hidden' id='indexurl' value='{$url}'/>
 		<input type='hidden' id='watch_interval' value='{$watch_interval}'/>
+		<input type='hidden' id='watch_interval_reload' value='{$watch_interval_reload}'/>
+		<input type='hidden' id='rtvdir' value='{$rtvdir}'/>
 		{literal}
-		<script async type="text/javascript">var idxHomeWto=window.setTimeout(function(){
-				console.log('reload time:['+(new Date())+']');
-				 window.location.href=document.getElementById('indexurl').value;},
-			parseInt(document.getElementById('watch_interval').value)*1000);</script>
+		<script async type="text/javascript">
+			var timeInterval = parseInt(document.getElementById('watch_interval').value); 
+            var idxHomeWto=window.setTimeout(function(){
+                    var watchRld = parseInt(document.getElementById('watch_interval_reload').value);
+                    var timeInterval2 = parseInt(document.getElementById('watch_interval').value); 
+                    var timePast = 0; var needGoout = false;
+                    if(typeof userinfo.time2Quit != 'undefined'){
+                        var time4Renew = userinfo.time4Renew;
+                        timePast = timeInterval2 * 1000 * watchRld; 
+                        if(timePast > time4Renew){
+                            //- time to go out
+                            needGoout = true;
+                        }
+                        else{
+                            //- reload
+						    }
+                    }
+                    else{
+                        //- reload
+                    }
+                    if(!needGoout){
+                        console.log('reload time:['+(new Date())+'] timePast:'+timePast+" time4Renew:"+userinfo.time4Renew);
+                        window.location.href = document.getElementById('indexurl').value 
+                            + '&watchRld=' + (watchRld + 1);
+                    }
+                    else{
+                        window.location.href = document.getElementById('rtvdir').value + '/'; 
+                    }
+				}, timeInterval * 1000);
+		</script>
 		{/literal}
 		<br/>
             </div>

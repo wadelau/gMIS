@@ -25,6 +25,7 @@ if($smttpl != ''){
 	$data['url'] = $url;
 	$data['isdebug'] = $is_debug;
 	$data['randi'] = $randi;
+	$data['max_idle_time'] = $_CONFIG['max_idle_time'];
 	foreach($data as $k=>$v){
 		$smt->assign($k, $v);
 	}

@@ -121,7 +121,7 @@ if($hm[0]){
                 <li><a href="'.$ido.'&tbl=fin_todotbl&tit=待处理事项&db=&pnsktouser='.$userid.'&pnsm=1&pnskistate=1&pnsktogroup='
                         .$user->getGroup().'&pnsc='.$pnscTodo.'&pnsck='.$pnsckTodo.'">待处理事项</a></li>
                 <li><a href="'.$ido.'&tbl=fin_todotbl&tit=已处理事项&db=&pnsktouser='.$userid.'&pnsm=1&pnskistate=0&pnsktogroup='
-                        .$user->getGroup().'&pnsc='.$pnscDone.'&pnsck='.$pnsckDone.'">已处理事项</a></li>
+                        .$user->getGroup().'&pnsc='.$pnscDone.'&pnsck='.$pnsckDone.'&pnobid=1">已处理事项</a></li>
                 <li><a href="'.$ido.'&tbl=mynotetbl&tit=我的笔记&db=&pnskoperator='.$userid.'">我的笔记</a></li>
                 <li><a href="'.$ido.'&tbl=fin_operatelogtbl&tit=操作历史记录&db=&pnskuserid='.$userid.'">操作历史记录</a></li>
                 <li><a href="'.$ido.'&tbl=info_toolsettbl&tit=常用工具">日常工具</a></li>

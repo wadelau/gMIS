@@ -77,6 +77,7 @@ if(true){
 	$conf['start_date'] = '2016-06-08'; # first action date in fin_operatelogtbl
 	$conf['sign_key'] = 'my_sign_key_at_myProJEct------14:54 Monday, August 5, 2019';
 	$conf['watch_interval'] = 5 * 60; # seconds
+	$conf['max_idle_time'] = 35 * 60; # seconds
 
     # a gMIS running across many db same-syntax systems.
     $conf['workspace'] = array(

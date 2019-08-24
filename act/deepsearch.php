@@ -123,12 +123,12 @@ for($hmi=$min_idx; $hmi<=$max_idx;$hmi++){
 
     }
     else{
-
+		//- .$gtbl->getAccept($field) , rm validator
 		$out .= "<td nowrap ".$gtbl->getCss($field)."> ".$gtbl->getCHN($field).": </td><td> "
 			. "<select style=\"width:60px\" name=\"oppnsk$field\" id=\"oppnsk$field\">"
 			.$gtbl->getLogicOp($field, $skiptag)."</select> <input type=\"text\" id=\"pnsk"
 			.$field."\" name=\"pnsk".$field."\" "
-			."value=\"".$hmorig[$field]."\" ".$gtbl->getJsAction($field).$gtbl->getAccept($field)." "
+			."value=\"".$hmorig[$field]."\" ".$gtbl->getJsAction($field)." "
 			.$gtbl->getReadOnly($field)." /> <br/> ".$gtbl->getMemo($field)."</td>";
 		$opentr = 0;
 

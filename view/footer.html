@@ -9,6 +9,7 @@
         	<b><a href="{$url}" style="color:#ABCAD3;font-weight:bold; font-size:12px" target="_blank">{$agentname}</a>  
         	Powered by  <a href="#-gmis" style="color:#ABCAD3;font-weight:bold; font-size:12px">{$appname}</a></b>. 
         	All rights reserved. </span>
+			<input type="hidden" id="max_idle_time" value="{$max_idle_time}"/>
         </td>
     </tr>
     </table>
@@ -36,6 +37,36 @@
  	win.console.log('-gMIS , https://github.com/wadelau/gMIS , https://ufqi.com/dev/gmis');
  }
  })(window);
+ 
+//- check signin active status
+if(true){
+var time2Stay = document.getElementById('max_idle_time').value;
+var time2Check = 10 * 1000;
+var time4Signin = (new Date()).getTime();
+var time2Quit = time4Signin + time2Stay; 
+if(typeof userinfo == 'undefined' || typeof userinfo.time2Quit == 'undefined'){ 
+    if(typeof userinfo == 'undefined'){
+        userinfo = {};
+    }
+    userinfo.time2Quit = time2Quit; 
+    userinfo.time4Renew = time2Stay;
+}
+function checkSignin(){
+    var nowTime = (new Date()).getTime();
+    time2Quit = userinfo.time2Quit;
+    if(nowTime > time2Quit){
+        //- ready to quit
+	 window.clearInterval(interval4Quit);
+        window.location.href =  currentpath + '/';
+    }
+    else{
+        //- stayed tune
+        console.log("checkSignin: nowtime:"+nowTime+" time2Quit:"+time2Quit+" left:"+(time2Quit-nowTime));
+    }
+}
+var interval4Quit = window.setInterval(checkSignin, time2Check); 
+}
+//- check signin status, end
 </script>
 
 </html>
