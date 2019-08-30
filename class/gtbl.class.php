@@ -527,6 +527,7 @@ class GTbl extends WebApp{
     }
 
 	# remedy on 12:39 Jun 06, 2018
+	# bugfix for lazyLoad, 16:33 Monday, August 26, 2019
     public function getSelectOption($field, $defaultval, $tagpre='', $needv=0, $ismultiple=0){
         $tmpstr = $this->hmconf[$this->taglist['field'].$this->sep.$field.$this->sep
 			.$this->taglist['selectoption']];
@@ -541,6 +542,7 @@ class GTbl extends WebApp{
         $optionlist = '<option value="" title="沒有篩選條件">-無选择-</option>';
         $selectval = '';
         $selectval_mul = '';
+		$lazyLoadStr = '';
         if($tmpstr == ''){
             # ?
         }else if(strpos($tmpstr,"fromtable") === 0){
@@ -603,7 +605,7 @@ class GTbl extends WebApp{
             //$this->setTbl($oldtbl);
 			
 			if($hasExist == 0 && $optioni > $maxInitSelectCount){
-				print "<script type='text/javascript' async>parent.lazyLoad('".$field
+				$lazyLoadStr = "<script type='text/javascript' async>parent.lazyLoad('".$field
 					."','select','extra/readtblfield.php?objectid=0&logicid=".$dispfield
 					."&tbl=".$theTbl."&field=".$field."');</script><input name='pnsk_".$field
 					."_optionlist' id='pnsk_".$field."_optionlist' value='' type='hidden' />";
@@ -693,7 +695,7 @@ class GTbl extends WebApp{
 			}
         }
         if($needv != 1){
-            return $tmpstr;
+            return $tmpstr.$lazyLoadStr;
         }
 		else{
             #error_log(__FILE__.": field:$field, selectval:$selectval , selectval_mul:$selectval_mul");

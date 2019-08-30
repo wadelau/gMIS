@@ -107,7 +107,7 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
 				$filename = Base62x::encode($filename);
 				$fileNameLength = strlen($filename);
 				$fileNameLength = $fileNameLength > 128 ? 128 : $fileNameLength; 
-                $filename = date("dHi")."_".substr($filename, -$fileNameLength).".".$tmpfileext;
+                $filename = date("dHis")."_".substr($filename, -$fileNameLength).".".$tmpfileext;
 				#print __FILE__.": filename:[$filename]";
                 if(move_uploaded_file($_FILES[$field]['tmp_name'], $appdir."/".$filedir."/".$filename)){
                     $out .= "file:[$filedir/$filename] succ.";
