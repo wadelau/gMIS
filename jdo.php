@@ -332,10 +332,8 @@ else if(startsWith($act, "list")){
                    $out .= "<td> ".$fhref;
 				   $isimg = isImg($rec[$field]);
                    if($isimg){
-                       $out .= "<img src=\"".$rec[$field]."\" style=\"max-width:99%; max-height:99%\" onload=\"javascript: "
-                               ."var baseSize=118; if(this.width > baseSize){ this.style.width = baseSize+'px';}"
-                               ."else if(this.height > baseSize){ this.style.height=baseSize+'px'; } \" id=\"img_"
-                               .$rec[$field]."\" />";
+                       $out .= "<img src=\"img/st.png\" style=\"max-width:99%; max-height:99%\" onload=\"javascript:"
+                               ."parent.imageLoadAsync(this.id, '".$rec[$field]."');\" id=\"img_list_".$rec[$gtbl->getMyId()]."\" alt=\"img-x\"/>";
 
                    }else{
                         $out .= "".shortenStr($rec[$field], $list_disp_limit)."";
