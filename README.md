@@ -24,6 +24,10 @@ In the short time in [Sina](http://weibo.com) Corp.,
 
 and it has been created from top to down and the polishing work are continuing and lasting till now. 
 
+### Documents & References
+
+[gMIS Documents & Reference online](https://wadelau.github.io/gmis/index)
+
 ### Updates
 
 [-gMIS Updates](http://ufqi.com/blog/category/computer-tech/%E9%80%9A%E7%94%A8%E4%BF%A1%E6%81%AF%E7%AE%A1%E7%90%86%E7%B3%BB%E7%BB%9F/)
