@@ -22,7 +22,7 @@ $base62x = new Base62x();
 $base62xTag = 'b62x.';
 
 $out .= "<fieldset style=\"border-color:#5f8ac5;border: 1px solid #5f8ac5; background:#E8EEF7;\">"
-    ."<legend><h4>点选概览</h4></legend><form id=\""
+    ."<legend><h4>".$lang->get("func_pickup")."</h4></legend><form id=\""
 	.$formid."\" name=\"".$formid."\" method=\"post\" action=\"".$jdo."&act=list\" "
 	.$gtbl->getJsActionTbl()."><table cellspacing=\"0\" cellpadding=\"0\" "
 	." style=\"border:0px solid black; width:98%; margin-left:auto; margin-right:auto; background:transparent;\">";
@@ -33,11 +33,11 @@ $out .= "<tr height='".($rowHeight/2)."px'><td width=\"1%\">&nbsp;</td>
             <td style='width:35px;'>";
 if($pickupFieldCount <= $shortFieldCount){ 
     $out .= "<a onclick=\"javascript:parent.fillPickUpReqt('"
-         .$jdo."', '', $max_idx, 'moreoption', this);\" title=\"加载更多选项\"><b>+更多</b></a>";
+         .$jdo."', '', $max_idx, 'moreoption', this);\" title=\"".$lang->get("more")."\"><b>+".$lang->get("more")."</b></a>";
 }
 else{
     $out .= "<a onclick=\"javascript:parent.fillPickUpReqt('"
-    	 .$jdo."', '', $shortFieldCount, 'moreoption', this);\" title=\"减少选项\"  style=\"color:#ffffff;background-color:#1730FD;\"><b>-更多</b></a>";
+    	 .$jdo."', '', $shortFieldCount, 'moreoption', this);\" title=\"-".$lang->get("more")."\"  style=\"color:#ffffff;background-color:#1730FD;\"><b>-".$lang->get("more")."</b></a>";
 }
 $out .= "</td></tr>";
 			
@@ -278,7 +278,8 @@ function fillPickUpReqt($myurl, $field, $fieldv, $oppnsk, $base62x=null){
                         }
                     }
                     if(inList($fieldv, $reqv)){
-                        $tmpArr = implode(',', $reqv);
+                        $tmpArr = array();
+						if(is_array($reqv)){ $tmpArr=implode(',', $reqv); }
                         foreach($tmpArr as $tmpk=>$tmpv){
                             if($tmpv == $fieldv){
                                 unset($tmpArr[$tmpk]); # break; ?

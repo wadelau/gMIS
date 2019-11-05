@@ -1,7 +1,7 @@
 <?php
 //- embedded in app entry
 
-global $appdir, $userid, $user, $gtbl, $out, $data;
+global $appdir, $userid, $user, $gtbl, $out, $data, $lang;
 date_default_timezone_set("Asia/Hong_Kong"); # +0800
 
 $docroot = $_SERVER['DOCUMENT_ROOT'];
@@ -48,6 +48,7 @@ require_once($appdir."/comm/tools.function.php");
 require($appdir."/class/gtbl.class.php");
 require($appdir."/class/pagenavi.class.php");
 require_once($appdir."/class/base62x.class.php");
+require_once($appdir."/class/language.class.php");
 
 #session_start();
 # in initial stage, using php built-in session manager
@@ -69,6 +70,15 @@ $reqUri = str_replace('jdo.php', 'ido.php', $reqUri);
 $thisUrl = 'http' . (isset($_SERVER['HTTPS']) ? 's' : '') . '://' . "{$_SERVER['HTTP_HOST']}{$reqUri}";
 
 $sid = Wht::get($_REQUEST, SID);
+if(true){
+	$dotPos = strpos($sid, '.');
+	if($dotPos > 0){
+		$tmpArr = explode('.', $sid);
+		$pureSid = $tmpArr[0];
+		$_REQUEST['sid'] = $pureSid;
+		if(!isset($_REQUEST['lang'])){ $_REQUEST['lang'] = $tmpArr[1]; }
+	}
+}
 $userid = $user->getUserBySession($_REQUEST);
 
 //- @todo: workspace id, see inc/config
@@ -80,6 +90,39 @@ else if(strpos($_SERVER['PHP_SELF'],'signupin.php') === false
 	&& strpos($_SERVER['PHP_SELF'],'readtblfield.php') === false){// ?
     header("Location: ".$rtvdir."/extra/signupin.php?act=signin&bkl=".Base62x::encode($thisUrl));
 	exit(0);
+}
+# language
+$ilang = "zh"; 
+if(true){
+	$icoun = "CN"; $langconf = array();
+	$reqtlang = Wht::get($_REQUEST, 'lang');
+	if($reqtlang == ''){
+		$langs = trim($_SERVER['HTTP_ACCEPT_LANGUAGE']);
+		$sepPos = strpos($langs, ',');
+		if($sepPos > 0){
+			$langs = substr($langs, 0, $sepPos);	
+		}
+		if(strpos($langs, '-') > 0){
+			$tmpArr = explode('-', $langs);
+			$ilang = $tmpArr[0]; $tmpArr[1];
+		}
+		else{
+			$ilang = "zh";
+		}
+	}
+	else{
+		$ilang = $reqtlang;	
+	}
+	$langconf['language'] = $ilang;
+	$lang = new Language($langconf);
+	debug("comm/header: ilang:".$lang->getTag()." welcome:".$lang->get("welcome"));
+	$data['lang']['welcome'] = $lang->get('welcome');
+	$data['lang']['agentname'] = $lang->get('lang_agentname');
+	$data['lang']['appchnname'] = $lang->get('lang_appchnname');
+	//- set to cookie if necessary, @todo
+}
+if($_REQUEST['lang'] != ''){
+	$sid = Wht::get($_REQUEST, 'sid').'.'.Wht::get($_REQUEST, 'lang');	
 }
 
 $ido = $rtvdir.'/ido.php?'.SID.'='.$sid;
@@ -94,7 +137,7 @@ $base62xTag = 'b62x.';
 if(true){
 foreach($_REQUEST as $k=>$v){
     $k = trim($k);
-    if($k != ''){
+    if($k != '' && !inList($k, 'user,lang')){
         if(preg_match("/([0-9a-z_]+)/i", $k, $matcharr)){
             $k_orig = $k = $matcharr[1];
 			if(is_string($v)){
@@ -184,23 +227,31 @@ if($isoput){
     }
     if($isheader){
         if($userid != ''){
-            $welcomemsg .= "Welcome, ";
+            $welcomemsg .= $lang->get('welcome').", ";
             $welcomemsg .= "<a href='".$rtvdir."/ido.php?tbl=info_usertbl&id=".$userid
                 ."&act=view' class='whitelink'>";
             $welcomemsg .= $user->getEmail()."</a> !</b>&nbsp; ";
             $welcomemsg .= "<a href=\"".$rtvdir."/extra/signupin.php?act=resetpwd&userid="
-                    .$userid."\" class='whitelink'>重置密码</a> &nbsp;.&nbsp;<a href=\""
-                    .$rtvdir."/extra/signupin.php?act=signout&bkl=".Base62x::encode($thisUrl)."\"";
-            $welcomemsg .= " class='whitelink'>退出</a> &nbsp;";
+                    .$userid."\" class='whitelink'>".$lang->get('user_reset_pwd')."</a>";
+            $welcomemsg .= "&nbsp;&nbsp;<select name='langselect' style='background-color:silver;'"
+				." onchange=\"javascript:window.location.href='".$url."&lang='+this.options[this.selectedIndex].value;\">
+					<option value='en'".($ilang=='en'?' selected':'').">English</option>
+					<option value='zh'".($ilang=='zh'?' selected':'').">中文</option>
+					<option value='fr'".($ilang=='fr'?' selected':'').">Français</option>
+					<option value='ja'".($ilang=='ja'?' selected':'').">日本語</option>
+					</select>"
+				."&nbsp;&nbsp;<a href=\"".$rtvdir."/extra/signupin.php?act=signout&bkl=".Base62x::encode($thisUrl)
+				."\" class='whitelink'>".$lang->get('user_sign_out')."</a> &nbsp;";
 
             $menulist = '';
+
             include($appdir."/comm/navimenu/navimenu.php");
 
             $out .= "<div style=\"width:100%;clear:both\" id=\"navimenu\">".$menulist."</div>";
-
             //show message number if there are new messages.
             $out .= "<div id=\"a_separator\" style=\"height:10px;margin-top:25px;clear:both\"></div>"
                     ."<!-- height:15px;margin-top:8px;clear:both;text-align:center;z-index:99 -->";
+			$data['lang']['copyright'] = $lang->get('copyright');
         }
     }
     else if(!startsWith($act, "modify") && !inString('-addform', $act)

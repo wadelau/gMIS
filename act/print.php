@@ -16,7 +16,7 @@ $data = array(); # 用于打印模板的数据集
 $srcprefix = $gtbl->getSrcPrefix();
 $tblName = $gtbl->getTblCHN();
 
-$out .= "<div align=\"center\"><h2>".$_CONFIG['agentname'].($tblName=='' ? $tit : $tblName)."</h2>";
+$out .= "<div align=\"center\"><h2>".$lang->get($_CONFIG['agentname']).($tblName=='' ? $tit : $tblName)."</h2>";
 $data['title'] = $_CONFIG['agentname'].($tblName=='' ? $tit : $tblName);
 $htmlheader = str_replace('TITLE', $tit.": ".$id, $htmlheader);
 $data['id'] = $id;

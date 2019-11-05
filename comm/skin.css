@@ -199,6 +199,7 @@ a:link {
   }
 a:hover{
   color:red;
+  font-weight:bold;
   }
 /*
 a:link {

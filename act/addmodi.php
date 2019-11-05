@@ -9,7 +9,8 @@ if($_REQUEST['otbl'] != ''){
     $colsPerRow = 2;
 }
 
-$out .= "<fieldset style=\"border-color:#5f8ac5;border: 1px solid #5f8ac5;\"><legend><h4>新增/修改</h4>"
+$out .= "<fieldset style=\"border-color:#5f8ac5;border: 1px solid #5f8ac5;\"><legend><h4>".$lang->get("func_create")."/"
+		.$lang->get("func_edit")."</h4>"
         ."</legend><form id=\"".$formid."\" name=\"".$formid."\" method=\"post\" action=\""
         .$jdo."&act=list-addform\" ".$gtbl->getJsActionTbl()." data-formid=\"$formid\" "
 		." title=\"$formid\"><table align=\"center\" width=\"98%\" "
@@ -145,8 +146,8 @@ if(true){
     }
 }
 if(startsWith($act, 'modify') && $hasDisableW && !$isAddByCopy){
-    $out .= "Access to writing denied. 访问被拒绝. 201811111014.";
-    $out .= "<br/><br/><a href=\"javascript:switchArea('contentarea_outer','off');\">关闭 并尝试其他操作.</a>";
+    $out .= $lang->get("notice_access_deny")." 201811111014.";
+    $out .= "<br/><br/><a href=\"javascript:switchArea('contentarea_outer','off');\">".$lang->get("func_close")."</a>";
 
 }
 else{
@@ -352,11 +353,11 @@ if($hasEndLine == 0){
         .$form_cols."\">  </td></tr>";
 }
 $out .= "<tr><td colspan=\"".$form_cols."\" align=\"center\">"
-        ."<input type=\"submit\" name=\"addsub\" id=\"addsub\" value=\"递交\" "
+        ."<input type=\"submit\" name=\"addsub\" id=\"addsub\"" #  value=\"递交\" 
         ."onclick=\"javascript:doActionEx(this.form.name,'actarea');\" /> \n";
 $out .= "<input type=\"hidden\" id=\"id\" name=\"id\" value=\"".$id."\"/>\n ".$hiddenfields."\n";
 $out .= "&nbsp;&nbsp;&nbsp;<input type=\"reset\" name=\"resetbtn\" />";
-$out .= "&nbsp;&nbsp;&nbsp;<input type=\"button\" name=\"cancelbtn\" value=\"取消\" "
+$out .= "&nbsp;&nbsp;&nbsp;<input type=\"button\" name=\"cancelbtn\" value=\"".$lang->get("func_cancel")."\" "
         ."onclick=\"javascript:switchArea('contentarea_outer','off');\" /> <br/><span id='respFromServ'></span> </td></tr>";
 $out .= "</table> </form>  </fieldset>  <br/>";
 

@@ -3,7 +3,7 @@
 $_REQUEST['tbl'] = ''; #  'fin_todotbl'; Wed Oct 22 09:10:01 CST 2014
 
 require("./comm/header.inc.php");
-$data['title'] = $_CONFIG['agentname'];
+$data['title'] = $data['lang']['agentname'];
 $out = str_replace('TITLE', $data['title'], $out);
 
 $gtbl = new WebApp();
@@ -177,6 +177,32 @@ $data['todo_list'] = $hm_todo_list;
 $data['module_path'] = $module_path;
 $data['user_list_ol'] = $userListOL;
 
+$data['lang']['welcome_back'] = $lang->get('welcome_back');
+$data['lang']['navi_homepage'] = $lang->get('navi_homepage');
+$data['lang']['navi_dir'] = $lang->get('navi_dir');
+$data['lang']['todayis'] = $lang->get('todayis');
+$data['lang']['work_todo'] = $lang->get('menu_desktop_todo');
+$data['lang']['work_task'] = $lang->get('work_task');
+$data['lang']['state'] = $lang->get('state');
+$data['lang']['demand'] = $lang->get('demand');
+$data['lang']['supply'] = $lang->get('supply');
+$data['lang']['updatetime'] = $lang->get('updatetime');
+$data['lang']['more'] = $lang->get('more');
+$data['lang']['user'] = $lang->get('user');
+$data['lang']['object'] = $lang->get('object');
+$data['lang']['module'] = $lang->get('module');
+$data['lang']['sys_online'] = $lang->get('sys_online');
+$data['lang']['online_user'] = $lang->get('online_user');
+$data['lang']['homesite'] = $lang->get('open_homesite');
+
+$data['lang']['operation'] = $lang->get('operation');
+$data['lang']['mostused'] = $lang->get('navi_mostused');
+$data['lang']['mostused_hint'] = $lang->get('navi_mostused_hint');
+$data['lang']['desktop_shortcut'] = $lang->get('navi_desktop');
+$data['lang']['desktop_shortcut_hint'] = $lang->get('navi_desktop_hint');
+$data['lang']['operatelog'] = $lang->get('navi_operatelog');
+$data['lang']['operatelog_hint'] = $lang->get('navi_operatelog_hint');
+
 $smttpl = getSmtTpl(__FILE__, $act);
 
 $smt->assign('agentname', $_CONFIG['agentname']);
@@ -186,13 +212,13 @@ $smt->assign('url', $url);
 $smt->assign('ido', $ido);
 $smt->assign('jdo', $jdo);
 $smt->assign('today', date("Y-m-d"));
-$smt->assign('historyurl', $ido.'&tbl=info_operatelogtbl&tit=操作历史记录&a1=0&pnsktogroup='
+$smt->assign('historyurl', $ido.'&tbl=info_operatelogtbl&tit='.$lang->get('menu_desktop_operatelog').'&a1=0&pnsktogroup='
 	.$userGroup.'&pnskuserid='.$userid);
 
 $navi = new PageNavi();
 
 $pnsc = "state=? and (touser like '".$user->getId()."' or togroup like '".$userGroup."')";
-$smt->assign('todourl','ido.php?tbl=fin_todotbl&tit=待处理任务&a1=1&pnskistate=0&pnsm=1&pnsktouser='.$userid
+$smt->assign('todourl','ido.php?tbl=fin_todotbl&tit='.$lang->get('menu_desktop_todo').'&a1=1&pnskistate=0&pnsm=1&pnsktouser='.$userid
 	.'&pnsc='.$pnsc.'&pnsck='.$navi->signPara($pnsc).'&pnsktogroup='.$userGroup);
 
 $smt->assign('sid', $sid);

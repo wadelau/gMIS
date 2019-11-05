@@ -112,68 +112,65 @@ if($hm[0]){
     }
 }
 
- $menulist = '
-     <ul class="menu" id="menu">
-     <li>
-	 
-        <a href="'.$url.'" class="menulink"><img src="'.$rtvdir.'/img/my-desktop.png" alt="my desktop"  style="vertical-align:middle;height:12px" /> 我的桌面</a>
-            <ul>
-                <li><a href="'.$ido.'&tbl=fin_todotbl&tit=待处理事项&db=&pnsktouser='.$userid.'&pnsm=1&pnskistate=1&pnsktogroup='
-                        .$user->getGroup().'&pnsc='.$pnscTodo.'&pnsck='.$pnsckTodo.'">待处理事项</a></li>
-                <li><a href="'.$ido.'&tbl=fin_todotbl&tit=已处理事项&db=&pnsktouser='.$userid.'&pnsm=1&pnskistate=0&pnsktogroup='
-                        .$user->getGroup().'&pnsc='.$pnscDone.'&pnsck='.$pnsckDone.'&pnobid=1">已处理事项</a></li>
-                <li><a href="'.$ido.'&tbl=mynotetbl&tit=我的笔记&db=&pnskoperator='.$userid.'">我的笔记</a></li>
-                <li><a href="'.$ido.'&tbl=fin_operatelogtbl&tit=操作历史记录&db=&pnskuserid='.$userid.'">操作历史记录</a></li>
-                <li><a href="'.$ido.'&tbl=info_toolsettbl&tit=常用工具">日常工具</a></li>
-				<li><a href="'.$ido.'&tbl=filedirtbl&tit=文件柜&pnskparentname=/&pnsm=1">文件柜</a></li>
-                <li> <a href="'.$ido.'&tbl=info_objecttbl&tit=桌面设置">桌面设置</a> </li>
-            </ul>
-     </li>
-     
-	'.$dynamicmenu.'
-	    
-     <li><a href="'.$url.'&navidir=99" orighref="javascript:void(0);" class="menulink">'
-        .'<img src="'.$rtvdir.'/img/my-setting.png" style="vertical-align:middle;height:16px" alt="Settings" /> 系统设置</a>
-     <ul>
-        <li><a href="'.$ido.'&tbl=info_usertbl&tit=&db=">用户信息</a></li>
-        <li><a href="'.$ido.'&tbl=info_grouptbl&tit=&db=">用户组设置</a></li>
-        <li><a href="'.$ido.'&tbl=info_objecttbl&tit=&db=">单元模块</a></li>
-        <li><a href="'.$ido.'&tbl=info_objectgrouptbl&tit=&db=">单元模块组</a></li>
-        <li><a href="'.$ido.'&tbl=useraccesstbl&tit=&db=">系统权限</a></li>
-        <li> <a href="'.$ido.'&tbl=info_menulist&tit=&db=">菜单调整</a> </li>
-		<li><a href="javascript:void(0);" class="sub">帮助向导</a>
-     		<ul>
-        	<li><a href="'.$ido.'&tbl=info_helptbl&pnskid=2&tit=公司介绍&db=&act=view&id=16">公司介绍</a></li>
-        	<li><a href="'.$ido.'&tbl=info_helptbl&pnskisfaq=1&tit=FAQ常见问题&db=">FAQ常见问题</a></li>
-        	<li><a href="'.$ido.'&tbl=info_helptbl&tit=帮助主题&db=">帮助主题</a></li>
-     		</ul>
-     	</li>
-        <li><a href="javascript:void(0);" class="sub">站内搜索</a>
-     		<ul>
-        	<li><a href="'.$ido.'&tbl=insitesearchtbl&tit=搜索源配置&db=">搜索源配置</a></li>
-        	<li><a href="'.$ido.'&tbl=issblackwhitetbl&tit=搜索源黑白名单&db=">搜索源黑白名单</a></li>
-     		</ul>
-     	</li>
-     </ul>
-     </li>
-    
-    </ul>
-     ';
+$menulist = '
+	<ul class="menu" id="menu">
+ 	<li>
+ 
+	<a href="'.$url.'" class="menulink"><img src="'.$rtvdir.'/img/my-desktop.png" alt="my desktop"  style="vertical-align:middle;height:12px" /> '.$lang->get('menu_desktop').'</a>
+		<ul>
+			<li><a href="'.$ido.'&tbl=fin_todotbl&tit='.$lang->get('menu_desktop_todo').'&db=&pnsktouser='.$userid.'&pnsm=1&pnskistate=1&pnsktogroup='
+					.$user->getGroup().'&pnsc='.$pnscTodo.'&pnsck='.$pnsckTodo.'">'.$lang->get('menu_desktop_todo').'</a></li>
+			<li><a href="'.$ido.'&tbl=fin_todotbl&tit='.$lang->get('menu_desktop_done').'&db=&pnsktouser='.$userid.'&pnsm=1&pnskistate=0&pnsktogroup='
+					.$user->getGroup().'&pnsc='.$pnscDone.'&pnsck='.$pnsckDone.'&pnobid=1">'.$lang->get('menu_desktop_done').'</a></li>
+			<li><a href="'.$ido.'&tbl=mynotetbl&tit='.$lang->get('menu_desktop_mynote').'&db=&pnskoperator='.$userid.'">'.$lang->get('menu_desktop_mynote').'</a></li>
+			<li><a href="'.$ido.'&tbl=fin_operatelogtbl&tit='.$lang->get('menu_desktop_operatelog').'&db=&pnskuserid='.$userid.'">'.$lang->get('menu_desktop_operatelog').'</a></li>
+			<li><a href="'.$ido.'&tbl=info_toolsettbl&tit='.$lang->get('menu_desktop_toolset').'">'.$lang->get('menu_desktop_toolset').'</a></li>
+			<li><a href="'.$ido.'&tbl=filedirtbl&tit='.$lang->get('menu_desktop_filemgmt').'&pnskparentname=/&pnsm=1">'.$lang->get('menu_desktop_filemgmt').'</a></li>
+			<li> <a href="'.$ido.'&tbl=info_objecttbl&tit='.$lang->get('menu_desktop_add2desktop').'">'.$lang->get('menu_desktop_add2desktop').'</a> </li>
+		</ul>
+ </li>
+'.$dynamicmenu.'
+	<li><a href="'.$url.'&navidir=99" orighref="javascript:void(0);" class="menulink">
+		<img src="'.$rtvdir.'/img/my-setting.png" style="vertical-align:middle;height:16px" alt="Settings" /> '.$lang->get('menu_settings').'</a>
+	 <ul>
+		<li><a href="'.$ido.'&tbl=info_usertbl&tit=&db=">'.$lang->get('menu_setting_user').'</a></li>
+		<li><a href="'.$ido.'&tbl=info_grouptbl&tit=&db=">'.$lang->get('menu_setting_usergroup').'</a></li>
+		<li><a href="'.$ido.'&tbl=info_objecttbl&tit=&db=">'.$lang->get('menu_setting_module').'</a></li>
+		<li><a href="'.$ido.'&tbl=info_objectgrouptbl&tit=&db=">'.$lang->get('menu_setting_modulegroup').'</a></li>
+		<li><a href="'.$ido.'&tbl=useraccesstbl&tit=&db=">'.$lang->get('menu_setting_security').'</a></li>
+		<li> <a href="'.$ido.'&tbl=info_menulist&tit=&db=">'.$lang->get('menu_setting_menuinfo').'</a> </li>
+		<li><a href="javascript:void(0);" class="sub">'.$lang->get('menu_setting_guide').'</a>
+			<ul>
+			<li><a href="'.$ido.'&tbl=info_helptbl&pnskid=2&tit='.$lang->get('menu_setting_guide_companyinfo').'&db=&act=view&id=16">'.$lang->get('menu_setting_guide_companyinfo').'</a></li>
+			<li><a href="'.$ido.'&tbl=info_helptbl&pnskisfaq=1&tit='.$lang->get('menu_setting_guide_faq').'&db=">'.$lang->get('menu_setting_guide_faq').'</a></li>
+			<li><a href="'.$ido.'&tbl=info_helptbl&tit='.$lang->get('menu_setting_guide_topic').'&db=">'.$lang->get('menu_setting_guide_topic').'</a></li>
+			</ul>
+		</li>
+		<li><a href="javascript:void(0);" class="sub">'.$lang->get('menu_setting_insitesearch').'</a>
+			<ul>
+			<li><a href="'.$ido.'&tbl=insitesearchtbl&tit='.$lang->get('menu_setting_searchconfig').'&db=">'.$lang->get('menu_setting_searchconfig').'</a></li>
+			<li><a href="'.$ido.'&tbl=issblackwhitetbl&tit='.$lang->get('menu_setting_searchwblist').'&db=">'.$lang->get('menu_setting_searchwblist').'</a></li>
+			</ul>
+		</li>
+	 </ul>
+ 	</li>
+</ul>
+ ';
 
 $menulistjs = '
-     <script async type="text/javascript">
-		var menu = {};
-		function initNaviMenu(){ //- will be exec in async mode
-			menu = new parent.NaviMenu.dd("menu");
-			menu.init("menu","menuhover");
-		}
-		if(typeof parent.NaviMenu == "undefined"){
-			var menuDelayT=window.setTimeout(function(){ initNaviMenu();}, 2*1000);
-		}
-		else{
-			initNaviMenu();
-		}
-     </script>
+ <script async type="text/javascript">
+	var menu = {};
+	function initNaviMenu(){ //- will be exec in async mode
+		menu = new parent.NaviMenu.dd("menu");
+		menu.init("menu","menuhover");
+	}
+	if(typeof parent.NaviMenu == "undefined"){
+		var menuDelayT=window.setTimeout(function(){ initNaviMenu();}, 2*1000);
+	}
+	else{
+		initNaviMenu();
+	}
+ </script>
  ';
 
 $menulist .= $menulistjs;
