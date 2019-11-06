@@ -26,7 +26,7 @@ if(cidr_match($myip, '10.0.0.0/8') || cidr_match($myip, '172.16.0.0/12')
 
 if($act == 'signin'){
     $smt->assign('action',$url.'&act=dosignin');
-    $smt->assign('title', $lang->get('user_sign_in'));
+    $smt->assign('title','用户登录');
 	$smt->assign('bkl', $_REQUEST['bkl']);
 	$smt->assign('verifyid', $user->getVerifyId());
 	$smt->assign('islan', $islan);
@@ -93,7 +93,7 @@ else if($act == 'dosignin'){
     if(!$issucc){
         $nexturl = $url."&act=signin";
     }
-    $smt->assign('title', $lang->get('user_sign_in_resp'));
+    $smt->assign('title','登录消息');
     $smt->assign('result', $result);
     $smt->assign('nexturl', $nexturl);
 }

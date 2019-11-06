@@ -22,14 +22,14 @@ body {
         <tr style="padding:0px; 
         	background-image:url({$rtvdir}/img/login-top-bg-small-updown.png); 
         	background-repeat:repeat-x;">
-          <td width="33%" style="padding:0px;height:27px;width:33%;">
+          <td width="33%" style="padding:0px;height:27px;">
           	<a href="{$url}" 
           		style="color:#ABCAD3;font-weight:bold;font-size:16px;font-family:Tahoma,Geneva,sans-serif;"
           		title="HomePage/首頁">
-          		&nbsp;{$lang['agentname']} </a>
+          		&nbsp;{$agentname} </a>
           </td>
           <td width="5%" style="padding:0px;"> <div id="top_notice_div" 
-          	style="postion:absolute; width:280px; top:20px; left:20px; text-align:center;z-index:99"></div> 
+          	style="postion:absolute; width:400px; top:20px; left:20px; text-align:center;z-index:99"></div> 
           </td>
           <td id="searchform">
 			<form id="insitesearch" 
@@ -56,8 +56,8 @@ body {
             {$content}
 			
             <div id="welcomearea" style="float:left;margin-left:28px;text-align:left;">
-			<b> &Pi; <a href="{$url}" style="font-size:17px" >{$lang['navi_homepage']}</a> <span style="font-size:17px">&rarr;</span></b>
-			{$lang['welcome_back']}！ {$lang['todayis']} <a href="#-万年历" target="_blank">
+			<b> &Pi; <a href="{$url}" style="font-size:17px" >首页</a> <span style="font-size:17px">&rarr;</span></b>
+			欢迎您回来！ 今天是 <a href="#-万年历" target="_blank">
 				<script type="text/javascript" src="./comm/show_today.js"></script></a>
             <br/> 
 
@@ -116,10 +116,10 @@ body {
 		</style>
 		<table style="width:700px; background:transparent; align:center; padding-top:10px;">
 
-		{if is_array($navidir_list) && count($navidir_list)>0}
+		{if count($navidir_list)>0}
 		<tr>
 		<td>
-		<b title="{$lang['navi_dir']}">ND. {$lang['navi_dir']}</b> | {$module_path} <br/>
+		<b title="浏览菜单导航">ND.导航 Navigate Directory</b> | {$module_path} <br/>
 		{$mi=0}
 		{foreach $navidir_list as $k=>$v}
 			{if $k==0}
@@ -129,7 +129,7 @@ body {
 				<div class="wrapper">
 				{/if}
 					 {if $navidir_list[$k]['modulename'] != ''}
-					 	<a href="{$ido}&tbl={$navidir_list[$k]['modulename']}&db={$navidir_list[$k]['thedb']}&{$navidir_list[$k]['dynamicpara']}&levelcode={$navidir_list[$k]['levelcode']}">
+					 <a href="{$ido}&tbl={$navidir_list[$k]['modulename']}&db={$navidir_list[$k]['thedb']}&{$navidir_list[$k]['dynamicpara']}&levelcode={$navidir_list[$k]['levelcode']}">
 					 {else}
 					 	{if $navidir_list[$k]['dynamicpara'] != ''} <!-- extra modules -->
 					 	<a href="{$rtvdir}/{$navidir_list[$k]['dynamicpara']}&sid={$sid}&db={$navidir_list[$k]['thedb']}&levelcode={$navidir_list[$k]['levelcode']}">
@@ -141,10 +141,10 @@ body {
 					 	<span style="size:14px; font-weight:bold;">{$mi+1}.{$navidir_list[$k]['linkname']}</span>
 					 	<br/>(
 						 {if $navidir_list[$k]['modulename'] != ''}
-							{$navidir_list[$k]['modulename']}
-						 {else}
-							子目录/Subdir
-						 {/if}
+                                			{$navidir_list[$k]['modulename']}
+                            			 {else}
+                                			子目录/Subdir
+                            			 {/if}
 						 )</div></a>
 				{if ($mi+1) % 4 == 0}
 				</div>
@@ -158,17 +158,18 @@ body {
 		
 		<tr>
 			<td colspan="10">
-			<b title="{$lang['work_todo']}">WT. {$lang['work_todo']}</b><br/>
+			<b title="(工作、任务列表)">WT. 工作表 Work-Todo</b><br/>
 			<div id="tododiv" class="wrapperlog">
 			<table style="border:0px; background:transparent;">
-				<tr style="font-weight: bold;"><td>No.</td><td>{$lang['work_task']}</td><td>{$lang['state']}</td><td>{$lang['demand']}</td><td>{$lang['supply']}</td><td>{$lang['updatetime']}</td></tr>
+				<tr style="font-weight: bold;"><td>序号</td><td>事项/任务</td><td>状态</td><td>需求方</td><td>供应方</td>
+					<td>更新时间</td></tr>
 				{foreach $todo_list as $k=>$v}
 				<tr>
 				<td>{$v['id']}.</td>
 				{if $v['pid'] == '0'}
-				<td><a href="{$ido}&tbl=fin_todotbl&pnskpid={$v['id']}&pnskid={$v['id']}&pnsm=0">{$v['taskname']}</a></td>
+				<td><a href="{$ido}&tbl=fin_todotbl&pnskpid={$v['id']}&pnskid={$v['id']}&pnsm=0&tit=事项管理">{$v['taskname']}</a></td>
 				{else}
-				<td><a href="{$ido}&tbl=fin_todotbl&pnskpid={$v['pid']}&pnskid={$v['pid']}&pnsm=0">{$v['taskname']}</a></td>
+				<td><a href="{$ido}&tbl=fin_todotbl&pnskpid={$v['pid']}&pnskid={$v['pid']}&pnsm=0&tit=事项管理">{$v['taskname']}</a></td>
 				{/if}
 				<td>{$todo_state[$v['state']]}</td>
 				<td>{$user_list[$v['triggerbyparentid']]['email']}</td>
@@ -177,7 +178,7 @@ body {
 				</tr>
 				{/foreach}
 				<tr><td style="white-space:nowrap;">
-					<a href="{$ido}&tbl=fin_todotbl&pnobistate=1&tit={$lang['work_todo']}&pnsktouser={$userid}&pnsktriggerbyparentid={$userid}&pnobid=1&pnsm=0">{$lang['more']}...</a></td></tr>
+					<a href="{$ido}&tbl=fin_todotbl&pnobistate=1&tit=事项管理&pnsktouser={$userid}&pnsktriggerbyparentid={$userid}&pnobid=1&pnsm=0">更多...</a></td></tr>
 			</table>
 			</div>	
 			</td>
@@ -185,7 +186,7 @@ body {
 
 		<tr>
 		<td>
-		<b title="{$lang['mostused_hint']}">MU. {$lang['mostused']}</b><br/>
+		<b title="(根据被调用频率自动排列、调整)">MU. 常用 Most-Used</b><br/>
 		{$mi=0}
 		{foreach $module_list_order as $k=>$v}
 			{if $mi==0 || ($mi) % 4 == 0}
@@ -219,7 +220,7 @@ body {
 		</td>
 		</tr><tr>
 		<td>
-		<b title="{$lang['desktop_shortcut_hint']}">DT. {$lang['desktop_shortcut']}</b><br/>
+		<b title="（用户自定义的快捷列表，在“系统设置--单元模块”中选择某个模块，修改其中“添加到桌面”即可）">DT. 桌面 Desktop</b><br/>
 		{$mi=0}
 		{foreach $module_list_byuser as $k=>$v}
 			{if $mi==0 || ($mi) % 4 == 0}
@@ -237,10 +238,10 @@ body {
 
 		<tr>
 			<td colspan="10">
-			<b title="{$lang['operatelog_hint']}">OL. {$lang['operatelog']}</b><br/>
+			<b title="(操作、管理日志)">OL. 操作日志 Operation-Log</b><br/>
 			<div id="oplogdiv" class="wrapperlog">
 			<table style="border:0px; background:transparent;">
-				<tr style="font-weight: bold;"><td>{$lang['updatetime']}</td><td>{$lang['user']}/Id</td><td>{$lang['object']}/Id</td><td>{$lang['operation']}</td></tr>
+				<tr style="font-weight: bold;"><td>时间</td><td>用户/Id</td><td>对象/Id</td><td>操作</td></tr>
 				{foreach $log_list as $k=>$v}
 				<tr>
 				<td>{$v['inserttime']}</td>
@@ -249,7 +250,7 @@ body {
 				<td>{$v['actionstr']}</td>
 				</tr>
 				{/foreach}
-				<tr><td style="white-space:nowrap;"><a href="{$ido}&tbl=fin_operatelogtbl">{$lang['more']}...
+				<tr><td style="white-space:nowrap;"><a href="{$ido}&tbl=fin_operatelogtbl">更多...
 					</a></td></tr>
 			</table>
 			</div>
@@ -286,15 +287,15 @@ body {
 			return [dY, dD];  
 		}
 		</script>
-		<b><i>ii</i></b>. {$lang['sys_online']} <a href="{$url}"><script async type="text/javascript">
-			diff=diffInYearsAndDays('{$start_date}',(new Date())); document.write(''+diff[0]+' year(s) '+diff[1]
-			+' day(s)');</script></a> ,  <a href="{$ido}&tbl=info_usertbl"><b>{$user_count}</b></a> {$lang['user']} ，
-			 <a href="{$ido}&tbl=info_objecttbl"><b> {$module_count}  </b></a> {$lang['module']}.  
-			{$lang['updatetime']}: <a href='#-gmis' target='_blank'>{$system_lastmodify}</a> . 
-			{$lang['online_user']} <a><b>{$logged_user_count}</b></a> . 
+		<b><i>ii</i></b>. 系统已上线 <a href="{$url}"><script async type="text/javascript">
+			diff=diffInYearsAndDays('{$start_date}',(new Date())); document.write(''+diff[0]+' 年 '+diff[1]
+			+' 天');</script></a> , 系统共 <a href="{$ido}&tbl=info_usertbl"><b>{$user_count}</b></a> 位用户，
+			管理着<a href="{$ido}&tbl=info_objecttbl"><b> {$module_count}  </b></a>个功能模块.  
+			系统上次更新: <a href='#-gmis' target='_blank'>{$system_lastmodify}</a> . 
+			目前登录用户 <a><b>{$logged_user_count}</b></a> 位. 
 		</td></tr>
 
-		<tr><td><b><i>HM</i></b>. <a href="{$front_page}" target="_blank">{$lang['homesite']}</a></td></tr>
+		<tr><td><b><i>HM</i></b>. <a href="{$front_page}" target="_blank">打开主站</a></td></tr>
 		</table>
 		<input type='hidden' id='indexurl' value='{$url}'/>
 		<input type='hidden' id='watch_interval' value='{$watch_interval}'/>

@@ -14,7 +14,6 @@
 //- imprvs on pivot with addgroupbyseg, 17 August, 2018
 //- imprvs on pickup, Fri Sep 21 21:09:34 CST 2018
 //- imprvs on todo/filedir, Sat Oct 20 CST 2018
-//- imprvs with userinfo.$lang, Tue Nov  5 03:39:27 UTC 2019
 
 var currenttbl = currenttbl ? currenttbl : '';
 var currentdb =  currentdb ? currentdb : '';
@@ -23,7 +22,6 @@ var currentlistid = currentlistid ? currentlistid : {}; //-- associative array
 var userinfo =  userinfo ? userinfo : {};
 
 //-
-userinfo.$lang = userinfo.$lang ? userinfo.$lang : {};
 userinfo.pickUpFromTag = '&frompickup=1';
 
 if(!window.console){
@@ -568,14 +566,11 @@ function switchEditable(targetObj,fieldName,fieldType,fieldValue,myUrl,readOnly)
             gta.set('targetarea', 'addareaextradiv');
             gta.set("callback", function(){
                         var s = this;
-                        var noticeMsg = '';
-						if(s.indexOf('--SUCC--') > -1){
-							noticeMsg = userinfo.$lang['notice_success'];
-                            sendNotice(true, noticeMsg);
-                        }
-						else{
-							noticeMsg = userinfo.$lang['notice_failure'];
-                        	sendNotice(false, '');
+                        if(s.indexOf('--SUCC--') > -1){
+                            sendNotice(true,'Data updated Successfully. 成功');
+                        }else{
+                            
+                           sendNotice(false,'Data updated Failed. Please Try again.');
                         }
                     });
             gta.get(appendSid(myUrl+'&'+fieldName+'='+encodeURIComponent(newv)));
@@ -667,7 +662,7 @@ function doActSelect(sSel, sUrl, iId, fieldVal){
 
     if(fieldv != ''){
         if(fieldv == 'list-dodelete'){
-           var deleteDelay = 10; // seconds
+           var deleteDelay = 7; // seconds
 			if(!actListDiv){
 				console.log('actListDiv was lost.....')
 			}
@@ -689,7 +684,7 @@ function doActSelect(sSel, sUrl, iId, fieldVal){
 						var iId = json_resp.resultobj.targetid; //- anonymous func embeded in another anonymos func, cannot share variables in runtime.
 						//console.log('delete_resp_after-2:['+resp+'] id:['+iId+']');
 						if(json_resp.resultobj.resultcode == 0){
-							sendNotice(true, userinfo.$lang['notice_success']+' TargetId:['+iId+']');
+							sendNotice(true, 'Data updated Successfully. 操作成功! TargetId:['+iId+']');
 							var its_list_tr = document.getElementById('list_tr_'+iId);
 							if(its_list_tr){
 								its_list_tr.style.backgroundColor = '#404040';
@@ -709,16 +704,16 @@ function doActSelect(sSel, sUrl, iId, fieldVal){
 						}
 						else{
 							iId = json_resp.resultobj.resulttrace;
-							sendNotice(false, userinfo.$lang['notice_failure']+' ErrCode:'+iId);
+							sendNotice(false, 'Data updated Failed. Please Try again/请重试. ErrCode:'+iId);
 						}
 					});
 				gta.get(appendSid(targetUrl+'&async=1&fmt=json&targetLineId='+iId));
 	
 				}, deleteDelay * 1000);
             
-			actListDiv.innerHTML = '<span style="color:red"> &nbsp; ' + iId + userinfo.$lang['notice_delete_soon']
+			actListDiv.innerHTML = '<span style="color:red"> &nbsp; ' + iId + ' will be deleted after '
 				+deleteDelay+' seconds, [<a href="javascript:window.clearTimeout('+deleteTimerId+');switchArea(\'divActList_'
-				+iId+'\',\'off\');console.log(\'delete is canceled.\'+(new Date())); ">'+userinfo.$lang['func_cancel']+'</a>]...</span>'; 
+				+iId+'\',\'off\');console.log(\'delete is canceled.\'+(new Date())); ">Press here to cancel</a>]...</span>'; 
 			hideActListDiv = 0;	
 			//if(isconfirm){
             //}
@@ -896,7 +891,7 @@ function WdatePicker(){
         });
     }
 	else{
-        sendNotice(userinfo.$lang['notice_datap_invalid']+' Object:['+obj+']');
+        sendNotice('DateP has an invalid obj:['+obj+']');
     }
 }
 
@@ -1175,7 +1170,7 @@ function input2Search(inputx, obj, div3rd, valueoption){
 						+selelistdiv+'\',\'pnsk_'+obj+'\',4);>'+seleText+'-('+seleVal+')</span>';
 					}
 					if(j>30){
-						dataarr[j++] = userinfo.$lang['more']+'....';
+						dataarr[j++] = '更多.....';
 						break;	
 					}
 				}
@@ -1194,7 +1189,7 @@ function input2Search(inputx, obj, div3rd, valueoption){
 						dataarr[j++] = '<span onmouseover=parent.changeBGC(this,1);parent.makeSelect(\''+destobj+'\',\''+seleVal+'\',\''+selelistdiv+'\',\'pnsk_'+obj+'\',1); onmouseout=parent.changeBGC(this,0);userinfo.input2Select.makeSelect=0; onclick=parent.makeSelect(\''+destobj+'\',this.innerText,\''+selelistdiv+'\',\'pnsk_'+obj+'\',4);>'+seleText+'</span>';
 					}
 					if(j>30){
-						dataarr[j++] = userinfo.$lang['more']+'....';
+						dataarr[j++] = '更多.....';
 						break;	
 					}
 				}
@@ -1208,7 +1203,7 @@ function input2Search(inputx, obj, div3rd, valueoption){
 		if(true){
 			//-- close action
 			j++;
-			dataarr[j] = '<span onmouseover="parent.changeBGC(this,1);parent.makeSelect(\''+destobj+'\',\''+origdestvalue+'\',\''+selelistdiv+'\',\'pnsk_'+obj+'\',3);" onmouseout="parent.changeBGC(this,0);" onclick="javascript:userinfo.input2Select.makeSelect=0;parent.makeSelect(\''+destobj+'\',\''+origdestvalue+'\',\''+selelistdiv+'\',\'pnsk_'+obj+'\',2);">'+userinfo.$lang['func_cancel']+'</span>';
+			dataarr[j] = '<span onmouseover="parent.changeBGC(this,1);parent.makeSelect(\''+destobj+'\',\''+origdestvalue+'\',\''+selelistdiv+'\',\'pnsk_'+obj+'\',3);" onmouseout="parent.changeBGC(this,0);" onclick="javascript:userinfo.input2Select.makeSelect=0;parent.makeSelect(\''+destobj+'\',\''+origdestvalue+'\',\''+selelistdiv+'\',\'pnsk_'+obj+'\',2);">关闭/Close</span>';
 		}
 		odata = dataarr.join('<br/>');
 		//console.log(odata);	
@@ -1232,15 +1227,15 @@ function showActList(nId, isOn, sUrl, dataId){
 
 	var sCont = '<p>'; var targetAreaId = '#contentarea_outer';
 	sCont += '&nbsp; &nbsp;&nbsp;<a href="'+targetAreaId+'" onclick="javascript:doActSelect(\'\', \''+sUrl+'\', \''
-		+nId+'\', \'view\');"> - '+userinfo.$lang['func_view']+'</a>&nbsp; &nbsp;&nbsp;';
+		+nId+'\', \'view\');">查看View</a>&nbsp; &nbsp;&nbsp;';
 	sCont += '<br/>&nbsp; &nbsp;&nbsp;<a href="'+targetAreaId+'" onclick="javascript:doActSelect(\'\', \''+sUrl+'\', \''
-		+nId+'\', \'modify\');"> - '+userinfo.$lang['func_edit']+'</a>&nbsp; &nbsp;&nbsp;';
+		+nId+'\', \'modify\');">修改Edit</a>&nbsp; &nbsp;&nbsp;';
 	sCont += '<br/>&nbsp; &nbsp;&nbsp;<a href="'+targetAreaId+'" onclick="javascript:doActSelect(\'\', \''+sUrl+'\', \''
-		+nId+'\', \'print\');"> - '+userinfo.$lang['func_print']+'</a>&nbsp; &nbsp;&nbsp;';
+		+nId+'\', \'print\');">打印Print</a>&nbsp; &nbsp;&nbsp;';
 	sCont += '<br/>&nbsp; &nbsp;&nbsp;<a href="'+targetAreaId+'" onclick="javascript:doActSelect(\'\', \''+sUrl+'\', \''
-		+nId+'\', \'list-dodelete\');"> - '+userinfo.$lang['func_delete']+'</a>&nbsp; &nbsp;&nbsp;';
+		+nId+'\', \'list-dodelete\');">删除Delete</a>&nbsp; &nbsp;&nbsp;';
 	sCont += '<br/>&nbsp; &nbsp;&nbsp;<a href="'+targetAreaId+'" onclick="javascript:doActSelect(\'\', \''+sUrl+'\', \''
-        +nId+'\', \'addbycopy\');"> - '+userinfo.$lang['func_copy']+'</a>&nbsp; &nbsp;&nbsp;';
+        +nId+'\', \'addbycopy\');">复制Copy</a>&nbsp; &nbsp;&nbsp;';
    
     //- add more options on popup menu, Fri Apr 26 10:58:24 HKT 2019
     if(typeof userinfo.actListOption != 'undefined'){
@@ -1270,7 +1265,7 @@ function showActList(nId, isOn, sUrl, dataId){
                 tmpUrl = tmpUrl2;
             }
             sCont += '<br/>&nbsp; &nbsp;&nbsp;<a href="'+targetAreaId+'" onclick="javascript:doActSelect(\'\', \''+tmpUrl+'\', \''
-                +nId+'\', \'ActOption\');"> - '+tmpName+'</a>&nbsp; &nbsp;&nbsp;';
+                +nId+'\', \'ActOption\');">'+tmpName+'</a>&nbsp; &nbsp;&nbsp;';
         }
     }
 	 
@@ -1287,7 +1282,7 @@ function lazyLoad(myObj, myType, myUrl){
 	//window.onload = function(){
 	window.setTimeout(function(){
 		if(document.readyState == 'complete' || document.readyState == 'interactive'){
-			sendNotice(true, userinfo.$lang['lazyloading']+'.... myObj:['+myObj+']');
+			sendNotice(true, 'Lazy is loading in process..... myobj:['+myObj+']');
 			var gta = new GTAjax();
         	gta.set('targetarea', 'addareaextradiv');
         	gta.set("callback", function(){
@@ -1308,12 +1303,12 @@ function lazyLoad(myObj, myType, myUrl){
 				myOptionList.value = JSON.stringify(optionList);
 				console.log("thefield:["+resultList.thefield+"] completed......"+(new Date()));
 				//console.log(JSON.stringify(myOptionList.value));
-				sendNotice(true, userinfo.$lang['notice_lazyload_success']+'.... myObj:['+myObj+']');
+				sendNotice(true, 'Lazy Load is done successfully..... myobj:['+myObj+']');
 			});
         	gta.get(appendSid(myUrl));
 		}
 		else{
-			sendNotice(false, userinfo.$lang['notice_lazyloading']+'....');
+			sendNotice(false, 'Lazy Loading is waiting.....');
 		}
 	}, 3*1000);
 
@@ -1361,21 +1356,17 @@ function showPivotList(nId, isOn, sUrl, sName){
 	divObj.onmouseout = function(){ this.style.display='none'; };
 
 	var sCont = '<p> &nbsp; <b style="color:red;">'+nId+'. '+sName+'</b>: ';
-	var groupCol = userinfo.$lang['func_pivot_group_col'];
-	var valueCol = userinfo.$lang['func_pivot_value_col'];
-	var orderCol = userinfo.$lang['func_pivot_order_col'];
-	var opList = {'addgroupby':groupCol,
-			'addgroupbyymd':groupCol+'Ymd', 'addgroupbyseg':groupCol+'Seg',
-			'addgroupbyother':groupCol+'Other(?)', 
+	var opList = {'addgroupby':'組項列', 'addgroupbyymd':'組項列Ymd', 
+			'addgroupbyseg':'组项列区段', 'addgroupbyother':'組項列Other(?)', 
 			'__SEPRTa':1,
-			'addvaluebysum':valueCol+'Sum', 'addvaluebycount':valueCol+'Count',
-			'addvaluebycountdistinct':valueCol+'CountUniq', 'addvaluebyavg':valueCol+'Average',
-			'addvaluebymiddle':valueCol+'Median(?)', 'addvaluebymax':valueCol+'Max', 
-			'addvaluebymin':valueCol+'Min', 'addvaluebystddev_pop':valueCol+'Stddev_Pop', 
-			'addvaluebystddev_samp':valueCol+'Stddev_Samp',
-			'addvaluebyother':valueCol+'Other(?)',
+			'addvaluebysum':'值列Sum', 
+			'addvaluebycount':'值列Count', 'addvaluebycountdistinct':'值列Count去重',
+			'addvaluebyavg':'值列Average', 'addvaluebymiddle':'值列Median(?)', 'addvaluebymax':'值列Max', 
+			'addvaluebymin':'值列Min', 'addvaluebystddev_pop':'值列Stddev_Pop', 
+			'addvaluebystddev_samp':'值列Stddev_Samp',
+			'addvaluebyother':'值列Other(?)',
 			'__SEPRTb':1,
-			'addorderby':orderCol};
+			'addorderby':'排序項'};
 	var opi = 1;
 	for(var op in opList){
 		if(op.indexOf('__SEPRT') > -1){
@@ -1408,8 +1399,8 @@ function doPivotSelect(sField, iId, sOp, isOn, sName){
         || sOp.indexOf('addgroupbyseg') > -1){
         if(isOn == 1){
             if(sOp == 'addgroupbyseg'){
-                var segPoints = window.prompt(userinfo.$lang['input']+sName+'/'+sField
-						+ userinfo.$lang['func_pivot_seg_range'], '1-4');
+                var segPoints = window.prompt('请输入 '+sName+'/'+sField
+						+' 分组区间段起始位置, 起点-终点:', '1-4');
                 if(segPoints.indexOf('-') > 0){
                     sOp += segPoints.replace(' ', '');
                 }
@@ -1430,9 +1421,9 @@ function doPivotSelect(sField, iId, sOp, isOn, sName){
 	fieldValue = fieldObj.value;
 	//console.log("span:["+spanObj.innerHTML+"] field:["+fieldValue+"]");
 	var tmps = sName+'('+sField+') '+sOp+'   <a href="javascript:void(0);" onclick="javascript:doPivotSelect(\''
-			+sField+'\', \''+iId+'\', \''+sOp+'\', 0, \''+sName+'\');" title="'+userinfo.$lang['func_delete']+'"> X(Rm) </a>'
+			+sField+'\', \''+iId+'\', \''+sOp+'\', 0, \''+sName+'\');" title="Remove"> X(Rm) </a>'
 			+'   <a href="javascript:void(0);" onclick="javascript:doPivotSelect(\''
-	+sField+'\', \''+iId+'\', \'addorderby\', 1, \''+sName+'\');" title="'+userinfo.$lang['func_orderby']+'"> ↿⇂(Od) </a><br>';
+	+sField+'\', \''+iId+'\', \'addorderby\', 1, \''+sName+'\');" title="Order"> ↿⇂(Od) </a><br>';
 	if(isOn == 1){
 		if(fieldValue.indexOf(sField+sOp) == -1){
 			spanObj.innerHTML += tmps;

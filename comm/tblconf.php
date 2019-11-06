@@ -6,7 +6,6 @@ $hlcolor = '#afc4e2'; $form_cols = 6; $hashiddenfield = false;
 
 $hmconf = GTbl::xml2hash($xmlpathpre, $elementsep, $db, $tbl);
 $hmconf[0]['mydb'] = $mydb;
-$hmconf[0]['lang'] = $lang; # + $lang, Tue Nov  5 04:14:33 UTC 2019
 #print_r($hmconf);
 $gtbl = new GTbl($tbl, $hmconf[0], $elementsep, $tblrotate);
 $tbl = $gtbl->getTbl();

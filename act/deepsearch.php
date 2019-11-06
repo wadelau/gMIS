@@ -17,8 +17,7 @@ if($_REQUEST['otbl'] != ''){
 # reset old?
 $jdo = str_replace("&pnsk", "&oldpnsk", $jdo);
 
-$out .= "<fieldset style=\"border-color:#5f8ac5;border: 1px solid #5f8ac5;\"><legend><h4>".$lang->get("func_deepsearch_hint")
-	."</h4></legend><form id=\""
+$out .= "<fieldset style=\"border-color:#5f8ac5;border: 1px solid #5f8ac5;\"><legend><h4>深度复合搜索</h4></legend><form id=\""
 	.$formid."\" name=\"".$formid."\" method=\"post\" action=\"".$jdo."&act=list-dodeepsearch\" "
 	.$gtbl->getJsActionTbl()."><table cellspacing=\"0\" cellpadding=\"0\" "
 	." style=\"border:0px solid black; width:86%; margin-left:auto; margin-right:auto;\">";
@@ -154,12 +153,11 @@ for($hmi=$min_idx; $hmi<=$max_idx;$hmi++){
 
 $out .= "<tr height=\"10px\"><td style=\"border-top: 1px dotted #cccccc; vertical-align:middle;\" colspan=\"".$my_form_cols."\">  </td></tr>";
 $out .= "<tr><td colspan=\"".$my_form_cols."\" align=\"center\">"
-	.$lang->get("func_deepsearch_oplogic").": <select id='pnsm' name='pnsm'><option value='and'>".$lang->get("func_andsearch")
-	."</option> <option value='or'>".$lang->get("func_orsearch")."</option> </select> "
+	."条件之间关系: <select id='pnsm' name='pnsm'><option value='and'>并且</option> <option value='or'>或者</option> </select> "
 	."&nbsp;&nbsp;&nbsp;&nbsp;<input type=\"submit\" name=\"addsub\" id=\"addsub\" "
-	."onclick=\"javascript:doActionEx(this.form.name,'actarea');\" /> \n"; 
+	."onclick=\"javascript:doActionEx(this.form.name,'actarea');\" /> \n"; #  value=\"递交\"
 $out .= "<input type=\"hidden\" id=\"id\" name=\"id\" value=\"".$id."\"/>\n ".$hiddenfields."\n";
-$out .= "&nbsp;&nbsp;&nbsp;&nbsp;<input type=\"button\" name=\"cancelbtn\" value=\"".$lang->get("func_cancel")."\" "
+$out .= "&nbsp;&nbsp;&nbsp;&nbsp;<input type=\"button\" name=\"cancelbtn\" value=\"取消\" "
 	."onclick=\"javascript:switchArea('contentarea_outer','off');\" /> </td></tr>";
 $out .= "</table> </form>  </fieldset>  <br/>";
 

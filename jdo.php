@@ -49,7 +49,7 @@ else if(startsWith($act, "list")){
 	}
 	else{
 		# html
-    $navi = new PageNavi($args=array('lang'=>$lang));
+    $navi = new PageNavi();
     $orderfield = $navi->getOrder();
     if($orderfield == ''){
         $orderfield = $gtbl->getOrderBy();
@@ -94,8 +94,8 @@ else if(startsWith($act, "list")){
     $out .= "<table width=\"98%\" id=\"gmisjdomaintbl\" cellspacing=\"0px\" cellpadding=\"3px\""
 			." style=\"word-break:break-all;\" class=\"mainlist\">"
             ."<tr height=\"35px\"><td colspan=\"".($max_disp_cols+2)."\">";
-    $out .= "<button name=\"selectallbtn\" type=\"button\" onclick=\"checkAll();\" value=\"\">".$lang->get("func_selectall")."</button> &nbsp;";
-    $out .= "<button name=\"reversebtn\" type=\"button\" onclick=\"uncheckAll();\" value=\"\">".$lang->get("func_unselect")."</button>";
+    $out .= "<button name=\"selectallbtn\" type=\"button\" onclick=\"checkAll();\" value=\"\">全选</button> &nbsp;";
+    $out .= "<button name=\"reversebtn\" type=\"button\" onclick=\"uncheckAll();\" value=\"\">反选</button>";
     $out .= "&nbsp; ".$navi->getNavi()." &nbsp;";
 
     if($accMode!='' && ($accMode == 'r' || !inString('w', $accMode))){
@@ -103,22 +103,22 @@ else if(startsWith($act, "list")){
     }
     else{
 	$out .= "&nbsp;<button name='importexcel' onclick=\"javascript:doActionEx('"
-    	."extra/importexcel.php?sid=$sid&tbl=$tbl&db=$db', 'contentarea');\" title=\"".$lang->get("func_importxlsx_hint")."\">".$lang->get("func_importxlsx")."</button>";
+    	."extra/importexcel.php?sid=$sid&tbl=$tbl&db=$db', 'contentarea');\" title=\"批量导入外部数据\">导入Xlsx</button>";
     }
 
 	$out .= "&nbsp;&nbsp;&nbsp;<button name='pickup' onclick=\"javascript:doActionEx('"
-    	.$jdo."&act=pickup', 'contentarea');\" title=\"".$lang->get("func_pickup_hint")."\">".$lang->get("func_pickup")."</button>";
+    	.$jdo."&act=pickup', 'contentarea');\" title=\"快速点击勾选\">点  选</button>";
 	$out .= "&nbsp;&nbsp;<button name='deepsearch' onclick=\"javascript:doActionEx('"
-    	.$jdo."&act=deepsearch', 'contentarea');\" title=\"".$lang->get("func_deepsearch_hint")."\">".$lang->get("func_deepsearch")."</button>";
+    	.$jdo."&act=deepsearch', 'contentarea');\" title=\"深度复合查询\">深  搜</button>";
 	$out .= "&nbsp;&nbsp;<button name='deepsearch' onclick=\"javascript:doActionEx('"
-    	.$jdo."&act=pivot&pntc=".$navi->get('totalcount')."', 'contentarea');\" title=\"".$lang->get("func_pivot_hint")."\">".$lang->get("func_pivot")."</button>";
+    	.$jdo."&act=pivot&pntc=".$navi->get('totalcount')."', 'contentarea');\" title=\"数据透视分析\">透  视</button>";
 	if(true){
         $iswatch = Wht::get($_REQUEST, 'pnwatch');
         $watchInterval = $_CONFIG['watch_interval']; # seconds
         $watchAct = "doActionEx('".$jdo."&act=list&pnwatch=1', 'actarea')";
-        $out .= "&nbsp;&nbsp;&nbsp;<button name='watchbtn' title='".$lang->get("func_watch_hint")."' onclick=\"javascript:parent.doActionEx('"
+        $out .= "&nbsp;&nbsp;&nbsp;<button name='watchbtn' title='觀察模式' onclick=\"javascript:parent.doActionEx('"
                 .$jdo."&act=list&pnwatch=".($iswatch==1?'0':'1')."', 'actarea');\">"
-                .($iswatch==1? $lang->get("func_watch").'...': $lang->get("func_watch"))."</button>";
+                .($iswatch==1?'觀察中...':'觀  察')."</button>";
         if($iswatch == 1){
             # parent.doActionEx('".$jdo."&act=list&pnwatch=1', 'actarea');
             $out .= "<script type=\"text/javascript\">parent.registerAct({'status':'onload', "
@@ -132,9 +132,9 @@ else if(startsWith($act, "list")){
         }
     }
     $out .= "&nbsp;<div style=\"float:right;\"><button name=\"searchor\" onclick=\"javascript:searchBy('"
-    	.$jdo."&act=list&pnsm=or');\" title=\"".$lang->get('func_orsearch_hint')."\">".$lang->get('func_orsearch')."</button>&nbsp;&nbsp;&nbsp;"
+    	.$jdo."&act=list&pnsm=or');\" title=\"满足其中一个条件即可\">或搜</button>&nbsp;&nbsp;&nbsp;"
     	."<button name=\"searchand\" onclick=\"javascript:searchBy('"
-    	.$jdo."&act=list&pnsm=and');\" title=\"".$lang->get('func_andsearch_hint')."\">".$lang->get('func_andsearch')."</button>&nbsp;&nbsp;</div>"
+    	.$jdo."&act=list&pnsm=and');\" title=\"同时满足所有检索条件\">并搜</button>&nbsp;&nbsp;</div>"
     	."</td></tr>";
     ## list-sort start
     $out .= "<tr style=\"font-weight:bold;\" height=\"28px\">";
@@ -218,7 +218,8 @@ else if(startsWith($act, "list")){
         }
         $out .= "</td>";
     }
-    $out .= "</tr>";
+    $out .= "<!-- <td><a href=\"javascript:searchBy('".$jdo."&act=list&pnsm=or');\" title=\"满足其中一个条件即可\">或搜</a><br/>"
+            ."<a href=\"javascript:searchBy('".$jdo."&act=list&pnsm=and');\" title=\"同时满足所有检索条件\">与搜</a></td> --> </tr>";
     ## list-search end
     ## main data loop
     $hm = $gtbl->getBy("*", $navi->getCondition($gtbl, $user));
@@ -422,8 +423,8 @@ else if(startsWith($act, "list")){
         $out .= "</tr>\n";
         # sum end
         $out .= "<tr height=\"35px\"><td style=\"border-bottom:0px\" colspan=\"".($max_disp_cols+2)."\">";
-        $out .= "<button name=\"selectallbtn\" type=\"button\" onclick=\"checkAll();\" value=\"\">".$lang->get("func_selectall")."</button> &nbsp;";
-        $out .= "<button name=\"reversebtn\" type=\"button\" onclick=\"uncheckAll();\" value=\"\">".$lang->get("func_unselect")."</button>";
+        $out .= "<button name=\"selectallbtn\" type=\"button\" onclick=\"checkAll();\" value=\"\">全选</button> &nbsp;";
+        $out .= "<button name=\"reversebtn\" type=\"button\" onclick=\"uncheckAll();\" value=\"\">反选</button>";
         $out .= $navi->getNavi();
         //$out .= " <script> parent.sendLinkInfo('".implode(",",$listid)."','w',''); </script> ";
         $out .= " <script type=\"text/javascript\"> if(typeof parent.sendLinkInfo != 'undefined'){ parent.sendLinkInfo('".urlencode(substr($fstfields, 0, strlen($fstfields)-1))."','w','".$_REQUEST['field']."'); } </script> ";
@@ -452,8 +453,8 @@ else if(startsWith($act, "list")){
                         ." onclick=\"javascript:fillPickUpReqt('".$jdo."', '$field', '".($base62xTag.Base62x::encode($v))."', 'filterrollback', this);\">[X]</a><br/>";
             }
         }
-        $out .= "<tr><td colspan='".($max_disp_cols+2)."' style='text-align:center'><br/> "
-                .$this->lang->get('notice_search_nodata')."<br/><br/>".$queryFields."<br/>1609240951.<br/><br/></td></tr>";
+        $out .= "<tr><td colspan='".($max_disp_cols+2)."' style='text-align:center'><br/>No Data for These Criterions. "
+                ."/ 没有符合条件的数据. 請嘗試去掉一些條件再試試<br/><br/>".$queryFields."<br/>1609240951.<br/><br/></td></tr>";
     }
     $out .= "</table>";
     # list end

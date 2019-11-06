@@ -17,7 +17,6 @@ class PageNavi extends WebApp{
     var $dummy = '';
     const SID = 'sid';
 	const Omit_String = '----';
-	var $lang = null;
     
    public function __construct($args=null){
    
@@ -44,25 +43,11 @@ class PageNavi extends WebApp{
             $this->hmf[$k]=$para[$k];
        }
 	   
-	   if(!is_array($args)){ $args = array(); }
-
 	   #$this->dba = new DBA(); # added by wadelau@ufqi.com, Wed Jul 11 14:31:52 CST 2012
 	   # call parent's constructor, explicitly
 	   parent::__construct($args);
-	   # lang
-	   if(array_key_exists('lang', $args)){
-			$this->lang = $args['lang'];   
-			#debug("mod/pagenavi: lang:".serialize($this->lang)." welcome:".$this->lang->get('welcome'));
-		}
-		else{
-			#debug("mod/pagenavi: lang: not config. try global?");
-			global $lang;
-			$this->lang = $lang; # via global?
-		}
-
    }
 
-	# ?
    function getNavi(){
        $para = $this->hmf;
        if($this->hmf['totalcount'] > 0){
@@ -92,7 +77,7 @@ class PageNavi extends WebApp{
 
        $totalpage = $para['pntc'] % $para['pnps'] == 0 ? ($para['pntc']/$para['pnps']) : ceil($para['pntc']/$para['pnps']);
        $navilen = 9;
-       $str = "&nbsp;&nbsp;<b>".$this->lang->get("pagenavi_pageno").": &nbsp;<a href=\"javascript:pnAction('".$para['url']."&pnpn=1');\" title=\"".$this->lang->get("pagenavi_p1")."\">|&laquo;</a></b>&nbsp; ";
+       $str = "&nbsp;&nbsp;<b>页号: &nbsp;<a href=\"javascript:pnAction('".$para['url']."&pnpn=1');\" title=\"第一页\">|&laquo;</a></b>&nbsp; ";
 
        for($i=$para['pnpn']-$navilen; $i<$para['pnpn'] + $navilen && $i<=$totalpage; $i++){
            if($i>0){
@@ -107,15 +92,11 @@ class PageNavi extends WebApp{
            }
            #print "$i: [$str] totalpage:[$totalpage]\n";
        }
-       $str .= " &nbsp;<b><a href=\"javascript:pnAction('".$para['url']."&pnpn=".$totalpage."');\" title=\"".$this->lang->get("pagenavi_plast")
-	   		."\">&raquo;|</a> </b> &nbsp; &nbsp; <a href=\"javascript:void(0);\" title=\"".$this->lang->get("pagenavi_adjustps")
-			."\" onclick=\"javascript:var pnps=window.prompt('".$this->lang->get("pagenavi_inputps").":','".$para['pnps']."'); if(pnps>0){ myurl='"
-			.$para['url']."'; myurl=myurl.replace('&pnps=','&opnps='); doAction(myurl+'&pnps='+pnps);};\"><b>".number_format($para['pnps'])."</b> "
-			.$this->lang->get("pagenavi_ps")."</a> &nbsp;  <b>".number_format($para['pntc'])."</b> ".$this->lang->get("pagenavi_record")." / <b>".number_format($totalpage)."</b> ".$this->lang->get("pagenavi_page")." &nbsp;";
+       $str .= " &nbsp;<b><a href=\"javascript:pnAction('".$para['url']."&pnpn=".$totalpage."');\" title=\"最后一页\">&raquo;|</a> </b> &nbsp; &nbsp; <a href=\"javascript:void(0);\" title=\"改变显示条数\" onclick=\"javascript:var pnps=window.prompt('请输入新的每页显示条数:','".$para['pnps']."'); if(pnps>0){ myurl='".$para['url']."'; myurl=myurl.replace('&pnps=','&opnps='); doAction(myurl+'&pnps='+pnps);};\"><b>".number_format($para['pnps'])."</b>条/页</a> &nbsp; 共 <b>".number_format($para['pntc'])."</b>条 / <b>".number_format($totalpage)."</b>页 &nbsp;";
        if($_REQUEST['isheader'] != '0'){
-           $str .= "<button name=\"initbtn\" onclick=\"javascript:pnAction('".$this->getInitUrl()."');\">".$this->lang->get("pagenavi_pinit")."</button>&nbsp;";
+           $str .= "<button name=\"initbtn\" onclick=\"javascript:pnAction('".$this->getInitUrl()."');\">初始页</button>&nbsp;";
            $str .= "<button name=\"initbtn2\" onclick=\"javascript:doAction('".str_replace("=list","=list-toexcel",$para['url']."&pnpn=".$para['pnpn'])
-               ."&needautopickup=no');\" title=\"".$this->lang->get("func_exportxlsx_hint")."\">".$this->lang->get("func_exportxlsx")."</button>";
+               ."&needautopickup=no');\" title=\"输出并下载数据\">导出Xlsx</button>";
        }
 
        return $str;

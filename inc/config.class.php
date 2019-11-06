@@ -13,21 +13,19 @@ if(true){
 	
 	$conf['tblpre'] 	= $tblpre;
 	$conf['appname'] 	= '-gMIS';
-	$conf['appchnname'] 	= 'lang_appchnname';
+	$conf['appchnname'] 	= '-吉密斯';
 	$conf['appdir']		= $appdir;
 
 	$conf['rtvdir'] 	= $rtvdir;
-	$conf['agentname'] 	= 'lang_agentname';
+	$conf['agentname'] 	= 'gMIS通用管理信息系统';
 	$conf['agentalias']	= 'gMIS-Admin';
 	$conf['smarty']		= $appdir.'/class/Smarty';
 
 	$conf['uploaddir']	= 'upld';
-	$conf['languagedir']	= 'lang';
 	$conf['septag']		= '_J_A_Z_';
 	$conf['skiptag']    = '----';
 
-	#$conf['maindb']		= 'DB_NAME';
-	$conf['maindb']		= 'gmisdb';
+	$conf['maindb']		= 'DB_NAME';
 	$conf['maintbl']	= $tblpre.'customertbl';
 	$conf['usertbl']	= $tblpre.'info_usertbl';
 	$conf['welcometbl']	= $tblpre.'info_welcometbl';
@@ -35,14 +33,10 @@ if(true){
 	$conf['ostype'] = 0; # 0 for *nix, 1 for windows, Mar 2018
 
 	# db info
-	$conf['dbhost'] 	= '127.0.0.1'; # use 127.0.0.1 instead of localhost
-	$conf['dbport'] 	= '3306';
-	$conf['dbuser'] 	= 'gmis';
-	$conf['dbpassword'] 	= 'gmispwd1433';
-	#$conf['dbhost'] 	= 'DB_HOST'; # use 127.0.0.1 instead of localhost
-	#$conf['dbport'] 	= 'DB_PORT';
-	#$conf['dbuser'] 	= 'DB_USER';
-	#$conf['dbpassword'] 	= 'DB_PASSWORD';
+	$conf['dbhost'] 	= 'DB_HOST'; # use 127.0.0.1 instead of localhost
+	$conf['dbport'] 	= 'DB_PORT';
+	$conf['dbuser'] 	= 'DB_USER';
+	$conf['dbpassword'] 	= 'DB_PASSWORD';
 	$conf['dbname'] 	= $conf['maindb'];
 	$conf['dbdriver']	= 'MYSQLIX'; # 'MYSQL', 'MYSQLIX', 'PDOX', 'SQLSERVER', 'ORACLE' in support, UPCASE only
 	$conf['db_enable_utf8_affirm'] = false; # append utf-8 affirm after db connection established, should be false in a all-utf-8 env.
@@ -74,7 +68,7 @@ if(true){
 
 	# misc
 	$conf['frontpage'] = '/';  # put # before -naturedns as #-naturedns
-	$conf['is_debug'] = 1;
+	$conf['is_debug'] = 0;
 	$conf['html_resp'] = '<!DOCTYPE html><html><head><title>RESP_TITLE</title></head><body>RESP_BODY</body></html>';
 	$conf['auto_save_interval'] = 20; # ref extra/htmleditor
 	$conf['auto_install'] = 'INSTALL_AUTO';

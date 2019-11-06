@@ -40,11 +40,11 @@ if($levelcode != ''){
         $module_path = substr($module_path, 0, strlen($module_path)-7); # '&rarr; '
     }
 }
-$data['modulename'] = $lastLinkName=='' ? $lang->get('navi_desktop_setting') : $lastLinkName;
+$data['modulename'] = $lastLinkName=='' ? '桌面 & 系统配置' : $lastLinkName;
 $tit = $tit=='' ? $tbl : $tit;
-$module_path = $module_path == '' ? '<a href="'.$url.'&navidir=99">'.$lang->get('navi_desktop_setting').'</a> &rarr; '.$tit : $module_path;
+$module_path = $module_path == '' ? '<a href="'.$url.'&navidir=99">桌面 & 系统配置</a> &rarr; '.$tit : $module_path;
 if($lastLinkName != $tit){ $module_path .= "&nbsp;|&nbsp;".($tit==''?$lastLinkName:$tit); }
-$module_path = "<b> &Pi; <a href=\"".$url."\">".$lang->get('navi_homepage')."</a> "
+$module_path = "<b> &Pi; <a href=\"".$url."\">首页</a> "
         ."<span class=\"f17px\">&rarr;</span> ".$module_path." ".($db==''?'':'@ '.$db)." "
 	.($tblrotate=='' ? '' : $gtbl->getTblRotateName($tblrotate))."</b> ";
 
