@@ -145,7 +145,7 @@ if($act == 'pivot-do'){
     if($hm[0]){
         $hm = $hm[1];
         # table headers
-        $out .= "<b>透視數據繪圖</b><br/>";
+        $out .= "<b>".$lang->get("func_pivot_hint")."</b><br/>";
         $out .= "<div id=\"pivot_resultset_g\">"
                 ."<table id=\"pivot_resultset_gtbl\" style=\"border:1px solid black; width:96%; margin-left:auto; margin-right:auto;\">"
                 ."";
@@ -154,7 +154,7 @@ if($act == 'pivot-do'){
         $out .= "<tr><td colspan=\"30\" style=\"text-align:center\">"
                 ."</td></tr>";
         $out .= "</table></div>";
-        $out .= "<br/><b>透視數據列表</b>";
+        $out .= "<br/><b></b>";
         $out .= "<table id=\"pivot_resultset\" style=\"border:1px solid black; width:96%; margin-left:auto; margin-right:auto;\""
                 ." class=\"pivot_resultset_cls\" name=\"pivot_resultset\">";
         $out .= "<tr><td colspan=\"3\"></td></tr>";
@@ -310,13 +310,13 @@ else{
 # form 
 # reset old?
 
-$out .= "<fieldset style=\"border-color:#5f8ac5;border: 1px solid #5f8ac5;\"><legend><h4>數據透視當前數據集("
+$out .= "<fieldset style=\"border-color:#5f8ac5;border: 1px solid #5f8ac5;\"><legend><h4>".$lang->get("func_pivot_dataset")."("
         .number_format($_REQUEST['pntc']).")</h4></legend>"
        ."<form id=\"".$formid."\" name=\"".$formid."\" method=\"post\" action=\"".$jdo."&act=pivot-do\" "
 	   .$gtbl->getJsActionTbl().">";
 $out .= "<table style='border:0px; width:96%; margin-left:auto; margin-right:auto;'>";
         
-$out .= "<tr><td colspan='$tblspan'>選擇待考察的對象, 形成待生成數據表的橫向列項:</td></tr>";
+$out .= "<tr><td colspan='$tblspan'>".$lang->get("func_pivot_ophint")."</td></tr>";
 $out .= "<tr><td colspan='$tblspan' width='100%'>";
 
 $hmorig = array();
@@ -402,21 +402,21 @@ $out .= "</td></tr>";
 $firstFieldChn = $gtbl->getCHN($firstField);
 $secondFieldChn = $gtbl->getCHN($secondField);
 $out .= "<tr>"
-        ."<td width='34%'><fieldset><legend title='目標數據表分組項'>分組項列</legend>"
+        ."<td width='34%'><fieldset><legend title='".$lang->get("func_pivot_group_col")."'>".$lang->get("func_pivot_group_col")."</legend>"
         ."<span id='span_groupby'>"
         .$firstFieldChn."($firstField) addgroupby   <a href=\"javascript:void(0);\" onclick=\"javascript:doPivotSelect('$firstField', "
         ."'1', 'addgroupby', 0, '".$firstFieldChn."');\" title=\"Remove\"> X(Rm) </a>   <a href=\"javascript:void(0);\" onclick=\"javascript:doPivotSelect('"
         .$firstField."', '1', 'addorderby', 1, '".$firstFieldChn."');\" title=\"Order\"> ↿⇂(Od) </a><br>"
         ."</span><input type='hidden' name='groupby' id='groupby' value=',".$firstField."::addgroupby'/>"
         ."</fieldset></td>";
-$out .= "<td width='33%'><fieldset><legend title='目標數據表計算項'>求值項列</legend>"
+$out .= "<td width='33%'><fieldset><legend title='".$lang->get("func_pivot_value_col")."'>".$lang->get("func_pivot_value_col")."</legend>"
         ."<span id='span_calculateby'>"
         .$gtbl->getCHN($secondField)."($secondField) addvaluebycount   <a href=\"javascript:void(0);\" onclick=\"javascript:doPivotSelect('$secondField', "
-        ."'1', 'addvaluebycount', 0, '".$gtbl->getCHN($secondField)."');\" title=\"Remove\"> X(Rm) </a>   <a href=\"javascript:void(0);\" onclick=\"javascript:doPivotSelect('"
-        .$secondField."', '1', 'addorderby', 1, '".$secondFieldChn."');\" title=\"Order\"> ↿⇂(Od) </a><br>"
+        ."'1', 'addvaluebycount', 0, '".$gtbl->getCHN($secondField)."');\" title=\"".$lang->get("func_delete")."\"> X(Rm) </a>   <a href=\"javascript:void(0);\" onclick=\"javascript:doPivotSelect('"
+        .$secondField."', '1', 'addorderby', 1, '".$secondFieldChn."');\" title=\"".$lang->get("func_orderby")."\"> ↿⇂(Od) </a><br>"
         ."</span><input type='hidden' name='calculateby' id='calculateby' value=',".$secondField."::addvaluebycount'/>"
         ."</fieldset></td>";
-$out .= "<td><fieldset><legend title='目標數據表排序項'>排序項</legend>"
+$out .= "<td><fieldset><legend title='".$lang->get("func_pivot_order_col")."'>".$lang->get("func_pivot_order_col")."</legend>"
         ."<span id='span_orderby'>"
         .$gtbl->getCHN($firstField)."($firstField) addorderby   <a href=\"javascript:void(0);\" onclick=\"javascript:doPivotSelect('$firstField', "
         ."'1', 'addorderby', 0, '".$gtbl->getCHN($firstField)."');\" title=\"Remove\"> X(Rm) </a>   <a href=\"javascript:void(0);\" onclick=\"javascript:doPivotSelect('"
@@ -425,9 +425,9 @@ $out .= "<td><fieldset><legend title='目標數據表排序項'>排序項</legen
         ."</tr>";
 	
 $out .= "<tr><td colspan='$tblspan'> <input type=\"submit\" name=\"addsub\" id=\"addsub\" "
-        ."onclick=\"javascript:doActionEx(this.form.name,'pivotarea');\" /> \n"; # value=\"递   交\"
+        ."onclick=\"javascript:doActionEx(this.form.name,'pivotarea');\" /> \n"; 
         $out .= "<input type=\"hidden\" id=\"id\" name=\"id\" value=\"".$id."\"/>\n ".$hiddenfields."\n";
-        $out .= "&nbsp;&nbsp;&nbsp;&nbsp;<input type=\"button\" name=\"cancelbtn\" value=\"取   消\" "
+        $out .= "&nbsp;&nbsp;&nbsp;&nbsp;<input type=\"button\" name=\"cancelbtn\" value=\"".$lang->get("func_cancel")."\" "
                 ."onclick=\"javascript:switchArea('contentarea_outer','off');\" /> </td></tr></table>";
 
 $out .= "</form> <br/> <div id='pivotarea'>Data Processing....</div> </fieldset>"

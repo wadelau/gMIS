@@ -1,10 +1,10 @@
 <?php
 require("./comm/header.inc.php");
 
-$out = str_replace('TITLE', $_CONFIG['agengname'], $out);
+$out = str_replace('TITLE', $lang->get($_CONFIG['agentname']), $out);
 $isgo = true;
 if($tbl == ''){
-    if(1){
+    if(true){
         $tbl = $_CONFIG['welcometbl'];
         $_REQUEST['tbl'] = $tbl;
         debug(__FILE__.": empty tbl detection. 1703082103.");
@@ -20,7 +20,28 @@ else{
         ."','group':'".$user->getGroup()
         ."','branch':'".$user->get('branchoffice')
         ."','sid':'".$sid
-        ."'};\n </script>\n";
+        ."'};\n";
+	$out .= "userinfo.\$lang = {"
+		."\"func_cancel\":\"".$lang->get("func_cancel")."\","
+		."\"notice_success\":\"".$lang->get("notice_success")."\","
+		."\"notice_failure\":\"".$lang->get("notice_failure")."\","
+		."\"notice_delete_soon\":\"".$lang->get("notice_delete_soon")."\","
+		."\"notice_datap_invalid\":\"".$lang->get("notice_datap_invalid")."\","
+		."\"more\":\"".$lang->get("more")."\","
+		."\"func_view\":\"".$lang->get("func_view")."\","
+		."\"func_edit\":\"".$lang->get("func_edit")."\","
+		."\"func_print\":\"".$lang->get("func_print")."\","
+		."\"func_delete\":\"".$lang->get("func_delete")."\","
+		."\"func_copy\":\"".$lang->get("func_copy")."\","
+		."\"func_orderby\":\"".$lang->get("func_orderby")."\","
+		."\"func_pivot_group_col\":\"".$lang->get("func_pivot_group_col")."\","
+		."\"func_pivot_value_col\":\"".$lang->get("func_pivot_value_col")."\","
+		."\"func_pivot_order_col\":\"".$lang->get("func_pivot_order_col")."\","
+		."\"func_pivot_seg_range\":\"".$lang->get("func_pivot_seg_range")."\","
+		."\"input\":\"".$lang->get("input")."\","
+		."\"\":\"\""
+		."};\n";	
+	$out .= "</script>\n";
 }
 
 $out_header = $out;
@@ -43,7 +64,7 @@ $jdo = mkUrl($jdo, $_REQUEST, $gtbl); # ".($isheader?"</h3>":"")."
 $accMode = $gtbl->getMode();
 
 $out .= "<table align=\"center\" width=\"98%\"  style=\"background:transparent\">";
-$out .= "<tr><td width=\"40%\" ".($isheader?"class=\"f17px\"":"")."> <!-- <b> &Pi; <a href=\"".$url."\">首页</a> "
+$out .= "<tr><td width=\"40%\" ".($isheader?"class=\"f17px\"":"")."> <!-- <b> &Pi; <a href=\"".$url."\">".$lang->get('navi_homepage')."</a> "
         ."<span class=\"f17px\">&rarr;</span> --> ".$module_path." </b> </td>";
 $out .= "<td style=\"text-align:left\" colspan=\"18\">";
 
@@ -51,7 +72,7 @@ if($accMode!='' && ($accMode == 'r' || !inString('w', $accMode))){
     # readonly
 }
 else{
-    $out .= "&nbsp;&nbsp; <button onclick=\"javascript:doActionEx('".$jdo."&act=add','contentarea');\">新增</button>";
+    $out .= "&nbsp;&nbsp; <button onclick=\"javascript:doActionEx('".$jdo."&act=add','contentarea');\">".$lang->get("func_create")."</button>";
 }
 
 $refArr = $gtbl->getRelatedRef($jdo."&act=list"); # related ref, added on Thu Apr 12 18:54:43 CST 2012
@@ -108,7 +129,7 @@ if(count($refArr) > 0){
 }
 
 $out .= "&nbsp;&nbsp;&nbsp;<button id=\"refreshbtn\" name=\"refreshbtn\" onclick=\"javascript:window.location.reload();\" "
-        ."title=\"刷新\">刷新</button> &nbsp;&nbsp; &nbsp;</td></tr>";
+        ."title=\"刷新\">".$lang->get("func_refresh")."</button> &nbsp;&nbsp; &nbsp;</td></tr>";
 
 $out .= "</table>";
 
@@ -120,7 +141,7 @@ $out .= "<div id=\"contentarea\" style=\"postion:absolute;\" align=\"center\"></
 
 $out .= "<span id=\"addarea\"></span> <span id=\"loadarea\"></span>\n";
 $out .= "<div id=\"actarea\" align=\"center\"><br/><br/><span style=\"margin-left:38px;\"> Loading...... "
-        ."<a href=\"javascript:doAction('".$jdo."&act=list');\"> 手工加载列表 </a> </span><br/><br/> &nbsp;</div>\n";
+        ."<a href=\"javascript:doAction('".$jdo."&act=list');\"> ".$lang->get("func_reload")." </a> </span><br/><br/> &nbsp;</div>\n";
 $out .= "<div id=\"tagmenu\" style=\"position:absolute;left:-50px;\"></div>";
 $out .= "<div id=\"addareaextradiv\" onmousedown=\"javascript:fDragging(this, event, true);\" class=\"div\" "
         ."style=\"position:absolute;width: 350px;left:250px; top:250px;z-index:11; display:none\">"
@@ -150,7 +171,7 @@ if($accMode!='' && ($accMode == 'r' || !inString('w', $accMode))){
 }
 else{
     $out .= "&nbsp;  <button onclick=\"javascript:doActionEx('"
-        .$jdo."&act=add','contentarea');\">新增</button>  ";
+        .$jdo."&act=add','contentarea');\">".$lang->get("func_create")."</button>  ";
 }
 # repeat related menu, Wed, 12 Apr 2017 21:34:24 +0800
 if(count($refArr) > 0){
@@ -180,7 +201,7 @@ if(count($refArr) > 0){
 }
         
 $out .= "&nbsp;&nbsp; <button id=\"refrehbtn2\" name=\"refreshbtn2\" "
-    ."onclick=\"javascript:window.location.reload();\" title=\"刷新\">刷新</button>  &nbsp;&nbsp;&nbsp;";
+    ."onclick=\"javascript:window.location.reload();\" title=\"".$lang->get("func_refresh")."\">".$lang->get("func_refresh")."</button>  &nbsp;&nbsp;&nbsp;";
 $out .= "</td> </tr></table>\n";
 
 $out_footer = "<hr width=\"1\"/> &nbsp;&nbsp;&nbsp;<span id=\"noticediv\" style=\"color:green;\"> </span>";

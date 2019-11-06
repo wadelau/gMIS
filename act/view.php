@@ -8,7 +8,7 @@ if($_REQUEST['pnsktuanid'] != '' && $_REQUEST['otbl'] != ''){
 }
 
 $out .= "<fieldset style=\"border-color:#5f8ac5;border: 1px solid #5f8ac5\">"
-        ."<legend><h4>详细内容</h4></legend><table align=\"center\" width=\"98%\" "
+        ."<legend><h4>".$lang->get("func_view_detail")."</h4></legend><table align=\"center\" width=\"98%\" "
 	." cellspacing=\"0\" cellpadding=\"6px\" border=\"0px\">";
 $out .= "<tr><td width=\"10%\">&nbsp;</td>
             <td width=\"22%\">&nbsp;</td>
@@ -92,7 +92,7 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
         if($isimg){
             $out .= "<td style=\"vertical-align:top\">".$gtbl->getCHN($field).":&nbsp;</td>"
                     ."<td class=\"tdiviewfixedwidth\" style=\"vertical-align:top\"> <a href=\""
-                    .$hmorig[$field]."\" target=\"_blank\" title=\"打开大图\"><img src=\"".$hmorig[$field]
+                    .$hmorig[$field]."\" target=\"_blank\" title=\"".$lang->get("func_open_large")."\"><img src=\"".$hmorig[$field]
                     ."\" alt=\"-x-\" style=\"width:118px\"/></a><br/>".($srcprefix==''?$rtvdir."/":'')
                     .$hmorig[$field]." </td>";
         }
@@ -146,7 +146,8 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
                         ."_mytextdiv','off');\">".$hmorig[$field]."</textarea> </div><br/> ".$tmpmemo."<br/> </td></tr><tr>";
             $out .= '';
 
-        }else{
+        }
+		else{
             $out .= "<td style=\"vertical-align:top\">".$gtbl->getCHN($field).":</td><td><textarea id=\"".$field."\" name=\""
                     .$field."\" rows=\"11\" cols=\"35\"  class=\"search\">".$hmorig[$field]."</textarea> <br/> "
                     .$gtbl->getMemo($field)." </td>";
@@ -227,16 +228,16 @@ if($hasEndLine == 0){
 }
 $rtn2top = 'document.location.href=\'#contentarea_outer\';';
 $out .= "<tr><td colspan=\"".$form_cols."\" align=\"center\" style=\"word-spacing:8px;\">
-	<input type=\"button\" name=\"viewbtn\" id=\"viewbtn\" value=\"编辑\"
+	<input type=\"button\" name=\"viewbtn\" id=\"viewbtn\" value=\"".$lang->get("func_edit")."\"
 		onclick=\"javascript:doActionEx('"
 		.$jdo."&act=modify','contentarea');$rtn2top\"".($hasDisableW ? ' disabled' : '')."/>
-	<input type=\"button\" name=\"printbtn\" id=\"printbtn\" value=\"打印预览\"
+	<input type=\"button\" name=\"printbtn\" id=\"printbtn\" value=\"".$lang->get("func_print")."\"
 		onclick=\"javascript:window.open('"
 		.$jdo."&act=print&isoput=1&isheader=0','PrintWindow','scrollbars,toolbar,location=0');\"/>
-	<input type=\"button\" name=\"deletebtn\" id=\"deletebtn\" value=\"删除\"
-		onclick=\"javascript:if(window.confirm('Are you sure to delete? / 您确定要删除 id:".$id
-		." 吗?')){doAction('".$jdo."&act=list-dodelete');}\"".($hasDisableW ? ' disabled' : '')."/>
-	<input type=\"button\" name=\"addbycopybtn\" id=\"addbycopybtn\" value=\"复制\"
+	<input type=\"button\" name=\"deletebtn\" id=\"deletebtn\" value=\"".$lang->get("func_delete")."\"
+		onclick=\"javascript:if(window.confirm('".$lang->get("notice_confirm")." ".$lang->get("func_delete")." Id:".$id
+		." ?')){doAction('".$jdo."&act=list-dodelete');}\"".($hasDisableW ? ' disabled' : '')."/>
+	<input type=\"button\" name=\"addbycopybtn\" id=\"addbycopybtn\" value=\"".$lang->get("func_copy")."\"
         onclick=\"javascript:doActionEx('".$jdo."&act=addbycopy','contentarea');$rtn2top\"/>";
 
 # more act options
@@ -255,7 +256,7 @@ if(true){
     }
 }
 
-$out .=	"<input type=\"button\" name=\"cancelbtn\" value=\"关闭\"
+$out .=	"<input type=\"button\" name=\"cancelbtn\" value=\"".$lang->get("func_close")."\"
 		onclick=\"javascript:parent.switchArea('contentarea_outer','off');\" />";
 	
 $out .="</td></tr>";

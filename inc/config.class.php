@@ -13,19 +13,21 @@ if(true){
 	
 	$conf['tblpre'] 	= $tblpre;
 	$conf['appname'] 	= '-gMIS';
-	$conf['appchnname'] 	= '-吉密斯';
+	$conf['appchnname'] 	= 'lang_appchnname';
 	$conf['appdir']		= $appdir;
 
 	$conf['rtvdir'] 	= $rtvdir;
-	$conf['agentname'] 	= 'gMIS通用管理信息系统';
+	$conf['agentname'] 	= 'lang_agentname';
 	$conf['agentalias']	= 'gMIS-Admin';
 	$conf['smarty']		= $appdir.'/class/Smarty';
 
 	$conf['uploaddir']	= 'upld';
+	$conf['languagedir']	= 'lang';
 	$conf['septag']		= '_J_A_Z_';
 	$conf['skiptag']    = '----';
 
-	$conf['maindb']		= 'DB_NAME';
+	#$conf['maindb']		= 'DB_NAME';
+	$conf['maindb']		= 'gmisdb';
 	$conf['maintbl']	= $tblpre.'customertbl';
 	$conf['usertbl']	= $tblpre.'info_usertbl';
 	$conf['welcometbl']	= $tblpre.'info_welcometbl';
@@ -33,6 +35,10 @@ if(true){
 	$conf['ostype'] = 0; # 0 for *nix, 1 for windows, Mar 2018
 
 	# db info
+	#$conf['dbhost'] 	= ''; # use 127.0.0.1 instead of localhost
+	#$conf['dbport'] 	= '3306';
+	#$conf['dbuser'] 	= '';
+	#$conf['dbpassword'] 	= '';
 	$conf['dbhost'] 	= 'DB_HOST'; # use 127.0.0.1 instead of localhost
 	$conf['dbport'] 	= 'DB_PORT';
 	$conf['dbuser'] 	= 'DB_USER';
@@ -68,7 +74,7 @@ if(true){
 
 	# misc
 	$conf['frontpage'] = '/';  # put # before -naturedns as #-naturedns
-	$conf['is_debug'] = 0;
+	$conf['is_debug'] = 1;
 	$conf['html_resp'] = '<!DOCTYPE html><html><head><title>RESP_TITLE</title></head><body>RESP_BODY</body></html>';
 	$conf['auto_save_interval'] = 20; # ref extra/htmleditor
 	$conf['auto_install'] = 'INSTALL_AUTO';

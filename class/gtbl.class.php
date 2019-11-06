@@ -74,11 +74,13 @@ class GTbl extends WebApp{
 	private $skiptag = ''; # Gconf::get('skiptag');
     private $intOperatorList = array();
     private $strOperatorList = array();
+	public $lang = null;
 
 	//-
 	function __construct($tbl, $hmconf, $sep, $tblrotate=null){
 		//-
 		//$this->dba = new DBA(); # see parent::__construct() below.
+		$hmconf = $hmconf==null ? array() : $hmconf;
 		$mydb = $hmconf['mydb'];
 		$db = $hmconf['db'];
 		$args = array('dbconf'=>($db==GConf::get('maindb')?'':$db));
@@ -113,30 +115,40 @@ class GTbl extends WebApp{
 		$this->tbl = $tbl;
 		$this->setMyId($this->getMyIdName());
 		#debug(__FILE__.": get id name:[".$this->getMyId()."]");
+		# lang
+	    if(array_key_exists('lang', $hmconf)){
+			$this->lang = $hmconf['lang'];   
+			#debug("mod/pagenavi: lang:".serialize($this->lang)." welcome:".$this->lang->get('welcome'));
+		}
+		else{
+			#debug("mod/pagenavi: lang: not config. try global?");
+			global $lang;
+			$this->lang = $lang; # via global?
+		}
 		
 		$this->skiptag = Gconf::get('skiptag');
-        $this->intOperatorList = array( '='=>'等于', $this->skiptag=>'忽略,不使用此條件',
-			'!='=>'不等于',
-			'>'=>'大于',
-			'>='=>'大于等于',
-			'<'=>'小于',
-			'<='=>'小于等于',
-			'inlist'=>'等于列表中的一个,如: 1,2,3',
-			'inrange'=>'在一个值域中,如: min,max',
-			'contains' => '包含',
-			'containslist'=>'包含列表中的一个, 如: 1,2,3',
-			'notcontainslist'=>'不包含列表中的任一个, 如: 1,2,3',);
-        $this->strOperatorList = array( 'contains'=>'包含', $this->skiptag=>'忽略,不使用此條件',
-			'='=>'等于',
-			'!='=>'不等于',
-			'notcontains'=>'不包含',
-			'containslist'=>'包含列表中的一个,如: A,B,C',
-			'notcontainslist'=>'不包含列表中的任一个,如: A,B,C',
-			'inlist'=>'等于列表中的一个,如: A,B,C',
-			'startswith'=>'以...开头',
-			'endswith'=>'以...结尾',
-			'regexp'=>'正則式匹配',
-			'notregexp'=>'正則式非匹配',);
+        $this->intOperatorList = array( '='=>$this->lang->get("op_equal"), $this->skiptag=>$this->lang->get("op_skip"),
+			'!='=>$this->lang->get("op_notequal"),
+			'>'=>$this->lang->get("op_gt"),
+			'>='=>$this->lang->get("op_gte"),
+			'<'=>$this->lang->get("op_lt"),
+			'<='=>$this->lang->get("op_lte"),
+			'inlist'=>$this->lang->get("op_inlist"),
+			'inrange'=>$this->lang->get("op_inrange"),
+			'contains' => $this->lang->get("op_contains"),
+			'containslist'=>$this->lang->get("op_containslist"),
+			'notcontainslist'=>$this->lang->get("op_notcontainslist"),);
+        $this->strOperatorList = array( 'contains'=>$this->lang->get("op_contains"), $this->skiptag=>$this->lang->get("op_skip"),
+			'='=>$this->lang->get("op_equal"),
+			'!='=>$this->lang->get("op_notequal"),
+			'notcontains'=>$this->lang->get("op_notcontains"),
+			'containslist'=>$this->lang->get("op_containslist"),
+			'notcontainslist'=>$this->lang->get("op_notcontainslist"),
+			'inlist'=>$this->lang->get("op_inlist"),
+			'startswith'=>$this->lang->get("op_startswith"),
+			'endswith'=>$this->lang->get("op_endswith"),
+			'regexp'=>$this->lang->get("op_regexp"),
+			'notregexp'=>$this->lang->get("op_notregexp"),);
 	}
 
 	public function getTblCHN(){
@@ -299,14 +311,18 @@ class GTbl extends WebApp{
 		# check search by time field
         if(true){
             $timefield = $this->getSearchByTime();
+			$today = $this->lang->get("todayis");
+			$yestday = $this->lang->get("yesterday");
+			$thisweek = $this->lang->get("thisweek");
+			$lastweek = $this->lang->get("lastweek");
             if($timefield != ''){
-                $refArr[] = array('name'=>'今天', 'href'=>'JS',
+                $refArr[] = array('name'=>$today, 'href'=>'JS',
                         'target'=>'getUrlByTime(\''.$url.'\', \''.$timefield.'\', \'inrange\', \'TODAY\');');
-                $refArr[] = array('name'=>'昨天', 'href'=>'JS',
+                $refArr[] = array('name'=>$yestday, 'href'=>'JS',
                         'target'=>'getUrlByTime(\''.$url.'\', \''.$timefield.'\', \'inrange\', \'YESTERDAY\');');
-                $refArr[] = array('name'=>'本周', 'href'=>'JS',
+                $refArr[] = array('name'=>$thisweek, 'href'=>'JS',
                         'target'=>'getUrlByTime(\''.$url.'\', \''.$timefield.'\', \'inrange\', \'THIS_WEEK\');');
-                $refArr[] = array('name'=>'上周', 'href'=>'JS',
+                $refArr[] = array('name'=>$lastweek, 'href'=>'JS',
                         'target'=>'getUrlByTime(\''.$url.'\', \''.$timefield.'\', \'inrange\', \'LAST_WEEK\');');
             }
         }
@@ -435,7 +451,7 @@ class GTbl extends WebApp{
                     }
                 }
                 if($needJsConfirm == 1){
-                    $tUrl = "javascript:if(window.confirm('确认要执行此操作吗?')){document.location.href='".$tUrl."';}";
+                    $tUrl = "javascript:if(window.confirm('".$this->lang->get("notice_confirm")."')){document.location.href='".$tUrl."';}";
                 }
 			}
 			if($needBlank == 1){
@@ -534,12 +550,12 @@ class GTbl extends WebApp{
         $tmpstr = $tmpstr==null?'':$tmpstr;
         if($tmpstr == ''){
             if(inList($field, 'istate,state,status,istatus')){
-                $tmpstr = "1:正常|0:停用";
+                $tmpstr = $this->lang->get("form_state_list"); #"1:正常|0:停用";
             }else{
                 return $tmpstr;
             }
         }
-        $optionlist = '<option value="" title="沒有篩選條件">-無选择-</option>';
+        $optionlist = '<option value="" title="'.$this->lang->get('op_select').'">-'.$this->lang->get('op_select').'-</option>';
         $selectval = '';
         $selectval_mul = '';
 		$lazyLoadStr = '';
@@ -576,7 +592,7 @@ class GTbl extends WebApp{
 				}
 				$this->hmf = $oldhmf;
 			}
-			$optionlist = '<option value="" title="沒有篩選條件">-無选择-</option>';
+			$optionlist = '<option value="" title="'.$this->lang->get('op_select').'">-'.$this->lang->get('op_select').'-</option>';
 			foreach($hmoption as $k=>$rec){
 				$dispname = $rec[$arr[2]];
 				if(strpos($dispfield, ",") !== false){ #! Sat Nov 29 07:35:39 CST 2014
@@ -853,7 +869,7 @@ class GTbl extends WebApp{
                     }
                 }
                 if($needJsConfirm == 1){
-                    $tUrl = "javascript:if(window.confirm('确认要执行此操作吗?')){document.location.href='".$tUrl."';}";
+                    $tUrl = "javascript:if(window.confirm('".$this->lang->get('notice_confirm')."')){document.location.href='".$tUrl."';}";
                 }
 			}
 			if($needBlank == 1){
@@ -992,6 +1008,9 @@ class GTbl extends WebApp{
             debug(__FILE__.": separator is empty. [1201231153]", 2);
             return $hm;
         }
+		# @todo
+		# check $lang for specified xml file
+		# 
 		$tblpre = GConf::get('tblpre');
 		$tblconf = str_replace($tblpre, "", $tbl);
         if(file_exists($xmlpath."/".$tblconf.".xml")){
