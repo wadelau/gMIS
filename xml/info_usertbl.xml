@@ -17,7 +17,7 @@
         <field name="usergroup">
             <chnname>用户组</chnname>
             <inputtype>select</inputtype>
-            <selectoption>fromtable::info_grouptbl::groupname</selectoption>
+            <selectoption>fromtable::info_grouptbl::groupname::1=1::grouplevel</selectoption>
         </field>
         <field name="password" type="text">
             <chnname>密码</chnname>

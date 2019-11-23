@@ -4,6 +4,7 @@
  * This is an all-in-one script for -gMIS live installation.
  * wadelau@{ufqi,hotmail,gmail}.com
  * Sat Apr 16 10:15:04 CST 2016
+ * 13:12 Friday, November 22, 2019, updt create table 
  * v0.1
  */
 
@@ -381,7 +382,6 @@ else if($step == 'db'){
 				redirect($file."&step=db&istep=testdb", 10, $header.$out.$footer);
 			}
 			else{
-
 				replaceInFile($config_file, 'DB_HOST', $dbhost);
 				replaceInFile($config_file, 'DB_PORT', $dbport);
 				replaceInFile($config_file, 'DB_NAME', $dbname);
@@ -419,9 +419,14 @@ else if($step == 'db'){
 		$sqlarr = explode(';', $sqlstr);
 		foreach($sqlarr as $k=>$v){
 			#print "<br/>sql-".($i++).": ".$v;	
-			$sql = $v;
+			$sql = trim($v);
 			if($sql != ''){
-				$query = (($mysqlmode == 'mysql') ? @mysql_query($sql) : $link->query($sql));
+				 if(strpos($sql, '--') === 0){
+                    print "<br/> skip comments.... [$sql]\n";
+                }
+                else{
+					$query = (($mysqlmode == 'mysql') ? @mysql_query($sql) : $link->query($sql));
+				}
 			}
 		}
 		
@@ -497,7 +502,7 @@ else if($step == 'finalize'){
 		execInBackground($cmd);
 		
 		$rd = rand(1000, 9999999);
-		$cmd = "mv ./install.php ./install.$rd.php";
+		$cmd = "mv ./install.php ./install.".date("YmdHis", time()).$rd.".php";
 		#print $cmd;
 		execInBackground($cmd);
 		

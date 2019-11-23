@@ -1,10 +1,11 @@
 
----- gmis tables, 201908
+---- gmis tables, 201908; to sep in install script;
+
 drop table if exists gmis_filedirtbl;
 CREATE TABLE `gmis_filedirtbl` (
   `id` int(12) NOT NULL AUTO_INCREMENT,
   `filename` char(128) NOT NULL DEFAULT '' COMMENT 'file or dir name',
-  `parentname` varchar(768) NOT NULL DEFAULT '' COMMENT 'file or dir path',
+  `parentname` char(254) NOT NULL DEFAULT '' COMMENT 'file or dir path',
   `pparentname` varchar(768) NOT NULL DEFAULT '' COMMENT 'file or dir path uplevel',
   `idesc` char(255) NOT NULL DEFAULT '',
   `itype` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0:file, 1:dir',

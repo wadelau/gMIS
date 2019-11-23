@@ -453,7 +453,7 @@ else if(startsWith($act, "list")){
             }
         }
         $out .= "<tr><td colspan='".($max_disp_cols+2)."' style='text-align:center'><br/> "
-                .$this->lang->get('notice_search_nodata')."<br/><br/>".$queryFields."<br/>1609240951.<br/><br/></td></tr>";
+                .$lang->get('notice_search_nodata')."<br/><br/>".$queryFields."<br/>1609240951.<br/><br/></td></tr>";
     }
     $out .= "</table>";
     # list end

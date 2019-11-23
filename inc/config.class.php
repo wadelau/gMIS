@@ -26,8 +26,7 @@ if(true){
 	$conf['septag']		= '_J_A_Z_';
 	$conf['skiptag']    = '----';
 
-	#$conf['maindb']		= 'DB_NAME';
-	$conf['maindb']		= 'gmisdb';
+	$conf['maindb']		= 'DB_NAME';
 	$conf['maintbl']	= $tblpre.'customertbl';
 	$conf['usertbl']	= $tblpre.'info_usertbl';
 	$conf['welcometbl']	= $tblpre.'info_welcometbl';
