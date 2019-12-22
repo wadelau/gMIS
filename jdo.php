@@ -332,7 +332,7 @@ else if(startsWith($act, "list")){
 				   $isimg = isImg($rec[$field]);
                    if($isimg){
                        $out .= "<img src=\"img/st.png\" style=\"max-width:99%; max-height:99%\" onload=\"javascript:"
-                               ."parent.imageLoadAsync(this.id, '".$rec[$field]."');\" id=\"img_list_".$rec[$gtbl->getMyId()]."\" alt=\"img-x\"/>";
+                               ."parent.imageLoadAsync(this.id, '".$rec[$field]."');\" id=\"img_".$field."_list_".$rec[$gtbl->getMyId()]."\" alt=\"img-x\"/>";
 
                    }else{
                         $out .= "".shortenStr($rec[$field], $list_disp_limit)."";
