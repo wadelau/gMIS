@@ -1851,7 +1851,7 @@ function imageLoadAsync(imgId, imgRealPath){
         else{
             console.log((new Date())+" image is not ready....");
         }
-    }
+    };
     //window.setTimeout(function(){ realImage.src = imgRealPath; }, 1*1000);
     realImage.src = imgRealPath;
     }
