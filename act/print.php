@@ -194,5 +194,4 @@ $printref = $gtbl->getPrintRef(1);
 
 $smt->assign('data', $data);
 
-
 ?>

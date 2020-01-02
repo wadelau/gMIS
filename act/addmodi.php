@@ -215,9 +215,7 @@ for($hmi=$min_idx; $hmi<=$max_idx;$hmi++){
 
         if($gtbl->getSingleRow($field) == '1'){
             if($tmpmemo == ''){
-              #$tmpmemo = '支持标准HTML: 加粗&lt;b&gt;, 超链&lt;a&gt;, 
-		      #插入图片如&lt;img src="admin/upld/102913431493_-201210.jpg" /&gt;
-		      #(图片路径在 综合数据--附件数据 里获取)';
+				# memo desc
             }
             if($opentr < 1){
             	$out .= "</tr>\n<tr>";	
@@ -353,7 +351,7 @@ if($hasEndLine == 0){
         .$form_cols."\">  </td></tr>";
 }
 $out .= "<tr><td colspan=\"".$form_cols."\" align=\"center\">"
-        ."<input type=\"submit\" name=\"addsub\" id=\"addsub\"" #  value=\"递交\" 
+        ."<input type=\"submit\" name=\"addsub\" id=\"addsub\""
         ."onclick=\"javascript:doActionEx(this.form.name,'actarea');\" /> \n";
 $out .= "<input type=\"hidden\" id=\"id\" name=\"id\" value=\"".$id."\"/>\n ".$hiddenfields."\n";
 $out .= "&nbsp;&nbsp;&nbsp;<input type=\"reset\" name=\"resetbtn\" />";

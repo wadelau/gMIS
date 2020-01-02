@@ -121,6 +121,7 @@
 	"pagenavi_record": "条",
 	"pagenavi_page": "页",
 	"pagenavi_pinit": "初始页",
+	"pagenavi_no": "序/编号",
 
 	"notice_success":"数据成功更新, 干得漂亮!",
 	"notice_failure":"数据更新失败, 请稍后重试.",
@@ -131,6 +132,10 @@
 	"notice_confirm": "确认要执行此操作吗?",
 	"notice_search_nodata": "没有符合条件的数据. 請嘗試去掉一些條件再試試",
 	"notice_access_deny": "访问被拒绝.",
+	"notice_details": "详细信息",
+	"notice_download_image":"点击大图或者下载",
+	"notice_remove_filter": "去掉此条件",
+	"notice_save_error": "数据异常/出错, 请修正后重试.",
 
 	"op_skip": "忽略",
 	"op_select": "请选择",

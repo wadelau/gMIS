@@ -55,7 +55,7 @@ if(count($hm) < 2){
 
             }else if($fieldinputtype == 'file'){
                    $out .= "<td class=\"downline\" valign=\"middle\" > <a href=\"javascript:window.open('"
-                           .$hmorig[$field]."');\" title=\"点击大图或者下载 ".$hmorig[$field]."\">";
+                           .$hmorig[$field]."');\" title=\"".$lang->get('notice_download_image')." ".$hmorig[$field]."\">";
                    $tmparr = explode(".", $hmorig[$field]); $fileext = $tmparr[count($tmparr)-1];
                    if(in_array($fileext, array('gif','jpg','jpeg','png','bmp'))){
                        $out .= " <img src=\"".$hmorig[$field]."\" style=\"width:100%\" /> ";
@@ -103,9 +103,8 @@ if(count($hm) < 2){
             }
         }
     }
-
-}else{
-
+}
+else{
 #print_r($hm);
 
     $out .= "<tr height=\"30\" valign=\"middle\"  onmouseover=\"javascript:this.style.backgroundColor='"
@@ -139,7 +138,7 @@ if(count($hm) < 2){
                 
             }else if($fieldinputtype == 'file'){
                 $out .= "<td class=\"downline\" valign=\"middle\" > <a href=\"javascript:window.open('"
-                        .$hmorig[$field]."');\" title=\"点击大图或者下载 ".$hmorig[$field]."\">";
+                        .$hmorig[$field]."');\" title=\"".$lang->get('notice_download_image')." ".$hmorig[$field]."\">";
                 $tmparr = explode(".", $hmorig[$field]); $fileext = $tmparr[count($tmparr)-1];
                 if(in_array($fileext, array('gif','jpg','jpeg','png','bmp'))){
                     $out .= " <img src=\"".$hmorig[$field]."\" style=\"width:100%\" /> ";

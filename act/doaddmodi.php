@@ -6,6 +6,65 @@ $fieldvlist = array(); # remedy for overrided by $obj->get during adding, need a
 $filearr = array();
 $disableFileExtArr = array('html','php','js','jsp','pl','shtml', 'sh', 'c', 'cpp', 'py');
 
+/*
+ * security double check for end-user's input
+ * found illegal and empty it
+ * Xenxin@ufqi
+ * 14:05 12/9/2019
+ @param $rawInput, fk, fv
+ @return $safeOutput
+ */
+function securityFileCheck4Tmp($fv){
+	$rtn = $fv;
+	$rtn = securityFileCheck($rtn);
+	$rtn = realpath($rtn);
+	$tmpUploadDir = get_cfg_var('upload_tmp_dir');
+	$tmpUploadDir = $tmpUploadDir=='' ? '/tmp' : $tmpUploadDir;
+	if(strpos($rtn, $tmpUploadDir) !== 0){
+		$rtn = '';
+	}
+	if($rtn != '' && !file_exists($rtn)){
+		$rtn = '';
+	}
+	if($rtn != '' && !is_uploaded_file($rtn)){
+		$rtn = '';
+	}
+	debug('act/doaddmodi: fk4tmp-x:'.$fv.'->'.$rtn);
+	return $rtn;
+}
+
+//- securityFileCheck , 
+//- Xenxin@ufqi
+// 11:17 Thursday, December 19, 2019
+function securityFileCheck($fv){
+	$rtn = $fv;
+	//$rtn = realpath($rtn);
+	$rtn = str_replace(';', '', $rtn);
+	$rtn = str_replace('%3B', '', $rtn);
+	$rtn = str_replace(' ', '', $rtn);
+	$rtn = str_replace("%20", '', $rtn);
+	$rtn = str_replace('&', '', $rtn);
+	$rtn = str_replace("%26", '', $rtn);
+	$rtn = str_replace("..", '', $rtn);
+	$rtn = str_replace("//", '', $rtn);
+	$rtn = str_replace('./', '', $rtn);
+	$rtn = str_replace("\\", '', $rtn);
+	$rtn = str_replace('\.', '', $rtn);
+	if(!preg_match('/^(?:[a-z0-9_\-\/#~]|\.(?!\.))+$/iD', $rtn)){
+		$rtn = '';
+	}
+	if(strpos($rtn, '/') === 0 && strpos($rtn, '/www') !== 0 
+		&& strpos($rtn, '/var') !== 0
+		&& strpos($rtn, '/tmp') !== 0
+		&& strpos($rtn, '/srv') !== 0){
+		$rtn = '';
+	}
+	debug('act/doaddmodi: fk-x:'.$fv.'->'.$rtn);
+	return $rtn;
+}
+
+//- real processing..
+
 if($id != ''){
     $gtbl->setId($id); # speical field
 }
@@ -70,8 +129,9 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
     }
 	else{
         if($fieldInputType == 'file'){
-
             $fieldv_orig = $_REQUEST[$field.'_orig'];
+			$_FILES[$field]['name'] = securityFileCheck($_FILES[$field]['name']);
+			$_FILES[$field]['tmp_name'] = securityFileCheck4Tmp($_FILES[$field]['tmp_name']);
             if($_FILES[$field]['name'] == '' && $fieldv_orig != ''){
 				if(strpos($fieldv_orig, $shortDirName) === false){
                     $fieldv_orig = $shortDirName."/".$fieldv_orig;
@@ -226,7 +286,7 @@ if($hm[0]){
     include("./act/trigger.php");
     # some triggers end, added on Fri Mar 23 21:51:12 CST 2012
 
-    $out .= "<script> parent.sendNotice(true, '操作成功！'); parent.switchArea('contentarea_outer','off'); </script>";
+    $out .= "<script> parent.sendNotice(true, '".$lang->get('notice_success')."'); parent.switchArea('contentarea_outer','off'); </script>";
 
 }
 else{
@@ -234,14 +294,14 @@ else{
     $foundErr = false;
     foreach($fieldlist as $k=>$v){
         if(inString($v, $servResp)){
-            $servResp .= "<br/>".$gtbl->getCHN($v)."[$v]: 数据异常/出错, 请修正后重试. / Please revise and retry.";        
+            $servResp .= "<br/>".$gtbl->getCHN($v)."[$v]: ".$lang->get('notice_save_error');        
             $foundErr = true;
         }
     }
     if(!$foundErr){
         if(inString('Duplicate entry', $servResp)){
             $priuni = $gtbl->get($gtbl->PRIUNI);
-            $servResp .= "<br/>发现重复冲突数据, 请修正后重试. / Please revise and retry.";
+            $servResp .= "<br/>".$lang->get('notice_save_error');
             foreach($priuni as $k=>$v){
                 if($k == 'PRI'){ continue; } # skip id?
                 foreach($v as $k2=>$v2){
@@ -253,7 +313,7 @@ else{
             $foundErr = true;
         }
     }
-    $out .= "<script> if(typeof parent.sendNotice !='undefined'){ parent.sendNotice(false, '遗憾！操作失败，请重试'); }; if(true){ var servResp=parent._g('respFromServ'); if(servResp){ servResp.innerHTML='<p style=\"color:red;\">Operation Failed. / 操作失败.<br/>".$servResp."</p>';}} </script>";
+    $out .= "<script> if(typeof parent.sendNotice !='undefined'){ parent.sendNotice(false, '".$lang->get('notice_failure')."'); }; if(true){ var servResp=parent._g('respFromServ'); if(servResp){ servResp.innerHTML='<p style=\"color:red;\">".$lang->get('notice_failure')."<br/>".$servResp."</p>';}} </script>";
     debug("act/doaddmodi: ".$servResp);
 }
 

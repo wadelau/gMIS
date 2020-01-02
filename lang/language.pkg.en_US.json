@@ -121,6 +121,7 @@
 	"pagenavi_record": "Record(s)",
 	"pagenavi_page": "Page(s)",
 	"pagenavi_pinit": "Initial Page",
+	"pagenavi_no": "No./Id",
 
 	"notice_success":"Data updated successfully, Well Done!",
 	"notice_failure":"Data updated Failed. Please Try again.",
@@ -131,6 +132,10 @@
 	"notice_confirm": "Are you sure to do this?",
 	"notice_search_nodata": "No Data for These Criterions. Please try again later.",
 	"notice_access_deny": "Access to writing denied.",
+	"notice_details": "Detailed info.",
+	"notice_download_image":"Click for downloading larget size.",
+	"notice_remove_filter": "Remove this filter",
+	"notice_save_error": "Data saved error. Please revise and retry.",
 	
 	"op_skip": "Skip",
 	"op_select": "Please Select",

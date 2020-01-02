@@ -129,7 +129,7 @@ if(count($refArr) > 0){
 }
 
 $out .= "&nbsp;&nbsp;&nbsp;<button id=\"refreshbtn\" name=\"refreshbtn\" onclick=\"javascript:window.location.reload();\" "
-        ."title=\"刷新\">".$lang->get("func_refresh")."</button> &nbsp;&nbsp; &nbsp;</td></tr>";
+        ."title=\"".$lang->get('func_refresh')."\">".$lang->get("func_refresh")."</button> &nbsp;&nbsp; &nbsp;</td></tr>";
 
 $out .= "</table>";
 

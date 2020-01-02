@@ -34,27 +34,27 @@ $dirLevelLength = 2;
 # main actions
 
 $out .= '
-	<script type="text/javascript" src="'.$rtvdir.'/comm/jquery-1.12.1.min.js" charset="utf-8"></script>
+	<script type="text/javascript" src="'.$rtvdir.'/comm/jquery-3.4.1.min.js" charset="utf-8"></script>
 	<style type="text/css">
 		.node ul{
-		margin-left:-25px;
+			margin-left:-25px;
 		}
 		.node ul li{
-		list-style-type:none;
+			list-style-type:none;
 		}
 		.node .node{
-		display:none;
+			display:none;
 		}
 		.node .tree{
-		height:24px;
-		line-height:24px;
+			height:24px;
+			line-height:24px;
 		}
 		.ce_ceng_close{
-		background:url(../img/cd_zd1.png) left center no-repeat;
-		padding-left: 15px;
+			background:url(../img/cd_zd1.png) left center no-repeat;
+			padding-left: 15px;
 		}
 		.ce_ceng_open{
-		background:url(../img/cd_zd.png) left center no-repeat;
+			background:url(../img/cd_zd.png) left center no-repeat;
 		}
 	</style>
 	';
@@ -150,19 +150,6 @@ $out .= '
 			}
 		});
 		';
-
-/*
-foreach($list as $k=>$v){
-	$out .='
-		function xianshi'.$k.'() {
-			document.getElementById("nodelink'.$k.'").style.display="inline";
-		}
-		function yincang'.$k.'() {
-			document.getElementById("nodelink'.$k.'").style.display="none";
-		}
-	   ';
-}
- */
 
 $out .= '
     //- disp menu options    

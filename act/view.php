@@ -134,8 +134,7 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
         if($gtbl->getSingleRow($field) == '1'){
 			$tmpmemo = $gtbl->getMemo($field);
             if($tmpmemo == ''){
-                #$tmpmemo = '支持标准HTML: 加粗&lt;b&gt;, 超链&lt;a&gt;,
-                #插入图片如&lt;img src="admin/upld/102913431493_-201210.jpg" /&gt;(图片路径在 综合数据--附件数据 里获取)';
+                # memo desc
             }
             $out .= "</tr>\n<tr><td style=\"vertical-align:top\">".$gtbl->getCHN($field).":</td><td colspan=\"".($form_cols)."\">
                 <div id='".$field."_myeditordiv' style='width:680px;height:450px;display:none'></div>
@@ -262,6 +261,5 @@ $out .=	"<input type=\"button\" name=\"cancelbtn\" value=\"".$lang->get("func_cl
 $out .="</td></tr>";
 
 $out .= "</table> </fieldset>  <br/>";
-
 
 ?>

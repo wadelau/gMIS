@@ -140,7 +140,7 @@ else if(startsWith($act, "list")){
     $out .= "<tr style=\"font-weight:bold;\" height=\"28px\">";
     if($hasid){
         $out .= "<td valign=\"middle\" nowrap>&nbsp;<a href=\"javascript:void(0);\" title=\"Sort by ID\" onclick=\"javascript:doAction('"
-                .str_replace("&pnob","&xxpnob",$jdo)."&act=list&pnobid=".($navi->getAsc($gtbl->getMyId())==0?1:0)."'); \">序/编号</a></td>";
+                .str_replace("&pnob","&xxpnob",$jdo)."&act=list&pnobid=".($navi->getAsc($gtbl->getMyId())==0?1:0)."'); \">".$lang->get('pagenavi_no')."</a></td>";
     }
 	else{
         $out .= "<td valign=\"middle\">Nbr.</td>";
@@ -240,7 +240,7 @@ else if(startsWith($act, "list")){
                 .str_replace("&".$gtbl->getMyId()."=","&oid=", $jdo)."&".$gtbl->getMyId()."=".$id
                 ."', '$id');\" onmouseout=\"javascript:showActList('".$i."', 0, '".str_replace("&".$gtbl->getMyId()."=","&oid=", $jdo)
                 ."&".$gtbl->getMyId()."=".$id."', '$id');\" href='javascript:void(0);' onclick=\"javascript:doActionEx('".$jdo."&act=view&"
-                .$gtbl->getMyId()."=".$id."','contentarea');;\" title=\"详细信息\">"
+                .$gtbl->getMyId()."=".$id."','contentarea');;\" title=\"".$lang->get('notice_details')."\">"
                 .($i + (intval($navi->get('pnpn'))-1) * (intval($navi->get('pnps'))))." / ".$id
                 ." &#x25BE;</a> <div id=\"divActList_$i\" style=\"display:none; position: absolute; margin-left:50px; "
                 ."margin-top:-11px; z-index:99; background-color:silver;\">actlist-$i</div> </td>";
@@ -251,7 +251,7 @@ else if(startsWith($act, "list")){
                 ."\"> &nbsp; <a onmouseover=\"javascript:showActList('".$i."', 1, '".$jdo."&".$url_uni_extra
                 ."', '$id');\" onmouseout=\"javascript:showActList('".$i."', 0, '".$jdo."&".$url_uni_extra
                 ."', '$id');\" href='javascript:void(0);' onclick=\"javascript:doActionEx('".$jdo."&act=view&".$url_uni_extra
-                ."','contentarea');;\" title=\"详细信息\">".($i + (intval($navi->get('pnpn'))-1) * (intval($navi->get('pnps'))))
+                ."','contentarea');;\" title=\"".$lang->get('notice_details')."\">".($i + (intval($navi->get('pnpn'))-1) * (intval($navi->get('pnps'))))
                 ." / ".$id." &#x25BE;</a> <div id=\"divActList_$i\" style=\"display:none; position: absolute; margin-left:50px; "
                 ."margin-top:-11px; z-index:99; background-color:silver;\">actlist-$i</div> </td>";
            }
@@ -316,7 +316,7 @@ else if(startsWith($act, "list")){
 								$fieldT = str_replace('"', '-', $fieldT);
 							}
 							$fhref = "<a href=\"javascript:void(0);\" onclick=\"window.open('".$rec[$field]."');\" title=\""
-							        .$fieldT."点击大图或者下载 ".$rec[$field]."\">"; 	   
+							        .$fieldT.$lang->get('notice_download_image')." ".$rec[$field]."\">"; 	   
 						}
 						else{
 							if(strpos($fhref[0],"javascript") !== false){
@@ -448,7 +448,7 @@ else if(startsWith($act, "list")){
                 }
                 $tmpFieldUrl = str_replace($k, 'old'.$k, $jdo);
                 $queryFields .= " &nbsp;  &nbsp; <a href=\"javascript:pnAction('".$tmpFieldUrl."');\""
-                        ." title='Remove this filter/去掉此条件'"
+                        ." title='".$lang->get('notice_remove_filter')."'"
                         ." onclick=\"javascript:fillPickUpReqt('".$jdo."', '$field', '".($base62xTag.Base62x::encode($v))."', 'filterrollback', this);\">[X]</a><br/>";
             }
         }

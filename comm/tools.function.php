@@ -352,7 +352,6 @@ function debug($obj, $tag='', $output=null){
 	$s .= ' func:['.$caller[$callidx]['function'].'] file:['.$caller[$callidx]['file'].']';
 
 	if($output != null){
-	    
 	    if(startsWith($output, "file:")){
 	        $f = str_replace('file:', '', $output).date('Ymd', time()).'.log';
 	        file_put_contents($f, $s, FILE_APPEND);
@@ -389,10 +388,8 @@ function debug($obj, $tag='', $output=null){
 //- should replaced with Wht::getIp
 //- Tue, 6 Dec 2016 11:12:05 +0800
 function getIp() {
-	
 	$ip = Wht::getIp();
 	return $ip;
-	
  }
 
  // Wht: Web and/or HTTP Tools
