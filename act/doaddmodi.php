@@ -39,17 +39,8 @@ function securityFileCheck4Tmp($fv){
 function securityFileCheck($fv){
 	$rtn = $fv;
 	//$rtn = realpath($rtn);
-	$rtn = str_replace(';', '', $rtn);
-	$rtn = str_replace('%3B', '', $rtn);
-	$rtn = str_replace(' ', '', $rtn);
-	$rtn = str_replace("%20", '', $rtn);
-	$rtn = str_replace('&', '', $rtn);
-	$rtn = str_replace("%26", '', $rtn);
-	$rtn = str_replace("..", '', $rtn);
-	$rtn = str_replace("//", '', $rtn);
-	$rtn = str_replace('./', '', $rtn);
-	$rtn = str_replace("\\", '', $rtn);
-	$rtn = str_replace('\.', '', $rtn);
+	$badChars = array(';', '%3B', ' ', "%20", '&', "%26", "..", "//", './', "\\", '\.');
+	$rtn = str_replace($badChars, '', $rtn);
 	if(!preg_match('/^(?:[a-z0-9_\-\/#~]|\.(?!\.))+$/iD', $rtn)){
 		$rtn = '';
 	}
