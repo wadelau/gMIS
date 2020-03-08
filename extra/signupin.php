@@ -58,9 +58,15 @@ else if($act == 'dosignin'){
             $_CONFIG[UID] = $user->getId();
             $userid = $_CONFIG[UID];
             $sid = $user->getSid($_REQUEST);
+			# imprv4ipv6
+			#debug("extra/signinup: ipv6:[".$_CONFIG['is_ipv6']."]");
+            if($_CONFIG['is_ipv6'] == 1){
+                $user->set('sid_tag', $user->get('sid_tag').'v6');
+            }
             # issue a valid ticket for this session
             # based on user, time, ip, browser and so on.
-            $ckirtn = setcookie($name=$user->get('sid_tag'), $value=$sid);
+            $ckirtn = setcookie($ckiname=$user->get('sid_tag'), $ckivalue=$sid,
+				time()+60*60*24, '/'); # 24 hrs, full site;
             $result .= '<br/><br/>很好! 登录成功！ 欢迎回来, '.$user->getEmail()." !";
 			$bkl = Base62x::decode($_REQUEST['bkl']);
             if($bkl != ''){

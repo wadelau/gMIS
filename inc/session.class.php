@@ -62,6 +62,11 @@ class SESSIONX {
 	    $sid = '';
 	    $sidtag = self::gMIS_Sid;
 	    $sidtag2 = self::gMIS_Sid2;
+		# imprv4ipv6
+        global $_CONFIG;
+        if($_CONFIG['is_ipv6'] == 1){
+            $sidtag .= 'v6';
+        }
 	    if(isset($_COOKIE[$sidtag])){
 	        $sid = $_COOKIE[$sidtag];
 	    }

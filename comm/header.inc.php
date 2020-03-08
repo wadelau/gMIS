@@ -57,6 +57,9 @@ require_once($appdir."/class/language.class.php");
 define("UID", $_CONFIG['agentalias'].'_user_id');
 define("SID", 'sid');
 $_CONFIG['client_ip'] = Wht::getIp();
+# imprv4ipv6
+$_CONFIG['is_ipv6'] = strpos($_CONFIG['client_ip'], ':')>0 ? 1 : 0;
+#debug("comm/header: is_ipv6:".$_CONFIG['is_ipv6']." ip:".$_CONFIG['client_ip']);
 
 if(!isset($user)){
     $user = new User();

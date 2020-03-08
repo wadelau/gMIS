@@ -36,6 +36,7 @@ class MYSQLIX {
 		$this->m_user     = $config->mDbUser; 
 		$this->m_password = $config->mDbPassword; 
 		$this->m_name     = $config->mDbDatabase; 
+		$this->m_persistent = $config->mDbPersistent;
 		$this->m_link = null;
 		if($this->m_persistent){
 			$this->m_host = Persistent_Tag . $this->m_host;
