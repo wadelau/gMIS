@@ -1832,27 +1832,31 @@ function imageLoadAsync(imgId, imgRealPath){
         console.log((new Date())+" imgid:"+imgId+" path:"+imgRealPath+" img already loaded!");
     }
     else{
-    var realImage = new Image();
-    //console.log("imgid:"+imgId+" path:"+imgRealPath+" imgobj:"+realImage);
-    realImage.onload = function(){
-        var baseSize = 118;
-        if(image){
-            image.src = this.src;
-            image.onload = null; //- stop further refer to imageLoadAsync
-            if(image.width > baseSize){
-                image.style.width = baseSize+'px';
-            }
-            else if(image.height > baseSize){
-                image.style.height = baseSize+'px';
-            }
-            //console.log((new Date())+"image load async succ...src:"+image.src);
-            realImage = null;
-        }
-        else{
-            console.log((new Date())+" image is not ready....");
-        }
-    };
-    //window.setTimeout(function(){ realImage.src = imgRealPath; }, 1*1000);
-    realImage.src = imgRealPath;
+		var realImage = new Image();
+		//console.log("imgid:"+imgId+" path:"+imgRealPath+" imgobj:"+realImage);
+		realImage.onload = function(){
+			var baseSize = 118;
+			if(image){
+				image.src = this.src;
+				image.onload = null; //- stop further refer to imageLoadAsync
+				if(image.width > baseSize){
+					image.style.width = baseSize+'px';
+				}
+				else if(image.height > baseSize){
+					image.style.height = baseSize+'px';
+				}
+				//console.log((new Date())+"image load async succ...src:"+image.src);
+				realImage = null;
+			}
+			else{
+				console.log((new Date())+" image is not ready....");
+			}
+		};
+		//- anti empty src, Thu Mar 19 10:21:21 CST 2020
+		if(imgRealPath == ''){
+			imgRealPath = 'data:image/jpeg;base64,0';
+		}
+		//window.setTimeout(function(){ realImage.src = imgRealPath; }, 1*1000);
+		realImage.src = imgRealPath;
     }
 }
