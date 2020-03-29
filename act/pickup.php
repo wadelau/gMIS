@@ -2,7 +2,8 @@
 /*
  * pick up/select on all avaliable values
  * added by xenxin@ufqi.com
- * Mon Sep 17 21:21:03 CST 2018
+ * init. Mon Sep 17 21:21:03 CST 2018
+ * updt. Sat Mar 28 11:16:55 CST 2020
  */
 
 include_once($appdir.'/class/pickup.class.php');
@@ -104,6 +105,7 @@ for($hmi=$min_idx; $hmi<=$max_idx;$hmi++){
     # main fields
     if(true){
         $options = ""; $prtFieldType = 'string';
+		$hasHitOption = 0;
         $optionListAll = $pickup->getOptionList($field, $fieldinputtype);
         $optionList = $optionListAll[0];
         $prtFieldType = $optionListAll[1];
@@ -112,6 +114,7 @@ for($hmi=$min_idx; $hmi<=$max_idx;$hmi++){
         if($opCount > 0){
             $opi = 0; $lastopv = null;
             foreach($optionList as $ok=>$ov){
+				$urlParts = array();
                 if($fieldinputtype == 'select'){
                     $opv = $ov[$field.'_uniq_all']; # same with class/pickup
                     $origopv = $opv;
@@ -180,7 +183,31 @@ for($hmi=$min_idx; $hmi<=$max_idx;$hmi++){
                     debug("unsupported prtFieldType:$prtFieldType from field:$field skip....\n");
                 }
                 $opi++;
+				if($hasHitOption == 0){
+					if(isset($urlParts[1]) && $urlParts[1] == '-'){
+						$hasHitOption = 1;
+					}	
+				}
             }
+			$reqv = Wht::get($_REQUEST, "pnsk$field");
+			if($reqv != '' && $hasHitOption == 0){
+				$opType = ""; $origReqv = $reqv;
+                if($fieldinputtype == 'select'){
+                    $opType = "inlist";
+                }
+                else if($prtFieldType == 'string'){
+                    $opType = "containslist";
+                    $reqv = $base62xTag.$base62x->encode($reqv);
+                }
+                else if($prtFieldType == 'number'){
+                    $opType = "inrangelist";
+                }
+				$options .= "<a href='javascript:void(0);' "
+					." onclick=\"javascript:parent.fillPickUpReqt('".$jdo."', '$field', '$reqv', '$opType', this);\""
+					." style=\"color:#ffffff;background-color:#1730FD;\">";
+				$options .= '-'.$origReqv;
+				$options .= "</a> ";
+			}
         }
         if($options != ''){
             $out .= "<tr height=\"{$rowHeight}px\" valign=\"middle\" onmouseover=\"javascript:this.style.backgroundColor='"
@@ -200,13 +227,11 @@ for($hmi=$min_idx; $hmi<=$max_idx;$hmi++){
             #$pickupFieldCount++;
             #debug("\tfield:$field has no options. 1809191930. skip....\n");
         }
-
     }
 
     $out .= $gtbl->getDelayJsAction($field);       
 
     $columni++;
-
     if($columni % $colsPerRow == 0){
         $out .= "</tr>";
         $closedtr = 1;
@@ -245,7 +270,7 @@ function fillPickUpReqt($myurl, $field, $fieldv, $oppnsk, $base62x=null){
     $hasReqV = false;
     $tagPrefix = '+';
     $stylestr = '';
-    $origFieldv = $fieldv;
+    $origFieldv = $fieldv; $reqVal = '';
     $base62xTag = 'b62x.'; # for string only
     if($base62x == null){
         $base62x = new Base62x();
@@ -254,6 +279,7 @@ function fillPickUpReqt($myurl, $field, $fieldv, $oppnsk, $base62x=null){
         #$fieldv = strtolower($fieldv); # why?
         $isString = false;
         if($oppnsk == 'containslist'){ $isString = true; }
+		$urlPartsNew = array();
         foreach($urlParts as $k=>$v){
             $paraParts = explode("=", $v);
             if(count($paraParts) > 1){
@@ -277,9 +303,10 @@ function fillPickUpReqt($myurl, $field, $fieldv, $oppnsk, $base62x=null){
                             }
                         }
                     }
+					if($reqv != ''){ $reqVal = $reqv; }
                     if(inList($fieldv, $reqv)){
                         $tmpArr = array();
-						if(is_array($reqv)){ $tmpArr=implode(',', $reqv); }
+						if(is_array($reqv)){ $tmpArr=explode(',', $reqv); }
                         foreach($tmpArr as $tmpk=>$tmpv){
                             if($tmpv == $fieldv){
                                 unset($tmpArr[$tmpk]); # break; ?
@@ -296,10 +323,14 @@ function fillPickUpReqt($myurl, $field, $fieldv, $oppnsk, $base62x=null){
                 else if($reqk == "oppnsk$field"){
                     $reqv = $oppnsk; $hasReqKop = true;
                 }
+				$paraParts[0] = $reqk;
+				$paraParts[1] = $reqv;
             }
             $v = implode('=', $paraParts);
+			$urlPartsNew[$k] = $v;
         }
-        $newurl = implode('&', $urlParts);
+        #$newurl = implode('&', $urlParts);
+		$newurl = implode('&', $urlPartsNew);
         if(!$hasReqK){
             $newurl .= "&pnsk$field=$fieldv";
             #$newurl .= "&pnsk$field=B62X.".Base62x::encode($fieldv);
@@ -311,6 +342,11 @@ function fillPickUpReqt($myurl, $field, $fieldv, $oppnsk, $base62x=null){
             $tagPrefix = '-';
             $stylestr = 'color:#ffffff;background-color:#1730FD;';
         }
+		else{
+			if($reqVal != ''){
+				#debug("found reqVal:$reqVal not in optionList.");	
+			}
+		}
     }
     else{
         debug("Unknown oppnsk:$oppnsk. 1809210905. \n");

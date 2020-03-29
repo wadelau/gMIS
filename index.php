@@ -169,6 +169,17 @@ if($hm[0]){
 $module_path = ''; $levelcode = ''; $codelist = '';
 include_once($appdir."/comm/modulepath.inc.php");
 
+if(true){
+    $out .= "<script type=\"text/javascript\">currenttbl='".$tbl."';\ncurrentdb='"
+        .$mydb."';\n currentlistid= {};\n currentpath='".$rtvdir."';\n userinfo={"
+        ."'id':'".$userid
+        ."','email':'".$user->getEmail()
+        ."','group':'".$user->getGroup()
+        ."','branch':'".$user->get('branchoffice')
+        ."','sid':'".$sid
+        ."'};\n </script>\n";
+}
+
 $data['logged_user_count'] = $logged_user_count;
 $data['module_list_order'] = $hm_module_order;
 $data['module_list_name'] = $hm_module_name;

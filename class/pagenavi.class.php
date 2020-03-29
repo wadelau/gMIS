@@ -305,8 +305,18 @@ class PageNavi extends WebApp{
 						$v = str_replace("，",",", $v);
                         $tmparr = explode(",", $v);
                         $conditionTmp = ' 1=0 '; 
-                        foreach($tmparr as $tmpk=>$tmpv){
-                            $tmpArr2 = explode('~', $tmpv);
+                        $arrSize = count($tmparr); $ai = 0;
+                        #foreach($tmparr as $tmpk=>$tmpv){
+						while($ai < $arrSize){
+							$tmpv = $tmparr[$ai];
+							if(inString('~', $tmpv)){
+                            	$tmpArr2 = explode('~', $tmpv);
+							}
+							else{
+								# compatible with "a,b,c~d" , Sat Mar 28 12:05:31 CST 2020
+								$tmpArr2 = array($tmpv, $tmparr[$ai+1]);	
+								$ai++;
+							}
                             if(count($tmpArr2) > 1 && $tmpArr2[1] !== ''){
                                 $tmpbgn = $tmpArr2[0];
                                 $tmpend = $tmpArr2[1];
@@ -326,6 +336,7 @@ class PageNavi extends WebApp{
                                     $conditionTmp .= " or ($field >= '".$tmpbgn."')";
                                 }
                             }
+							$ai++;
                         }
                         $condition .= " $pnsm ($conditionTmp)";
 						$gtbl->del($field);

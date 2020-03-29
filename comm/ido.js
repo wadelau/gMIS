@@ -15,6 +15,7 @@
 //- imprvs on pickup, Fri Sep 21 21:09:34 CST 2018
 //- imprvs on todo/filedir, Sat Oct 20 CST 2018
 //- imprvs with userinfo.$lang, Tue Nov  5 03:39:27 UTC 2019
+//- bugfix for getUrlByTime and PickUp, 13:33 Saturday, March 28, 2020
 
 var currenttbl = currenttbl ? currenttbl : '';
 var currentdb =  currentdb ? currentdb : '';
@@ -361,7 +362,6 @@ function x_calcuTbl(theform, targetx, f){
 
 //- dynammic select, bgn, Sun Mar 11 11:36:44 CST 2012
 function fillSubSelect(parentId, childId, logicId, myUrl){
-    
     var fieldv = document.getElementById(parentId).options[document.getElementById(parentId).selectedIndex].value;
     var fieldorig = _g(childId+'_select_orig').value;
     fieldorig = fieldorig == null?'':fieldorig;
@@ -653,7 +653,6 @@ function registerAct(tObj){
 
 //-- act list, 执行动作, bgn, Sat Jun  2 19:19:12 CST 2012
 function doActSelect(sSel, sUrl, iId, fieldVal){
-    
     var fieldv = fieldVal;
     if((fieldv == null || fieldv =='') && fieldv != 'ActOption'){
     	fieldv = document.getElementById(sSel).options[document.getElementById(sSel).selectedIndex].value;
@@ -818,7 +817,7 @@ function checkAll(){
 		boxValue= boxValue +document.all.checkboxid[i].value+",";
 	}
 	window.clipboardData.setData('text',boxValue);
-	window.alert("something wrong. 03061743.");
+	window.alert("Something wrong. 03061743.");
 }
 
 //-
@@ -836,7 +835,7 @@ function uncheckAll(){
 		}
 	}
   window.clipboardData.setData('text',box1);
-  window.alert("something wrong. 03061744.");
+  window.alert("Something wrong. 03061744.");
 }
 
 //-
@@ -850,20 +849,20 @@ function batchDelete(url,checkboxid){
 	var url1 = url+"&checkboxid="+box;
 	if(box==""){
 		if(document.all.copyid.value=="??"){
-		    alert("something wrong. 03061745.");
+		    alert("Something wrong. 03061745.");
 		}
 		else{
-		    alert("something wrong. 03061746.");
+		    alert("Something wrong. 03061746.");
 		}
 	}
 	else{
 		if(document.all.copyid.value=="??"){
-			if(confirm("are you sure:"+box)){
+			if(confirm("Are you sure:"+box)){
 			    doAction(url1);
 			}
 		}
 		else if(document.all.copyid.value=="??"){
-			if(confirm("are you sure:"+box)){
+			if(confirm("Are you sure:"+box)){
 				doAction(url1);
 			}
 		}
@@ -1333,10 +1332,8 @@ function copyAndReturn(theField){
 			document.getElementById(theField).value = document.getElementById('linktblframe').contentWindow.sendLinkInfo('', 'r', theField);
 		}
 	}
-
 	//document.getElementById('extrainput_'+theAct+'_'+theField).style.display='none'; 
 	//document.getElementById('extendicon_'+iId+'_'+theField).src='./img/plus.gif';
-
 }
 
 //- show pivot list
@@ -1690,6 +1687,10 @@ function fillPickUpReqt(myUrl, field, fieldv, opStr, linkObj){
                             pv = pv.replace(fieldv+',', ''); 
                             hasReqV = true;
                         }
+						else if(pv == fieldv){
+                        	pv = ''; hasReqV = true;
+                        	emptyList[pk] = true;
+						}
 						else{
                             pv += ','+fieldv;
                         }

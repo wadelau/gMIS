@@ -17,12 +17,28 @@ body {
 -->
 </style>
 <script type="text/javaScript">
-//- go to top window
-//- added by Xenxin@ufqi.com, Tue Sep 13 09:43:42 CST 2016
+//-
+function preventBack() { window.history.forward(); };
+
 if(true){
-	if (top.frames.length>0){
-		window.setTimeout("top.location = window.location;",100);
-	}
+    //-
+    //- disable back btn
+    //- Wed Mar 25 11:30:35 HKT 2020
+    var watch4BackBtnI = window.setTimeout("preventBack()", 0);
+    window.onunload = function () { null };
+    window.onload = function(){ preventBack(); };
+    //-
+    window.history.pushState(null, null, location.href);
+    window.onpopstate = function () {
+        window.history.go(1);
+    };
+
+    //-
+    //- go to top window
+    //- added by Xenxin@ufqi.com, Tue Sep 13 09:43:42 CST 2016
+    if (top.frames.length>0){
+        window.setTimeout("top.location = window.location;",100);
+    }
 }
 </script>
 <table style="border:0px;width:100%;height:566px;border-collapse:collapse; border-spacing:0px;"

@@ -13,6 +13,7 @@ if($fmt == ''){ # default html
     $data['appname'] = $_CONFIG['appname'];
     $data['front_page'] = $_CONFIG['frontpage'];
     $data['adminmail'] = $_CONFIG['adminmail'];
+	$data['hostname'] = $_SERVER['HTTP_HOST'];
 }
 
 # content output
