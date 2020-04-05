@@ -1,4 +1,4 @@
-                            Apache License for gMIS
+                           Apache License for gMIS
                            Version 2.0, April 2020
                         http://www.apache.org/licenses/
 
