@@ -41,8 +41,7 @@ class User extends WebApp{
 		$this->session = new SESSIONX($args);
 		$this->set('sid_tag', self::gMIS_Sid);
 	}
-
-
+	//-
 	function getEmail(){
 		return $this->get($this->eml);
 	}
@@ -50,7 +49,6 @@ class User extends WebApp{
 	function isLogin(){
 		return $this->getId() != '';
 	}
-
 
 	function getLat(){
 		return $this->get('lat');
@@ -84,12 +82,13 @@ class User extends WebApp{
         return $this->get($this->objid);
     }
 
+	//- remedy to open-end policy, 16:44 Tuesday, April 14, 2020
     function chkAccess($req){
         #print "userid:[".$this->getId()."] usergroup:[".$this->getGroup()."]\n";
         $reason = '';
         $result = true;
         $tmptbl = GConf::get('tblpre').$req['tbl'];
-        $tmphm = $this->execBy('select id as objid, objgroup from '.GConf::get('tblpre').'info_objecttbl where tblname="'.$tmptbl.'"', '',
+        $tmphm = $this->execBy('select id as objid, objgroup from '.GConf::get('tblpre').'info_objecttbl where (tblname="'.addslashes($tmptbl).'" or tblname="'.addslashes(trim($req['tbl'])).'")', '',
 			$withCache=array('key'=>'info_object-'.$tmptbl));
         #print_r($tmphm);
         $objgrp = ''; $objid = '';
@@ -101,17 +100,29 @@ class User extends WebApp{
             $this->set($this->objid, $objid);
         }
         #print "obj:[".$req['tbl']."] objgroup:[".$objgrp."] objid:[".$objid."]\n";
-
+		$objid = $objid=='' ? 'No_Such_Obj' : $objid;
+		$objgrp = $objgrp=='' ? 'No_Such_Grp' : $objgrp;
+		
+		/*
         $sql = "select id,accesstype,objectfield,userid,usergroup from "
 			.GConf::get('tblpre')."useraccesstbl where istate=1 and (userid='".$this->getId()
 			."' or userid=0) and (usergroup='".$this->getGroup()."' or usergroup=0) and (objectid='"
 			.$objid."' or objectid=0) and (objectgroup='".$objgrp."' or objectgroup=0) order by "
 			.$this->getMyId()." desc, accesstype desc limit 100";
-        #print "sql:[".$sql."]";
-        $tmphm = $this->execBy($sql, null, $withCache=array('key'=>'useraccess-'.$this->getId().'-'.$this->getGroup()));
-        #print "chkAccess:";
-        #print_r($tmphm);
-        #print "\n";
+		*/
+		$sql = "select id,accesstype,objectfield,userid,usergroup from "
+			.GConf::get('tblpre')."useraccesstbl where istate=1 "
+			." and (((userid='".$this->getId()."' or userid=0) " # overall match if correct data
+				." and (usergroup='".$this->getGroup()."' or usergroup=0) "
+				." and (objectid='".$objid."' or objectid=0) "
+				." and (objectgroup='".$objgrp."' or objectgroup=0)) "
+			." or (userid='".$this->getId()."' and objectid='".$objid."')) " # exact match without group
+			." order by ".$this->getMyId()." desc, accesstype desc limit 100";
+        
+		//debug("mod/user: objtbl:$tmptbl sql:".$sql);
+        $tmphm = $this->execBy($sql, null, $withCache=array('key'=>'useraccess-'.$this->getId().'-'.$this->getGroup().'-'.$objid.'-'.$objgrp.'-3'));
+        //debug("mod/user: hmRule: ".json_encode($tmphm));
+		
         if($tmphm[0]){
             $tmphm = $tmphm[1];
             #detailed access type will be evaluated in next canRead....
@@ -119,8 +130,7 @@ class User extends WebApp{
             $maxAccessType = $tmphm[0]['accesstype'];
             $minField = $tmphm[0]['objectfield'];
             $tmpId = $tmphm[0]['id'];
-            foreach($tmphm as $k=>$v)
-            {
+            foreach($tmphm as $k=>$v){
                 if($v['accesstype'] > $this->accessLevel['deny']){
                     if($v['userid'] != 0){
                         $this->specifyAcc[$v['userid']] = $v['accesstype'];
@@ -138,16 +148,20 @@ class User extends WebApp{
             if($maxAccessType > $this->accessLevel['deny']){
                 $result =  true;
                 $reason = $tmpId.',1427,';
-            }else if($minField != ''){
+            }
+			else if($minField != ''){
                 $result = true;
                 $reason = $tmpId.',0417';
-            }else{
+            }
+			else{
                 $result = false;
                 $reason = $tmpId.',1204,';
             }
-        }else{
-
-            $result = false;
+        }
+		else{
+            #$result = false;
+			$result = true; # open-end policy
+			$reason = 'Open4all. 201004141035.';
         }
         #print_r($this->specifyAcc);
         if(!$result){
@@ -156,18 +170,22 @@ class User extends WebApp{
         }
         return array('result'=>$result,'reason'=>$reason);
     }
-    
+    //-
     function canRead($field, $obj='', $objgrp='', $reqId='', $currentId=''){
         $rtn = array('result'=>true,'reason'=>'');
         if($field != ''){
             if($reqId == $currentId && $this->rgtArr['supacc'] && $this->rgtArr['r']){
                 $rtn['result'] = true;
                 $rtn['reason'] = "superAcc, 2100";
-            }else{
+            }
+			else{
                 $accessInfo = $this->get($this->accessinfo);
                 if(!is_array($accessInfo)){
                     $accessInfo = array();
+					$rtn['result'] = true;
+					$rtn['reason'] = "Open4all, 1131";
                 }
+				else{
                 foreach($accessInfo as $k=>$v){
                     if($v['accesstype'] < $this->accessLevel['read'] && $this->specifyAcc[$this->getId()] < 1
 						&& $this->specifyAcc[$this->getGroup()] < 1 ){
@@ -178,6 +196,7 @@ class User extends WebApp{
                         }
                     }
                 }
+				}
             }
         }
         if(!$rtn['result']){
@@ -186,7 +205,7 @@ class User extends WebApp{
         }
         return $rtn['result'];
     }
-
+	//-
     function canWrite($field, $obj='', $objgrp='', $reqId='', $currentId=''){
         $rtn = array('result'=>true,'reason'=>'');
         $accessInfo = $this->get($this->accessinfo);
@@ -194,10 +213,14 @@ class User extends WebApp{
             if($reqId == $currentId && $this->rgtArr['supacc'] && $this->rgtArr['w']){
                 $rtn['result'] = true;
                 $rtn['reason'] = "superAccess, 2059";
-            }else{
+            }
+			else{
                 if(!is_array($accessInfo)){
                     $accessInfo = array();
+					$rtn['result'] = true;
+					$rtn['reason'] = "Open4all, 1648";
                 }
+				else{
                 $maxLevel = $accessInfo[0]['accesstype'];
                 $minField = $tmphm[0]['objectfield'];
                 foreach($accessInfo as $k=>$v){
@@ -211,15 +234,21 @@ class User extends WebApp{
                     $rtn['result'] = false;
                     $rtn['reason'] = $v['id'].", 2001";
                 }
+				}
             }
-        }else if($field != ''){
+        }
+		else if($field != ''){
             if($reqId == $currentId && $this->rgtArr['supacc'] && $this->rgtArr['w']){
                 $rtn['result'] = true;
                 $rtn['reason'] = "superAcc, 2108";
-            }else{
+            }
+			else{
                 if(!is_array($accessInfo)){
                     $accessInfo = array();
+					$rtn['result'] = true;
+					$rtn['reason'] = "Open4all, 1749";
                 }
+				else{
                 foreach($accessInfo as $k=>$v){
                     if($v['accesstype'] < $this->accessLevel['write']){
                         if(strpos(",".$v['objectfield'].",", ",".$field.",") !== false){
@@ -229,6 +258,7 @@ class User extends WebApp{
                         }
                     }
                 }
+				}
             }
         }
         if(!$rtn['result']){
@@ -237,18 +267,22 @@ class User extends WebApp{
         }
         return $rtn['result'];
     }
-
+	//-
     function canDelete($obj, $objgrp='', $reqId='', $currentId=''){
         if($reqId == $currentId && $this->rgtArr['supacc'] && $this->rgtArr['d']){
             $rtn['result'] = true;
             $rtn['reason'] = "superAcc, 5827";
-        }else{
+        }
+		else{
             $rtn = array('result'=>true,'reason'=>'');
             $accessInfo = $this->get($this->accessinfo);
             if($obj != ''){
                 if(!is_array($accessInfo)){
                     $accessInfo = array();
+					$rtn['result'] = true;
+					$rtn['reason'] = "Open4all, 1651";
                 }
+				else{
                 $maxLevel = $accessInfo[0]['accesstype'];
                 $minField = $tmphm[0]['objectfield'];
                 foreach($accessInfo as $k=>$v){
@@ -262,6 +296,7 @@ class User extends WebApp{
                     $rtn['result'] = false;
                     $rtn['reason'] = $v['id'].", 2104";
                 }
+				}
             }
         }
         if(!$rtn['result']){
@@ -270,7 +305,7 @@ class User extends WebApp{
         }
         return $rtn['result'];
     }
-
+	//-
     function setSupAcc($mod, $tf){
         error_log(__FILE__.": setSupAcc is called. mod:[$mod] tf:[$tf] \n");
         return $this->rgtArr[$mod] = $tf;

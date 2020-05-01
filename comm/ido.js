@@ -1855,7 +1855,7 @@ function imageLoadAsync(imgId, imgRealPath){
 		};
 		//- anti empty src, Thu Mar 19 10:21:21 CST 2020
 		if(imgRealPath == ''){
-			imgRealPath = 'data:image/jpeg;base64,0';
+			imgRealPath = 'data:image/jpeg;base64,MA==';
 		}
 		//window.setTimeout(function(){ realImage.src = imgRealPath; }, 1*1000);
 		realImage.src = imgRealPath;

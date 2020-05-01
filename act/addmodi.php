@@ -212,7 +212,8 @@ for($hmi=$min_idx; $hmi<=$max_idx;$hmi++){
 	else if($fieldinputtype == 'textarea'){
 
         $hmorig[$field] = str_replace("<br/>", "\n", $hmorig[$field]); 
-
+		$acceptVal = $gtbl->getAccept($field);
+		
         if($gtbl->getSingleRow($field) == '1'){
             if($tmpmemo == ''){
 				# memo desc
@@ -220,22 +221,22 @@ for($hmi=$min_idx; $hmi<=$max_idx;$hmi++){
             if($opentr < 1){
             	$out .= "</tr>\n<tr>";	
             }
-            $out .= "<td style=\"vertical-align:top\"><b>".$gtbl->getCHN($field)."</b>:</td><td colspan=\""
+            $out .= "<td style=\"vertical-align:top\"><b>".$gtbl->getCHN($field).($acceptVal==''?'':'<span class="redb">*</span>')."</b>:</td><td colspan=\""
 	    	      .($form_cols)."\">
                         <div id='".$field."_myeditordiv' style='width:680px;height:450px;display:none'></div>
                         <div id='".$field."_mytextdiv' style='width:680px;height:450px;display:block'>
                         <textarea id=\"".$field."\" name=\"".$field."\" rows=\"11\" cols=\"85\"  class=\"search\""
             		." onclick=\"javascript:openEditor('".$rtvdir."/extra/htmleditor.php?field=".$field."&sid=".$sid."', '"
             		.$field."'); parent.switchArea('".$field."_myeditordiv','on'); parent.switchArea('"
-            		.$field."_mytextdiv','off');\">".$hmorig[$field]."</textarea> </div><br/> "
+            		.$field."_mytextdiv','off');\" ".$gtbl->getJsAction($field).$acceptVal.">".$hmorig[$field]."</textarea> </div><br/> "
             		.$tmpmemo." </td></tr><tr>";
             $out .= '';
             $opentr = 1;
         }
 		else{
-            $out .= "<td style=\"vertical-align:top\"><b>".$gtbl->getCHN($field)."</b>:</td>"
+            $out .= "<td style=\"vertical-align:top\"><b>".$gtbl->getCHN($field).($acceptVal==''?'':'<span class="redb">*</span>')."</b>:</td>"
                     ."<td><textarea id=\"".$field."\" name=\""
-                    .$field."\" rows=\"11\" cols=\"35\" ".$gtbl->getJsAction($field).$gtbl->getAccept($field)." "
+                    .$field."\" rows=\"11\" cols=\"35\" ".$gtbl->getJsAction($field).$acceptVal." "
                     .$gtbl->getReadOnly($field)." class=\"search\">".$hmorig[$field]."</textarea> <br/> "
 		            .$gtbl->getMemo($field)." </td>";
         }
@@ -298,23 +299,23 @@ for($hmi=$min_idx; $hmi<=$max_idx;$hmi++){
 		$opentr = 1;
 
     }else{
-
+		$acceptVal = $gtbl->getAccept($field);
 		if($gtbl->getSingleRow($field) == '1'){
             $out .= "</tr>\n<tr height=\"30px\" valign=\"middle\"  onmouseover=\"javascript:this.style.backgroundColor='"
                     .$hlcolor."';\" onmouseout=\"javascript:this.style.backgroundColor='';\"><td style=\"vertical-align:top\" "
-                    .$gtbl->getCss($field)."><b>".$gtbl->getCHN($field)."</b>:</td><td colspan=\"".($form_cols)
+                    .$gtbl->getCss($field)."><b>".$gtbl->getCHN($field).($acceptVal==''?'':'<span class="redb">*</span>')."</b>:</td><td colspan=\"".($form_cols)
                     ."\"  style=\"vertical-align:top\"><input type=\"text\" id=\"".$field."\" name=\""
                      .$field."\" class=\"\" style=\"width:600px\" value=\""
-                    .$hmorig[$field]."\" ".$gtbl->getJsAction($field).$gtbl->getAccept($field)." "
+                    .$hmorig[$field]."\" ".$gtbl->getJsAction($field).$acceptVal." "
                     .$gtbl->getReadOnly($field)." /> <br/>   ".$gtbl->getMemo($field)." </td></tr><tr>";
             $opentr = 1;
 		}
 		else{
             $rdonly = $gtbl->getReadOnly($field);
-        	$out .= "<td nowrap ".$gtbl->getCss($field)." style=\"vertical-align:top\"><b>".$gtbl->getCHN($field)."</b>: "
+        	$out .= "<td nowrap ".$gtbl->getCss($field)." style=\"vertical-align:top\"><b>".$gtbl->getCHN($field).($acceptVal==''?'':'<span class="redb">*</span>')."</b>: "
         	        ."</td><td style=\"vertical-align:top\"><input type=\"text\" id=\""
         	        .$field."\" name=\"".$field."\" class=\"noneinput wideinput\" value=\"".$hmorig[$field]."\" "
-                    .$gtbl->getJsAction($field).$gtbl->getAccept($field)." ".$rdonly." ";
+                    .$gtbl->getJsAction($field).$acceptVal." ".$rdonly." ";
              if(in_array($field, $timefield) && $rdonly==''){
                 $out .= " onclick=\"javascript:WdatePicker();\"";
              }
@@ -357,7 +358,8 @@ $out .= "<input type=\"hidden\" id=\"id\" name=\"id\" value=\"".$id."\"/>\n ".$h
 $out .= "&nbsp;&nbsp;&nbsp;<input type=\"reset\" name=\"resetbtn\" />";
 $out .= "&nbsp;&nbsp;&nbsp;<input type=\"button\" name=\"cancelbtn\" value=\"".$lang->get("func_cancel")."\" "
         ."onclick=\"javascript:switchArea('contentarea_outer','off');\" /> <br/><span id='respFromServ'></span> </td></tr>";
-$out .= "</table> </form>  </fieldset>  <br/>";
+$out .= "</table></form></fieldset><br/>";
+$out .= "<style>.redb{ color:red; font-size:16px; font-weight:bold; padding-left:2px;}</style>";
 
 #$out .= "<script> parent.userinfo.targetId='".$id."'; parent.userinfo.act='".$act."'; </script>"; 
 # relocated to comm/footer.inc

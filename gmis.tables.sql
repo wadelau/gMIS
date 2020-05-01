@@ -82,7 +82,8 @@ CREATE TABLE `gmis_info_grouptbl` (
   `operator` char(32) NOT NULL DEFAULT '',
   `istate` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `key2` (`groupname`)
+  UNIQUE KEY `key2` (`groupname`),
+  UNIQUE KEY `key3` (`grouplevel`)
 );
 
 drop table if exists `gmis_info_helptbl`;
@@ -142,7 +143,8 @@ CREATE TABLE `gmis_info_objectgrouptbl` (
   `operator` char(32) NOT NULL DEFAULT '',
   `istate` tinyint(4) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `key2` (`groupname`)
+  UNIQUE KEY `key2` (`groupname`),
+  UNIQUE KEY `key3` (`grouplevel`)
 );
 
 drop table if exists `gmis_info_objectindexkeytbl`;

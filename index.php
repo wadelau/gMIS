@@ -15,9 +15,9 @@ $moduleNeedDb = '';
 $userGroup = $user->getGroup();
 $hm = $gtbl->execBy($sql="select * from ".$_CONFIG['tblpre']."fin_todotbl where 1=1 and ((togroup in (" # for multiple groups
         .$userGroup.") or touser=".$user->getId()." or triggerbyparent in (".$userGroup.") or triggerbyparentid="
-        .$user->getId().") or $userGroup=0) and istate in (1,2) order by istate desc, id desc limit 7 ", null,
+        .$user->getId().") or $userGroup=1) and istate in (1,2) order by istate desc, id desc limit 7 ", null,
 		$withCache=array('key'=>'info_todo-select-'.$user->getId()));
-		# give overall data to admin group, Nov 10, 2018
+		# give overall data to admin grouplevel=1, Nov 10, 2018
 #debug("sql:$sql");
 if($hm[0]){
     $hm = $hm[1];

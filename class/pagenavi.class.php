@@ -18,6 +18,7 @@ class PageNavi extends WebApp{
     const SID = 'sid';
 	const Omit_String = '----';
 	var $lang = null;
+	const Default_Page_Size = 30;
     
    public function __construct($args=null){
    
@@ -31,7 +32,7 @@ class PageNavi extends WebApp{
        $url = $file."?".preg_replace("/&pnpn=([0-9]*)/","",$query);
        $this->hmf['url'] = $url;
        $para = array();
-       $pdef = array('pnpn'=>1,'pnps'=>50,'pntc'=>0);
+       $pdef = array('pnpn'=>1, 'pnps'=>self::Default_Page_Size, 'pntc'=>0);
        foreach($_REQUEST as $k=>$v){
            $para[$k] = ($v==''||$v==null)?$pdef[$k]:$v;
            #$this->hmf[$k]=$para[$k];

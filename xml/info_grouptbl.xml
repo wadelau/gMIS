@@ -13,12 +13,9 @@
         </field>
         <field name="grouplevel">
             <chnname>组级别</chnname>
+			 <memo>行使超级管理员组的级别默认为 1 , 级别代码不能重复</memo>
         </field>
         
-     
-
-
-
 		<field name="inserttime" type="text">
             <chnname>创建时间</chnname>
 			        </field>

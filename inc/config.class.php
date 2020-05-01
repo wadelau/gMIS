@@ -4,6 +4,7 @@
 # remedy by wadelau@ufqi.com on 22:31 Friday, December 04, 2015
 
 ini_set("memory_limit","512M"); # memory limit avoding crush
+ini_set("max_execution_time", 180); # 3 minutes * 60
 
 if(true){
 	$tblpre = "gmis_";

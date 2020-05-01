@@ -242,7 +242,7 @@ class MYSQLIX {
 					$newsql .=  $sql ;
 				}
 				#print __FILE__."\n: sql:[".$sql."] sql_new:[".$newsql."]\n";
-				#debug(__FILE__."\n: sql:[".$sql."] sql_new:[".$newsql."]\n");
+				#debug(__FILE__."\n: sql:[".$origSql."] sql_new:[".$newsql."]\n");
 				return $newsql;
 			}
 		}

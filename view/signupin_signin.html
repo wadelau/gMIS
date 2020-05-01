@@ -39,6 +39,16 @@ if(true){
     if (top.frames.length>0){
         window.setTimeout("top.location = window.location;",100);
     }
+	
+	//- anti timeout for verifycode
+    //- Thu Apr  2 10:33:13 CST 2020
+    if(true){
+        var try2Reloadi = window.setTimeout(function(){
+                    window.console.log((new Date())+" try reloading signin page....");
+                    window.location.reload();
+                }, 
+            5*60*1000); // 5 minutes    
+    }
 }
 </script>
 <table style="border:0px;width:100%;height:566px;border-collapse:collapse; border-spacing:0px;"
@@ -113,7 +123,7 @@ if(true){
 				<tr>
                     <td width="13%" height="35" ><span class="login_txt">验证码Vfc：</span></td>
                     <td height="35" colspan="2" class="top_hui_text">
-                    	<input name="verifycode" id="verifycode" 
+                    	<input name="verifycode" id="verifycode" autocomplete="off"
 							type="text" maxLength="5" onload="javascript:this.focus();"
 							style="font-size:16px;font-weight:bold;" title="验证码不区分大小写, Code Case-Insensitive">
                     	&nbsp;&nbsp;<span id="verifycoderesult" style="font-size:20px;"></span>

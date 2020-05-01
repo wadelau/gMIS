@@ -101,6 +101,12 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
             debug(__FILE__.": unclassified timefield:[$field]. 1611101112.");
 			#$fieldv = date("Y-m-d H:i:s", time()); # 'NOW()';
             #$fieldlist[] = $field;
+			# remedy 19:13 Wednesday, April 15, 2020
+			if(isset($_REQUEST[$field])){
+				$fieldv = trim(Wht::get($_REQUEST, $field));
+				$fieldlist[] = $field;
+				$fieldvlist[$field] = $fieldv;
+			}
         }
         continue;
     }

@@ -122,6 +122,7 @@ if(true){
 	$data['lang']['welcome'] = $lang->get('welcome');
 	$data['lang']['agentname'] = $lang->get('lang_agentname');
 	$data['lang']['appchnname'] = $lang->get('lang_appchnname');
+	$data['lang']['ilang'] = $ilang;
 	//- set to cookie if necessary, @todo
 }
 if($_REQUEST['lang'] != ''){
@@ -210,7 +211,7 @@ if(isset($_REQUEST['isheader'])){
 if($isoput){
     if(!$isheader){
 		# another place at view/header.html!
-        $htmlheader = '<!DOCTYPE html><html>
+        $htmlheader = '<!DOCTYPE html><html lang="'.$ilang.'">
             <head>
             <!-- other stuff in header.inc -->
             <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />

@@ -1,13 +1,13 @@
 <?php
-
-if(0){
+# restore to open-end policy, 16:41 Tuesday, April 14, 2020
+if(1){
     $chkAccess = $user->chkAccess($_REQUEST);
     $chkResult = true; 
-    $denymsg = "访问被拒绝, 请联系管理员或者上级申请权限. \\n\\nusername:[".$user->getEmail()
-        ."] userid:[".$userid."] objid:[".$user->getObjId()."]";
+    $denymsg = "访问被拒绝, 请联系管理员或者上级申请权限. \\n\\n UserName:[".$user->getEmail()
+        ."] UserId:[".$userid."] ObjectId:[".$user->getObjId()."]";
     if(!$chkAccess['result']){
         $chkResult = false;
-        $denymsg .= "\n<br/><script type='text/javascript'>window.alert('".$denymsg.". \\n\\n"
+        $denymsg .= "\n<br/><script type='text/javascript'>window.alert('".$denymsg.". \\n\\n Refer: "
                 .$chkAccess['reason'].".\\n201203132113.'); window.history.go(-1);</script>";
     }
     # 写权限判断
@@ -80,7 +80,10 @@ if(0){
     } 
 
     if(!$chkResult){
-        //--
+        //-- no cache
+		header("Cache-Control: no-store, no-cache, must-revalidate");
+		header("Expires: Thu, 01 Jan 1970 00:00:00 GMT");
+		//- return & exit
         print $out.$denymsg;
         exit;
     }
