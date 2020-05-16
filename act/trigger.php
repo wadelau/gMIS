@@ -36,13 +36,12 @@ foreach($fieldlist as $i=>$field){
     if($triggers != ''){
         debug("field:$field triggers:[".$triggers."]");
         $fstArr = explode("|",$triggers);
+		$tmpGtbl = new GTbl('', array(), '');
         foreach($fstArr as $k=>$trigger){
             $tArr = explode("::", $trigger);
             if($tArr[0] == 'ALL' || $tArr[0] == $gtbl->get($field)){
                 $tmptbl = $tArr[2];
-				if(!startsWith($tmptbl, $_CONFIG['tblpre'])){
-					$tmptbl = $_CONFIG['tblpre'].$tmptbl;
-				}
+				$tmptbl = $tmpGtbl->setTbl($tmptbl);
                 if($tArr[1] == 'copyto'){
                     $sqlchk = "select id from $tmptbl where ";
                     $chkFArr = explode(",", $tArr[4]);

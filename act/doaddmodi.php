@@ -104,6 +104,7 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
 			# remedy 19:13 Wednesday, April 15, 2020
 			if(isset($_REQUEST[$field])){
 				$fieldv = trim(Wht::get($_REQUEST, $field));
+				if($fieldv == ''){ $fieldv = date("Y-m-d H:i:s", time()); }
 				$fieldlist[] = $field;
 				$fieldvlist[$field] = $fieldv;
 			}
