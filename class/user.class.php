@@ -100,8 +100,10 @@ class User extends WebApp{
             $this->set($this->objid, $objid);
         }
         #print "obj:[".$req['tbl']."] objgroup:[".$objgrp."] objid:[".$objid."]\n";
-		$objid = $objid=='' ? 'No_Such_Obj' : $objid;
-		$objgrp = $objgrp=='' ? 'No_Such_Grp' : $objgrp;
+		//$objid = $objid=='' ? 'No_Such_Obj' : $objid;
+		//$objgrp = $objgrp=='' ? 'No_Such_Grp' : $objgrp;
+		$objid = $objid=='' ? 999999 : $objid; # error of int vs. chars in SQL
+		$objgrp = $objgrp=='' ? 999999 : $objgrp;
 		
 		/*
         $sql = "select id,accesstype,objectfield,userid,usergroup from "

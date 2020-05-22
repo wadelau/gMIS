@@ -17,7 +17,7 @@
     <field name="objgroup" type="text">
         <chnname>组别</chnname>
         <inputtype>select</inputtype>
-        <selectoption>fromtable::info_objectgrouptbl::groupname</selectoption>
+        <selectoption>fromtable::info_objectgrouptbl::groupname::istate=1::grouplevel</selectoption>
     </field>
 
     <field name="tblname" type="text">
