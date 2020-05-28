@@ -181,6 +181,9 @@ for($hmi=$min_idx; $hmi<=$max_idx;$hmi++){
     else if($isAddByCopy && $gtbl->getReadOnly($field, $fieldinputtype) != ''){
         $hmorig[$field] = '';
     }
+	if(($id=='' || $id==0) && $hmorig[$field] == '' && $hmfield[$field.'_default'] != ''){
+		$hmorig[$field] = $hmfield[$field.'_default'];
+	}
     
 	if($closedtr == 1){
         $out .= "<tr height=\"30px\" valign=\"middle\"  onmouseover=\"javascript:this.style.backgroundColor='"

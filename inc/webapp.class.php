@@ -189,8 +189,8 @@ class WebApp implements WebAppInterface{
 			# write to db
 			$sql = "";
 			$hm = array();
-			$isupdate = 0;
-			if($this->getId() == ''){
+			$isupdate = 0; $tmpId = $this->getId();
+			if($tmpId == '' || $tmpId == '0'){
 				$sql = "insert into ".$this->getTbl()." set ";
 			}
 			else{
@@ -198,7 +198,6 @@ class WebApp implements WebAppInterface{
 				$isupdate = 1;
 			}
 			$fieldarr = explode(",",$fields);
-
 			foreach($fieldarr as $k => $v){
 				$v = trim($v);
 				if($v == "updatetime" || $v == 'inserttime' || $v == 'createtime'){
@@ -212,7 +211,7 @@ class WebApp implements WebAppInterface{
 			$sql = substr($sql,0,strlen($sql)-2); //- drop ", " at the end, Sun Jul 17 22:51:44 UTC 2011
 			$issqlready = 1;
 			if($conditions == null || $conditions == ""){
-				if($this->getId() != ""){
+				if($tmpId != '' && $tmpId != '0'){
 					$sql .= " where ".$this->myId."=?";
 				}
 				else if($isupdate == 1){
@@ -225,9 +224,7 @@ class WebApp implements WebAppInterface{
 			else{
 				$sql .= " where ".$conditions;
 			}
-
             #debug("webapp::setBy: ".$sql);
-
 			if($issqlready == 1){
 				if($this->getId() != ""){ $this->hmf["pagesize"] = 1; } # single record
 				$hm = $this->dba->update($sql, $this->hmf);
