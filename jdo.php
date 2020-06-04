@@ -379,6 +379,7 @@ else if(startsWith($act, "list")){
                # hmsum, sum or count each item
                if($gtbl->getInputType($field) != 'select' 
                        && $gtbl->isNumeric($hmfield[$field])
+					   && $gtbl->getStat($field) != 'count'
                        && strpos($hmfield[$field], "date") === false){
                    $hmsum[$field] += $rec[$field]; 
                }
@@ -414,7 +415,7 @@ else if(startsWith($act, "list")){
             }else{ 
                 $tmpsum = $hmsum[$k];
                 if($gtbl->getStat($k) == 'average'){
-                    $tmpsum = sprintf("%.2f",$tmpsum/$i);
+                    $tmpsum = sprintf("%.2f", $tmpsum/$i);
                 }
                 $out .= "<td>".(is_numeric($tmpsum) ? number_format($tmpsum, 2, '.', ',') : $tmpsum)."</td>";
             }

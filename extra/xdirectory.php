@@ -68,6 +68,8 @@ if(inString('-', $parentCode)){ //- 0100-止疼药2级
     $tmpArr = explode('-', $parentCode);
     $parentCode = $tmpArr[0];
 }
+$xdirectory->set('parentCode', $parentCode);
+
 $expandList = array();
 if(strlen($parentCode) > $dirLevelLength){
 	$codeV = '';

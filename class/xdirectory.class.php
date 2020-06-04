@@ -29,6 +29,7 @@ class XDirectory extends WebApp{
     function getList($targetDir, $levelLen){
     	$lastNode = '';
 		$dirList .="<div class=\"cv_fcv node\">";
+		$parentCode = $this->get('parentCode');
 		foreach($targetDir as $k=>$v){
 			$ilevel = 0;
 			$codeArr = str_split($k,$levelLen);
@@ -39,7 +40,7 @@ class XDirectory extends WebApp{
 			$j = $this->getSubDir($targetDir, $levelLen, $ilevel, $k);
 			#$nodeContent = $ilevel."-".$k."-".$v;
 			$nodeContent = $k."-".$v;
-			$nodeContent = "<div class=\"tree\" id=\"".$k."\" onmouseover=\"xianShi('".$k."');\" onmouseout=\"yinCang('".$k."');\">".$nodeContent; # 
+			$nodeContent = "<div class=\"tree\" id=\"".$k."\" onmouseover=\"xianShi('".$k."');\" onmouseout=\"yinCang('".$k."');\"".($k==$parentCode?' style="color:red;font-weight:strong;"':'').">".$nodeContent; # 
 			$nodeContent .= "&nbsp;&nbsp;<span id=\"nodelink".$k."\"><a href=\"javascript:void(0);\" onclick=\"javascript:parent.sendLinkInfo('".$k."', 'w', current_link_field); parent.copyAndReturn(current_link_field); changeBgc('".$k."');\">该项</a>";
 			$nodeContent .= "&nbsp;&nbsp;<a href=\"javascript:void(0);\" onclick=\"javascript:parent.sendLinkInfo('".$k."-".$v."', 'w', current_link_field); parent.copyAndReturn(current_link_field); changeBgc('".$k."');\">该项+名</a>";
 			$nodeContent .= "&nbsp;&nbsp;<a href=\"javascript:void(0);\" onclick=\"javascript:parent.sendLinkInfo('".$i."', 'w', current_link_field); parent.copyAndReturn(current_link_field);\">+同级项</a>";	

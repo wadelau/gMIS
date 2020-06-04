@@ -88,6 +88,7 @@ fieldset legend {
 img{
     border:0px;
     vertical-align:bottom;
+	border-radius:10px;
 }
 
 hr{
@@ -168,12 +169,17 @@ table.printtbl td{
     font-weight:bold;
 }
 
-select{
-    width:80px;
+select {
+	width: auto;
+	max-width: 96px;
+}
+.selectauto{
+    width: auto;
+	max-width: 90%;
 }
 .selectsmall{
-    width:45px;
-}    
+    width: 48px;
+}
 
 .field-groupred{
     color:#ff0000;

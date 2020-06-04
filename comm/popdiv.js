@@ -1,5 +1,5 @@
-function show(obj,text,isdyn,tag)
-{
+//- remedy by xenxin@ufqi, Mon Jun  1 15:43:29 HKT 2020
+function show(obj,text,isdyn,tag){
     var objorig = obj;
     if(typeof obj == 'string'){
         obj = document.getElementById(obj);
@@ -31,12 +31,10 @@ function show(obj,text,isdyn,tag)
 
     var div2=document.getElementById(divid);
 
-    if(!tag)
-    {
+    if(!tag){
         div2.style.visibility="hidden";
     }
-    else
-    {
+    else{
         var contdivW =  (winWidth * 0.65 - rightbelow * 2);
         if(left + contdivW > winWidth - rightbelow * 6){
             left = winWidth - contdivW - rightbelow * 6;
@@ -49,7 +47,7 @@ function show(obj,text,isdyn,tag)
         if(isdyn){
             text = 'Loading....';
         }
-        div2.innerHTML = '<table width="100%"><tr><td width="100%" style="text-align:right"><a href="javascript:show(\''+objorig+'\',\'\',false);"><b>X</b></a></td></tr><tr><td width="100%"><div id="'+divid+'_inside">'+text+'</div></td></tr></table>';
+        div2.innerHTML = '<table style="width:100%;height:100%;"><tr><td width="100%" style="text-align:right"><a href="javascript:show(\''+objorig+'\',\'\',false);"><b>X</b></a></td></tr><tr style="height:100%;"><td width="100%"><div id="'+divid+'_inside" style="height:100%;">'+text+'</div></td></tr></table>';
 
         div2.style.position="absolute";
         div2.style.top= (top + h + rightbelow) +"px";
