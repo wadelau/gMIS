@@ -118,7 +118,9 @@ if(true){
 	}
 	$langconf['language'] = $ilang;
 	$lang = new Language($langconf);
-	debug("comm/header: ilang:".$lang->getTag()." welcome:".$lang->get("welcome"));
+	if($is_debug){ 
+		debug("comm/header: ilang:".$lang->getTag()." welcome:".$lang->get("welcome"));
+	}
 	$data['lang']['welcome'] = $lang->get('welcome');
 	$data['lang']['agentname'] = $lang->get('lang_agentname');
 	$data['lang']['appchnname'] = $lang->get('lang_appchnname');

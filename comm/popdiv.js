@@ -7,7 +7,7 @@ function show(obj,text,isdyn,tag){
    
     var divid = "divDetail_201201282102";
     var rightbelow = 15;
-    var div=document.createElement(divid);
+    var div=document.createElement('div');
 
     var posobj = getOffset(obj);
     //var posobj = getScrollXY();

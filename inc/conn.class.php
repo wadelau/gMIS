@@ -20,7 +20,7 @@ class Config_Master{
 		$this->mDbUser = $gconf->get('dbuser');
 		$this->mDbPassword = $gconf->get('dbpassword');
 		$this->mDbDatabase = $gconf->get('dbname');
-		if(isset($gconf->get('dbpersistent'))){
+		if(null !== $gconf->get('dbpersistent')){
 			$this->mDbPersistent = $gconf->get('dbpersistent');
 		}
 	} 
@@ -41,7 +41,7 @@ class Config_Stats{
 		$this->mDbUser = $gconf->get('dbuser'.$db_suffix);
 		$this->mDbPassword = $gconf->get('dbpassword'.$db_suffix);
 		$this->mDbDatabase = $gconf->get('dbname'.$db_suffix);
-		if(isset($gconf->get('dbpersistent'))){
+		if(null !== $gconf->get('dbpersistent')){
 			$this->mDbPersistent = $gconf->get('dbpersistent');
 		}
 	} 

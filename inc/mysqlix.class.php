@@ -39,7 +39,7 @@ class MYSQLIX {
 		$this->m_persistent = $config->mDbPersistent;
 		$this->m_link = null;
 		if($this->m_persistent){
-			$this->m_host = Persistent_Tag . $this->m_host;
+			$this->m_host = $this->Persistent_Tag . $this->m_host;
 		}
 
 	} 
