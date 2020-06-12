@@ -178,6 +178,11 @@ $out .= '
         lastSelectedK = nodeId;
     }
     ';
+	
+# positioning to selected, 17:42 6/11/2020
+if($parentCode != ''){
+	$out .= 'if(true){ var tmpReloadTimer=window.setTimeout(function(){ document.getElementById("'.$parentCode.'").scrollIntoView(); parent.scrollTo(0,10);}, 1*1000);};';
+}
 
 $out .='</script>';
 
