@@ -25,7 +25,11 @@ if($hm[0]){
         $hm_todo_list[$v['id']] = $v;
     }
 }
-$data['todo_state'] = array('0'=>'已完成', '1'=>'待做', '2'=>'进行中', '3'=>'擱置', '4'=>'取消');
+$data['todo_state'] = array('0'=>$lang->get('work_task_state_done'), 
+	'1'=>$lang->get('work_task_state_todo'), 
+	'2'=>$lang->get('work_task_state_doing'), 
+	'3'=>$lang->get('work_task_state_pending'), 
+	'4'=>$lang->get('work_task_state_cancel'));
 $data['user_list'] = $user->getUserList();
 
 $mycachedate=date("Y-m-d", time()-(86400*60));

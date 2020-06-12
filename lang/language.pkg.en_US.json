@@ -155,6 +155,12 @@
 	"op_endswith": "Ends with it",
 	"op_regexp": "Match with RegExp",
 	"op_notregexp": "Match with Not RexExp",
+	
+	"work_task_state_done": "Completed",
+	"work_task_state_todo": "Todo",
+	"work_task_state_doing": "Processing",
+	"work_task_state_pending": "Pending",
+	"work_task_state_cancel": "Canceled",
 
 
 	"": "",

@@ -155,6 +155,12 @@
 	"op_endswith": "以....结束",
 	"op_regexp": "以正则式匹配",
 	"op_notregexp": "以正则式非匹配",
+	
+	"work_task_state_done": "已完成",
+	"work_task_state_todo": "待做",
+	"work_task_state_doing": "進行中",
+	"work_task_state_pending": "擱置",
+	"work_task_state_cancel": "取消",
 
 	"": "",
 
