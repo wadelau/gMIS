@@ -287,11 +287,19 @@ function redirect($url, $time=0, $msg='') {
 }
 
 # added by wadelau@ufqi.com,  Wed Oct 24 09:54:10 CST 2012
-function isImg($file){
+# updt xenxin@ufqi, 17:43 6/16/2020
+function isImg($file, $fieldName=null){
 	$isimg = 0;
 	if($file != ''){
 		$tmpfileext = strtolower(substr($file, strlen($file)-4));
 		if(in_array($tmpfileext,array("jpeg",".jpg",".png",".gif",".bmp",".webp"))){
+			$isimg = 1;
+		}
+	}
+	if($isimg==0 && $fieldName!=null){
+		if(inString('image', $fieldName) 
+			|| inString('img', $fieldName)
+			|| inString('pic', $fieldName)){
 			$isimg = 1;
 		}
 	}

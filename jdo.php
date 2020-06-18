@@ -329,7 +329,7 @@ else if(startsWith($act, "list")){
 							$fhref = $fhref_tmp;
 						}
                    $out .= "<td> ".$fhref;
-				   $isimg = isImg($rec[$field]);
+				   $isimg = isImg($rec[$field], $field);
                    if($isimg){
                        $out .= "<img src=\"img/st.png\" style=\"max-width:99%; max-height:99%\" onload=\"javascript:"
                                ."parent.imageLoadAsync(this.id, '".$rec[$field]."');\" id=\"img_".$field."_list_".$rec[$gtbl->getMyId()]."\" alt=\"img-x\"/>";

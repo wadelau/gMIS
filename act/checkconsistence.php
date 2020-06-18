@@ -17,7 +17,12 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
     }
 
     $inputtype = $gtbl->getInputType($field);
-    if($inputtype == 'file'){
+    if($inputtype == 'file'
+		|| inString('file', $field)
+			|| inString('path', $field)
+			|| inString('img', $field)
+			|| inString('image', $field)
+			|| inString('pic', $field)){
         if($hmdelete[$field] != ''){
     		if(strpos($hmdelete[$field], "$shortDirName/") !== false){ 
     		    $hmdelete[$field] = str_replace("$shortDirName/", "", $hmdelete[$field]); 

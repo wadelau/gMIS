@@ -84,7 +84,7 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
         if($origValue != '' && $srcprefix != '' && !startsWith($origValue, 'http')){
             $hmorig[$field] = $srcprefix.'/'.$hmorig[$field];
         }
-        $isimg = isImg($hmorig[$field]);
+        $isimg = isImg($hmorig[$field], $field);
 		if(strpos($hmorig[$field], "$shortDirName/") !== false){
 		    $hmorig[$field] = str_replace("$shortDirName/", "", $hmorig[$field]);
 		}
