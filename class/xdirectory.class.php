@@ -8,11 +8,23 @@ require_once(__ROOT__.'/inc/webapp.class.php');
 class XDirectory extends WebApp{
 
     private $dirLevelLength = 2; # default
+	public $lang = null;
 
     function __construct($tbl = ''){
-
-        $this->dba = new DBA();
-
+        # db
+		$db = $reqdb = trim($_REQUEST['db']);
+		if($reqdb != ''){
+			$args = array('dbconf'=>($db==GConf::get('maindb')? '' : $db));
+			if($args['dbconf'] == 'newsdb'){
+				$args['dbconf'] = 'Config_Master';
+			}
+			# other args options
+			parent::__construct($args);
+		}
+		else{
+			$this->dba = new DBA();
+		}
+		# tbl
         if($tbl != ''){
 			if($_CONFIG['language'] && $_CONFIG['language'] == "en_US"){
 				//$this->setTbl(GConf::get('tblpre').'en_'.$tbl);
@@ -22,6 +34,12 @@ class XDirectory extends WebApp{
 				//$this->setTbl(GConf::get('tblpre').$tbl);
 				$this->setTbl($tbl);
 			}
+		}
+		# lang
+	    if(true){
+			#debug("mod/pagenavi: lang: not config. try global?");
+			global $lang;
+			$this->lang = $lang; # via global?
 		}
     }
 
@@ -41,10 +59,10 @@ class XDirectory extends WebApp{
 			#$nodeContent = $ilevel."-".$k."-".$v;
 			$nodeContent = $k."-".$v;
 			$nodeContent = "<div class=\"tree\" id=\"".$k."\" onmouseover=\"xianShi('".$k."');\" onmouseout=\"yinCang('".$k."');\"".($k==$parentCode?' style="color:red;font-weight:strong;"':'').">".$nodeContent; # 
-			$nodeContent .= "&nbsp;&nbsp;<span id=\"nodelink".$k."\"><a href=\"javascript:void(0);\" onclick=\"javascript:parent.sendLinkInfo('".$k."', 'w', current_link_field); parent.copyAndReturn(current_link_field); changeBgc('".$k."');\">该项</a>";
-			$nodeContent .= "&nbsp;&nbsp;<a href=\"javascript:void(0);\" onclick=\"javascript:parent.sendLinkInfo('".$k."-".$v."', 'w', current_link_field); parent.copyAndReturn(current_link_field); changeBgc('".$k."');\">该项+名</a>";
-			$nodeContent .= "&nbsp;&nbsp;<a href=\"javascript:void(0);\" onclick=\"javascript:parent.sendLinkInfo('".$i."', 'w', current_link_field); parent.copyAndReturn(current_link_field);\">+同级项</a>";	
-			$nodeContent .= "&nbsp;&nbsp;<a href=\"javascript:void(0);\" onclick=\"javascript:parent.sendLinkInfo('".$j."', 'w', current_link_field); parent.copyAndReturn(current_link_field);\">+下级项</a>";	
+			$nodeContent .= "&nbsp;&nbsp;<span id=\"nodelink".$k."\"><a href=\"javascript:void(0);\" onclick=\"javascript:parent.sendLinkInfo('".$k."', 'w', current_link_field); parent.copyAndReturn(current_link_field); changeBgc('".$k."');\">".$this->lang->get("xdir_this_item")."</a>";
+			$nodeContent .= "&nbsp;&nbsp;<a href=\"javascript:void(0);\" onclick=\"javascript:parent.sendLinkInfo('".$k."-".$v."', 'w', current_link_field); parent.copyAndReturn(current_link_field); changeBgc('".$k."');\">".$this->lang->get("xdir_this_item_and_value")."</a>";
+			$nodeContent .= "&nbsp;&nbsp;<a href=\"javascript:void(0);\" onclick=\"javascript:parent.sendLinkInfo('".$i."', 'w', current_link_field); parent.copyAndReturn(current_link_field);\">+".$this->lang->get("xdir_same_level")."</a>";	
+			$nodeContent .= "&nbsp;&nbsp;<a href=\"javascript:void(0);\" onclick=\"javascript:parent.sendLinkInfo('".$j."', 'w', current_link_field); parent.copyAndReturn(current_link_field);\">+".$this->lang->get("xdir_sub_level")."</a>";	
 			$nodeContent .= "</span></div>";			
 			if($lastNode == ''){
 				$dirList .= $nodeContent;								
@@ -121,7 +139,6 @@ class XDirectory extends WebApp{
 				$exist = true;   //当前菜单项存在子级
 			}
 		}
-		
 		if($exist){	
 			$lastnumber = substr($max,strlen($max)-$levelLen,strlen($max));
 			$lastnumber = base_convert($lastnumber,36,10);   //36进制转成10进制

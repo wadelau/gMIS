@@ -61,7 +61,7 @@ function checkSignin(){
     if(nowTime > time2Quit){
         //- ready to quit
 	 	window.clearInterval(interval4Quit);
-        window.location.href =  currentpath + '/';
+        window.location.href =  currentpath + '/?randi='+(Math.random());
         console.log("checkSignin togo: nowtime:"+nowTime+" time2Quit:"+time2Quit+" left:"+(time2Quit-nowTime)
 			+" time2Stay:"+time2Stay+" time4sign:"+time4Signin);
     }

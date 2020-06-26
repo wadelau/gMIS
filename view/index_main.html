@@ -324,10 +324,10 @@ body {
                     if(!needGoout){
                         console.log('reload time:['+(new Date())+'] timePast:'+timePast+" time4Renew:"+userinfo.time4Renew);
                         window.location.href = document.getElementById('indexurl').value 
-                            + '&watchRld=' + (watchRld + 1);
+                            + '&watchRld=' + (watchRld + 1)+'&randi='+(Math.random());
                     }
                     else{
-                        window.location.href = document.getElementById('rtvdir').value + '/'; 
+                        window.location.href = document.getElementById('rtvdir').value + '/?randi='+(Math.random()); 
                     }
 				}, timeInterval * 1000);
 		</script>

@@ -563,7 +563,7 @@ class GTbl extends WebApp{
             # ?
         }else if(strpos($tmpstr,"fromtable") === 0){
             $arr = explode("::",$tmpstr);
-            $tbl = $arr[1]; $theTbl = $tbl;
+            $tbl = $arr[1]; $theTbl = $tbl; # support "dbname.tblname" with access
             $dispfield = $arr[2];
             if(isset($arr[3])){
                 #$dispfield .= ",".$arr[3];
@@ -1117,11 +1117,16 @@ class GTbl extends WebApp{
 
 	//- @override, test a table with or without $_CONFIG['tblpre']
 	//- Xenxin, Thu Jun 16 17:03:49 CST 2016
+	//- support "dbname.tblname" , 12:30 6/21/2020 
 	public function setTbl($tbl=''){
 		$realtbl = '';
 		if($tbl == null || $tbl == ''){
 			$tbl = parent::getTbl();
 		}
+		if(inString('.', $tbl)){
+			$realtbl = $tbl;
+		}
+		else{
 		$tblpre = GConf::get('tblpre');
 		$hasTblpre = startsWith($tbl, $tblpre);
 		$hm = parent::execBy('show tables like "%'.$tbl.'" ', null,
@@ -1162,9 +1167,8 @@ class GTbl extends WebApp{
 				$realtbl = $tblpre.$tbl;
 			}
 		}
-
+		}
 		parent::setTbl($realtbl);
-
 		return $realtbl;
 
 	}

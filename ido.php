@@ -14,7 +14,7 @@ if($tbl == ''){
 }
 else{
     $out .= "<script type=\"text/javascript\">currenttbl='".$tbl."';\ncurrentdb='"
-        .$mydb."';\n currentlistid= {};\n currentpath='".$rtvdir."';\n userinfo={"
+        .$db."';\n currentlistid= {};\n currentpath='".$rtvdir."';\n userinfo={"
         ."'id':'".$userid
         ."','email':'".$user->getEmail()
         ."','group':'".$user->getGroup()

@@ -161,6 +161,11 @@
 	"work_task_state_doing": "進行中",
 	"work_task_state_pending": "擱置",
 	"work_task_state_cancel": "取消",
+	
+	"xdir_this_item": "該項",
+	"xdir_this_item_and_value": "該項+名",
+	"xdir_same_level": "同級項",
+	"xdir_sub_level": "下級項",
 
 	"": "",
 

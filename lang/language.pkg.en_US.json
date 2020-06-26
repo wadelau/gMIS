@@ -161,7 +161,11 @@
 	"work_task_state_doing": "Processing",
 	"work_task_state_pending": "Pending",
 	"work_task_state_cancel": "Canceled",
-
+	
+	"xdir_this_item": "This Value",
+	"xdir_this_item_and_value": "This Value+Name",
+	"xdir_same_level": "Same Level Item",
+	"xdir_sub_level": "Sub-Level Item",
 
 	"": "",
 
