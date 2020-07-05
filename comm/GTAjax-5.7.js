@@ -4,23 +4,32 @@
  * @abstract: General-Targeted Ajax 
  * @author: wadelau@hotmail.com,wadelau@gmail.com
  * @since: 2006-2-17 14:04
- * @update: Tue Feb  1 20:47:03 GMT 2011
- * @code: 5.6 // a.bc , funcs added b+, errs updated c+ 
+ * @code: 5.7 // a.bc , funcs added b+, errs updated c+ 
  * @NOTICE: DO NOT USE THIS COMMERICALLY WITHOUT AUTHOR'S PAPER AUTHORIZATION
+ * @update: Tue Feb  1 20:47:03 GMT 2011
  * Tue Jan 25 12:55:01 GMT 2011
  * Wed Jan 26 17:31:33 GMT 2011
  * Wed Jul 20 08:08:09 BST 2011
  * Fri Mar 16 16:36:52 CST 2012
+ * 12:15 Friday, February 20, 2015
  * Sun Jan 24 12:56:43 CST 2016
  * Fri May 25 08:51:23 CST 2018, code format refine and cA.sort bugfix
  * Wed Oct 31 21:57:26 CST 2018, +form Name validate
+ * 11:06 Friday, August 16, 2019, imprvs with form validate
+ * 11:55 2020-07-04, bugfix for submit fail with forceFrame.
  */ 
 //---- DO NOT CHANGE ANY PART OF THE CODE UNDER THIS LINE ---
 var GTAj = null ; 
-var GTAjVar = {helpurl:'http://ufqi.com/dev/gtajax/'} ;
+var GTAjVar = {helpurl:'https://ufqi.com/dev/gtajax/', version:5.7} ;
 var GTAjStatus = {hdlcp:0, nowopen:0, lastopen:0, gti:0, tlpid:0, bki:0,maxbk:9, ierdy:0};
 var GTAjBK = {} ;
 
+if(!window){ window = {}; } //- why this?
+if(typeof window.console == "undefined"){
+    window.console = {log: function(errMsg){ window.alert(errMsg); }};
+}
+
+//- main object, global with window
 function GTAjax(){
 	//--- initiate
 	GTAjStatus.gti++;
@@ -42,7 +51,6 @@ function GTAjax(){
 	GTAj.tErr = new Error() ; //-- tmpErr
 	GTAj.nEmt2 = null ;
 	GTAj.gtFDiv = 'icld200607232107'; //-- gtfloatdiv
-	//GTAj.tBro = navigator.appName; //-- tmpBro
 	GTAj.tBro = (navigator.userAgent).toLowerCase(); //-- tmpBro
 	GTAj.tLgu = navigator.language?navigator.language:navigator.userLanguage ; //--- user charset
 	GTAj.myBdTt = null ; //-- myBodyTarget
@@ -52,42 +60,42 @@ function GTAjax(){
 	GTAj.ti = 0; //-- runing track id, positioning by line no, added on 20160124 
 	GTAj.cA = new Array();
 	GTAj.vA = new Array()
-	GTAj.vA['sbv'] = 'Submit' ;
-	GTAj.vA['mul'] = 3*60*1000 ;
-	GTAj.vA['ta'] = '' ;
-	GTAj.vA['rn'] = ' Return ' ;
-	GTAj.vA['ib'] = false ;
-	GTAj.vA['rdo'] = false ;
-	GTAj.vA['ic'] = true ;
-	GTAj.vA['cf'] = '' ;
-	GTAj.vA['ff'] = true; // false ;
-	GTAj.vA['pb'] = true ;
-	GTAj.vA['bl'] = true ;
-	GTAj.vA['fft'] = 'fftag';
-	GTAj.vA['req'] = 'undefined';
-	GTAj.vA['nbl'] = '' ;
-	GTAj.vA['ncp'] = false ;
-	GTAj.vA['fbl'] = false ;
-	GTAj.vA['chkv'] = 1 ;
-	GTAj.vA['cfs'] = '::' ; //- chkformsep, reform since v5.2, 201107
+		GTAj.vA['sbv'] = 'Submit' ;
+		GTAj.vA['mul'] = 3*60*1000 ;
+		GTAj.vA['ta'] = '' ;
+		GTAj.vA['rn'] = ' Return ' ;
+		GTAj.vA['ib'] = false ;
+		GTAj.vA['rdo'] = false ;
+		GTAj.vA['ic'] = true ;
+		GTAj.vA['cf'] = '' ;
+		GTAj.vA['ff'] = true; // false ;
+		GTAj.vA['pb'] = true ;
+		GTAj.vA['bl'] = true ;
+		GTAj.vA['fft'] = 'fftag';
+		GTAj.vA['req'] = 'undefined';
+		GTAj.vA['nbl'] = '' ;
+		GTAj.vA['ncp'] = false ;
+		GTAj.vA['fbl'] = false ;
+		GTAj.vA['chkv'] = 1 ;
+		GTAj.vA['cfs'] = '::' ; //- chkformsep, reform since v5.2, 201107
 	GTAj.vArr = new Array()
-	GTAj.vArr['subbtnval']='sbv';
-	GTAj.vArr['maxuploadfiletime']='mul';
-	GTAj.vArr['targetarea']='ta';
-	GTAj.vArr['returnname']='rn';
-	GTAj.vArr['isdebug']='ib';
-	GTAj.vArr['returndataonly']='rdo';
-	GTAj.vArr['iscache']='ic';
-	GTAj.vArr['chkform']='cf';
-	GTAj.vArr['forceframe']='ff';
-	GTAj.vArr['processbar']='pb';
-	GTAj.vArr['backlink']='bl';
-	GTAj.vArr['forceframetag']='fft';
-	GTAj.vArr['request'] = 'req';
-	GTAj.vArr['nobacktag'] = 'nbl';
-	GTAj.vArr['nocopy'] = 'ncp';
-	GTAj.vArr['forcebacktag'] = 'fbl';
-	GTAj.vArr['callback'] = 'cb'; //- callback function, added on Sun Mar 11 12:56:52 CST 2012
+		GTAj.vArr['subbtnval']='sbv';
+		GTAj.vArr['maxuploadfiletime']='mul';
+		GTAj.vArr['targetarea']='ta';
+		GTAj.vArr['returnname']='rn';
+		GTAj.vArr['isdebug']='ib';
+		GTAj.vArr['returndataonly']='rdo';
+		GTAj.vArr['iscache']='ic';
+		GTAj.vArr['chkform']='cf';
+		GTAj.vArr['forceframe']='ff';
+		GTAj.vArr['processbar']='pb';
+		GTAj.vArr['backlink']='bl';
+		GTAj.vArr['forceframetag']='fft';
+		GTAj.vArr['request'] = 'req';
+		GTAj.vArr['nobacktag'] = 'nbl';
+		GTAj.vArr['nocopy'] = 'ncp';
+		GTAj.vArr['forcebacktag'] = 'fbl';
+		GTAj.vArr['callback'] = 'cb'; //- callback function, added on Sun Mar 11 12:56:52 CST 2012
 	
 	GTAj.xmlhttp = null ;
 	
@@ -211,7 +219,7 @@ function GTAjax(){
 			iswaiting = true ;
 		}
 		if( iswaiting ){
-			//--- waiting... // && !(GTAj.tBro.indexOf('Explorer')>-1 && document.readyState!='complete')
+			//--- waiting...
 			if( !isnum ){
 				eval('GTAjStatus.pid'+GTAjStatus.gti+' = GTAj;');
 			}
@@ -249,8 +257,7 @@ function GTAjax(){
 			if( !GTAj.isWtRp ){
                 if( GTAj.sTd2 == 0){
 				    this._PSD( GTAj.iTm ); 
-                    //-- update to dynamic again 2007-10-4 21:19, take static process div instead of dynamic,
-				    //- updated 20060810, 201102
+                    //-- update to dynamic again 2007-10-4 21:19, take static process div instead of dynamic, updated 20060810, 201102
                 }
                 else{
                     this._DBG( GTAj.vA['ib'],'process-GTAj.sTd2', 'gti:['+GTAjStatus.nowopen
@@ -277,10 +284,11 @@ function GTAjax(){
                     }
 				}
 				catch (eFNm){
-					//- debug?
+					console.log(eFNm);
 				}
 				this._DBG( GTAj.vA['ib'],'sForm/aft',sForm);
 				if( sForm!=null && typeof sForm !='undefined' ){
+					//- real html form
 					this._DBG( GTAj.vA['ib'],'ta-1', GTAj.vA['ta']);		
 					document.getElementById(GTAj.vA['req']).onsubmit= this._DFM_F ;
 					if( GTAj.vA['chkv']==0 ){
@@ -310,7 +318,6 @@ function GTAjax(){
 					catch(e8){
 						return this._RGT( 'parentArea', e8 ); // when err reinit the environment...
 					}
-					
 					try{
 						GTAj.sUrl = sForm.action ;
 						GTAj.sMtd = sForm.method ;
@@ -343,8 +350,7 @@ function GTAjax(){
 							else if (el.tagName.toLowerCase() == 'textarea'){
                                 if(!this._chkAccept(sForm, el, myCFM)){ return false; }
 								if(typeOfElement != 'undefined'){
-									if(!myCFM(sForm,el.name,el.value,GTAj.cA[el.name]))
-									{
+									if(!myCFM(sForm,el.name,el.value,GTAj.cA[el.name])){
 										return false;	
 									}
 								}
@@ -360,8 +366,7 @@ function GTAjax(){
 									}
                                     if(!this._chkAccept(sForm, el, myCFM)){ return false; }
 									if(typeOfElement != 'undefined'){
-										if(!myCFM(sForm,el.name,el.value,GTAj.cA[el.name]))
-										{
+										if(!myCFM(sForm,el.name,el.value,GTAj.cA[el.name])){
 											return false;	
 										}
 									}		
@@ -369,16 +374,14 @@ function GTAjax(){
 								else if( el.type.toLowerCase() == 'file'){
                                     if(!this._chkAccept(sForm, el, myCFM)){ return false; }
 									if(typeOfElement != 'undefined'){
-										if(!myCFM(sForm,el.name,el.value,GTAj.cA[el.name]))
-										{
+										if(!myCFM(sForm,el.name,el.value,GTAj.cA[el.name])){
 											return false;	
 										}
 									}
 									if(el.value!='' && el.value!=null){
 										GTAj.wFl = true ;
 										this._DBG( GTAj.vA['ib'],'fileUpload2',GTAj.wFl);
-										if(eval(GTAj.cA.length)==0)
-										{
+										if(eval(GTAj.cA.length)==0){
 											break ;
 										}
 									}
@@ -428,7 +431,8 @@ function GTAjax(){
 						}
 					}
 					catch(e2){
-					   return this._RGT( 'formElement3',e2 ); // when err reinit the environment...
+						console.log(e2);
+					    return this._RGT( 'formElement3',e2 ); // when err reinit the environment...
 					}
 			        //---- end of real form action
 				}
@@ -474,7 +478,7 @@ function GTAjax(){
 							}
 							eval('GTAjBK.bk'+GTAjStatus.bki+'=document.getElementById('+GTAj.vA['ta']
 								+').innerHTML');
-							this._DBG(  GTAj.vA['ib'], 'GTAjBK.bk'+GTAjStatus.bki,'val');
+							this._DBG(GTAj.vA['ib'], 'GTAjBK.bk'+GTAjStatus.bki,'val');
 							GTAj.sBkCt = '1' ;
 						}
 						else if( GTAj.vA['ta']!=''){
@@ -495,7 +499,7 @@ function GTAjax(){
 				}
 				//- create a request object
 				if( GTAj.wFl || GTAj.vA['ff'] ){	
-					//--- use form submit 
+					//--- use form submit with forceFrame
 					try{
 						this._SAY(GTAj.sFld,'Loading data...',false);
 						var randframei = (new Date).getMilliseconds(); // for firefox continual fileuploads...
@@ -523,7 +527,7 @@ function GTAjax(){
 						this._SUB(sForm,GTAj.sUrl,GTAj.sPtWi, GTAj.vA['ib'], GTAj.vA['ff']); 
 						GTAj.isWtRp = true ;
 						eval('GTAjStatus.pid'+GTAjStatus.nowopen+'=GTAj;');
-						GTAj.sTd = window.setTimeout( 'GTAj._LOP()',GTAj.iItl);
+						GTAj.sTd = window.setTimeout( 'GTAj._LOP()', GTAj.iItl);
 						postFrame= null ;
 						randframei = null ;
 						this._DBG( GTAj.vA['ib'],'iframeListen','starting');
@@ -533,7 +537,7 @@ function GTAjax(){
 					}
 			    }
 			    else{
-					// using xmlhttp
+					// using xmlhttp for url request
 					var isAsync = false ;
 					this._SAY(GTAj.sFld,'Initiating',false);
 					try{
@@ -565,13 +569,13 @@ function GTAjax(){
 						}
 					}
 					catch(e39){
+						console.log(e39);
 						//--- xmlhttp.open fail, set ff==true and try again..
 						this._SAY(GTAj.sFld, GTAj.vA['sbv'],true);
 						GTAj.vA['ff'] = true ;
 						eval('GTAjStatus.pid'+GTAjStatus.nowopen+'=GTAj;');
 						GTAj.sTd = window.setTimeout('GTAj._LOP()',GTAj.iItl);
 					}
-					
 					//- submitting request
 					this._SAY(GTAj.sFld,'Communicating',false);
 					GTAj.sMtd = GTAj.sMtd.toUpperCase();
@@ -657,7 +661,8 @@ function GTAjax(){
 							this._DBG( GTAj.vA['ib'],'GTAj.xmlhttp-sRe',GTAj.sRe 
 									+ ', GTAj.rtns:['+GTAj.rtns	+'] ');
 						}
-						catch(e3){ 
+						catch(e3){
+							console.log(e3);
 							//--- xmlhttp.open fail, set ff==true and try again..
 							this._DBG(GTAj.vA["ib"],"GTAj.xmlhttp.fail","xmlhttp:["
 									+GTAj.xmlhttp+"],failed.");
@@ -677,7 +682,6 @@ function GTAjax(){
 						GTAj.xmlhttp = null ; 
 					}
 				}
-			        
 				if(GTAj.isDN){
 					this._SAY( GTAj.sFld,'Loaded Successfully',false );	
 				}
@@ -697,7 +701,7 @@ function GTAjax(){
 					    this._RGT('GTAj.isWtRp',GTAj.tErr);
                         return false;
                     }
-					var sRe2 =  pgt.body.innerHTML ;
+					var sRe2 =  pgt.body!=null ? pgt.body.innerHTML : '';
 					GTAj.rtns = pgt.readyState ;
 					if( GTAj.rtns=='complete' && sRe2==''){
 						GTAj.rtns = ''; //-- remedy on 20101111 for chrome
@@ -710,8 +714,8 @@ function GTAjax(){
 								&& GTAj.sRe.length==sRe2.length ){
 							GTAj.rtns = 'complete';
 						}
-						GTAj.sRe = sRe2 ;
-						GTAj.iItl = 2000 ;	
+						GTAj.sRe = sRe2;
+						GTAj.iItl = 2000;	
 					}
 					if( GTAj.tBro.indexOf('opera')>-1 ){
 						GTAj.sRe = GTAj.sRe.replace(/\n{3,}/,''); //--- for opera compatible
@@ -737,7 +741,8 @@ function GTAjax(){
 					}
 					sRe2 = null ;
 				}
-				catch( e7 ){	
+				catch( e7 ){
+					console.log(e7);
 					this._DBG( GTAj.vA['ib'],'accessRe',e7.message );
 					//--- tell script to waiting again,Modified on 2006-7-7 11:36 
 					eval('GTAjStatus.pid'+GTAjStatus.nowopen+'=GTAj;');
@@ -798,7 +803,6 @@ function GTAjax(){
 							}
 						}
 					}
-
 					GTAj.ti = 1241301; 
                     //-- callback function, added on Sun Mar 11 12:56:18 CST 2012
                     if(GTAj.vA['cb'] != undefined && GTAj.vA['cb'] != ''){
@@ -813,15 +817,13 @@ function GTAjax(){
 							document.getElementById( GTAj.vA['ta']).innerHTML = GTAj.sRe ;
 						}
 					}
-					
 					if( sRe2 ){
 						sRe2 = null ;	
 					}
-					
+					//-
 					eval('GTAjStatus.pid'+GTAjStatus.nowopen+'=null;') ;
 					GTAjStatus.lastopen = GTAjStatus.nowopen ;
 					GTAjStatus.nowopen = 0 ;
-					
 					if( GTAj.sTd != 0 ){
 						window.clearTimeout( GTAj.sTd ) ;
 					}
@@ -830,7 +832,6 @@ function GTAjax(){
 						window.clearTimeout( GTAj.sTd2 ) ;
 					    this._DBG( GTAj.vA['ib'],'sTd2-accessRe-2', GTAj.sTd2 );
 					}
-
 					this._RGT('done',GTAj.tErr);
 					
 					return GTAj.sRe ;
@@ -840,7 +841,6 @@ function GTAjax(){
 					console.log("e5:["+JSON.stringify(e5)+"] ti:["+GTAj.ti+"]");
 					return this._RGT('finishJob',e5);	
 				}
-				
 			}
 			else if(!GTAj.isWtRp){
 				this._DBG( GTAj.vA['ib'],'serverResponse',' emptyValue');
@@ -848,12 +848,13 @@ function GTAjax(){
 			else{
 				this._DBG( GTAj.vA['ib'],'sRe-waiting','sRe:['+GTAj.sRe+'],state:['+GTAj.rtns+']');
 			}
-		}		
+		}	
 	}
 	
 	//- output debug info when isdebug=1
 	this._DBG = function(ib,sName,sVal){
 		if(typeof sVal == 'undefined'){ sVal = ''; }
+		//console.log((new Date()).getTime()+" debug: sName:["+sName+"] sVal:["+sVal+"]");
 		if( ib ){ 
 			try{
 				var debugid = 'gtajax-debugid';
@@ -881,7 +882,7 @@ function GTAjax(){
 						debugdiv.setAttribute('id', debugid );
 						document.body.appendChild( debugdiv );
 					}
-					document.getElementById( debugid ).innerHTML += "<br/><br/>"+(new Date).getTime()
+					document.getElementById( debugid ).innerHTML += "<br/><br/>"+(new Date()).getTime()
 						+":<br/>";
                     if(GTAj.tBro.indexOf('firefox') > -1){ 
                         if(sVal.replace){
@@ -911,6 +912,7 @@ function GTAjax(){
 			}
 		}
 		catch(e1609){
+			console.log(e1609);
             if( GTAj){
 			    return GTAj._RGT('GTAj._LOP()',e1609)
             }
@@ -991,11 +993,13 @@ function GTAjax(){
 			}
 		}
 		postForm.lang = GTAj.tLgu;
-		if(GTAj.wFl){
-			postForm.encoding = "multipart/form-data";
-		}
-		else{
-			postForm.encoding = "application/x-www-form-urlencoded";	
+		if(postForm.encoding == null || typeof postForm.encoding == 'undefined'){
+			if(GTAj.wFl){
+				postForm.encoding = "multipart/form-data";
+			}
+			else{
+				postForm.encoding = "application/x-www-form-urlencoded";	
+			}
 		}
 		postForm.target = sPtWi;
 		var iQmark = sUrlx.indexOf('?');
@@ -1017,18 +1021,34 @@ function GTAjax(){
 				sUrlx += GTAj.vA['fft']+'=1';	
 			}
 		}
-		if(sUrlPart.indexOf('.htm')>0 || sUrlPart.indexOf('.txt')>0 ){
-			//--- only if main action url is .htm or .txt file, use this, update on 2006-10-18 9:24
-			postForm.method = 'GET';
-		}
-		else{
-			postForm.method = 'POST';                  
+		if(true){
+			if(sUrlPart.indexOf('.htm')>0 || sUrlPart.indexOf('.txt')>0 ){
+				//--- only if main action url is .htm or .txt file, use this, update on 2006-10-18 9:24
+				postForm.method = 'GET';
+			}
+			else{
+				postForm.method = 'POST';                  
+			}
 		}
 		postForm.action = sUrlx;
-		postForm.submit();
+		//postForm.submit(); // maybe fail due to this._DFM_F . 10:42 2020-07-04
+		if(postForm.onsubmit == null){
+			postForm.submit();
+			GTAj._DBG(GTAj.vA['ib'], 'this._SUB', 'Sync form:['+postForm.name+'] is being submitted.');
+		}
+		else{
+			GTAj.currentPostFormId = postForm.name!='' ? postForm.name : postForm.id;
+			postForm.onsubmit = (function(){
+				var myTimerId = window.setTimeout(function(formId){
+					document.getElementById(GTAj.currentPostFormId).submit();
+					GTAj._DBG(GTAj.vA['ib'], 'this._SUB', 'Async form:['+GTAj.currentPostFormId+'] is being submitted.');
+				}, 10); //- 0.01 sec
+				return true;
+			})();
+		}
 		this._DBG( GTAj.vA['ib'],'this._SUB',sForm+':'+postForm.method+':'+sUrlx+':'+sPtWi
 				+ ',ff:['+fft+'] postform:['+postForm.name+'] enctype:['+postForm.encoding+']');
-		postForm = null ;
+		postForm = null;
 	} 
 	
 	//- reset all into inital status after a complete request
@@ -1104,21 +1124,21 @@ function GTAjax(){
 	
 		GTAj.cA = new Array();
 		GTAj.vA = new Array()
-		 GTAj.vA['sbv'] = 'Submit' ;
-		 GTAj.vA['mul'] = 3*60*1000 ;
-		 GTAj.vA['ta'] = '' ;
-		 GTAj.vA['rn'] = ' Return ' ;
-		 //GTAj.vA['ib'] = false ;
-		 GTAj.vA['rdo'] = false ;
-		 GTAj.vA['ic'] = true ;
-		 GTAj.vA['cf'] = '' ;
-		 GTAj.vA['ff'] = true; //false ;
-		 GTAj.vA['pb'] = true ;
-		 GTAj.vA['bl'] = true ;
-		 GTAj.vA['fft'] = 'fftag';
-		 GTAj.vA['nbl'] = '' ;	
-		 GTAj.vA['fbl'] = false ;
-		 GTAj.vA['chkv'] = 1 ;
+			GTAj.vA['sbv'] = 'Submit' ;
+			GTAj.vA['mul'] = 3*60*1000 ;
+			GTAj.vA['ta'] = '' ;
+			GTAj.vA['rn'] = ' Return ' ;
+			//GTAj.vA['ib'] = false ;
+			GTAj.vA['rdo'] = false ;
+			GTAj.vA['ic'] = true ;
+			GTAj.vA['cf'] = '' ;
+			GTAj.vA['ff'] = true; //false ;
+			GTAj.vA['pb'] = true ;
+			GTAj.vA['bl'] = true ;
+			GTAj.vA['fft'] = 'fftag';
+			GTAj.vA['nbl'] = '' ;	
+			GTAj.vA['fbl'] = false ;
+			GTAj.vA['chkv'] = 1 ;
 			
 		return false ;
 		
@@ -1144,6 +1164,7 @@ function GTAjax(){
 		}
   	}
 	
+	//-
 	this._DFM_F = function(){ return false ; }
 	this._DFM_T = function(){ return true ; }
 
@@ -1204,7 +1225,8 @@ function GTAjax(){
 				}
 			}
 		}
-		catch(eDiv){	
+		catch(eDiv){
+			console.log(eDiv);
 			return this._RGT('prcsDiv',eDiv);
 		}
 	}
@@ -1216,7 +1238,7 @@ function GTAjax(){
 			if( strChk.indexOf(GTAj.vA['cfs']) > -1 ){
 				var chkTmpA = strChk.split(GTAj.vA['cfs'],2) ;
 				var chktype = chkTmpA[0] ;
-				var strError = 'Unacceptable:['+strVal+']. '+chkTmpA[1] ;
+				var strError = strField+': Unacceptable:['+strVal+']. '+chkTmpA[1] ;
 				var prefixval = 0 ;
 				var chkok = true ;
 				if(chktype.indexOf('+')>-1){
@@ -1281,12 +1303,12 @@ function GTAjax(){
 						}
 					}
 					else if(chktype=='lt' || chktype=='lessthan'){
-						if( isNaN(strVal) ||(eval(strVal) >= prefixval)){ 
+						if( isNaN(strVal) || strVal.trim()=='' || (eval(strVal) >= prefixval)){ 
 							chkok = false ;                 
 						}//if    	
 					}
 					else if(chktype=='gt' || chktype=='greaterthan'){
-						if( isNaN(strVal) ||(eval(strVal) <= prefixval)){ 
+						if( isNaN(strVal) || strVal.trim()=='' ||(eval(strVal) <= prefixval)){ 
 							chkok = false ;                
 						}//if    
 					}
@@ -1340,6 +1362,7 @@ function GTAjax(){
 			return chkok; 
 		}
 		catch(echk){
+			console.log(echk);
 			return GTAj._RGT('formValidate-0',echk);
 		}
 	}
@@ -1347,7 +1370,7 @@ function GTAjax(){
 	//- support do disable copy & paste on page
 	this._DISCP = function( isnocp ){
 		//--- disable select & copy
-		if( 1 ){
+		if( true ){
 			try{
 				if( document.body ){
 					if( GTAj.tBro.indexOf('msie') > -1 || GTAj.tBro.indexOf('explorer') > -1 ){
@@ -1416,7 +1439,8 @@ window.GTAjax = GTAjax;
 var gtaj = new GTAjax();
 gtaj.set('nobacktag','<!--gtajaxsucc-->'); //--- server response with this tag, no append back link
 gtaj.set('nocopy',true); //--- forbid copy content from current page
-gtaj.get(sUrl);
+gtaj.set('isdebug', true); //--- output verbosely
+var resp = gtaj.get(sUrl);
 
 */
 //-- http://www.thescripts.com/forum/thread508775.html
@@ -1425,4 +1449,3 @@ gtaj.get(sUrl);
 // java -jar custom_rhino.jar -c GTAjax-20070515-2.01.js > GTAjax_.js 2>&1
 
 //-->
- 
