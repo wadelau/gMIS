@@ -318,7 +318,7 @@ CREATE TABLE `gmis_useraccesstbl` (
 drop table if exists `gmis_dict_infotbl`;
 CREATE TABLE `gmis_dict_infotbl` (
   `id` int(12) NOT NULL AUTO_INCREMENT COMMENT 'primary key',
-  `ikey` char(16) COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT 'dict key',
+  `ikey` char(24) COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT 'dict key',
   `ivalue` char(64) COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT 'dict value',
   PRIMARY KEY (`id`)
 );
@@ -326,10 +326,11 @@ CREATE TABLE `gmis_dict_infotbl` (
 drop table if exists `gmis_dict_detailtbl`;
 CREATE TABLE `gmis_dict_detailtbl` (
   `id` int(12) NOT NULL AUTO_INCREMENT,
-  `itype` char(16) COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'dict key type',
+  `itype` char(24) COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'dict key type',
   `ikey` char(128) COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT 'item name',
   `ivalue` char(16) COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT 'item value',
   `iorder` int(12) NOT NULL DEFAULT '0' COMMENT 'order no',
   PRIMARY KEY (`id`),
-  KEY `k2` (`stype`)
+  KEY `k2` (`stype`),
+  unique key k3(`itype`, `ivalue`)
 );

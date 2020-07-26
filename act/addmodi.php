@@ -181,7 +181,8 @@ for($hmi=$min_idx; $hmi<=$max_idx;$hmi++){
     else if($isAddByCopy && $gtbl->getReadOnly($field, $fieldinputtype) != ''){
         $hmorig[$field] = '';
     }
-	if(($id=='' || $id==0) && $hmorig[$field] == '' && $hmfield[$field.'_default'] != ''){
+	if(($id=='' || $id==0) && $hmorig[$field] == '' 
+		&& $hmfield[$field.'_default'] != ''){
 		$hmorig[$field] = $hmfield[$field.'_default'];
 	}
     
@@ -303,11 +304,15 @@ for($hmi=$min_idx; $hmi<=$max_idx;$hmi++){
 
     }else{
 		$acceptVal = $gtbl->getAccept($field);
+		$tmpInputType = 'text';
+		if(inString('time', $field)){ $tmpInputType = 'datetime-local';}
+		else if(inString('date')){ $tmpInputType = 'date'; }
+		else if(inString('0', $hmfield[$field.'_default'])){ $tmpInputType = 'number'; }
 		if($gtbl->getSingleRow($field) == '1'){
             $out .= "</tr>\n<tr height=\"30px\" valign=\"middle\"  onmouseover=\"javascript:this.style.backgroundColor='"
                     .$hlcolor."';\" onmouseout=\"javascript:this.style.backgroundColor='';\"><td style=\"vertical-align:top\" "
                     .$gtbl->getCss($field)."><b>".$gtbl->getCHN($field).($acceptVal==''?'':'<span class="redb">*</span>')."</b>:</td><td colspan=\"".($form_cols)
-                    ."\"  style=\"vertical-align:top\"><input type=\"text\" id=\"".$field."\" name=\""
+                    ."\"  style=\"vertical-align:top\"><input type=\"".$tmpInputType."\" id=\"".$field."\" name=\""
                      .$field."\" class=\"\" style=\"width:600px\" value=\""
                     .$hmorig[$field]."\" ".$gtbl->getJsAction($field).$acceptVal." "
                     .$gtbl->getReadOnly($field)." /> <br/>   ".$gtbl->getMemo($field)." </td></tr><tr>";
@@ -316,7 +321,7 @@ for($hmi=$min_idx; $hmi<=$max_idx;$hmi++){
 		else{
             $rdonly = $gtbl->getReadOnly($field);
         	$out .= "<td nowrap ".$gtbl->getCss($field)." style=\"vertical-align:top\"><b>".$gtbl->getCHN($field).($acceptVal==''?'':'<span class="redb">*</span>')."</b>: "
-        	        ."</td><td style=\"vertical-align:top\"><input type=\"text\" id=\""
+        	        ."</td><td style=\"vertical-align:top\"><input type=\"".$tmpInputType."\" id=\""
         	        .$field."\" name=\"".$field."\" class=\"noneinput wideinput\" value=\"".$hmorig[$field]."\" "
                     .$gtbl->getJsAction($field).$acceptVal." ".$rdonly." ";
              if(in_array($field, $timefield) && $rdonly==''){

@@ -143,7 +143,7 @@ $base62xTag = 'b62x.';
 if(true){
 foreach($_REQUEST as $k=>$v){
     $k = trim($k);
-    if($k != '' && !inList($k, 'user,lang')){
+    if($k != '' && !inList($k, 'user,lang,userid,appdir,data,out')){
         if(preg_match("/([0-9a-z_]+)/i", $k, $matcharr)){
             $k_orig = $k = $matcharr[1];
 			if(is_string($v)){

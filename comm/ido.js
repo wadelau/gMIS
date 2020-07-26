@@ -1067,6 +1067,17 @@ function changeBGC(obj, onoff){
 	}
 }
 
+//- 10:37 2020-07-26
+function switchBgc(obj, newBgc){
+	var currBgc = obj.style.background;
+	if(currBgc != ''){
+		obj.style.background='';
+	}
+	else{ 
+		obj.style.background=newBgc;
+	}
+}
+
 //-
 function makeSelect(sId, sCont, sDiv, sSele, iStop){
 	//-- this would be called after targetObj.onblur
