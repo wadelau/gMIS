@@ -143,7 +143,7 @@ class SESSIONX {
 	
 	//-
 	public function generateVerifyId(){
-	    $letters = str_split('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz._,');
+	    $letters = str_split('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz.-_,');
 	    $llen = count($letters) - 1;
 	    $charc = 100;
 	    $verifycode = '';

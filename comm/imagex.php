@@ -44,7 +44,7 @@ if(true){
 	$textcolor = imagecolorallocate($im, rand(0,200), rand(10,200), rand(5, 200));
 	foreach($codeArr as $k=>$v){
 		$y = rand(0,intval($height/2)) + 1;
-		$fontsize = rand(4, 10);
+		$fontsize = rand(4, 14);
 		$fontspace = rand(7, 10);
 		imagestring($im, $fontsize, $startPos, $y, $v, $textcolor);
 		imagestring($im, $fontsize, $startPos+$_x[$i], $y+$_y[$i], $v, $textcolor);
@@ -54,7 +54,7 @@ if(true){
 		$i++;
 	}
 
-	$noisyline = 1;
+	$noisyline = 2;
 	for($j=0; $j<$noisyline; $j++){
 		#imageline($im, rand(1,$startPos2), rand(2, $height),  rand($startPos2, $width), rand(2, $height) , $textcolor);
 		imagearc($im, rand(4,$startPos2)+40, rand(10, $height),  rand($startPos2, $width), rand(5, $height), 50, 15 , $textcolor);
