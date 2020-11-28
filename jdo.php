@@ -232,7 +232,7 @@ else if(startsWith($act, "list")){
                 $bgcolor = "";
            }
            $out .= "<tr height=\"35px\" valign=\"middle\" bgcolor=\""
-                   .$bgcolor."\" id=\"list_tr_".(++$i)."\" onclick=\"switchBgc(this,'yellow');\">"; # rec[$gtbl->getMyId()]
+                   .$bgcolor."\" id=\"list_tr_".(++$i)."\" onclick=\"switchBgc(this,'#ffffef');\">"; # rec[$gtbl->getMyId()]
            if($hasid){
                $id = $rec[$gtbl->getMyId()]; $listid[0] = $id; # id/myid as the very first
                $out .= "<td nowrap> <input name=\"checkboxid\" type=\"checkbox\" value=\"".$id
