@@ -7,6 +7,8 @@
  	https://github.com/wadelau/Base62x
  	https://ufqi.com/dev/base62x/?_via=-naturedns
  * v0.8, 21:49 12 February 2017
+ * v0.9, imprvs with decode, Mon Mar 11 02:09:55 GMT 2019
+ * v1.0, bugfix for number conversion with base 60+, Sun Apr  7 02:22:24 BST 2019
  */
  
  'use strict';
@@ -85,42 +87,41 @@
 				var c0=0; var c1=0; var c2=0; var c3=0; var remaini=0;
 				do{
 					remaini = inputlen - i;
-					switch(remaini){
-						case 1:
-							c0 = inputArr[i] >> 2;
-							c1 = ((inputArr[i] << 6) & 0xff) >> 6;
-							if(c0 > bpos){ op[m] = xtag; op[++m] = b62x[c0]; }
-							else{ op[m] = b62x[c0]; }
-							if(c1 > bpos){ op[++m] = xtag; op[++m] = b62x[c1]; }
-							else{ op[++m] = b62x[c1];}
-							break;
-						case 2:
-							c0 = inputArr[i] >> 2;
-							c1 = (((inputArr[i] << 6) & 0xff) >> 2) | (inputArr[i+1] >> 4);
-							c2 = ((inputArr[i+1] << 4) & 0xff) >> 4;
-							if(c0 > bpos){ op[m] = xtag; op[++m] = b62x[c0]; }
-							else{ op[m] = b62x[c0]; }
-							if(c1 > bpos){ op[++m] = xtag; op[++m] = b62x[c1]; }
-							else{ op[++m] = b62x[c1];}
-							if(c2 > bpos){ op[++m] = xtag; op[++m] = b62x[c2]; }
-							else{ op[++m] = b62x[c2];}
-							i += 1;
-							break;
-						default:
-							c0 = inputArr[i] >> 2;
-							c1 = (((inputArr[i] << 6) & 0xff) >> 2) | (inputArr[i+1] >> 4);
-							c2 = (((inputArr[i+1] << 4) & 0xff) >> 2) | (inputArr[i+2] >> 6);
-							c3 = ((inputArr[i+2] << 2) & 0xff) >> 2;
-							if(c0 > bpos){ op[m] = xtag; op[++m] = b62x[c0]; }
-							else{ op[m] = b62x[c0]; }
-							if(c1 > bpos){ op[++m] = xtag; op[++m] = b62x[c1]; }
-							else{ op[++m] = b62x[c1];}
-							if(c2 > bpos){ op[++m] = xtag; op[++m] = b62x[c2]; }
-							else{ op[++m] = b62x[c2];}
-							if(c3 > bpos){ op[++m] = xtag; op[++m] = b62x[c3]; }
-							else{ op[++m] = b62x[c3];}
-							i += 2;
-					}
+                    if(remaini > 2){
+                        c0 = inputArr[i] >> 2;
+                        c1 = (((inputArr[i] << 6) & 0xff) >> 2) | (inputArr[i+1] >> 4);
+                        c2 = (((inputArr[i+1] << 4) & 0xff) >> 2) | (inputArr[i+2] >> 6);
+                        c3 = ((inputArr[i+2] << 2) & 0xff) >> 2;
+                        if(c0 > bpos){ op[m] = xtag; op[++m] = b62x[c0]; }
+                        else{ op[m] = b62x[c0]; }
+                        if(c1 > bpos){ op[++m] = xtag; op[++m] = b62x[c1]; }
+                        else{ op[++m] = b62x[c1];}
+                        if(c2 > bpos){ op[++m] = xtag; op[++m] = b62x[c2]; }
+                        else{ op[++m] = b62x[c2];}
+                        if(c3 > bpos){ op[++m] = xtag; op[++m] = b62x[c3]; }
+                        else{ op[++m] = b62x[c3];}
+                        i += 2; 
+                    }
+                    else if(remaini == 2){
+                        c0 = inputArr[i] >> 2;
+                        c1 = (((inputArr[i] << 6) & 0xff) >> 2) | (inputArr[i+1] >> 4);
+                        c2 = ((inputArr[i+1] << 4) & 0xff) >> 4;
+                        if(c0 > bpos){ op[m] = xtag; op[++m] = b62x[c0]; }
+                        else{ op[m] = b62x[c0]; }
+                        if(c1 > bpos){ op[++m] = xtag; op[++m] = b62x[c1]; }
+                        else{ op[++m] = b62x[c1];}
+                        if(c2 > bpos){ op[++m] = xtag; op[++m] = b62x[c2]; }
+                        else{ op[++m] = b62x[c2];}
+                        i += 1;
+                    }
+                    else{ // ==1
+                        c0 = inputArr[i] >> 2;
+                        c1 = ((inputArr[i] << 6) & 0xff) >> 6;
+                        if(c0 > bpos){ op[m] = xtag; op[++m] = b62x[c0]; }
+                        else{ op[m] = b62x[c0]; }
+                        if(c1 > bpos){ op[++m] = xtag; op[++m] = b62x[c1]; }
+                        else{ op[++m] = b62x[c1];}
+                    }
 					m++;
 				}
 				while(++i < inputlen);
@@ -194,7 +195,7 @@
 				var tmpArr = []; var tmprtn = {};
 				var bint = {1:1, 2:2, 3:3};
 				var remaini = 0;
-				var rki = 0;
+				var rki = 0; var j = 0;
 				for(var rk in rb62x){ // for char and its ascii value as key
 					rki = rk.charCodeAt();
 					rb62x[rki] = rb62x[rk];
@@ -206,46 +207,32 @@
 				do{
 					tmpArr = [];
 					remaini = inputlen - i;
-					switch(remaini){
-						case 1:
-							console.log('static decode: illegal base62x input:['+inputArr[i]+']. 1702122106.');
-							break;
-						case 2:
-							if(inputArr[i] == ixtag){ tmpArr[0] = bpos + bint[inputArr[++i]]; }
-							else{ tmpArr[0] = rb62x[inputArr[i]]; }
-							if(inputArr[++i] == ixtag){ tmpArr[1] = bpos + bint[inputArr[++i]]; }
-							else{ tmpArr[1] = rb62x[inputArr[i]]; }
-							tmprtn = this.decodeByLength(tmpArr, op, m);
-							op = tmprtn[0];
-							m = tmprtn[1];
-							break;
-						case 3:
-							if(inputArr[i] == ixtag){ tmpArr[0] = bpos + bint[inputArr[++i]]; }
-							else{ tmpArr[0] = rb62x[inputArr[i]]; }
-							if(inputArr[++i] == ixtag){ tmpArr[1] = bpos + bint[inputArr[++i]]; }
-							else{ tmpArr[1] = rb62x[inputArr[i]]; }
-							if(inputArr[++i] == ixtag){ tmpArr[2] = bpos + bint[inputArr[++i]]; }
-							else{ tmpArr[2] = rb62x[inputArr[i]]; }
-							tmprtn = this.decodeByLength(tmpArr, op, m);
-							op = tmprtn[0];
-							m = tmprtn[1];
-							break;
-						default:
-							if(inputArr[i] == ixtag){ tmpArr[0] = bpos + bint[inputArr[++i]]; }
-							else{ tmpArr[0] = rb62x[inputArr[i]]; }
-							if(inputArr[++i] == ixtag){ tmpArr[1] = bpos + bint[inputArr[++i]]; }
-							else{ tmpArr[1] = rb62x[inputArr[i]]; }
-							if(inputArr[++i] == ixtag){ tmpArr[2] = bpos + bint[inputArr[++i]]; }
-							else{ tmpArr[2] = rb62x[inputArr[i]]; }
-							if(inputArr[++i] == ixtag){ tmpArr[3] = bpos + bint[inputArr[++i]]; }
-							else{ tmpArr[3] = rb62x[inputArr[i]]; }
-							tmprtn = this.decodeByLength(tmpArr, op, m);
-							op = tmprtn[0];
-							m = tmprtn[1];
-					}
+                    if(remaini > 1){
+                        j = 0;
+                        do{
+							if(inputArr[i] == ixtag){
+                                i++;
+                                tmpArr[j] = bpos + bint[inputArr[i]]; 
+                            }
+							else{
+                                tmpArr[j] = rb62x[inputArr[i]];
+                            }
+							i++; j++;
+                        }
+                        while(j < 4 && i < inputlen);
+
+					    tmprtn = this.decodeByLength(tmpArr, op, m);
+						op = tmprtn[0];
+						m = tmprtn[1]; //- deprecated.
+                    }
+                    else{
+                        console.log('static decode: illegal base62x input:['+inputArr[i]+']. 1702122106.');
+                        i++;
+                        continue;
+                    }
 					m++;
 				}
-				while(++i < inputlen);
+				while(i < inputlen);
 				//console.log('static dec: op:['+op+'] asctype:['+asctype+'] inputArr:['+inputArr+'] tmpstr:['+tmpstr+']');
 				rtn = this.toUTF16Array(op).join(''); //String.fromCharCode.apply(null, new Uint8Array(op));
 			}
@@ -302,7 +289,8 @@
 			'ascidx': [],
 			'ascrlist': [],
 			'max_safe_base': 36,
-			'ver': 0.8,
+			'ver': 1.0,
+            'base59': 59,
 		 };
 		 var gotV = false;
 		 //- runtime
@@ -406,7 +394,7 @@
 		 var rtn = 0;
 		 var obase = 10; var xtag = this.get('xtag');
 		 var bpos = this.get('bpos'); var max_safe_base = this.get('max_safe_base');
-		 var xpos = this.get('xpos');
+		 var xpos = this.get('xpos'); var base59 = this.get('base59');
 		 if(ibase < 2 || ibase > xpos){
 			console.log('static xx2dec: illegal ibase:['+ibase+']');
 		 }
@@ -414,12 +402,17 @@
 			 rtn = parseInt(input+'', ibase|0).toString(obase|0); //http://locutus.io/php/math/base_convert/
 		 }
 		 else{
+             var isBase62x = false;
+             if(ibase > base59 && ibase < xpos){
+                rb62x['x'] = 59; rb62x['y'] = 60; rb62x['z'] = 61;
+             }
+             else if(ibase == xpos){ isBase62x = true; }
 			 var iArr = input.split('');
 			 var aLen = iArr.length;
 			 var xnum = 0; var tmpi = 0;
 			 iArr.reverse();
 			 for(var i=0; i<aLen; i++){
-				 if(iArr[i+1] == xtag){
+				 if(isBase62x && iArr[i+1] == xtag){
 					 tmpi = bpos + rb62x[iArr[i]];
 					 xnum++;
 					 i++;
@@ -442,6 +435,7 @@
 		 var ibase = 10; var xtag = this.get('xtag');
 		 var bpos = this.get('bpos'); var max_safe_base = this.get('max_safe_base');
 		 var xpos = this.get('xpos'); var num_input_orig = num_input;
+         var base59 = this.get('base59');
 		 if(obase < 2 || obase > xpos){
 			console.log('static xx2dec: illegal ibase:['+ibase+']');
 		 }
@@ -449,12 +443,21 @@
 			 rtn = parseInt(num_input+'', ibase|0).toString(obase|0); 
 		 }
 		 else{
+             var isBase62x = false;
+             if(obase > base59 && obase < xpos){
+                b62x[59] = 'x'; b62x[60] = 'y'; b62x[61] = 'z';
+             }
+             else if(obase == xpos){
+                isBase62x = true;
+             }
+             var maxPos = bpos;
+             if(!isBase62x){ maxPos = bpos + 1; }
 			 var i = 0; var b = 0;
 			 var oArr = [];
 			 while(num_input >= obase){
 				 b = num_input % obase;
 				 num_input = Math.floor(num_input/obase);
-				 if(b <= bpos){
+				 if(b <= maxPos){
 					 oArr[i++] = b62x[b];
 				 }
 				 else{
@@ -463,7 +466,7 @@
 				 }
 			 }
 			 b = num_input;
-			 if(b <= bpos){
+			 if(b <= maxPos){
 				 oArr[i++] = b62x[b];
 			 }
 			 else{
