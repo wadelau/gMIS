@@ -42,6 +42,7 @@ else{
     ini_set('error_reporting', E_ERROR | E_PARSE);
     ini_set("display_errors", 0);
 }
+header("X-Frame-Options: sameorigin"); //- 10:11 2020-12-25
 
 require_once($appdir."/class/user.class.php");
 require_once($appdir."/comm/tools.function.php");

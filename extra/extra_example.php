@@ -4,10 +4,7 @@
 #
 
 require("../comm/header.inc.php");
-
-
-$gtbl = new GTbl($tbl, array(), $elementsep);
-
+//$gtbl = new GTbl($tbl, array(), $elementsep);
 include("../comm/tblconf.php");
 
 # main actions

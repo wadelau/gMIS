@@ -5,8 +5,17 @@
 
 $levelcode = Wht::get($_REQUEST, 'levelcode');
 if($levelcode == ''){ $levelcode = Wht::get($_REQUEST, 'navidir'); } # by Wadelau, Jan 27, 2018
+$theGtbl = $gtbl; //- 12:31 2020-12-25
+if(true){
+	$mainDb = GConf::get('maindb');
+	if($db != $mainDb){
+		$hmconf[0]['db'] = $mainDb;
+		$theGtbl = new GTbl($tbl, $hmconf[0], $elementsep, $tblrotate);
+		//debug('comm/modulepat: gtbl re-init.');
+	}
+}
 if($levelcode == ''){
-    $hm = $gtbl->execBy("select levelcode, linkname, modulename from ".$_CONFIG['tblpre']
+    $hm = $theGtbl->execBy("select levelcode, linkname, modulename from ".$_CONFIG['tblpre']
             ."info_menulist where modulename in ('".str_replace($_CONFIG['tblpre'],"",$tbl)."', '".$tbl."')",
             null,
             $withCache=array('key'=>'info_menulist-select-'.$tbl));
@@ -20,7 +29,7 @@ if($levelcode != ''){
     $codelist = substr($levelcode,0,2)."','".substr($levelcode,0,4)."','".substr($levelcode,0,6)."','"
             .substr($levelcode,0,8).substr($levelcode,0,10).substr($levelcode,0,12)
 			.substr($levelcode,0,14); # max 7 levels allowed; # max 4 levels allowed
-    $hm = $gtbl->execBy("select levelcode, linkname, modulename, thedb from "
+    $hm = $theGtbl->execBy("select levelcode, linkname, modulename, thedb from "
             .$_CONFIG['tblpre']."info_menulist where levelcode in ('"
             .$codelist."') order by levelcode", null,
             $withCache=array('key'=>'info_menulist-select-level-'.$codelist));
@@ -46,6 +55,6 @@ $module_path = $module_path == '' ? '<a href="'.$url.'&navidir=99">'.$lang->get(
 if($lastLinkName != $tit){ $module_path .= "&nbsp;|&nbsp;".($tit==''?$lastLinkName:$tit); }
 $module_path = "<b> &Pi; <a href=\"".$url."\">".$lang->get('navi_homepage')."</a> "
         ."<span class=\"f17px\">&rarr;</span> ".$module_path." ".($db==''?'':'@ '.$db)." "
-	.($tblrotate=='' ? '' : $gtbl->getTblRotateName($tblrotate))."</b> ";
+	.($tblrotate=='' ? '' : $theGtbl->getTblRotateName($tblrotate))."</b> ";
 
 ?>
