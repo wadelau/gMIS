@@ -201,8 +201,13 @@ class WebApp implements WebAppInterface{
 			foreach($fieldarr as $k => $v){
 				$v = trim($v);
 				if($v == "updatetime" || $v == 'inserttime' || $v == 'createtime'){
-					$sql .= $v."=NOW(), ";
-					unset($this->hmf[$v]);
+					if(!isset($this->hmf[$v])){
+						$sql .= $v."=NOW(), ";
+						#unset($this->hmf[$v]);
+					}
+					else{
+						$sql .= $v."=?, ";
+					}
 				}
 				else{
 					$sql .= $v."=?, ";

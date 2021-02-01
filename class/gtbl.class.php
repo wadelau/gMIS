@@ -286,8 +286,7 @@ class GTbl extends WebApp{
         return $tmpstr = ($tmpstr==''|| $tmpstr < $default)?$default:$tmpstr;
     }
 
-    public function getFieldList()
-    {
+    public function getFieldList(){
         return $this->hmfield;
     }
 
@@ -436,7 +435,13 @@ class GTbl extends WebApp{
                     }
                     $tUrl .= "&";
                 }
-                $tUrl = $file."?".substr($tUrl, 0, strlen($tUrl)-1);
+                #$tUrl = $file."?".substr($tUrl, 0, strlen($tUrl)-1);
+				if(inString('?', $file)){
+					$tUrl = $file."&".substr($tUrl, 0, strlen($tUrl)-1);
+				}
+				else{
+					$tUrl = $file."?".substr($tUrl, 0, strlen($tUrl)-1);
+				}
 				$tUrl = $this->appendSid($tUrl);
                 $fourthPara = $vArr[3];
                 if($fourthPara != ''){
@@ -854,7 +859,13 @@ class GTbl extends WebApp{
                     }
                     $tUrl .= "&";
                 }
-                $tUrl = $file."?".substr($tUrl, 0, strlen($tUrl)-1);
+                #$tUrl = $file."?".substr($tUrl, 0, strlen($tUrl)-1);
+				if(inString('?', $file)){
+					$tUrl = $file."&".substr($tUrl, 0, strlen($tUrl)-1);
+				}
+				else{
+					$tUrl = $file."?".substr($tUrl, 0, strlen($tUrl)-1);
+				}
 				$tUrl = $this->appendSid($tUrl);
                 $fourthPara = $vArr[3];
                 if($fourthPara != ''){
@@ -1236,6 +1247,7 @@ class GTbl extends WebApp{
 	public function appendSid($url){
 	    // return $url
 	    $sidstr = self::SID.'='.$_REQUEST[self::SID];
+		$hasAppended = false;
 	    if(inString('?sid=', $url) || inString('&sid=', $url)){
 	        # good
 	    }
@@ -1266,13 +1278,14 @@ class GTbl extends WebApp{
 	                    $url .= '?'.$sidstr;
 	                }
 	            }
+				$hasAppended = true;
 	        }
 	    }
 		//- append &db=
 		if(inString('&db=', $url)){
 			# goood
 		}
-		else{
+		else if($hasAppended){
 			$url .= "&db=".$this->db;
 		}
 	    return $url;

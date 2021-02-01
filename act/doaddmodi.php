@@ -80,7 +80,7 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
     }
 	else if(in_array($field,$timefield)){
 		$fieldv = '';
-        if($gtbl->getId() == ''){
+        if($id=='' || $id=='0'){
             # insert
             if(inList($field, 'inserttime,insertime,insertd,created,starttime,dinserttime')){ # see comm/tblconf.php
                 $fieldv = date("Y-m-d H:i:s", time()); # 'NOW()';

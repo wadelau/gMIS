@@ -102,14 +102,12 @@ function sendMail($to,$subject,$body, $from='', $local=0){
     return $rtnarr;
 }
 
-function startsWith($haystack, $needle)
-{
+function startsWith($haystack, $needle){
     $length = strlen($needle);
     return (substr($haystack, 0, $length) === $needle);
 }
 
-function endsWith($haystack, $needle)
-{
+function endsWith($haystack, $needle){
     $length = strlen($needle);
     $start  = $length * -1; //negative
     return (substr($haystack, $start) === $needle);
@@ -292,7 +290,7 @@ function isImg($file, $fieldName=null){
 	$isimg = 0;
 	if($file != ''){
 		$tmpfileext = strtolower(substr($file, strlen($file)-4));
-		if(in_array($tmpfileext,array("jpeg",".jpg",".png",".gif",".bmp",".webp"))){
+		if(in_array($tmpfileext,array("jpeg",".jpg",".png",".gif",".bmp","webp"))){
 			$isimg = 1;
 		}
 	}
