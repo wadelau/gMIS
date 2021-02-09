@@ -78,6 +78,9 @@ else if($act == 'dosignin'){
                 $nexturl = $rtvdir."/";
             }
             $nexturl .= inString('?', $nexturl) ? '&' : '?';
+			if(inString('sid=', $nexturl)){
+				$nexturl = str_replace('sid=', 'osid=', $nexturl);
+			}
             $nexturl .= SID."=".$sid;
             $issucc = true;
         }
