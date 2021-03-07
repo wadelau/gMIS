@@ -59,7 +59,7 @@ class MYSQLIX {
 					$this->m_password, $this->m_name, $this->m_port);           
 
 			if(Gconf::get('db_enable_utf8_affirm')){
-				$this->query("SET NAMES 'utf8'", null, null);
+				$this->query("SET NAMES 'utf8mb4'", null, null);
 			}
 		}
 		if($this->m_link->connect_errno > 0){

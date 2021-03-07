@@ -54,8 +54,15 @@ function securityFileCheck($fv){
 	return $rtn;
 }
 
-//- real processing..
+//- safe checking
+if(strtoupper($_SERVER['REQUEST_METHOD']) != 'POST' ){
+	$tmpErr = "Error with REQUEST_METHOD:[".$_SERVER['REQUEST_METHOD']."]. POST needed. 202102251636.";
+	$out .= " ".$tmpErr;
+	debug("act/doaddmodi: ".$tmpErr);
+	exit(1);
+}
 
+//- real processing..
 if($id != ''){
     $gtbl->setId($id); # speical field
 }
