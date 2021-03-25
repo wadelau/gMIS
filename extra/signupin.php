@@ -65,8 +65,9 @@ else if($act == 'dosignin'){
             }
             # issue a valid ticket for this session
             # based on user, time, ip, browser and so on.
-            $ckirtn = setcookie($ckiname=$user->get('sid_tag'), $ckivalue=$sid,
-				time()+60*60*24, '/'); # 24 hrs, full site;
+            $ckirtn = setcookie($ckiname=$user->get('sid_tag'), $ckivalue=$sid, time()+60*60*24, '/'); # 24 hrs, full site;
+			# cache valid sid, 11:56 2021-03-24
+			$user->setSidToken($userid, $sid);
             $result .= '<br/><br/>很好! 登录成功！ 欢迎回来, '.$user->getEmail()." !";
 			$bkl = Base62x::decode($_REQUEST['bkl']);
             if($bkl != ''){

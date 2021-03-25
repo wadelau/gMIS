@@ -96,6 +96,7 @@ if(true){
      *  3) retrieve workspace id in each request after userid, comm/header
      *  4) apply the workspace id to specify maindb, comm/header
      */
+	$conf['single_sid_multiple_ip'] = false; # lower security higher convenience if true, otherwise. 13:12 2021-03-23
 
 	# set them all
 	GConf::setConf($conf);

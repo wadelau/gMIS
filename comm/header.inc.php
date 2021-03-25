@@ -83,17 +83,22 @@ if(true){
 		if(!isset($_REQUEST['lang'])){ $_REQUEST['lang'] = $tmpArr[1]; }
 	}
 }
-$userid = $user->getUserBySession($_REQUEST);
-
+# user
+$isLogin = false; 
+if(strpos($_SERVER['PHP_SELF'],'signupin.php') > 0){ $isLogin = true; }
+if(!$isLogin){
+	$userid = $user->getUserBySession($_REQUEST);
+}
 //- @todo: workspace id, see inc/config
-//
 if($userid != ''){
     $user->setId($userid);
 }
-else if(strpos($_SERVER['PHP_SELF'],'signupin.php') === false
-	&& strpos($_SERVER['PHP_SELF'],'readtblfield.php') === false){// ?
+else if(!$isLogin){
     header("Location: ".$rtvdir."/extra/signupin.php?act=signin&bkl=".Base62x::encode($thisUrl));
 	exit(0);
+}
+else{
+	//debug("comm/header: empty userid, to signupin. what next? thisUrl:$thisUrl ");
 }
 # language
 $ilang = "zh"; 

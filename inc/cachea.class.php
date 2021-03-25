@@ -18,6 +18,8 @@ class CacheA {
 
 	var $conf = null; 
 	var $cacheconn = null;
+	var $sanitizeKeys = true; # clean format for short keys, need Base62x if true, 21:11 2021-03-23
+	const Max_Plain_Key_Length = 32;
 	
  	//- construct
 	function __construct($cacheConf = null){
@@ -60,9 +62,18 @@ class CacheA {
 		
 	}
 	
-	# shorten key
+	# shorten key, with sanitizeKeys, 21:17 2021-03-23
 	private function _md5k($k){
-		return strlen($k)>32 ? md5($k) : $k;
+		if(strlen($k) > self::Max_Plain_Key_Length){
+			$k = md5($k);
+		}
+		else{
+			if($this->sanitizeKeys){
+				$k = Base62x::encode($k);
+			}
+			//- leave it as plain text
+		}
+		return  $k;
 	}
  	
 	//-

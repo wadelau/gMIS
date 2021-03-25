@@ -353,16 +353,85 @@ class User extends WebApp{
         $uid = '';
         $chk = $this->session->chkSid($this, $reqt);
         if($chk){
+			# valid
             $data = $this->session->getData();
             $uid = $data;
         }
         else{
-            # no valid
-            debug(__FILE__.": unkn session:[".$sid."]");
+            # invalid, try with cache,14:12 2021-03-24
+			$data = $this->session->getData();
+			$tmpUid = $data;
+			$sidList = $this->getSidToken($tmpUid);
+			$testSid = $sid;
+			if(isset($reqt['sid'])){ $testSid = Wht::get($reqt, 'sid'); }
+			if(in_array($testSid, $sidList)){
+				debug(__FILE__.": unkn session:[".$sid."], but succ with sidList:".serialize($sidList));
+				$uid = $tmpUid;
+			}
+            else{
+				debug(__FILE__.": unkn session:[".$sid."], again failed with sidList:".serialize($sidList)." ip:".Wht::getIp());
+			}
         }
         #debug(__FILE__.": get uid:[$uid]");
         return $uid;
     }
+	
+	//- get sid ot token cached for varying ips. 12:00 2021-03-24
+	public function getSidToken($userId=0){
+		$myId = $userId;
+		$userId = $userId==0 ? $this->getId() : $userId;
+		$sidList = array();
+		$hmResult = $this->getBy("cache:", null, $withCache=array('key'=>self::User_SidToken_Cache_Key.$userId));
+		debug("mod/User: gMIS/getSidToken: userId:$userId sidList:".serialize($sidList));
+		$sidStr = '';
+		if($hmResult[0]){
+			$sidStr = $hmResult[1];
+			if($sidStr != ''){
+				$sidList = explode(',', $sidStr);
+			}
+		}
+		return $sidList;
+	}
+	//-
+	public function setSidToken($userId, $sidToken){
+		$isSucc = false;
+		if($userId=='' || $userId=='0'){ 
+			$userId = $this->getId(); 
+			$userId = $userId=='' ? 0 : $userId; 
+		}
+		$hmResult = $this->getBy('cache:', null, $withCache=array('key'=>self::User_SidToken_Cache_Key.$userId));
+		$sidCacheStr = '';
+		if($hmResult[0]){
+			$sidCacheStr = $hmResult[1];
+		}
+		$hasChanged = false;
+		if($sidCacheStr == ''){
+			$sidCacheStr = $sidToken; $hasChanged = true;
+		}
+		else{
+			if(strpos($sidCacheStr, $sidToken) < 0){
+				$sidCacheStr .= ','.$sidToken; $hasChanged = true;
+			}
+		}
+		if($hasChanged){
+			$cacheArgs = array('key'=>self::User_SidToken_Cache_Key.$userId);
+			$cacheArgs['value'] = $sidCacheStr;
+			$tmpExpire = $_CONFIG['cacheexpire'];
+			$cacheArgs['expire'] = $tmpExpire * 40; # 120 mins? 
+			$hmResult = $this->setBy('cache:', null, $cacheArgs);
+			if($hmResult[0]){
+				$isSucc = true;
+				//debug("mod/User gMIS: setSidToken succ. sidToken:$sidToken userId:$userId");
+			}
+			else{
+				debug("mod/User gMIS: setSidToken failed. sidToken:$sidToken userId:$userId hmResult:".serialize($hmResult));
+			}
+		}
+		else{
+			$isSucc = true;
+		}
+		return $isSucc;
+	}
     
     //-
     public function getSid($reqt){

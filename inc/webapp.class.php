@@ -37,6 +37,8 @@ class WebApp implements WebAppInterface{
 	var $http_enable_gzip = false;
 	var $GWA2_Runtime_Env_List = null;
 	var $hmfieldinfo = array(); #  container for table structure, -gMIS only,
+	private $timeFieldArr = array('inserttime', 'createtime', 'savetime',
+		        'modifytime', 'edittime', 'updatetime');
 
 	var $myId = 'id'; # field name 'id', in case that it can be renamed as nameid, name_id, nameId, nameID, ID, iD, Id, and so on, by wadelau@ufqi.com Mon May  9 13:34:45 CST 2016
 	
@@ -176,21 +178,25 @@ class WebApp implements WebAppInterface{
 		return $this->get($this->myId);
 	}
 
-/* 
+	/* 
 	 * mandatory return $hm = (0 => true|false, 1 => string|array);
 	 * Thu Jul 21 11:31:47 UTC 2011, wadelau@gmail.com
 	 * update by extending to writeObject by wadelau, Sat May  7 11:06:37 CST 2016
+	 * # fieldname should precede with a space, e.g. "where a>?&& b < ?"
 	 */
-	function setBy($fields, $conditions){
-		if(strpos($fields, ':') !== false){ # write to  file: or http(s):
-			$hm = $this->writeObject($type=$fields, $args=$conditions);
+	function setBy($fields, $conditions, $withCache=null){
+		$hm = array();
+		if(strpos($fields, ':') !== false){ # write to  file: or http(s): or cache
+			$args = $conditions;
+			if(!is_array($args) && $withCache != null){ $args = $withCache; }
+			$hm = $this->writeObject($type=$fields, $args);
 		}
 		else{
 			# write to db
 			$sql = "";
-			$hm = array();
 			$isupdate = 0; $tmpId = $this->getId();
-			if($tmpId == '' || $tmpId == '0'){
+			if(($tmpId == '' || $tmpId == '0') 
+					&& ($conditions == null || $conditions == '')){
 				$sql = "insert into ".$this->getTbl()." set ";
 			}
 			else{
@@ -200,7 +206,7 @@ class WebApp implements WebAppInterface{
 			$fieldarr = explode(",",$fields);
 			foreach($fieldarr as $k => $v){
 				$v = trim($v);
-				if($v == "updatetime" || $v == 'inserttime' || $v == 'createtime'){
+				if(in_array($v, $this->timeFieldArr) && !isset($this->hmf[$v])){
 					if(!isset($this->hmf[$v])){
 						$sql .= $v."=NOW(), ";
 						#unset($this->hmf[$v]);
@@ -220,7 +226,7 @@ class WebApp implements WebAppInterface{
 					$sql .= " where ".$this->myId."=?";
 				}
 				else if($isupdate == 1){
-					error_log("/inc/webapp.class.php: setBy: unconditonal update is forbidden.");
+					debug("/inc/webapp.class.php: setBy: unconditonal update is forbidden.");
 					$issqlready = 0;
 					$hm[0] = false;
 					$hm[1] = array("error"=>"unconditonal update is forbidden.");
@@ -229,19 +235,19 @@ class WebApp implements WebAppInterface{
 			else{
 				$sql .= " where ".$conditions;
 			}
-            #debug("webapp::setBy: ".$sql);
 			if($issqlready == 1){
 				if($this->getId() != ""){ $this->hmf["pagesize"] = 1; } # single record
 				$hm = $this->dba->update($sql, $this->hmf);
+				$hm[]['isupdate'] = $isupdate;
+				//- rm old cache when updt succ, 14:37 2020-08-21
+				$args = $conditions;
+				if(!is_array($args) && $withCache != null){ $args = $withCache; }
+				if(is_array($args) && $hm[0]){
+					$this->rmBy("cache:"+$args['key']);
+				}
 			}
-            else{
-                debug(__FILE__.": sql:[$sql] not ready. hmf:[".$this->toString($this->hmf)."]");
-            }
-            #debug("webapp::setBy: result: ".$this->toString($hm));
 		}
-
 		return $hm;
-
 	}
 
 	/* 
@@ -384,24 +390,36 @@ class WebApp implements WebAppInterface{
 	function rmBy($conditions=null){
 		$hm = array();
 		$issqlready = 0;
-		$sql = "delete from ".$this->getTbl()." where ";
+		$sql = "delete from ".$this->getTbl()." ";
 		if($conditions == null || $conditions == ""){
 			if($this->getId() != ""){
-				$sql .= $this->myId."=?";
+				$sql .= " where ".$this->myId."=?";
 				$issqlready = 1;
 			}
 			else{
-				print "unconditional deletion is strictly forbidden. stop it. sql:[".$sql."] conditions:[".$conditions."]";
+				debug("unconditional deletion is strictly forbidden. stop it. sql:["
+				        .$sql."] conditions:[".$conditions."]");
 				$hm[0] = false;
 				$hm[1] = array("error"=>"unconditional deletion is strictly forbidden.");
 			}
 		}
 		else{
-			$sql .= $conditions;
-			$issqlready = 1;
+			$isRmCache = false;
+			if(strpos($conditions, 'cache:') > -1){ $isRmCache = true; }
+			if($isRmCache){
+				//- rm cache when updt, xenxin@ufqi.com, 12:05 2020-08-20
+				//- args=cache:keyString
+				$hm = $this->writeObject("cache:", array("key"=>substr($conditions, 6))); // rm cache without value as key.
+			}
+			else{
+				if(stripos($conditions, 'where ') === false){
+					$sql .= " where ";
+				}
+				$sql .= $conditions;
+				$issqlready = 1;
+			}
 		}
-		$this->hmf['hmfieldinfo'] = $this->hmfieldinfo;
-		debug(" rmBy: sql:[".$sql."] hmf:[".serialize($this->hmf)."] [1201241223].\n");
+		#debug(": rmBy: sql:[".$sql."] hmf:[".serialize($this->hmf)."] [1201241223].\n");
 		if($issqlready == 1){
 			$hm = $this->dba->update($sql, $this->hmf);
 		}

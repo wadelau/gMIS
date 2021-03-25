@@ -135,6 +135,7 @@ class SESSIONX {
 	       }
 	       else{
 	           # invalid
+			   $this->plaindata = $params; # for 2rd round validattion, 12:05 2021-03-23
 	           debug(__FILE__.": unmatched md5:[$md5sum] md5-2:[$md5sum2]");
 	       }
 	    }
