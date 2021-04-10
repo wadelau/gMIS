@@ -331,7 +331,7 @@ else if(startsWith($act, "list")){
                    $out .= "<td> ".$fhref;
 				   $isimg = isImg($rec[$field], $field);
                    if($isimg){
-                       $out .= "<img src=\"img/st.png\" style=\"max-width:99%; max-height:99%\" onload=\"javascript:"
+                       $out .= "<img src=\"img/st.png\" class=\"listImg\"  onload=\"javascript:"
                                ."parent.imageLoadAsync(this.id, '".$rec[$field]."');\" id=\"img_".$field."_list_".$rec[$gtbl->getMyId()]."\" alt=\"img-x\"/>";
 
                    }else{

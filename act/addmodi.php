@@ -9,8 +9,8 @@ if($_REQUEST['otbl'] != ''){
     $colsPerRow = 2;
 }
 
-$out .= "<fieldset style=\"border-color:#5f8ac5;border: 1px solid #5f8ac5;\"><legend><h4>".$lang->get("func_create")."/"
-		.$lang->get("func_edit")."</h4>"
+$out .= "<fieldset style=\"border-color:#5f8ac5;border: 1px solid #5f8ac5;\"><legend><h4> ".$lang->get("func_create")."/"
+		.$lang->get("func_edit").($hasid?" ".$id:"")." </h4>"
         ."</legend><form id=\"".$formid."\" name=\"".$formid."\" method=\"post\" action=\""
         .$jdo."&act=list-addform\" ".$gtbl->getJsActionTbl()." data-formid=\"$formid\" "
 		." title=\"$formid\"><table align=\"center\" width=\"98%\" "
@@ -261,12 +261,13 @@ for($hmi=$min_idx; $hmi<=$max_idx;$hmi++){
         $out .= "<td nowrap style=\"vertical-align:top\"><b>".$gtbl->getCHN($field)."</b>:</td>"
 			."<td style='word-break:break-all;vertical-align:top;'><input type=\"file\" id=\"".$field
 			."\" name=\"".$field."\" size=\"20\" class=\"noneinput wideinput\" ".$gtbl->getJsAction($field)
-			." /> <input type=\"hidden\" name=\"".$field."_orig\" value=\"".$fieldv."\" /> <br/> "
-			.($fieldv==''?'':$fieldv)." ".$gtbl->getMemo($field)."</td>";
-			$out .="<td colspan='4'> ".($isimg==1?"<img src=\"".$fieldv."\" alt=\"-x-\" width=\"118px\" /><br/>"
-			.$fieldv:"")." <script>document.getElementById('"
-			.$formid."').enctype='multipart/form-data';</script>  </td></tr><tr>";
-	    $opentr = 1;
+			." /> <input type=\"hidden\" name=\"".$field."_orig\" value=\"".$fieldv."\" />"
+			." <input type=\"text\" name=\"".$field."_onlinesrc\" value=\"\" placeholder=\"".$lang->get("form_file_online_src")."\"/> <br/> "
+			.($fieldv==''?'':$fieldv)." ".$gtbl->getMemo($field)." ";
+			$out .="<br/> ".($isimg==1?"<img src=\"".$fieldv."\" alt=\"-x-\" width=\"118px\" />"
+			:"")." <script>document.getElementById('"
+			.$formid."').enctype='multipart/form-data';</script>  </td>";
+	    #$opentr = 1;
 
     }else if($gtbl->getExtraInput($field, $hmorig) != ''){
 

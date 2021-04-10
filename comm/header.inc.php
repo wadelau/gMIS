@@ -243,7 +243,7 @@ if($isoput){
             $welcomemsg .= $lang->get('welcome').", ";
             $welcomemsg .= "<a href='".$rtvdir."/ido.php?tbl=info_usertbl&id=".$userid
                 ."&act=view' class='whitelink'>";
-            $welcomemsg .= $user->getEmail()."</a> !</b>&nbsp; ";
+            $welcomemsg .= $user->getEmail()." $userid</a> !</b>&nbsp; ";
             $welcomemsg .= "<a href=\"".$rtvdir."/extra/signupin.php?act=resetpwd&userid="
                     .$userid."\" class='whitelink'>".$lang->get('user_reset_pwd')."</a>";
             $welcomemsg .= "&nbsp;&nbsp;<select name='langselect' style='background-color:silver;'"

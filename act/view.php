@@ -8,7 +8,7 @@ if($_REQUEST['pnsktuanid'] != '' && $_REQUEST['otbl'] != ''){
 }
 
 $out .= "<fieldset style=\"border-color:#5f8ac5;border: 1px solid #5f8ac5\">"
-        ."<legend><h4>".$lang->get("func_view_detail")."</h4></legend><table align=\"center\" width=\"98%\" "
+        ."<legend><h4> ".$lang->get("func_view_detail").($hasid?" ".$id:"")." </h4></legend><table align=\"center\" width=\"98%\" "
 	." cellspacing=\"0\" cellpadding=\"6px\" border=\"0px\">";
 $out .= "<tr><td width=\"10%\">&nbsp;</td>
             <td width=\"22%\">&nbsp;</td>
@@ -57,7 +57,7 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
     $field = $gtbl->getField($hmi);
     $fieldinputtype = $gtbl->getInputType($field);
     if($field == null || $field == ''
-            ){
+        || $field == 'id' || $field == $gtbl->getMyId()){
         continue;
     }
     if($closedtr == 1){
@@ -90,10 +90,12 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
 		}
 		if($gtbl->getSingleRow($field)){ $out .= "</tr><tr>"; }
         if($isimg){
+            $tmpLeadingPrefix = '';
+			if($srcprefix == '' && !inString('//', $hmorig[$field])){ $tmpLeadingPrefix = $rtvdir; }
             $out .= "<td style=\"vertical-align:top\">".$gtbl->getCHN($field).":&nbsp;</td>"
                     ."<td class=\"tdiviewfixedwidth\" style=\"vertical-align:top\"> <a href=\""
                     .$hmorig[$field]."\" target=\"_blank\" title=\"".$lang->get("func_open_large")."\"><img src=\"".$hmorig[$field]
-                    ."\" alt=\"-x-\" style=\"width:118px\"/></a><br/>".($srcprefix==''?$rtvdir."/":'')
+                    ."\" alt=\"-x-\" style=\"width:118px\"/></a><br/>".($tmpLeadingPrefix)
                     .$hmorig[$field]." </td>";
         }
 		else{
@@ -151,10 +153,8 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
                     .$field."\" rows=\"11\" cols=\"35\"  class=\"search\">".$hmorig[$field]."</textarea> <br/> "
                     .$gtbl->getMemo($field)." </td>";
         }
-
     }
 	else{
-
 		$tmpval = $hmorig[$field];
 		if(strpos($tmpval, '<') !== false){
 			$tmpval = str_replace('<', '&lt;', $tmpval);

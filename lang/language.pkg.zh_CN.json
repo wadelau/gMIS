@@ -82,6 +82,7 @@
 
 	"form_submit":"递交",
 	"form_state_list": "1:正常|0:停用|2:其他2|3:其他3",
+	"form_file_online_src":"在线地址",
 
 	"user_sign_in":"登录",	
 	"user_sign_in_resp":"登录消息",	

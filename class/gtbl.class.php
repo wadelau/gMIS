@@ -409,12 +409,15 @@ class GTbl extends WebApp{
 			}
 			else{
                 $file = $vArr[0];
+                /*
                 if($file == 'THIS'){
                     $file = $result[$field];
                 }
     			else if(strpos($file, 'THIS') !== false){
     				$file = str_replace('THIS',$result[$field], $file); # <href>http://THIS::a=1::跳转登录::blank=1</href>
     			}
+				*/
+				$file = $this->fillThis($file, $field);
                 $pArr = explode(",", $vArr[1]);
                 $title = $vArr[2];
 				$title = $this->fillThis($title, $field);
@@ -823,6 +826,9 @@ class GTbl extends WebApp{
         $tUrl = "";
         $title = ""; $needJsConfirm = 0; $needBlank = 0;
         if($tmpstr != ""){ # see xml/info_usertbl.xml
+			if($result != null){
+				$this->set($this->resultset, $result);
+			}
             $vArr = explode("::", $tmpstr);
 			if(startsWith($vArr[0], "javascript:")){
 				$tUrl = $vArr[0];
@@ -833,12 +839,15 @@ class GTbl extends WebApp{
 			}
 			else{
                 $file = $vArr[0];
+                /*
                 if($file == 'THIS'){
                     $file = $result[$field];
                 }
     			else if(strpos($file, 'THIS') !== false){
     				$file = str_replace('THIS',$result[$field], $file); # <href>http://THIS::a=1::跳转登录::blank=1</href>
     			}
+				*/
+				$file = $this->fillThis($file, $field);
                 $pArr = explode(",", $vArr[1]);
                 $title = $vArr[2];
 				$title = $this->fillThis($title, $field);

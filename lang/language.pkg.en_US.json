@@ -82,6 +82,7 @@
 
 	"form_submit":"Submit",
 	"form_state_list": "1:Ready|0:Stopped|2:Other2|3:Other3",
+	"form_file_online_src":"Online Url",
 
 	"user_sign_in":"Sign In",	
 	"user_sign_in_resp":"Sign In Results",	

@@ -289,9 +289,18 @@ function redirect($url, $time=0, $msg='') {
 function isImg($file, $fieldName=null){
 	$isimg = 0;
 	if($file != ''){
+		$imgFileTagList = array("jpeg",".jpg",".png",".gif",".bmp","webp");
 		$tmpfileext = strtolower(substr($file, strlen($file)-4));
-		if(in_array($tmpfileext,array("jpeg",".jpg",".png",".gif",".bmp","webp"))){
+		if(in_array($tmpfileext, $imgFileTagList)){
 			$isimg = 1;
+		}
+		if($isimg == 0){
+			foreach($imgFileTagList as $tk=>$tv){
+				if(inString($tv.'?', $file)){
+					$isimg = 1;
+					break;
+				}
+			}
 		}
 	}
 	if($isimg==0 && $fieldName!=null){

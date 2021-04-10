@@ -71,11 +71,13 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
     $field = $gtbl->getField($hmi);
     $fieldv = ''; # remedy by wadelau@ufqi.com, Wed Oct 17 12:46:16 CST 2012
 	$fieldInputType = $gtbl->getInputType($field);
+	$fieldReadOnly = strtolower($gtbl->getReadOnly($field));
     if($field == null | $field == '' 
             || $field == $gtbl->getMyId()){
         continue;
 
-    }else if(!$user->canWrite($field)){
+    }else if(!$user->canWrite($field)
+		|| $fieldReadOnly == 'readonly' || $fieldReadOnly == 'disabled'){
         $out .= "$field cannot be written.\n";
         continue;
 
@@ -137,11 +139,17 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
             $fieldv_orig = $_REQUEST[$field.'_orig'];
 			$_FILES[$field]['name'] = securityFileCheck($_FILES[$field]['name']);
 			$_FILES[$field]['tmp_name'] = securityFileCheck4Tmp($_FILES[$field]['tmp_name']);
-            if($_FILES[$field]['name'] == '' && $fieldv_orig != ''){
-				if(strpos($fieldv_orig, $shortDirName) === false){
-                    $fieldv_orig = $shortDirName."/".$fieldv_orig;
-                }
-                $fieldv = $fieldv_orig;
+            if($_FILES[$field]['name'] == ''){
+				$fileOnlineSrc = Wht::get($_REQUEST, $field.'_onlinesrc');
+				if($fileOnlineSrc != ''){
+					$fieldv = $fileOnlineSrc; # extra online src, 09:01 2021-03-28
+				}
+				else if($fieldv_orig != ''){
+					if(strpos($fieldv_orig, $shortDirName) === false){
+						$fieldv_orig = $shortDirName."/".$fieldv_orig;
+					}
+					$fieldv = $fieldv_orig;
+				}
             }
 			else if($_FILES[$field]['name'] != ''){
                 # safety check 
