@@ -12,7 +12,7 @@ var NaviMenu=function(){
 	dd.prototype.st=function(x,f){
 		var c=this.c[x], h=this.h[x], p=h.getElementsByTagName('a')[0];
 		clearInterval(c.t); 
-		//c.style.overflow='hidden'; // error when 120% view, 13:29 2021-04-08
+		c.style.overflow='hidden'; // what? error when 120% view, 13:29 2021-04-08
 		if(f){
 			p.className+=' '+a;
 			if(!c.mh){c.style.display='block'; c.style.height=''; c.mh=c.offsetHeight; c.style.height=0}

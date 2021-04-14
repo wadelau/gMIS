@@ -128,7 +128,9 @@ if(true){
 		debug("comm/header: ilang:".$lang->getTag()." welcome:".$lang->get("welcome"));
 	}
 	$data['lang']['welcome'] = $lang->get('welcome');
-	$data['lang']['agentname'] = $lang->get('lang_agentname');
+	$tmpAgent = $lang->get('lang_agentname');
+    if($tmpAgent == $lang->get('lang_agentname_orig') && $_CONFIG['agentname'] != '' ){ $tmpAgent = $_CONFIG['agentname']; }
+    $data['lang']['agentname'] = $tmpAgent;
 	$data['lang']['appchnname'] = $lang->get('lang_appchnname');
 	$data['lang']['ilang'] = $ilang;
 	//- set to cookie if necessary, @todo

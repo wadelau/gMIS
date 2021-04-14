@@ -73,7 +73,7 @@ if(true){
 	$conf['enable_filehandle_share'] = 1; # 17:31 10 November 2016
 
 	# misc
-	$conf['frontpage'] = '/';  # put # before -naturedns as #-naturedns
+	$conf['frontpage'] = '#FRONT_PAGE';  # put # before -naturedns as #-naturedns
 	$conf['is_debug'] = 1;
 	$conf['html_resp'] = '<!DOCTYPE html><html><head><title>RESP_TITLE</title></head><body>RESP_BODY</body></html>';
 	$conf['auto_save_interval'] = 20; # ref extra/htmleditor

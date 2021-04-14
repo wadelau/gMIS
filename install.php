@@ -93,7 +93,6 @@ function redirect($url, $time=0, $msg='') {
         print $hideMsg;
         exit();
     }
-
 }
 
 # check a needle in a haystack
@@ -461,8 +460,10 @@ else if($step == 'init'){
 	else if($istep == 'save'){
 		include_once($config_file);
 		# set init
-		replaceInFile($config_file, 'AGENT_NAME', $_REQUEST['agentname']);
-		replaceInFile($config_file, 'FRONT_PAGE', $_REQUEST['frontpage']);
+		replaceInFile($config_file, 'lang_agentname', $_REQUEST['agentname']);
+        $fpage = $_REQUEST['frontpage'];
+        $fpage = str_replace("/", "\\/", $fpage);
+        replaceInFile($config_file, '#FRONT_PAGE', $fpage);
 
 		# save super admin 
  		$sql = 'use '.$_CONFIG['dbname'].''; #source '.$appdir.'/gmis.tables.sql;';

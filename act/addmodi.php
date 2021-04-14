@@ -307,7 +307,7 @@ for($hmi=$min_idx; $hmi<=$max_idx;$hmi++){
 		$acceptVal = $gtbl->getAccept($field);
 		$tmpInputType = 'text';
 		if(inString('time', $field)){ $tmpInputType = 'datetime-local';}
-		else if(inString('date')){ $tmpInputType = 'date'; }
+		else if(inString('date', $field)){ $tmpInputType = 'date'; }
 		else if(inString('0', $hmfield[$field.'_default'])){ $tmpInputType = 'number'; }
 		if($gtbl->getSingleRow($field) == '1'){
             $out .= "</tr>\n<tr height=\"30px\" valign=\"middle\"  onmouseover=\"javascript:this.style.backgroundColor='"

@@ -180,7 +180,7 @@ CREATE TABLE `gmis_info_operateareatbl` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `areacode` char(16) NOT NULL DEFAULT '',
   `areaname` char(32) NOT NULL DEFAULT '',
-  `inserttime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `inserttime` datetime NOT NULL DEFAULT '1000-01-01 00:00:00',
   `operator` char(32) NOT NULL DEFAULT '',
   `istate` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`id`),

@@ -1,7 +1,7 @@
 <?php
 require("./comm/header.inc.php");
 
-$out = str_replace('TITLE', $lang->get($_CONFIG['agentname']), $out);
+$out = str_replace('TITLE', $data['lang']['agentname'], $out);
 $isgo = true;
 if($tbl == ''){
     if(true){

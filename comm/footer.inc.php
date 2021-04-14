@@ -8,8 +8,8 @@ if($isoput){
 }
 
 if($fmt == ''){ # default html
-    $data['agentname'] = $lang->get($_CONFIG['agentname']);
-    $data['appchnname'] = $lang->get($_CONFIG['appchnname']);
+    $data['agentname'] = $data['lang']['agentname'];
+    $data['appchnname'] = $lang->get('lang_appchnname');
     $data['appname'] = $_CONFIG['appname'];
     $data['front_page'] = $_CONFIG['frontpage'];
     $data['adminmail'] = $_CONFIG['adminmail'];

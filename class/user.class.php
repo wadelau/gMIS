@@ -27,7 +27,7 @@ class User extends WebApp{
     var $accessinfo = "accessinfo";
     var $accessLevel = array('deny'=>0,'read'=>1,'write'=>2,'delete'=>3);
     var $rgtArr = array('supacc'=>false,'r'=>false,'w'=>false,'d'=>false);
-    var $specifyAcc = array(); # 记录针对当前用户或者当前组的特殊权限, Sun May 13 16:42:45 CST 2012
+    var $specifyAcc = array(); # special rights, Sun May 13 16:42:45 CST 2012
     var $session = null;
 
 	//-
@@ -416,6 +416,7 @@ class User extends WebApp{
 		if($hasChanged){
 			$cacheArgs = array('key'=>self::User_SidToken_Cache_Key.$userId);
 			$cacheArgs['value'] = $sidCacheStr;
+			global $_CONFIG;
 			$tmpExpire = $_CONFIG['cacheexpire'];
 			$cacheArgs['expire'] = $tmpExpire * 40; # 120 mins? 
 			$hmResult = $this->setBy('cache:', null, $cacheArgs);
