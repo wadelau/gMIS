@@ -83,7 +83,8 @@ if(strlen($parentCode) > $dirLevelLength){
 
 $list = array();
 $sqlCondi = "1=1 order by $icode asc";
-$hm = $xdirectory->getBy("$icode, $iname", "$sqlCondi");
+$hm = $xdirectory->getBy("$icode, $iname", "$sqlCondi", 
+	$withCache=array("key"=>"xdir-$tbl-$sqlCondi"));
 if($hm[0]){
 	$hm = $hm[1];
 }

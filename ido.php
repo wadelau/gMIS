@@ -83,7 +83,7 @@ if(count($refArr) > 0){
     $maxRelatedCount = 3;
 }
 if(true){ # auto
-    $hm = $gtbl->execBy($sql="select linkname, modulename, levelcode, thedb from ".$_CONFIG['tblpre']."info_menulist "
+    $hm = $gtbl->execBy($sql="select linkname, modulename, levelcode, thedb, dynamicpara from ".$_CONFIG['tblpre']."info_menulist "
             ."where levelcode like '".substr($levelcode, 0, strlen($levelcode)-2)."__' "
             ."and levelcode<>'$levelcode' order by levelcode limit ".$maxRelatedCount, null,
             $withCache=array('key'=>'info_menulist-select-level-'.$levelcode));
@@ -95,8 +95,10 @@ if(true){ # auto
                 $tmphref = $ido."&tbl=".$v['modulename']."&db=".$v['thedb'];
             }
             else{
-                $tmphref = $url."&navidir=".$v['levelcode'];
+                $tmphref = $url;
             }
+            if($v['levelcode'] != ''){ $tmphref .= "&navidir=".$v['levelcode']; }
+            if($v['dynamicpara'] != ''){ $tmphref .= "&".$v['dynamicpara']; }
             $refArr[] = array('target'=>"window.location.href='".$tmphref."';",
                     'name'=>$v['linkname'], 'href'=>'JS');
         }

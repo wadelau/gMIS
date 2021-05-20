@@ -77,6 +77,18 @@ if($hmorig[0]){
     $hmorig = $hmorig[1][0]; 
 }
 
+# narrow down filter, Fri Apr 16 13:31:50 UTC 2021
+$navi = new PageNavi();
+$pageCondi = $navi->getCondition($gtbl, $user);
+$pageCondiVal = $pageCondi;
+for($hmi=$min_idx; $hmi<=$max_idx;$hmi++){
+    $field = $gtbl->getField($hmi);
+    if(inString($field, $pageCondi)){
+        $tmpV = $gtbl->get($field);
+        $pickup->set($field, $tmpV); $pageCondiVal .= '-'.$tmpV;
+    }
+}
+
 $closedtr = 1; $opentr = 0; # just open a tr, avoid blank line, Sun Jun 26 10:08:55 CST 2016
 $columni = 0; $my_form_cols = 4; 
 $skiptag = $_CONFIG['skiptag'];
@@ -106,7 +118,7 @@ for($hmi=$min_idx; $hmi<=$max_idx;$hmi++){
     if(true){
         $options = ""; $prtFieldType = 'string';
 		$hasHitOption = 0;
-        $optionListAll = $pickup->getOptionList($field, $fieldinputtype);
+        $optionListAll = $pickup->getOptionList($field, $fieldinputtype, $pageCondi, $pageCondiVal);
         $optionList = $optionListAll[0];
         $prtFieldType = $optionListAll[1];
         #debug("field:$field options:".serialize($optionList));

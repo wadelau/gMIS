@@ -168,6 +168,9 @@
 	"xdir_this_item_and_value": "This Value+Name",
 	"xdir_same_level": "Same Level Item",
 	"xdir_sub_level": "Sub-Level Item",
+	
+	"choose": "Choose",
+	"xtree-no-data": "If no item for selection, please add it in relative module and come back again.",
 
 	"": "",
 

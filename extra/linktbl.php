@@ -17,17 +17,23 @@ $url = mkUrl($url, $_REQUEST);
 $otbl = $_REQUEST['otbl'];
 $oid = $_REQUEST['oid'];
 $lfield = $_REQUEST['linkfield'];
-#if($oid == ''  && $otbl != $_CONFIG['maintbl']){
-if($_REQUEST['linkfieldval'] != ''){ # added on Mon Mar 19 21:09:43 CST 2012
-    
+$hmOrig = array();
+if($_REQUEST['linkfieldval'] != '' || $oid != ''){ 
+	# added on Mon Mar 19 21:09:43 CST 2012, updt Thu May  6 12:29:22 CST 2021
     $linkfv = $_REQUEST['linkfieldval'];
+    $linkfv = $linkfv=='' ? '*' : $linkfv;
     $hmconf = GTbl::xml2hash($xmlpathpre, $elementsep, $db, $otbl);
     $gtbl = new GTbl($otbl, $hmconf[0], $elementsep);
     $gtbl->setId($oid);
     $hm = $gtbl->getBy($linkfv, "id=?");
     if($hm[0]){
-        $hm = $hm[1][0];
-        $id = $hm[$linkfv];
+        $hm = $hm[1][0]; $hmOrig = $hm;
+        if($linkfv=='*'){
+        	$id = $hm['id'];
+		}
+		else{
+        	$id = $hm[$linkfv];
+		}
     }
 
 }else{
@@ -36,10 +42,35 @@ if($_REQUEST['linkfieldval'] != ''){ # added on Mon Mar 19 21:09:43 CST 2012
 
 $url = preg_replace("/linkfield=([0-9a-zA-Z]*)/", "pnsk\$1=".$id, $url);
 $url = preg_replace("/&id=([0-9]*)/", "", $url);
-
+$setPnsm = 0;
 if(strpos($url,"linkfield2") > 1){
-    $url = preg_replace("/linkfield2=([0-9a-z]*)/", "pnsk\$1=".$otbl, $url);
-    $url .= "&pnsm=1"; # page navigator search mode, see in class/pagenavi.class.php
+	if(preg_match("/linkfield2=([0-9a-zA-Z]*)/", $url, $matches)){
+		//debug("extra/linktbl: matches:".serialize($matches));
+		$tmpLinkField = $matches[0];
+		$tmpLinkFieldName = $matches[1];
+		$url = str_replace($tmpLinkField, "pnsk".$tmpLinkFieldName."=".$hmOrig[$tmpLinkFieldName], $url);
+		if($setPnsm == 0){
+			$url .= "&pnsm=1"; # page navigator search mode, see in class/pagenavi.class.php
+			$setPnsm = 1;
+		}
+	}
+}
+if(strpos($url,"linkfield3") > 1){
+	if(preg_match("/linkfield3=([0-9a-zA-Z]*)/", $url, $matches)){
+		$tmpLinkField = $matches[0];
+		$tmpLinkFieldName = $matches[1];
+		$url = str_replace($tmpLinkField, "pnsk".$tmpLinkFieldName."=".$hmOrig[$tmpLinkFieldName], $url);
+		if($setPnsm == 0){
+			$url .= "&pnsm=1"; 
+			$setPnsm = 1;
+		}
+	}
+}
+if(strpos($url,"linktbl") > 1){
+    $url = preg_replace("/linktbl=([0-9a-z]*)/", "pnsk\$1=".$otbl, $url);
+    if($setPnsm == 0){
+    	$url .= "&pnsm=1"; $setPnsm = 1;
+	}
 }
 
 $out .= "<!-- <br/> --> <table width=\"100%\" >";

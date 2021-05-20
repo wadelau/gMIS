@@ -168,7 +168,10 @@
 	"xdir_this_item_and_value": "該項+名",
 	"xdir_same_level": "同級項",
 	"xdir_sub_level": "下級項",
-
+	
+	"choose": "选择",
+	"xtree-no-data": "如果没有所需数据, 需到相应模块先增加后再来选择.",
+	
 	"": "",
 
 	"":""

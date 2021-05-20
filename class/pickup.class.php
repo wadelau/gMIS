@@ -39,7 +39,7 @@ class PickUp extends WebApp{
 
     # public methods
     # get option list by field
-    public function getOptionList($field, $fieldinputtype){
+    public function getOptionList($field, $fieldinputtype, $pageCondi, $pageCondiVal){
         $options = array();
         $hmfield = $this->fieldList;
         if(count($hmfield) < 1){
@@ -53,6 +53,8 @@ class PickUp extends WebApp{
         if(inString('time', $fieldtype) || inString("date", $fieldtype)){ 
             $isTimeField = true; 
         }
+		if($pageCondi == null || $pageCondi == ''){ $pageCondi = '1=1'; }
+        #debug("class/pickup: pageCondi:$pageCondi");
         $fieldDefineLength = $this->_getFieldDefineLength($field, $fieldtype);
         if($fieldDefineLength > self::PICK_MAX_FIELD_LENGTH * 20){ # why 20? <255?
             #debug("\tfield:$field has too long:$fieldDefineLength skip....\n");
@@ -62,8 +64,8 @@ class PickUp extends WebApp{
             $fieldUniq = $field.'_uniq_all';
             $hm = $this->execBy("select substr($field, 1, ".self::PICK_MAX_FIELD_LENGTH
                     .") as $fieldUniq, count($myId) as icount from $tbl "
-                    ." where 1=1 group by $fieldUniq order by icount desc limit ".self::PICK_TOP_N, null, 
-                $withCache=array('key'=>"read-pickup-$tbl-$field")); 
+                    ." where $pageCondi group by $fieldUniq order by icount desc limit ".self::PICK_TOP_N, null, 
+                $withCache=array('key'=>"read-pickup-$tbl-$field-$pageCondiVal")); 
             if($hm[0]){
                 $options = $hm[1];
             }
@@ -77,8 +79,8 @@ class PickUp extends WebApp{
             $imax = 1;
             $imin = 0;
             $hm = $this->execBy("select max($field) as imax, min($field) as imin from $tbl "
-                        ." where 1=1", null, 
-                    $withCache=array('key'=>"read-pickup-$tbl-$field")); 
+                        ." where $pageCondi", null, 
+                    $withCache=array('key'=>"read-pickup-$tbl-$field-$pageCondiVal")); 
             if($hm[0]){
                 $hm = $hm[1][0];
                 if($isTimeField){ $imax = strtotime($hm['imax']); }else{ $imax = $hm['imax']; }

@@ -10,7 +10,7 @@ if($_REQUEST['otbl'] != ''){
 }
 
 $out .= "<fieldset style=\"border-color:#5f8ac5;border: 1px solid #5f8ac5;\"><legend><h4> ".$lang->get("func_create")."/"
-		.$lang->get("func_edit").($hasid?" ".$id:"")." </h4>"
+		.$lang->get("func_edit").(($hasid && $act!='addbycopy')?" ".$id:"")." </h4>"
         ."</legend><form id=\"".$formid."\" name=\"".$formid."\" method=\"post\" action=\""
         .$jdo."&act=list-addform\" ".$gtbl->getJsActionTbl()." data-formid=\"$formid\" "
 		." title=\"$formid\"><table align=\"center\" width=\"98%\" "
@@ -151,6 +151,8 @@ if(startsWith($act, 'modify') && $hasDisableW && !$isAddByCopy){
 
 }
 else{
+# sync pre-set params
+$gtbl->set(GTbl::RESULTSET, $hmorig);
 
 $closedtr = 1; $opentr = 0; # just open a tr, avoid blank line, Sun Jun 26 10:08:55 CST 2016
 $columni = 0; $hasEndLine = 0;
@@ -178,7 +180,9 @@ for($hmi=$min_idx; $hmi<=$max_idx;$hmi++){
 	if(inString('password', $field) || inString('pwd', $field)){
         $hmorig[$field] = '';
     }
-    else if($isAddByCopy && $gtbl->getReadOnly($field, $fieldinputtype) != ''){
+    else if($isAddByCopy 
+		&& $gtbl->getReadOnly($field, $fieldinputtype) != ''
+		&& !isset($_REQUEST['pnsk'.$field])){
         $hmorig[$field] = '';
     }
 	if(($id=='' || $id==0) && $hmorig[$field] == '' 

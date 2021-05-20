@@ -571,7 +571,7 @@ class GTbl extends WebApp{
             # ?
         }else if(strpos($tmpstr,"fromtable") === 0){
             $arr = explode("::",$tmpstr);
-            $tbl = $arr[1]; $theTbl = $tbl; # support "dbname.tblname" with access
+            $tbl = $arr[1]; $theTbl = $tbl = $this->fillThis($tbl); # support "dbname.tblname" with access
             $dispfield = $arr[2];
             if(isset($arr[3])){
                 #$dispfield .= ",".$arr[3];
@@ -586,14 +586,14 @@ class GTbl extends WebApp{
 				$hmoption = $this->hmconf['selectoption_hm_'.$field];
 			}
 			else{
-				$oldhmf = $this->hmf;
-				$this->hmf = array();
+				$tmpWhere = $arr[3]; $tmpWhere = $this->fillThis($tmpWhere, $field);
+                $oldhmf = $this->hmf; $this->hmf = array(); # becareful!
 				$this->setTbl($tbl);
-                $tmpWhere = $arr[3];
+                #$tmpWhere = $arr[3]; # move to before oldhmf
                 if($tmpWhere==''){ $tmpWhere='1=1'; }
                 $tmpWhere .= " order by CONVERT($dispfield USING gbk)";
 				$hm = $this->getBy("$optval,$dispfield", $tmpWhere,
-					$withCache=array('key'=>$tbl.'-select-$optval-$dispfield-'.$arr[3]));
+					$withCache=array('key'=>$tbl.'-select-$optval-$dispfield-'.$arr[3].'-'.$tmpWhere));
 					# anti for various fields from the same src table
 				if($hm[0]){
 					$hmoption = $hm[1]; # $this->hmconf['selectoption_'.$field] = $hmoption;

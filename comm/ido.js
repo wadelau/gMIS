@@ -176,6 +176,7 @@ function searchBy(url){
 	var reg1055 = new RegExp("，", 'gm');
 	var reg1608 = new RegExp("\\\\", 'gm');
 	var reg1559 = new RegExp("'", 'gm');
+	if(typeof urlParamList == 'undefined'){ urlParamList = userinfo.urlParams = getUrlParams();  }
     for(var i=0;i<fieldarr.length;i++){
         var fieldv = null;
         eval("var obj = document.getElementById('pnsk_"+fieldarr[i]+"');");
@@ -228,6 +229,12 @@ function searchBy(url){
     			url = url.replace(reg, "");
             }
         }
+		else{
+			var tmpPnsk = 'pnsk'+fieldarr[i]; //- hidden query para, Wed Apr 28 08:25:32 UTC 2021
+            if(typeof urlParamList[tmpPnsk] != 'undefined'){
+                appendquery += '&' + tmpPnsk + "=" + urlParamList[tmpPnsk];
+            }
+		}
     }
     //window.alert("fieldlist:"+fieldlist+", url:["+url+"]");
     console.log("fieldlist:"+fieldlist+", url:["+url+"]");

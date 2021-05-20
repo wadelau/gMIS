@@ -41,7 +41,7 @@ function securityFileCheck($fv){
 	//$rtn = realpath($rtn);
 	$badChars = array(';', '%3B', ' ', "%20", '&', "%26", "..", "//", './', "\\", '\.');
 	$rtn = str_replace($badChars, '', $rtn);
-	if(!preg_match('/^(?:[a-z0-9_\-\/#~]|\.(?!\.))+$/iD', $rtn)){
+	if(preg_match("/\|\?/gmi", $rtn)){
 		$rtn = '';
 	}
 	if(strpos($rtn, '/') === 0 && strpos($rtn, '/www') !== 0 
@@ -63,8 +63,10 @@ if(strtoupper($_SERVER['REQUEST_METHOD']) != 'POST' ){
 }
 
 //- real processing..
+$hasId = 0;
 if($id != ''){
     $gtbl->setId($id); # speical field
+	$hasId = 1;
 }
 
 for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
@@ -77,7 +79,8 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
         continue;
 
     }else if(!$user->canWrite($field)
-		|| $fieldReadOnly == 'readonly' || $fieldReadOnly == 'disabled'){
+		|| ($hasId==1 
+			&& ($fieldReadOnly == 'readonly' || $fieldReadOnly == 'disabled'))){
         $out .= "$field cannot be written.\n";
         continue;
 

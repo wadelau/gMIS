@@ -51,6 +51,9 @@ if($hmorig[0]){
     $hmorig = $hmorig[1][0];
 }
 
+# sync pre-set params
+$gtbl->set(GTbl::RESULTSET, $hmorig);
+
 $closedtr = 1; $hasEndLine = 0;
 $columni = 0;
 for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
@@ -95,7 +98,7 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
             $out .= "<td style=\"vertical-align:top\">".$gtbl->getCHN($field).":&nbsp;</td>"
                     ."<td class=\"tdiviewfixedwidth\" style=\"vertical-align:top\"> <a href=\""
                     .$hmorig[$field]."\" target=\"_blank\" title=\"".$lang->get("func_open_large")."\"><img src=\"".$hmorig[$field]
-                    ."\" alt=\"-x-\" style=\"width:118px\"/></a><br/>".($tmpLeadingPrefix)
+                    ."\" alt=\"-x-\" style=\"width:118px\"/></a><br/>".($tmpLeadingPrefix)."/"
                     .$hmorig[$field]." </td>";
         }
 		else{

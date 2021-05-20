@@ -44,6 +44,9 @@ else if(startsWith($act, "list")){
                     'targetid'=>($targetLineId=='' ? $origId : $targetLineId)); # unique trace id
         }
     }
+	# retrieve preset vars  
+	include("./act/preset-vars.inc.php");
+ 
 	if(isset($data['respobj']['resultobj'])){
 		# json, xml, Tue Nov 24 21:31:23 CST 2015
 	}
