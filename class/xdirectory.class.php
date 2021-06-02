@@ -8,6 +8,7 @@ require_once(__ROOT__.'/inc/webapp.class.php');
 class XDirectory extends WebApp{
 
     private $dirLevelLength = 2; # default
+	private $maxLevelDepth = 10; # code width: 10 x 2 = 20
 	public $lang = null;
 
     function __construct($tbl = ''){
@@ -174,6 +175,90 @@ class XDirectory extends WebApp{
         }
         return $rtnDirList;
 
+    }
+	
+	//- sort same layer by iname
+    //- xenxin@ufqi.com, Sat May 22 21:37:49 CST 2021
+    function sortDir($targetDir, $icode, $iname, $dirLevelLength=2){
+    	$treeList = array();
+    	$codeLen = $dirLevelLength; $theCode = '';
+    	//-sort
+		foreach($targetDir as $k=>$v){
+   			$theCode = $v[$icode]; $codeLen = strlen($theCode);
+   			$keyLenArr[$codeLen]["$theCode"] = $v[$iname];
+   			#debug("k:$k $theCode len:$codeLen");
+    	}
+    	$keyLenArr2 = array(); 
+    	foreach($keyLenArr as $k=>$v){
+    		$v = $this->sortByGbk($v); // sort all items within same layer
+    		$keyLenArr2[$k] = $v;
+    		#debug("k:$k sort:".serialize($keyLenArr2[$k]));
+    	}
+    	$keyLenArr = $keyLenArr2;
+		//- re-group
+    	$keyLenArr2 = array(); $tmpArr = $keyLenArr; 
+    	$maxDepth = $this->maxLevelDepth + $dirLevelLength;
+		foreach($keyLenArr as $keyLen=>$arr){
+			foreach($arr as $k2=>$v2){
+				$keyLenArr2[] = array("$icode"=>$k2, "$iname"=>$v2);
+				#debug("keyLen:$keyLen, k2:$k2 v2:$v2 icode:".$v2[$icode]);	
+				$myLevel=$keyLen+$dirLevelLength;
+				$childArr = $this->getChild($keyLenArr, $k2, $myLevel, $icode, $iname);
+				foreach($childArr as $ck=>$cv){
+					$keyLenArr2[] = $cv;	
+				}
+			}
+		}
+    	$keyLenArr = $keyLenArr2;
+    	return $keyLenArr;
+    }
+    //- iterate all children looply
+    //- travel all dirs with depth first
+    function getChild($keyLenArr, $pcode, $myLevel, $icode, $iname){
+    	$rtnArr = array();
+		$tmpArr = $keyLenArr[$myLevel];
+		foreach($tmpArr as $k3=>$v3){
+			if(startsWith($k3, $pcode)){
+				#debug("\t\tmyLevel:$myLevel pcode:$pcode k3-icode:$k3 iname:$v3");	
+				$rtnArr[] = array("$icode"=>$k3, "$iname"=>$v3);
+				$tmpLevel = $myLevel + $this->dirLevelLength;
+				if($tmpLevel <= $this->maxLevelDepth){
+					$rtnArr2 = $this->getChild($keyLenArr, $k3, $tmpLevel, $icode, $iname);
+					foreach($rtnArr2 as $k4=>$v4){
+						$rtnArr[] = $v4;	
+					}
+				}
+				else{
+					#debug("class/xdirectory: myLevel:$tmpLevel > ".$this->maxLevelDepth);	
+				}
+			}
+		}
+		return $rtnArr;
+    }
+    //- sort with gbk?
+    function sortByGbk($arr){
+    	$needGBK = 0; global $_CONFIG;
+    	if(strtolower($_CONFIG['character_code_for_sort']) == 'gbk'){ $needGBK = 1; }
+    	$tmpArr = array();
+   		if($needGBK == 1){
+   			foreach($arr as $k=>$v){
+   				$tmpArr[$k] = iconv('UTF-8', 'GBK', $v);
+   			}
+		}
+		else{
+			$tmpArr = $arr;	
+		}
+		asort($tmpArr, SORT_STRING); // sort by value with string
+		$arr = array();
+   		if($needGBK == 1){
+   			foreach($tmpArr as $k=>$v){
+   				$arr[$k] = iconv('GBK', 'UTF-8', $v);
+   			}
+		}
+		else{
+			$arr = $tmpArr;	
+		}
+		return $arr;
     }
 
 }

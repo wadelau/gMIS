@@ -155,10 +155,10 @@ else{
 $gtbl->set(GTbl::RESULTSET, $hmorig);
 
 $closedtr = 1; $opentr = 0; # just open a tr, avoid blank line, Sun Jun 26 10:08:55 CST 2016
-$columni = 0; $hasEndLine = 0;
+$columni = 0; $hasEndLine = 0; $hasDefaultVal = 0;
 for($hmi=$min_idx; $hmi<=$max_idx;$hmi++){
     $field = $gtbl->getField($hmi);
-    $fieldinputtype = $gtbl->getInputType($field);
+    $fieldinputtype = $gtbl->getInputType($field); $hasDefaultVal = 0;
     
 	if($field == null || $field == ''){
 		continue;
@@ -188,6 +188,7 @@ for($hmi=$min_idx; $hmi<=$max_idx;$hmi++){
 	if(($id=='' || $id==0) && $hmorig[$field] == '' 
 		&& $hmfield[$field.'_default'] != ''){
 		$hmorig[$field] = $hmfield[$field.'_default'];
+		$hasDefaultVal = 1;
 	}
     
 	if($closedtr == 1){
@@ -275,16 +276,18 @@ for($hmi=$min_idx; $hmi<=$max_idx;$hmi++){
 
     }else if($gtbl->getExtraInput($field, $hmorig) != ''){
 
-		if($act=='add'){
+		if(startsWith($act,'add')){
 			$iconImage = 'plus.gif';
 		}
 		else if($act=='modify'){
 			$iconImage = 'minus.gif';
 		}
+		$placeHolder = '';
+		if($hasDefaultVal==1){ $placeHolder=$hmorig[$field]; $hmorig[$field]=''; }
 
 		$out .= "</tr><tr><td><b>".$gtbl->getCHN($field)."</b>:</td><td colspan=\"".$form_cols."\"><span id=\"span_"
 			.$act."_".$field."\"><input id=\"".$field."\" name=\"".$field."\" class=\"search\" value=\""
-			.$hmorig[$field]."\" /></span> <span id=\"span_".$act."_".$field."_v\"><a href=\"javascript:"
+			.$hmorig[$field]."\" placeholder=\"$placeHolder\"/></span> <span id=\"span_".$act."_".$field."_v\"><a href=\"javascript:"
 			."void(0);\" onclick=\"javascript:doActionEx('".$gtbl->getExtraInput($field, $hmorig)."&act="
 			.$act."&field=".$field."&oldv=".$hmorig[$field]."&otbl=".$tbl."&oid=".$id."&isheader=0&sid=".$sid."&randi=".rand(0,99999)."','extrainput_"
 			.$act."_".$field."_inside');document.getElementById('extrainput_".$act."_".$field
@@ -307,19 +310,22 @@ for($hmi=$min_idx; $hmi<=$max_idx;$hmi++){
 		$out .= "   <br/>".$gtbl->getMemo($field)."</td></tr><tr>";
 		$opentr = 1;
 
-    }else{
+    }
+	else{
 		$acceptVal = $gtbl->getAccept($field);
 		$tmpInputType = 'text';
 		if(inString('time', $field)){ $tmpInputType = 'datetime-local';}
 		else if(inString('date', $field)){ $tmpInputType = 'date'; }
 		else if(inString('0', $hmfield[$field.'_default'])){ $tmpInputType = 'number'; }
+		$placeHolder = '';
+		if($hasDefaultVal==1){ $placeHolder=$hmorig[$field]; $hmorig[$field]=''; }
 		if($gtbl->getSingleRow($field) == '1'){
             $out .= "</tr>\n<tr height=\"30px\" valign=\"middle\"  onmouseover=\"javascript:this.style.backgroundColor='"
                     .$hlcolor."';\" onmouseout=\"javascript:this.style.backgroundColor='';\"><td style=\"vertical-align:top\" "
                     .$gtbl->getCss($field)."><b>".$gtbl->getCHN($field).($acceptVal==''?'':'<span class="redb">*</span>')."</b>:</td><td colspan=\"".($form_cols)
                     ."\"  style=\"vertical-align:top\"><input type=\"".$tmpInputType."\" id=\"".$field."\" name=\""
                      .$field."\" class=\"\" style=\"width:600px\" value=\""
-                    .$hmorig[$field]."\" ".$gtbl->getJsAction($field).$acceptVal." "
+                    .$hmorig[$field]."\" ".$gtbl->getJsAction($field).$acceptVal." placeholder=\"$placeHolder\" "
                     .$gtbl->getReadOnly($field)." /> <br/>   ".$gtbl->getMemo($field)." </td></tr><tr>";
             $opentr = 1;
 		}
@@ -327,7 +333,8 @@ for($hmi=$min_idx; $hmi<=$max_idx;$hmi++){
             $rdonly = $gtbl->getReadOnly($field);
         	$out .= "<td nowrap ".$gtbl->getCss($field)." style=\"vertical-align:top\"><b>".$gtbl->getCHN($field).($acceptVal==''?'':'<span class="redb">*</span>')."</b>: "
         	        ."</td><td style=\"vertical-align:top\"><input type=\"".$tmpInputType."\" id=\""
-        	        .$field."\" name=\"".$field."\" class=\"noneinput wideinput\" value=\"".$hmorig[$field]."\" "
+        	        .$field."\" name=\"".$field."\" class=\"noneinput wideinput\" value=\""
+					.$hmorig[$field]."\" placeholder=\"$placeHolder\" "
                     .$gtbl->getJsAction($field).$acceptVal." ".$rdonly." ";
              if(in_array($field, $timefield) && $rdonly==''){
                 $out .= " onclick=\"javascript:WdatePicker();\"";

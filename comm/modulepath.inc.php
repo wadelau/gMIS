@@ -29,7 +29,7 @@ if($levelcode != ''){
     $codelist = substr($levelcode,0,2)."','".substr($levelcode,0,4)."','".substr($levelcode,0,6)."','"
             .substr($levelcode,0,8).substr($levelcode,0,10).substr($levelcode,0,12)
 			.substr($levelcode,0,14); # max 7 levels allowed; # max 4 levels allowed
-    $hm = $theGtbl->execBy("select levelcode, linkname, modulename, thedb from "
+    $hm = $theGtbl->execBy("select levelcode, linkname, modulename, thedb, dynamicpara from "
             .$_CONFIG['tblpre']."info_menulist where levelcode in ('"
             .$codelist."') order by levelcode", null,
             $withCache=array('key'=>'info_menulist-select-level-'.$codelist));
@@ -37,12 +37,15 @@ if($levelcode != ''){
         $hm = $hm[1]; #print_r($hm);
         foreach($hm as $k=>$v){
             if($v['modulename'] != ''){
-                $module_path .= "<a href='".$ido."&tbl=".$v['modulename']."&db=".$v['thedb']."'>"
-                        .$v['linkname']."</a> &rarr; ";
+				$tmphref = $ido."&tbl=".$v['modulename']."&db=".$v['thedb'];
+				if($v['levelcode'] != ''){ $tmphref .= "&navidir=".$v['levelcode']; }
+				if($v['dynamicpara'] != ''){ $tmphref .= "&".$v['dynamicpara']; }
+				$module_path .= "<a href='".$tmphref."'>".$v['linkname']."</a> &rarr; ";
             }
             else{
-                $module_path .= "<a href='".$url."&navidir=".$v['levelcode']."'>"
-                        .$v['linkname']."</a> &rarr; ";
+				$tmphref = $url."&navidir=".$v['levelcode']."&db=".$v['thedb'];
+				if($v['dynamicpara'] != ''){ $tmphref .= "&".$v['dynamicpara']; }
+                $module_path .= "<a href='".$tmphref."'>".$v['linkname']."</a> &rarr; ";
             }
             $lastLinkName = $v['linkname'];
         }

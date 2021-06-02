@@ -53,6 +53,9 @@ if(inString('-', $parentCode)){ //- 0100-止疼药2级
     $tmpArr = explode('-', $parentCode);
     $parentCode = $tmpArr[0];
 }
+else if(inString('THIS_', $parentCode)){ //- THIS_belongto
+	$parentCode = $rootId;
+}
 else{
 	$parentCode = $parentCode=='' ? $rootId : $parentCode; //- 1 as root	
 	$parentCode = $parentCode=='0' ? $rootId : $parentCode; //- 1 as root	
@@ -72,7 +75,8 @@ foreach($hmVars as $k=>$v){
 	$xTree->set($k, $v); //- override?	
 }
 $sqlCondi .= " and ($parentField=$parentCode)";
-$sqlCondi .= " order by $icode asc"; //- why unconditional?
+#$sqlCondi .= " order by $icode asc"; //- why unconditional?
+$xTree->set("orderby", "convert($iname using gbk), $icode asc");
 $hm = $xTree->getBy("$icode, $iname", "$sqlCondi", 
 	$withCache=array('key'=>"xtree-$tbl-$sqlCondi"));
 if($hm[0]){

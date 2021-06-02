@@ -1,10 +1,20 @@
 <?php
 
-$field = $_REQUEST['field'];
+$field = Wht::get($_REQUEST, 'field');
 
 # remedy by wadelau Tue Jun 30 16:17:53 CST 2015
+# updt by xenxin, Sat May 22 12:08:50 CST 2021
 # same as act/doaddmodi.php
-$fieldv = urldecode(trim($_REQUEST[$field]==''?$hmfield[$field."_default"]:$_REQUEST[$field]));
+$fieldv = Wht::get($_REQUEST, $field);
+$fieldv = urldecode($fieldv); 
+if($fieldv == ''){
+	if($gtbl->isNumeric($hmfield[$field]) == 1){
+		$fieldv = $hmfield[$field."_default"];
+		#print __FILE__.": field:[".$field."] type:[".$hmfield[$field]."] is int.";
+		$fieldv = $fieldv=='' ? 0 : $fieldv;
+	}
+} 
+
 if(1){
 	if(strpos($fieldv,"<") !== false){ # added by wadelau on Sun Apr 22 22:09:46 CST 2012
 		if($fieldInputType == 'textarea'){	

@@ -97,6 +97,7 @@ if(true){
      *  4) apply the workspace id to specify maindb, comm/header
      */
 	$conf['single_sid_multiple_ip'] = false; # lower security higher convenience if true, otherwise. 13:12 2021-03-23
+	$conf['character_code_for_sort'] = 'gbk'; # ascii, gbk, utf-8, see extra/xdirectory, Sat May 22 18:26:20 CST 2021
 
 	# set them all
 	GConf::setConf($conf);

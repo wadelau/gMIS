@@ -63,10 +63,14 @@ $out .= "";
 $icode = $_REQUEST['icode'];
 $iname = $_REQUEST['iname'];
 
+$rootId = '00';
 $parentCode = Wht::get($_REQUEST, 'parentcode');
 if(inString('-', $parentCode)){ //- 0100-止疼药2级
     $tmpArr = explode('-', $parentCode);
     $parentCode = $tmpArr[0];
+}
+else if(inString('THIS_', $parentCode)){ //- THIS_belongto
+	$parentCode = $rootId;
 }
 $xdirectory->set('parentCode', $parentCode);
 
@@ -89,9 +93,14 @@ if($hm[0]){
 	$hm = $hm[1];
 }
 else{
-	$hm = array(0=>array("$icode"=>'00', "$iname"=>'所有/All'));
+	$hm = array(0=>array("$icode"=>$rootId, "$iname"=>'所有/All'));
 }
 #debug($hm);
+# added by xenxin@ufqi.com, Sat May 22 21:29:53 CST 2021
+$sortArr = $xdirectory->sortDir($hm, $icode, $iname);
+#debug("sortArr:"); debug($sortArr);
+$hm = $sortArr;
+
 if(1){
 	foreach($hm as $k=>$v){
 		if($v[$icode] == ''){

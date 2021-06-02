@@ -94,11 +94,11 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
 		if($gtbl->getSingleRow($field)){ $out .= "</tr><tr>"; }
         if($isimg){
             $tmpLeadingPrefix = '';
-			if($srcprefix == '' && !inString('//', $hmorig[$field])){ $tmpLeadingPrefix = $rtvdir; }
+			if($srcprefix == '' && !inString('//', $hmorig[$field])){ $tmpLeadingPrefix = $rtvdir.'/'; }
             $out .= "<td style=\"vertical-align:top\">".$gtbl->getCHN($field).":&nbsp;</td>"
                     ."<td class=\"tdiviewfixedwidth\" style=\"vertical-align:top\"> <a href=\""
                     .$hmorig[$field]."\" target=\"_blank\" title=\"".$lang->get("func_open_large")."\"><img src=\"".$hmorig[$field]
-                    ."\" alt=\"-x-\" style=\"width:118px\"/></a><br/>".($tmpLeadingPrefix)."/"
+                    ."\" alt=\"-x-\" style=\"width:118px\"/></a><br/>".($tmpLeadingPrefix)
                     .$hmorig[$field]." </td>";
         }
 		else{

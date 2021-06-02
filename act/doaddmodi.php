@@ -1,6 +1,9 @@
 <?php
 # save data from act=add|modify
 
+# watermark, Fri May 28 11:31:02 CST 2021
+include("./class/WaterMark.class.php");
+
 $fieldlist = array();
 $fieldvlist = array(); # remedy for overrided by $obj->get during adding, need a tmp container for query string, Thu Jun 11 22:15:32 CST 2015
 $filearr = array();
@@ -148,7 +151,8 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
 					$fieldv = $fileOnlineSrc; # extra online src, 09:01 2021-03-28
 				}
 				else if($fieldv_orig != ''){
-					if(strpos($fieldv_orig, $shortDirName) === false){
+					if(strpos($fieldv_orig, $shortDirName) === false
+						&& !inString("//", $fieldv_orig)){
 						$fieldv_orig = $shortDirName."/".$fieldv_orig;
 					}
 					$fieldv = $fieldv_orig;
@@ -185,8 +189,13 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
 				$fileNameLength = $fileNameLength > 128 ? 128 : $fileNameLength; 
                 $filename = date("dHis")."_".substr($filename, -$fileNameLength).".".$tmpfileext;
 				#print __FILE__.": filename:[$filename]";
-                if(move_uploaded_file($_FILES[$field]['tmp_name'], $appdir."/".$filedir."/".$filename)){
+				$finalRealFile = $appdir."/".$filedir."/".$filename;
+                if(move_uploaded_file($_FILES[$field]['tmp_name'], $finalRealFile)){
                     $out .= "file:[$filedir/$filename] succ.";
+					if($_CONFIG['watermark_for_upload_image'] != "" && isImg($finalRealFile)){
+						$waterMark = new WaterMark($finalRealFile);
+						$waterMark->addString($_CONFIG['watermark_for_upload_image']);
+					}
                 }
 				else{
                     // Check $_FILES['upfile']['error'] value.
@@ -236,12 +245,10 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
 		else{
             $fieldv = trim(Wht::get($_REQUEST, $field));
 			if($fieldv == ''){
-				$fieldv = $hmfield[$field."_default"];
-				if($fieldv == ''){
-					if($gtbl->isNumeric($hmfield[$field]) == 1){
-						#print __FILE__.": field:[".$field."] type:[".$hmfield[$field]."] is int.";
-						$fieldv = 0;
-					}
+				if($gtbl->isNumeric($hmfield[$field]) == 1){
+					$fieldv = $hmfield[$field."_default"];
+					#print __FILE__.": field:[".$field."] type:[".$hmfield[$field]."] is int.";
+					$fieldv = $fieldv=='' ? 0 : $fieldv;
 				}
 			}
             else{
