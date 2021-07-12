@@ -45,6 +45,7 @@ else{
         print $out;
     }
     else if($fmt == 'json'){
+		header("Content-type: application/json;charset=utf-8");
         if(isset($data['respobj'])){
             $out=json_encode($data['respobj']);
         }

@@ -200,7 +200,9 @@ a:link {
 a:hover{
   color:red;
   font-weight:bold;
-  }
+  text-decoration:underline;
+  text-underline-offset:4px;
+}
 /*
 a:link {
 	font-size: 12px;

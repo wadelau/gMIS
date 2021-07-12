@@ -6,7 +6,11 @@
  * updt. Sat Mar 28 11:16:55 CST 2020
  */
 
+//- module
 include_once($appdir.'/class/pickup.class.php');
+
+# retrieve preset vars  
+include("./act/preset-vars.inc.php");
 
 $formid = "gmis_pickup";
 $hiddenfields = "";

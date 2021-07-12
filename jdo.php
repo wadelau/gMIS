@@ -20,6 +20,9 @@ if(startsWith($act,'add') || startsWith($act, "modify")){
     include("./act/addmodi.php");
 }
 else if(startsWith($act, "list")){
+	# retrieve preset vars  
+	include("./act/preset-vars.inc.php");
+	
     if(startsWith($act, "list-addform")){
 		include("./act/doaddmodi.php");
 		$jdo = str_replace('&'.$gtbl->getMyId().'=', '&xoid=', $jdo); # abandon targetid?	   
@@ -44,8 +47,6 @@ else if(startsWith($act, "list")){
                     'targetid'=>($targetLineId=='' ? $origId : $targetLineId)); # unique trace id
         }
     }
-	# retrieve preset vars  
-	include("./act/preset-vars.inc.php");
  
 	if(isset($data['respobj']['resultobj'])){
 		# json, xml, Tue Nov 24 21:31:23 CST 2015

@@ -244,6 +244,9 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
         }
 		else{
             $fieldv = trim(Wht::get($_REQUEST, $field));
+			if($fieldInputType == 'select' && ($fieldReadOnly == 'readonly' || $fieldReadOnly == 'disabled')){
+                $fieldv = Wht::get($_REQUEST, $field.'_select_orig');
+            }
 			if($fieldv == ''){
 				if($gtbl->isNumeric($hmfield[$field]) == 1){
 					$fieldv = $hmfield[$field."_default"];
@@ -341,5 +344,5 @@ else{
 }
 
 $gtbl->setId('');
-
+$id = '';
 ?>

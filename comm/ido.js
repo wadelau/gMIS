@@ -109,8 +109,23 @@ function doActionEx(strUrl,sActive){
 }
 
 //-
-function _g( str ){
-	return document.getElementById( str );
+function _g( idName ){
+	//return document.getElementById( str );
+	var obj = document.getElementById(idName);
+    var myObj = new Object();
+    if(obj != null && typeof obj != 'undefined'){
+        myObj = obj;
+    }
+    else{
+        var objs = document.getElementsByName(idName);
+        if(objs != null && typeof objs != 'undefined'){
+            if(objs[0] != null && typeof objs[0] != 'undefined'){
+                myObj = objs[0];
+            }
+        }
+    }
+    //console.log("comm/ido: _g idName:"+idName+" myObj:"+JSON.stringify(myObj));
+    return myObj;
 }
 
 //
@@ -1458,7 +1473,14 @@ function doPivotSelect(sField, iId, sOp, isOn, sName){
 		fieldValue = fieldValue.replace(','+sField+'::'+sOp, '');
 		fieldObj.value = fieldValue;
 		var spanValue = spanObj.innerHTML;
-		spanValue = spanValue.replace(tmps, '');
+		if(fieldValue == '' && spanValue != ''){
+            spanValue = ''; //- in case of non-ascii replace failed, Fri Jun 18 12:38:46 CST 2021
+        }
+        else{
+            console.log("doPivotSelect: spanValue:["+spanValue+"] tmps:["+tmps+"] indexOf:"+spanValue.indexOf(tmps));
+            spanValue = spanValue.replace(tmps, '');
+        }
+		//spanValue = spanValue.replace(tmps, '');
 		spanObj.innerHTML = spanValue;
 	}
 	return rtn;
@@ -1562,7 +1584,7 @@ function appendSid(urlx){
 					hasFilled = true;
 					break;
 				}
-				else if(urlx.indexOf(f) > -1){
+				else if(urlx.indexOf(f) > -1 && f != './'){
 					urlx = urlx.replace(f, f+'?'+sidstr);
 					hasFilled = true;
 					break;

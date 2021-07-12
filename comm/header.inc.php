@@ -2,7 +2,7 @@
 //- embedded in app entry
 
 global $appdir, $userid, $user, $gtbl, $out, $data, $lang;
-date_default_timezone_set("Asia/Hong_Kong"); # +0800
+date_default_timezone_set("GMT"); # UTC+0000
 
 $docroot = $_SERVER['DOCUMENT_ROOT'];
 $rtvdir = dirname(dirname(__FILE__)); # relative dir
@@ -237,6 +237,7 @@ if($isoput){
             <script type="text/javascript" src="'.$rtvdir.'/comm/navimenu/navimenu.js" charset=\"utf-8\" async></script>
 			<script type="text/javascript" src="'.$rtvdir.'/comm/Base62x.class.js" charset=\"utf-8\" async></script>
             <link rel="stylesheet" type="text/css" href="'.$rtvdir.'/comm/navimenu/navimenu.css" />
+			<link href="'.$rtvdir.'/comm/skin.css?i=" rel="stylesheet" type="text/css"/>
             </head>
             <body> <!--  style="'.($isheader==0?"":"width:880px").'" -->';
     }

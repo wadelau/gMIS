@@ -31,7 +31,7 @@
 
 	"work_task": "Work/Task",
 	"state": "Status",
-	"demand": "Provider",
+	"demand": "Demander",
 	"supply": "Supplier",
 	"updatetime": "Update Time",
 	"inserttime": "Insert Time",
@@ -140,7 +140,7 @@
 	"notice_save_error": "Data saved error. Please revise and retry.",
 	
 	"op_skip": "Skip",
-	"op_select": "Please Select",
+	"op_select": "Plz Select",
 	"op_equal": "Equals",
 	"op_notequal": "Not Equals",
 	"op_gt": "Greater Than",

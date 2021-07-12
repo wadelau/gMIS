@@ -32,6 +32,6 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
         }
     }
 
-} 
+}
 
 ?>

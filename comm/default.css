@@ -171,7 +171,8 @@ table.printtbl td{
 
 select {
 	width: auto;
-	max-width: 96px;
+	/*max-width: 96px;*/
+	max-width: 96%;
 }
 .selectauto{
     width: auto;
