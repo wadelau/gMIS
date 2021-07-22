@@ -69,6 +69,10 @@ fieldset {
 fieldset legend {
     font-weight: bold;
 }
+input[type="submit" i] {
+    color:blue;
+    font-weight:bolder;
+}
 
 .noneinput{
      /*
