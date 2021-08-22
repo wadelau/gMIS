@@ -111,7 +111,8 @@ class XDirectory extends WebApp{
 		foreach($currentDir as $k=>$v){
 			if(strlen($k)==$len && substr($k,0,strlen($k)-$levelLen)==substr($max,0,strlen($k)-$levelLen) ){  
 				//条件：同级且在同一个节点下
-				$max = $k;
+				//$max = $k;
+				$max = $this->maxByBase36($max, $k);
 			}   
 		}
 		
@@ -136,7 +137,8 @@ class XDirectory extends WebApp{
 		$exist = false;
 		foreach($currentDir as $k=>$v){
 			if(strlen($k)==$nextlen && substr($k,0,$currentlen)==$currentVal){
-				$max = $k;
+				//$max = $k;
+				$max = $this->maxByBase36($max, $k);
 				$exist = true;   //当前菜单项存在子级
 			}
 		}
@@ -260,6 +262,19 @@ class XDirectory extends WebApp{
 		}
 		return $arr;
     }
-
+	//-
+    //- added by xenxin@ufqi, Tue Jul 27 16:19:50 CST 2021
+    function maxByBase36($a, $b){
+        $a = $a=='' ? "0" : $a;
+        $b = $b=='' ? "0" : $b;
+        $a10 = base_convert($a, 36, 10);
+        $b10 = base_convert($b, 36, 10);
+        if($a10 > $b10){
+            return $a;
+        }
+        else{
+            return $b;
+        }
+    }
 }
 ?>

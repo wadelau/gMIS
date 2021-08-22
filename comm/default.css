@@ -73,6 +73,10 @@ input[type="submit" i] {
     color:blue;
     font-weight:bolder;
 }
+.defaultact {
+    color:blue;
+    font-weight:bolder;
+}
 
 .noneinput{
      /*

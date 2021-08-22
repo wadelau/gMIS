@@ -232,7 +232,7 @@ $rtn2top = 'document.location.href=\'#contentarea_outer\';';
 $out .= "<tr><td colspan=\"".$form_cols."\" align=\"center\" style=\"word-spacing:8px;\">
 	<input type=\"button\" name=\"viewbtn\" id=\"viewbtn\" value=\"".$lang->get("func_edit")."\"
 		onclick=\"javascript:doActionEx('"
-		.$jdo."&act=modify','contentarea');$rtn2top\"".($hasDisableW ? ' disabled' : '')."/>
+		.$jdo."&act=modify','contentarea');$rtn2top\"".($hasDisableW ? ' disabled' : '')." class=\"defaultact\"/>
 	<input type=\"button\" name=\"printbtn\" id=\"printbtn\" value=\"".$lang->get("func_print")."\"
 		onclick=\"javascript:window.open('"
 		.$jdo."&act=print&isoput=1&isheader=0','PrintWindow','scrollbars,toolbar,location=0');\"/>
