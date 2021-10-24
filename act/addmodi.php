@@ -1,6 +1,6 @@
 <?php
 
-$formid = "gtbl_add_form";
+$formid = "gMIS_".$tbl;
 $srcprefix = $gtbl->getSrcPrefix();
 $hiddenfields = "";
 

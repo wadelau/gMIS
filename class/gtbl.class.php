@@ -763,7 +763,12 @@ class GTbl extends WebApp{
     public function getReadOnly($field, $inputtype=''){
         $tmpstr = $this->hmconf[$this->taglist['field'].$this->sep.$field.$this->sep.$this->taglist['readonly']];
         $tmpstr = $tmpstr ==null ? '':$tmpstr;
-        if($tmpstr == '1'){
+		$needEnable = 0;
+        if($_REQUEST['act'] == 'deepsearch' 
+            && inList($field, 'operator,op,operatorid,ioperator,soperator')){
+            $needEnable = 1;
+        }
+        if($tmpstr == '1' && $needEnable == 0){
             $tmpstr = "readonly";
             if($inputtype == 'select'){
                 $tmpstr =  'disabled';
