@@ -234,7 +234,11 @@ class MYSQLIX {
 					else{
 						$sql = substr($sql,$a+1);
 						$a = strpos($sql,"?");
-						$newsql .= str_replace("?",$this->_quoteSafe($hmvars[$idxarr[$i]]),$t);
+						#$newsql .= str_replace("?",$this->_quoteSafe($hmvars[$idxarr[$i]]),$t);
+						$tmpVal = $this->_quoteSafe($hmvars[$idxarr[$i]]);
+						if(is_string($tmpVal)){
+							$newsql .= str_replace("?", $tmpVal,$t);
+						}
 					}
 					$i++;
 				}
@@ -251,13 +255,13 @@ class MYSQLIX {
 
 	//--- for sql injection remedy, added on 20061113 by wadelau
 	function _quoteSafe($value, $defaultValue=null){
-		if (!is_numeric($value)) {
+		if (!is_numeric($value) && is_string($value)) {
 			$value = "'".mysqli_real_escape_string($this->m_link, $value)."'";
 		    # in some case, e.g. $value = '010003', which is expected to be a string, but is_numeric return true.
             # this should be handled by $webapp->execBy with manual sql components...
 		}
 		else{
-			if($defaultValue == ''){
+			if($defaultValue == '' && is_string($value)){
 				$value = "'".mysqli_real_escape_string($this->m_link, $value)."'";
 			}
 		} 

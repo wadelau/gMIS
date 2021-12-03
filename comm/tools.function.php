@@ -429,8 +429,14 @@ function getIp() {
          if ($k == 'all') {
              $rtn = serialize ( $src );
          }
-         else {
-             $rtn = trim(isset($src[$k])?$src[$k]:'');
+		else {
+			if(is_string($src[$k])){
+				$rtn = trim(isset($src[$k])?$src[$k]:'');
+			}
+			else{
+				# is_array?
+				$rtn = isset($src[$k]) ? implode(',',$src[$k]) : '' ;
+			}
          }
          if (!$rtn && $defaultValue != null) {
              $rtn = $defaultValue;

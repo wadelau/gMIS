@@ -137,7 +137,10 @@
 	"notice_details": "Detailed info.",
 	"notice_download_image":"Click for downloading larget size.",
 	"notice_remove_filter": "Remove this filter",
-	"notice_save_error": "Data saved error. Please revise and retry.",
+	"notice_save_error": "Data saved error or duplicate record. Please revise and retry.",
+	"notice_save_error_data_too_long": "The size or length of content is too long, plz shorten it and try again.",
+	"notice_save_error_incorrect_type": "Data type or format of some content is incorrect, Please revise and retry.",
+	"notice_upload_error": "Receive uploads error. Possible for too large size or server-side failure.",
 	
 	"op_skip": "Skip",
 	"op_select": "Plz Select",

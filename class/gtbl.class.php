@@ -685,6 +685,7 @@ class GTbl extends WebApp{
                 $optionlist .=">".$arr[1]."(".$arr[0].")</option>\n";
             }
         }
+		$ismultiple = ($ismultiple=='' ? 0 : $ismultiple);
         if($this->getReadOnly($field,'select') == 'disabled'){
             $tmpstr = "<select id=\"".$tagpre.$field."\" name=\"".$tagpre.$field."\" "
 				.$this->getJsAction($field)." ".$this->getAccept($field)." disabled>"

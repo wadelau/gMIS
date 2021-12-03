@@ -8,21 +8,6 @@ $colsPerRow = 3;
 if($_REQUEST['otbl'] != ''){
     $colsPerRow = 2;
 }
-
-$out .= "<fieldset style=\"border-color:#5f8ac5;border: 1px solid #5f8ac5;\"><legend><h4> ".$lang->get("func_create")."/"
-		.$lang->get("func_edit").(($hasid && $act!='addbycopy')?" ".$id:"")." </h4>"
-        ."</legend><form id=\"".$formid."\" name=\"".$formid."\" method=\"post\" action=\""
-        .$jdo."&act=list-addform\" ".$gtbl->getJsActionTbl()." data-formid=\"$formid\" "
-		." title=\"$formid\"><table align=\"center\" width=\"98%\" "
-        ."cellspacing=\"0\" cellpadding=\"6px\" border=\"0px\">";
-$out .= "<tr><td width=\"11%\">&nbsp;</td>
-            <td width=\"22%\">&nbsp;</td>
-            <!-- <td width=\"2%\">&nbsp;</td> -->
-            <td width=\"11%\">&nbsp;</td>
-            <td width=\"22%\">&nbsp;</td>
-            <td width=\"11%\">&nbsp;</td>
-            <td width=\"22%\">&nbsp;</td>
-            </tr>";
 			
 $hmorig = array();
 $isAddByCopy = false;
@@ -122,6 +107,25 @@ else{
     #print_r($hmorig);
 }
 
+if(isAddByCopy && Wht.inString('&id=', $jdo)){
+	$jdo = str_replace('&id=', '&oid=', $jdo);
+}
+$out .= "<fieldset style=\"border-color:#5f8ac5;border: 1px solid #5f8ac5;\"><legend><h4> ".$lang->get("func_create")."/"
+		.$lang->get("func_edit").(($hasid && $act!='addbycopy')?" ".$id:"")." </h4>"
+        ."</legend><form id=\"".$formid."\" name=\"".$formid."\" method=\"post\" action=\""
+        .$jdo."&act=list-addform\" ".$gtbl->getJsActionTbl()." data-formid=\"$formid\" "
+		." title=\"$formid\"><table align=\"center\" width=\"98%\" "
+        ."cellspacing=\"0\" cellpadding=\"6px\" border=\"0px\">";
+$out .= "<tr><td width=\"11%\">&nbsp;</td>
+            <td width=\"22%\">&nbsp;</td>
+            <!-- <td width=\"2%\">&nbsp;</td> -->
+            <td width=\"11%\">&nbsp;</td>
+            <td width=\"22%\">&nbsp;</td>
+            <td width=\"11%\">&nbsp;</td>
+            <td width=\"22%\">&nbsp;</td>
+            </tr>";
+
+
 # check writeable
 $hasDisableW = false;
 if(true){
@@ -146,8 +150,8 @@ if(true){
     }
 }
 if(startsWith($act, 'modify') && $hasDisableW && !$isAddByCopy){
-    $out .= $lang->get("notice_access_deny")." 201811111014.";
-    $out .= "<br/><br/><a href=\"javascript:switchArea('contentarea_outer','off');\">".$lang->get("func_close")."</a>";
+    $out .= '<tr><td>'.$lang->get("notice_access_deny")." 201811111014.";
+    $out .= "<br/><br/><a href=\"javascript:switchArea('contentarea_outer','off');\">".$lang->get("func_close")."</a></td></tr>";
 
 }
 else{

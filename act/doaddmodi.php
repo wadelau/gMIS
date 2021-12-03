@@ -324,18 +324,31 @@ else{
             $foundErr = true;
         }
     }
+	if($foundErr){
+		if(inString('Data too long', $servResp)){
+			$servResp .= "<br/>".$lang->get("notice_save_error_data_too_long");
+		}
+		else if(inString('Incorrect', $servResp)){
+			$servResp .= "<br/>".$lang->get("notice_save_error_incorrect_type");
+		}
+	}
     if(!$foundErr){
         if(inString('Duplicate entry', $servResp)){
             $priuni = $gtbl->get($gtbl->PRIUNI);
             $servResp .= "<br/>".$lang->get('notice_save_error');
+			$hasCatched = false;
             foreach($priuni as $k=>$v){
                 if($k == 'PRI'){ continue; } # skip id?
                 foreach($v as $k2=>$v2){
                     if(isset($_REQUEST[$v2])){
-                        $servResp .= "<br/>".$gtbl->getCHN($v2)."[$v2]: ".$_REQUEST[$v2]."";        
+                        $servResp .= "<br/>".$gtbl->getCHN($v2)."[$v2]: ".$_REQUEST[$v2]."";
+						$hasCatched = true;
                     }
                 }
             }
+			if(!$hasCatched){
+				$servResp .= "<br/>Unknown error. 202111031159.<br/>".$lang->get('notice_upload_error');
+			}
             $foundErr = true;
         }
     }

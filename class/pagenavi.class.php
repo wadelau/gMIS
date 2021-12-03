@@ -87,7 +87,9 @@ class PageNavi extends WebApp{
 	                       $para['url'] .= "&$kp=".$_REQUEST[$kp];
 	           }
 	       }
-	       $para['url'] .= '&pnsm='.(isset($_REQUEST['pnsm'])?$_REQUEST['pnsm']:'and');
+			if(strpos($para['url'], "&pnsm") < 1){
+				$para['url'] .= '&pnsm='.(isset($_REQUEST['pnsm'])?$_REQUEST['pnsm']:'and');
+			}
 	   }
        #print_r($this->hmf);
 
@@ -238,10 +240,10 @@ class PageNavi extends WebApp{
                     $isTimeField = true;    
                 }
 				# op list
-                if(strpos($v, "tbl:") === 0){
+                if(is_string($v) && strpos($v, "tbl:") === 0){
                     $condition .= " ".$pnsm." ".$field." in (".$this->embedSql($linkfield,$v).")";
                 }
-				else if(strpos($v, "in::") === 0){
+				else if(is_string($v) && strpos($v, "in::") === 0){
 					# <hidesk>tuanid=id::in::tbl:hss_tuanduitbl:operatearea=IN=USER_OPERATEAREA</hidesk>
                     #error_log(__FILE__.": k:$k, v:$v");
                     $tmparr = explode("::", $v);

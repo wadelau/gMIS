@@ -324,13 +324,14 @@ CREATE TABLE `gmis_dict_infotbl` (
 );
 
 drop table if exists `gmis_dict_detailtbl`;
-CREATE TABLE `gmis_dict_detailtbl` (
-  `id` int(12) NOT NULL AUTO_INCREMENT,
-  `itype` char(24) COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'dict key type',
-  `ikey` char(128) COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT 'item name',
-  `ivalue` char(16) COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT 'item value',
-  `iorder` int(12) NOT NULL DEFAULT '0' COMMENT 'order no',
+CREATE TABLE `dict_detailtbl` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `itype` char(24) NOT NULL DEFAULT '' COMMENT 'dict key code',
+  `ikey` char(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT 'item name',
+  `ivalue` char(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'item value',
+  `iorder` int NOT NULL DEFAULT '0' COMMENT 'order num',
+  `imemo` char(254) NOT NULL DEFAULT '' COMMENT 'desc for the ikey/ivalue.',
   PRIMARY KEY (`id`),
-  KEY `k2` (`stype`),
-  unique key k3(`itype`, `ivalue`)
+  UNIQUE KEY `k3` (`itype`,`ikey`,`ivalue`),
+  KEY `k2` (`itype`)
 );
