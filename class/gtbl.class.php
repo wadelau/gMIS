@@ -544,7 +544,7 @@ class GTbl extends WebApp{
         $tmpstr = $this->hmconf[$this->taglist['field'].$this->sep.$field.$this->sep.$this->taglist['accept']];
         $tmpstr = $tmpstr==null?'':$tmpstr;
         if($tmpstr != ''){
-            return " accept=\"".$tmpstr."\" ";
+            return " accept=\"".$tmpstr."\" "; //- see https://ufqi.com/dev/gtajax/ for form validators
         }else{
             return '';
         }
@@ -1014,7 +1014,7 @@ class GTbl extends WebApp{
             if($k == $reqfieldv){
                 $selected = " selected";
             }
-            $rtn .= "<option value=\"$k\" title=\"".$v."\"".$selected.">$k</option>";
+            $rtn .= "<option value=\"$k\" title=\"".$v."\"".$selected.">$v</option>";
         }
         return $rtn;
     }

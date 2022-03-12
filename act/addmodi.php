@@ -202,13 +202,14 @@ for($hmi=$min_idx; $hmi<=$max_idx;$hmi++){
     }
 	
     if($fieldinputtype == 'select'){
+		$acceptVal = $gtbl->getAccept($field);
         if($gtbl->getSingleRow($field) == '1' && $opentr < 1){
 			$out .= "</tr><tr height=\"30px\" valign=\"top\"  onmouseover=\"javascript:"
 				."this.style.backgroundColor='".$hlcolor
 				."';\" onmouseout=\"javascript:this.style.backgroundColor='';\">"; 
 		}
 		if(true){
-        	$out .= "<td nowrap style=\"vertical-align:top\"><b>".$gtbl->getCHN($field)."</b>:&nbsp;</td>";
+        	$out .= "<td nowrap style=\"vertical-align:top\"><b>".$gtbl->getCHN($field).($acceptVal==''?'':'<span class="redb">*</span>')."</b>:&nbsp;</td>";
         	$out .= "<td style=\"vertical-align:top\">".$gtbl->getSelectOption($field, $hmorig[$field],'',0,$gtbl->getSelectMultiple($field))
 			." <br/> ".$gtbl->getMemo($field)." <input type=\"hidden\" id=\"".$field
 			."_select_orig\" name=\"".$field."_select_orig\" value=\"".$hmorig[$field]."\" /></td>";
@@ -256,6 +257,7 @@ for($hmi=$min_idx; $hmi<=$max_idx;$hmi++){
     }
 	else if($fieldinputtype == 'file'){
 	    $origValue = $hmorig[$field];
+		$acceptVal = $gtbl->getAccept($field);
         if($origValue != '' && $srcprefix != '' && !startsWith($origValue, 'http')){
             $hmorig[$field] = $srcprefix.'/'.$hmorig[$field];
         }
@@ -267,7 +269,7 @@ for($hmi=$min_idx; $hmi<=$max_idx;$hmi++){
         }
         $fieldv = $hmorig[$field]; $fieldv = str_replace($shortDirName."/","", $fieldv);
         $isimg = isImg($fieldv);
-        $out .= "<td nowrap style=\"vertical-align:top\"><b>".$gtbl->getCHN($field)."</b>:</td>"
+        $out .= "<td nowrap style=\"vertical-align:top\"><b>".$gtbl->getCHN($field).($acceptVal==''?'':'<span class="redb">*</span>')."</b>:</td>"
 			."<td style='word-break:break-all;vertical-align:top;'><input type=\"file\" id=\"".$field
 			."\" name=\"".$field."\" size=\"20\" class=\"noneinput wideinput\" ".$gtbl->getJsAction($field)
 			." /> <input type=\"hidden\" name=\"".$field."_orig\" value=\"".$fieldv."\" />"
