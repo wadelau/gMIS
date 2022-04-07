@@ -115,6 +115,7 @@ foreach($hmParent as $k=>$v){
 	$out .= "<span".(($v['id']==$parentCode)?" class=\"selectedColor\"":"").">".$v['iname']."(".$v['id'].")<a href='".$myUrl."&parentcode=".$lastParent."'><sup>X</sup></a></span> > ";	
 	$lastParent = $v['id'];
 }
+$out .= "<br/>";
 foreach($hm as $k=>$v){
 	$out .= "<span".(($v['id']==$parentCode)?" class=\"selectedColor\"":"")."><a href='".$myUrl."&parentcode=".$v['id']."'>".$v['iname']."(".$v['id'].")</a>"
 		." <a href='javascript:void(0);' onclick=\"javascript:parent.sendLinkInfo('".$v['id']."', 'w', current_link_field); "

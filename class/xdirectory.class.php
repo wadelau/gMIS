@@ -49,6 +49,7 @@ class XDirectory extends WebApp{
     	$lastNode = '';
 		$dirList .="<div class=\"cv_fcv node\">";
 		$parentCode = $this->get('parentCode');
+		$selectOnly = Wht::get($_REQUEST, 'selectOnly'); //- added 11:44 2022-03-25
 		foreach($targetDir as $k=>$v){
 			$ilevel = 0;
 			$codeArr = str_split($k,$levelLen);
@@ -59,11 +60,20 @@ class XDirectory extends WebApp{
 			$j = $this->getSubDir($targetDir, $levelLen, $ilevel, $k);
 			#$nodeContent = $ilevel."-".$k."-".$v;
 			$nodeContent = $k."-".$v;
-			$nodeContent = "<div class=\"tree\" id=\"".$k."\" onmouseover=\"xianShi('".$k."');\" onmouseout=\"yinCang('".$k."');\"".($k==$parentCode?' style="color:red;font-weight:strong;"':'').">".$nodeContent; # 
-			$nodeContent .= "&nbsp;&nbsp;<span id=\"nodelink".$k."\"><a href=\"javascript:void(0);\" onclick=\"javascript:parent.sendLinkInfo('".$k."', 'w', current_link_field); parent.copyAndReturn(current_link_field); changeBgc('".$k."');\">".$this->lang->get("xdir_this_item")."</a>";
+			//debug("extra/xdir: k:$k parentCode:$parentCode eq:".strcmp($k, $parentCode));
+			$hasRed = 0;
+			if(strcmp($k,$parentCode)==0){ $hasRed=1; }
+			else if(strpos($parentCode, $k)===0){ $hasRed=1; }
+			$nodeContent = "<div class=\"tree\" id=\"".$k."\" onmouseover=\"xianShi('".$k."');\" onmouseout=\"yinCang('".$k."');\"".($hasRed==1?' style="color:red;font-weight:strong;"':'').">".$nodeContent; # 
+			$nodeContent .= "&nbsp;&nbsp;<span id=\"nodelink".$k."\">";
+			if($selectOnly != 1){
+				$nodeContent .= "<a href=\"javascript:void(0);\" onclick=\"javascript:parent.sendLinkInfo('".$k."', 'w', current_link_field); parent.copyAndReturn(current_link_field); changeBgc('".$k."');\">".$this->lang->get("xdir_this_item")."</a>";
+			}
 			$nodeContent .= "&nbsp;&nbsp;<a href=\"javascript:void(0);\" onclick=\"javascript:parent.sendLinkInfo('".$k."-".$v."', 'w', current_link_field); parent.copyAndReturn(current_link_field); changeBgc('".$k."');\">".$this->lang->get("xdir_this_item_and_value")."</a>";
-			$nodeContent .= "&nbsp;&nbsp;<a href=\"javascript:void(0);\" onclick=\"javascript:parent.sendLinkInfo('".$i."', 'w', current_link_field); parent.copyAndReturn(current_link_field);\">+".$this->lang->get("xdir_same_level")."</a>";	
-			$nodeContent .= "&nbsp;&nbsp;<a href=\"javascript:void(0);\" onclick=\"javascript:parent.sendLinkInfo('".$j."', 'w', current_link_field); parent.copyAndReturn(current_link_field);\">+".$this->lang->get("xdir_sub_level")."</a>";	
+			if($selectOnly != 1){
+				$nodeContent .= "&nbsp;&nbsp;<a href=\"javascript:void(0);\" onclick=\"javascript:parent.sendLinkInfo('".$i."', 'w', current_link_field); parent.copyAndReturn(current_link_field);\">+".$this->lang->get("xdir_same_level")."</a>";	
+				$nodeContent .= "&nbsp;&nbsp;<a href=\"javascript:void(0);\" onclick=\"javascript:parent.sendLinkInfo('".$j."', 'w', current_link_field); parent.copyAndReturn(current_link_field);\">+".$this->lang->get("xdir_sub_level")."</a>";	
+			}
 			$nodeContent .= "</span></div>";			
 			if($lastNode == ''){
 				$dirList .= $nodeContent;								
