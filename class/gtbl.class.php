@@ -591,6 +591,12 @@ class GTbl extends WebApp{
 				$this->setTbl($tbl);
                 #$tmpWhere = $arr[3]; # move to before oldhmf
                 if($tmpWhere==''){ $tmpWhere='1=1'; }
+				# set a minimum list for this read-only options, 07:54 2022-04-17
+				# <field name="userid"><chnname>RecommendId</chnname>
+				# <selectoption>fromtable::user_basetbl::iname::1=1::id::minilist</selectoption>
+				if(isset($arr[4]) && isset($arr[5]) && $arr[5]=='minilist'){
+					$tmpWhere .= " and (id in (select $field from ".$this->tbl." where 1=1))";
+				}
                 $tmpWhere .= " order by CONVERT($dispfield USING gbk)";
 				$hm = $this->getBy("$optval,$dispfield", $tmpWhere,
 					$withCache=array('key'=>$tbl.'-select-$optval-$dispfield-'.$arr[3].'-'.$tmpWhere));
