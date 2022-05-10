@@ -85,10 +85,10 @@
 	"form_state_list": "1:正常|0:停用|2:其他2|3:其他3",
 	"form_file_online_src":"在线地址",
 
-	"user_sign_in":"登录",	
-	"user_sign_in_resp":"登录消息",	
-	"user_sign_out":"退出",	
-	"user_reset_pwd":"更新密码",	
+	"user_sign_in":"gMIS登录",	
+	"user_sign_in_resp":"gMIS登录消息",	
+	"user_sign_out":"gMIS退出",	
+	"user_reset_pwd":"gMIS更新密码",	
 
 	"menu_desktop": "我的桌面",
 	"menu_desktop_todo": "待处理事项",
