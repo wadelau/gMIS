@@ -394,7 +394,9 @@ for($hmi=$min_idx; $hmi<=$max_idx;$hmi++){
             ."</a><span id='divPivotList_$hmi' style=\"display:none; position: relative; margin-left:-5px; "
             ." margin-top:-10px; z-index:97; background-color:silver;\" "
             ." ></span>&nbsp;&nbsp;&nbsp;&nbsp;"; # onmouseout=\"javascript:this.style.display='none';\"
-
+	if($hmi > 1 && $hmi % 8 == 0){
+		$out .= "<br/>";
+	}
 }
 
 $out .= "</td></tr>";
@@ -405,8 +407,8 @@ $out .= "<tr>"
         ."<td width='34%'><fieldset><legend title='".$lang->get("func_pivot_group_col")."'>".$lang->get("func_pivot_group_col")."</legend>"
         ."<span id='span_groupby'>"
         .$firstFieldChn."($firstField) addgroupby   <a href=\"javascript:void(0);\" onclick=\"javascript:doPivotSelect('$firstField', "
-        ."'1', 'addgroupby', 0, '".$firstFieldChn."');\" title=\"Remove\"> X(Rm) </a>   <a href=\"javascript:void(0);\" onclick=\"javascript:doPivotSelect('"
-        .$firstField."', '1', 'addorderby', 1, '".$firstFieldChn."');\" title=\"Order\"> ↿⇂(Od) </a><br>"
+        ."'1', 'addgroupby', 0, '".$firstFieldChn."');\" title=\"".$lang->get("func_delete")."\"> X(Rm) </a>   <a href=\"javascript:void(0);\" onclick=\"javascript:doPivotSelect('"
+        .$firstField."', '1', 'addorderby', 1, '".$firstFieldChn."');\" title=\"".$lang->get("func_orderby")."\"> ↿⇂(Od) </a><br>"
         ."</span><input type='hidden' name='groupby' id='groupby' value=',".$firstField."::addgroupby'/>"
         ."</fieldset></td>";
 $out .= "<td width='33%'><fieldset><legend title='".$lang->get("func_pivot_value_col")."'>".$lang->get("func_pivot_value_col")."</legend>"
@@ -419,8 +421,8 @@ $out .= "<td width='33%'><fieldset><legend title='".$lang->get("func_pivot_value
 $out .= "<td><fieldset><legend title='".$lang->get("func_pivot_order_col")."'>".$lang->get("func_pivot_order_col")."</legend>"
         ."<span id='span_orderby'>"
         .$gtbl->getCHN($firstField)."($firstField) addorderby   <a href=\"javascript:void(0);\" onclick=\"javascript:doPivotSelect('$firstField', "
-        ."'1', 'addorderby', 0, '".$gtbl->getCHN($firstField)."');\" title=\"Remove\"> X(Rm) </a>   <a href=\"javascript:void(0);\" onclick=\"javascript:doPivotSelect('"
-        .$firstField."', '1', 'addorderby', 1, '".$firstFieldChn."');\" title=\"Order\"> ↿⇂(Od) </a><br>"
+        ."'1', 'addorderby', 0, '".$gtbl->getCHN($firstField)."');\" title=\"".$lang->get("func_delete")."\"> X(Rm) </a>   <a href=\"javascript:void(0);\" onclick=\"javascript:doPivotSelect('"
+        .$firstField."', '1', 'addorderby', 1, '".$firstFieldChn."');\" title=\"".$lang->get("func_orderby")."\"> ↿⇂(Od) </a><br>"
         ."</span><input type='hidden' name='orderby' id='orderby' value=',".$firstField."::addorderby'/></fieldset></td>"
         ."</tr>";
 	
