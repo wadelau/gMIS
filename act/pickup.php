@@ -25,6 +25,9 @@ $pickup->set('fieldlist', $gtbl->getFieldList());
 $pickup->set('myid', $gtbl->getMyId());
 $base62x = new Base62x();
 $base62xTag = 'b62x.';
+if(inString('&pntc=', $jdo)){
+	$jdo = preg_replace('/&pntc=[0-9]+/', '', $jdo); # remedy 09:31 2022-08-27
+}
 
 $out .= "<fieldset style=\"border-color:#5f8ac5;border: 1px solid #5f8ac5; background:#E8EEF7;\">"
     ."<legend><h4>".$lang->get("func_pickup")."</h4></legend><form id=\""

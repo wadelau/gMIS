@@ -269,13 +269,14 @@ for($hmi=$min_idx; $hmi<=$max_idx;$hmi++){
         }
         $fieldv = $hmorig[$field]; $fieldv = str_replace($shortDirName."/","", $fieldv);
         $isimg = isImg($fieldv);
+		if($id == '' && $isimg == 0){ $isimg = 1; }
         $out .= "<td nowrap style=\"vertical-align:top\"><b>".$gtbl->getCHN($field).($acceptVal==''?'':'<span class="redb">*</span>')."</b>:</td>"
 			."<td style='word-break:break-all;vertical-align:top;'><input type=\"file\" id=\"".$field
 			."\" name=\"".$field."\" size=\"20\" class=\"noneinput wideinput\" ".$gtbl->getJsAction($field)
-			." /> <input type=\"hidden\" name=\"".$field."_orig\" value=\"".$fieldv."\" />"
+			." onchange=\"javascript:document.getElementById('imgpreview_$field').src=window.URL.createObjectURL(this.files[0]);\" /> <input type=\"hidden\" name=\"".$field."_orig\" value=\"".$fieldv."\" />"
 			." <input type=\"text\" name=\"".$field."_onlinesrc\" value=\"\" placeholder=\"".$lang->get("form_file_online_src")."\"/> <br/> "
 			.($fieldv==''?'':$fieldv)." ".$gtbl->getMemo($field)." ";
-			$out .="<br/> ".($isimg==1?"<img src=\"".$fieldv."\" alt=\"-x-\" width=\"118px\" />"
+			$out .="<br/> ".($isimg==1?"<img id=\"imgpreview_$field\" src=\"".$fieldv."\" alt=\"\" width=\"118px\" />"
 			:"")." <script>document.getElementById('"
 			.$formid."').enctype='multipart/form-data';</script>  </td>";
 	    #$opentr = 1;
