@@ -436,6 +436,7 @@ else if(startsWith($act, "list")){
     }
 	else{
         $queryFields = ''; $skiptag = $_CONFIG['skiptag'];
+		if($id > 0){ $_REQUEST['pnskid'] = $id; }
         foreach($_REQUEST as $k=>$v){
             $opv = Wht::get($_REQUEST, 'op'.$k);
             $opv = $opv=='' ? '=' : $opv;
