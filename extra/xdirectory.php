@@ -34,7 +34,7 @@ $dirLevelLength = 2;
 # main actions
 
 $out .= '
-	<script type="text/javascript" src="'.$rtvdir.'/comm/jquery-3.4.1.min.js" charset="utf-8"></script>
+	<script type="text/javascript" src="'.$rtvdir.'/comm/jquery-3.6.1.min.js" charset="utf-8"></script>
 	<style type="text/css">
 		.node ul{
 			margin-left:-25px;
