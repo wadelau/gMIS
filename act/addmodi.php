@@ -321,9 +321,20 @@ for($hmi=$min_idx; $hmi<=$max_idx;$hmi++){
 	else{
 		$acceptVal = $gtbl->getAccept($field);
 		$tmpInputType = 'text';
-		if(inString('time', $field)){ $tmpInputType = 'datetime-local';}
-		else if(inString('date', $field)){ $tmpInputType = 'date'; }
-		else if(inString('0', $hmfield[$field.'_default'])){ $tmpInputType = 'number'; }
+		$isDatetime = false;
+		if(in_array($field, $timefield) || inString('date', $field) 
+			|| inString('time', $field) || inString('day', $field)){ $isDatetime = true; }
+		$isNumField = false;
+		if(inString('num', $field) || inString('count', $field)
+			|| inString('sum', $field) || inString('amount', $field)
+			|| inString('amt', $field) || inString('0', $hmfield[$field.'_default'])){ $isNumField = true; }
+		if($isDatetime && $rdonly==''){ 
+			$inputMethod = "datetime-local";
+			if(inString(' ', $hmorig[$field])){ $hmorig[$field] = str_replace(' ', 'T', $hmorig[$field]); }
+			if(!inString('T', $hmorig[$field])){ $hmorig[$field] .= 'T00:00'; }
+		}
+		else if($isNumField || $gtbl->isNumeric($hmfield[$field])==1){ $inputMethod = "number"; }
+		
 		$placeHolder = '';
 		if($hasDefaultVal==1){ $placeHolder=$hmorig[$field]; $hmorig[$field]=''; }
 		if($gtbl->getSingleRow($field) == '1'){
