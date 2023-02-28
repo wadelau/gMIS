@@ -377,7 +377,7 @@ class PageNavi extends WebApp{
                             $vv = addslashes($vv);
                             $vv = "%$vv%";
                             if($isString){ $vv = "'$vv'"; }
-                            $conditionTmp .= " or $field like $vv";
+                            $conditionTmp .= " or $field like \"$vv\"";
                         }
                         $condition .= " $pnsm ($conditionTmp)";
 						$gtbl->del($field);
@@ -404,7 +404,7 @@ class PageNavi extends WebApp{
                             $vv = addslashes($vv);
                             $vv = "%$vv%";
                             if($isString){ $vv = "'$vv'"; }
-                            $conditionTmp .= " and $field not like $vv";
+                            $conditionTmp .= " and $field not like \"$vv\"";
                         }
                         $condition .= " $pnsm ($conditionTmp)";
 						$gtbl->del($field);
