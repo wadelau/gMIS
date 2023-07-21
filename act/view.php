@@ -69,9 +69,9 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
         $closedtr = 0;
     }
 
-    #if($field == 'password'){
+    $isPwdField = false;
 	if(inString('password', $field) || inString('pwd', $field)){
-        $hmorig[$field] = '';
+        $hmorig[$field] = ''; $isPwdField = true;
     }
 
     if(!$user->canRead($field,'','', $_REQUEST[$gtbl->getMyId()], $id)){
@@ -176,12 +176,16 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
         if($gtbl->getSingleRow($field) == 1){
             $out .= "</tr><tr> <td style=\"vertical-align:top\"><b>".$gtbl->getCHN($field)."<b>:</td> ";
             $out .= "<td colspan=\"".($form_cols-1)."\" class=\"tdiviewfixedwidth\" style=\"vertical-align:top\"> "
-                    .$tmpval."  </td></tr><tr>";
+                    .$tmpval." "
+					.($isPwdField?"(".$lang->get('notice_password_encrypt').")":'')
+					." </td></tr><tr>";
         }else{
             $out .= "<td style=\"vertical-align:top\"><b>".$gtbl->getCHN($field)."</b>:&nbsp;</td>"
                     ."<td class=\"tdiviewfixedwidth\" "
                     ."style=\"word-wrap:break-word;white-space:normal;word-break:break-all;width:22%;vertical-align:top;\"> "
-                    .$tmpval." </td>";
+                    .$tmpval." "
+					.($isPwdField?"(".$lang->get('notice_password_encrypt').")":'')
+					."</td>";
         }
     }
 

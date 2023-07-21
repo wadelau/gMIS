@@ -180,9 +180,9 @@ for($hmi=$min_idx; $hmi<=$max_idx;$hmi++){
 		.$hmorig[$field]."\" />";
         continue;
     }
-	
+	$isPwdField = false;
 	if(inString('password', $field) || inString('pwd', $field)){
-        $hmorig[$field] = '';
+        $hmorig[$field] = ''; $isPwdField = true;
     }
     else if($isAddByCopy 
 		&& $gtbl->getReadOnly($field, $fieldinputtype) != ''
@@ -344,7 +344,9 @@ for($hmi=$min_idx; $hmi<=$max_idx;$hmi++){
                     ."\"  style=\"vertical-align:top\"><input type=\"".$tmpInputType."\" id=\"".$field."\" name=\""
                      .$field."\" class=\"\" style=\"width:600px\" value=\""
                     .$hmorig[$field]."\" ".$gtbl->getJsAction($field).$acceptVal." placeholder=\"$placeHolder\" "
-                    .$gtbl->getReadOnly($field)." /> <br/>   ".$gtbl->getMemo($field)." </td></tr><tr>";
+                    .$gtbl->getReadOnly($field)." /> <br/>   ".$gtbl->getMemo($field)." "
+					.($isPwdField?"(".$lang->get('notice_password_encrypt').")":'')
+					." </td></tr><tr>";
             $opentr = 1;
 		}
 		else{
@@ -358,7 +360,9 @@ for($hmi=$min_idx; $hmi<=$max_idx;$hmi++){
                 $out .= " onclick=\"javascript:WdatePicker();\"";
              }
              $out .= "/> <br/> "
-        	        .$gtbl->getMemo($field)."</td>";
+        	        .$gtbl->getMemo($field)." ".
+					($isPwdField?"(".$lang->get('notice_password_encrypt').")":'')
+					."</td>";
         	$opentr = 0;
 		}
 

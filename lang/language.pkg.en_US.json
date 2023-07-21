@@ -141,6 +141,8 @@
 	"notice_save_error_data_too_long": "The size or length of content is too long, plz shorten it and try again.",
 	"notice_save_error_incorrect_type": "Data type or format of some content is incorrect, Please revise and retry.",
 	"notice_upload_error": "Receive uploads error. Possible for too large size or server-side failure.",
+	"notice_password_encrypt": "Saved with encrpty.",
+
 	
 	"op_skip": "Skip",
 	"op_select": "Plz Select",

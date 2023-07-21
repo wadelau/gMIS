@@ -141,6 +141,7 @@
 	"notice_save_error_data_too_long": "相关数据内容尺寸太长, 需要截短后再试.",
 	"notice_save_error_incorrect_type": "相关数据类型或格式不正确, 请修正后重试.",
 	"notice_upload_error": "接收数据异常/出错, 可能由于尺寸太大或者服务暂时不可用.",
+	"notice_password_encrypt": "已设置保密",
 
 	"op_skip": "忽略",
 	"op_select": "请选择",
