@@ -39,6 +39,7 @@ else if($act == 'dosignin'){
     $verifycode = $verifycode2 = '';
     if(!$islan){
         $verifycode = strtolower(trim($_REQUEST['verifycode']));
+		$verifycode = str_replace(' ', '', $verifycode);
         $verifycode2 = substr($md5=Base62x::encode(md5(($i=$_REQUEST['verifyid'])
                 .$_CONFIG['sign_key']
                 .($d=substr(date('YmdHi', time()-date('Z')),0,11))

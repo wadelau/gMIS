@@ -152,7 +152,8 @@ for($hmi=$min_idx; $hmi<=$max_idx; $hmi++){
 				}
 				else if($fieldv_orig != ''){
 					if(strpos($fieldv_orig, $shortDirName) === false
-						&& !inString("//", $fieldv_orig)){
+						&& !inString("//", $fieldv_orig)
+						&& !startsWith($fieldv_orig, "/")){
 						$fieldv_orig = $shortDirName."/".$fieldv_orig;
 					}
 					$fieldv = $fieldv_orig;
